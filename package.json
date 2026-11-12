@@ -1,0 +1,14 @@
+{
+  "name": "shrapnel-city",
+  "version": "1.0.0",
+  "scripts": {
+    "build:scripts": "node tools/as2js.mjs",
+    "serve": "python3 -m http.server 8123"
+  },
+  "devDependencies": {
+    "acorn": "^8.14.0",
+    "astring": "^1.9.0"
+  },
+  "type": "module",
+  "private": true
+}

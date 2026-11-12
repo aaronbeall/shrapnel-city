@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shrapnel City art gallery</title>
+<style>
+  body { margin: 0; background: #152B2B; color: #9cc; font: 11px monospace; }
+  #grid { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; }
+  .cell { width: 150px; background: #0d1d1d; border: 1px solid #234; }
+  .cell canvas { display: block; width: 150px; height: 120px; }
+  .cell div { padding: 2px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+</style>
+</head>
+<body>
+<div id="grid"></div>
+<script type="module">
+import { Runtime } from '../src/flash/runtime.js';
+import { mul } from '../src/flash/geom.js';
+
+const params = new URLSearchParams(location.search);
+const filter = params.get('filter') || '';
+const frameParam = params.get('frame');
+const only = params.get('ids') ? params.get('ids').split(',').map(Number) : null;
+const CW = +(params.get('w') || 150), CH = +(params.get('h') || 120);
+const rt = new Runtime(document.createElement('canvas'), { base: '../assets/' });
+await rt.load();
+const grid = document.getElementById('grid');
+const ids = [...rt.lib.symbols.keys()].filter((id) => id !== 0);
+let shown = 0;
+for (const id of only || ids.sort((a, b) => rt.lib.symbols.get(a).name.localeCompare(rt.lib.symbols.get(b).name))) {
+  const sym = rt.lib.symbols.get(id) || { name: 'char' + id };
+  if (filter && !sym.name.includes(filter)) continue;
+  const node = rt.createInstance(id);
+  if (!node) continue;
+  if (node._initTimeline) node._initTimeline();
+  if (frameParam && node.gotoAndStop) node.gotoAndStop(frameParam === 'mid' ? Math.ceil(node._totalframes / 2) : +frameParam);
+  const b = node.localBounds();
+  if (!b || !isFinite(b[0]) || b[1] - b[0] < 0.5) continue;
+  const cell = document.createElement('div');
+  cell.className = 'cell';
+  const cv = document.createElement('canvas');
+  const W = CW * 2, H = CH * 2;
+  cell.style.width = CW + 'px'; cv.style.width = CW + 'px'; cv.style.height = CH + 'px';
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  const bw = b[1] - b[0], bh = b[3] - b[2];
+  const s = Math.min((W - 16) / bw, (H - 16) / bh, +(params.get('max') || 4));
+  const m = [s, 0, 0, s, W / 2 - (b[0] + bw / 2) * s, H / 2 - (b[2] + bh / 2) * s];
+  rt.renderer.scale = s;
+  rt.renderer.W = W; rt.renderer.H = H;
+  rt.renderer.pool = [];
+  rt.renderer.drawNode(ctx, node, m, null, [0, W, 0, H]);
+  // node.m is identity so drawNode == content with filters/blend applied
+  cell.appendChild(cv);
+  const label = document.createElement('div');
+  label.textContent = id + ' ' + sym.name.replace(/^.*\//, '') + (node._totalframes > 1 ? ` [${node._totalframes}f]` : '');
+  label.title = sym.name;
+  cell.appendChild(label);
+  grid.appendChild(cell);
+  shown++;
+}
+document.title = 'done ' + shown;
+</script>
+</body>
+</html>

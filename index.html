@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shrapnel City</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #0b1616; overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; }
+  #stage { display: block; background: #152B2B; outline: none; image-rendering: auto; }
+  #loading { position: absolute; color: #4cc; font: 14px monospace; }
+</style>
+</head>
+<body>
+<canvas id="stage" tabindex="0" width="800" height="600"></canvas>
+<div id="loading">loading…</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

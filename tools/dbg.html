@@ -1,0 +1,9 @@
+<!doctype html><canvas id=c width=900 height=200></canvas><script type=module>
+import { Library, buildPath } from '/src/flash/library.js';
+const lib = new Library('/assets/'); await lib.load();
+const f = lib.get(7); const ctx = document.getElementById('c').getContext('2d');
+ctx.fillStyle='#000'; ctx.fillRect(0,0,900,200); ctx.fillStyle='#fff';
+let x=10; for (const gi of [45,41,51,40,39]) { ctx.setTransform(3,0,0,3,x,150); ctx.fill(f.paths[gi]); x+= 90; }
+ctx.setTransform(1,0,0,1,0,0); ctx.font='12px monospace'; ctx.fillText(JSON.stringify(f.glyphs[45]).slice(0,140),5,190);
+document.title='done';
+</script>

@@ -1,0 +1,2446 @@
+{
+ "instances": {
+  "0:39:21": "on (release) {\n\tgotoAndStop(\"game\");\n}",
+  "0:39:27": "on (release) {\n\t_root.gotoAndStop(\"game\");\n}",
+  "0:43:23": "on (release) {\n\t_root.missionPanel_mc.toggle();\n}\n",
+  "0:46:29": "on (release) {\n\tgotoLevel(_root.so.data.level);\n}",
+  "125:1:1": "onClipEvent (load) {\n\t_parent.hitArea = this;\n\t_visible = false;\n}\n",
+  "14:2:1": "on (release) {\n\thideDialog();\n}\n",
+  "208:1:1": "/*onClipEvent(load){\n\t_parent.hit_mc._visible = false;\n}*/",
+  "248:1:1": "onClipEvent (load) {\n\t_visible=false;\n}\n",
+  "248:4:1": "onClipEvent (load) {\n\t_visible=false;\n}\n",
+  "31:10:14": "on (release) {\n\tretryLevel();\n\thideDialog();\n}\n",
+  "31:13:15": "on (release) {\n\tshowDialog(\"helpScreen\", {skipFade:true});\n}\n",
+  "31:16:16": "on (release) {\n\tquit();\n}\n",
+  "31:1:1": "on (rollOver) {\n\tuseHandCursor = false;\n}\n\n",
+  "31:7:13": "on (release) {\n\thideDialog();\n}\n",
+  "346:106:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Plasma\";\n\tquantity = 30;\n\t\n\talertMessage = \"You got a new weapon! Press <strong>INSERT</strong> and <strong>SHIFT+INSERT</strong> to change your primary weapon. Press <strong>DELETE</strong> and <strong>SHIFT+DELETE</strong> to change your secondary weapon.\";\n\talertKillTrigger = {onRollOut:_parent.triggerNewWep_mc}\n}",
+  "346:141:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 100;\n}",
+  "346:176:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 15;\n}",
+  "346:1:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 15;\n}",
+  "346:211:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 15;\n}",
+  "346:246:1": "\n",
+  "346:248:1": "onClipEvent (load) {\n\talertMessage = \"Welcome to basic training! Use the <strong>ARROW KEYS</strong> to move around and collect items.\";\n\tpersistent = true;\n}\n",
+  "346:267:1": "onClipEvent (load) {\n\talertMessage = \"Now practice maneuvering. Use <strong>Z</strong> and <strong>X</strong> to strafe left and right through tight areas and dodge incoming fire.\";\n\tpersistent = true;\n}\n",
+  "346:286:1": "onClipEvent (load) {\n\talertMessage = \"Let's shoot something! Press <strong>SPACE</strong> to blow up those yellow boxes.\";\n\tpersistent = true;\n}\n",
+  "346:305:1": "onClipEvent (load) {\n\talertMessage = \"Here's a good example of where to use a bomb. Press <strong>CTRL</strong> to bounce a bomb into the room for instant destruction.\";\n\tpersistent = true;\n}\n",
+  "346:324:1": "onClipEvent (load) {\n\talertMessage = \"To the exit, and you're ready!\";\n\tpersistent = true;\n}\n",
+  "346:36:1": "onClipEvent (load) {\n\ttype = \"secondary\";\n\titem = \"Carbon Bomb\";\n\tquantity = 1;\n}",
+  "346:71:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 15;\n}",
+  "349:1:1": "onClipEvent (load) {\n\thealth = .1;\n\tblastRange = 200;\n\tdamage = 200;\n\tfrag = \"frag_mc\";\n\tfragCount = 15;\n\t\n\t//_alpha = 0;\n}\n",
+  "38:2:1": "on (keyPress \"<Escape>\") {\n\thideDialog();\n}\non (release) {\n\thideDialog();\n}\n",
+  "39:1:1": "on (rollOver) {\n\tuseHandCursor = false;\n}\n\n",
+  "552:4:1": "onClipEvent (load) {\n\t_visible = false;\n}\n",
+  "558:9:1": "onClipEvent (load) {\n\t_visible = false;\n}\n",
+  "55:17:13": "on (release) {\n\thideDialog();\n}\n",
+  "55:17:19": "on (release) {\n\tretryLevel();\n\t_parent.removeMovieClip();\n}\non (keyPress \"<Enter>\") {\n\tretryLevel();\n\t_parent.removeMovieClip();\n}\non (keyPress \"<Space>\") {\n\tretryLevel();\n\t_parent.removeMovieClip();\n}\n",
+  "55:1:2": "on (rollOver) {\n\tuseHandCursor = false;\n}\n\n",
+  "55:20:15": "on (release) {\n\tquit();\n}\n",
+  "55:20:21": "on (release) {\n\tquit();\n\t_parent.removeMovieClip();\n}",
+  "587:1:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 25;\n}",
+  "587:36:1": "onClipEvent (load) {\n\ttype = \"secondary\";\n\titem = \"Carbon Bomb\";\n\tquantity = 1;\n}",
+  "587:71:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 25;\n}",
+  "608:10:1": "onClipEvent (load) {\n\t//refireRate = 15;\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tquantity:50\n\t}\n}",
+  "608:1:1": "onClipEvent(load){\n\t//refireRate = 15;\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Plasma\",\n\t\tquantity:50\n\t}\n}",
+  "649:121:1": "onClipEvent(load){\n\thealth = 50;\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:25\n\t}\n}",
+  "649:16:1": "onClipEvent(load){\n\thealth = 25;\n}",
+  "649:316:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15,\n\t\tprobability:.5\n\t}\n}\n",
+  "649:331:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15,\n\t\tprobability:.5\n\t}\n}\n",
+  "649:346:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15,\n\t\tprobability:.5\n\t}\n}\n",
+  "649:361:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15,\n\t\tprobability:.5\n\t}\n}\n",
+  "649:61:1": "onClipEvent(load){\n\thealth = 25;\n}",
+  "650:106:1": "onClipEvent (load) {\n\ttype = \"secondary\";\n\titem = \"Carbon Bomb\";\n\tquantity = 1;\n}",
+  "650:141:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Plasma\";\n\tquantity = 15;\n}",
+  "650:176:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 25;\n}",
+  "650:1:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 25;\n}",
+  "650:211:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 50;\n}",
+  "650:246:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 25;\n}",
+  "650:281:1": "onClipEvent (load) {\n\ttype = \"secondary\";\n\titem = \"Carbon Bomb\";\n\tquantity = 1;\n}",
+  "650:316:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 25;\n}",
+  "650:351:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 25;\n}",
+  "650:36:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 25;\n}",
+  "650:386:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 25;\n}",
+  "650:71:1": "onClipEvent (load) {\n\ttype = \"secondary\";\n\titem = \"Shrapnel Bomb\";\n\tquantity = 1;\n}",
+  "662:16:1": "onClipEvent (load) {\n\t_visible = false;\n}\n",
+  "663:192:1": "onClipEvent (load) {\n\trefireRate = 25;\n}",
+  "663:1:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Plasma\",\n\t\tquantity:10\n\t}\n}\n",
+  "663:209:1": "onClipEvent (load) {\n\trefireRate = 25;\n}",
+  "663:226:1": "onClipEvent (load) {\n\trefireRate = 25;\n}",
+  "663:243:1": "onClipEvent (load) {\n\trefireRate = 25;\n}",
+  "663:260:1": "onClipEvent (load) {\n\trefireRate = 25;\n}",
+  "663:277:1": "onClipEvent (load) {\n\trefireRate = 25;\n}",
+  "663:294:1": "onClipEvent (load) {\n\thealth = 200;\n}",
+  "663:388:1": "onClipEvent (load) {\n\t/*powerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:50,\n\t\tprobability:.5\n\t}*/\n}",
+  "663:50:1": "onClipEvent (load) {\n\t/*powerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:50,\n\t\tprobability:.5\n\t}*/\n}",
+  "670:11:1": "onClipEvent (load) {\n\t_visible = false;\n}\n",
+  "691:1:1": "onClipEvent (load) {\n\tstatus = _parent.status;\n\tid = _parent.id;\n}\n",
+  "729:106:1": "onClipEvent(load){\n\thealth = 50;\n\tpowerupDrop = {\n\t\ttype:\"secondary\",\n\t\titem:\"Splinter Bomb\",\n\t\tquantity:3\n\t}\n}",
+  "729:16:1": "onClipEvent(load){\n\thealth = 25;\n\tpowerupDrop = {\n\t\ttype:\"secondary\",\n\t\titem:\"Carbon Bomb\",\n\t\tquantity:1\n\t}\n}",
+  "729:211:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"secondary\",\n\t\titem:\"Impact Mortar\",\n\t\tquantity:1\n\t}\n}\n",
+  "729:226:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tquantity:15\n\t}\n}\n",
+  "729:241:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tquantity:15\n\t}\n}\n",
+  "729:256:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15\n\t}\n}\n",
+  "729:271:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15\n\t}\n}\n",
+  "729:286:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15\n\t}\n}\n",
+  "729:301:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tquantity:15\n\t}\n}\n",
+  "729:316:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tprobability:.5,\n\t\tquantity:10\n\t}\n}\n",
+  "729:331:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tprobability:.5,\n\t\tquantity:15\n\t}\n}\n",
+  "729:346:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tprobability:.5,\n\t\tquantity:15\n\t}\n}\n",
+  "729:361:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tprobability:.5,\n\t\tquantity:10\n\t}\n}\n",
+  "729:376:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"secondary\",\n\t\titem:\"Carbon Bomb\",\n\t\tquantity:1\n\t}\n}\n",
+  "729:391:1": "onClipEvent(load){\n\thealth = 50;\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tquantity:25\n\t}\n}",
+  "729:61:1": "onClipEvent(load){\n\thealth = 25;\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tquantity:50\n\t}\n}",
+  "729:841:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"secondary\",\n\t\titem:\"Splinter Bomb\",\n\t\tquantity:3\n\t}\n}\n",
+  "729:916:1": "onClipEvent (load) {\n\tfunction onDie(){\n\t\tmakeShrapnel(this,\"frag_mc\",15);\n\t\ttrigger(\"battery1down\");\n\t}\n}\n",
+  "729:984:1": "onClipEvent (load) {\n\tfunction onDie(){\n\t\tmakeShrapnel(this,\"frag_mc\",15);\n\t\ttrigger(\"battery2down\");\n\t}\n}\n",
+  "730:106:1": "onClipEvent (load) {\n\tfunction onPickup(){\n\t\ttrigger('door2:open');\n\t}\n}\n\n",
+  "730:141:1": "onClipEvent (load) {\n\tfunction onPickup(){\n\t\ttrigger('door3:open');\n\t}\n}\n\n",
+  "730:176:1": "onClipEvent (load) {\n\tfunction onPickup(){\n\t\ttrigger('door4:open');\n\t}\n}\n\n",
+  "730:1:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 50;\n}",
+  "730:211:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 50;\n}",
+  "730:246:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 35;\n}",
+  "730:281:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Bolter\";\n\tquantity = 35;\n}",
+  "730:316:1": "onClipEvent (load) {\n\ttype = \"secondary\";\n\titem = \"Carbon Bomb\";\n\tquantity = 1;\n}",
+  "730:351:1": "onClipEvent (load) {\n\ttype = \"secondary\";\n\titem = \"Shrapnel Bomb\";\n\tquantity = 1;\n}",
+  "730:36:1": "onClipEvent (load) {\n\ttype = \"trigger\";\n\titem = \"door1:close\";\n}\n\n",
+  "730:386:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Banshee\";\n\tquantity = 100;\n}",
+  "730:421:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Banshee\";\n\tquantity = 100;\n}",
+  "730:456:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 15;\n}",
+  "730:491:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 25;\n}",
+  "730:526:1": "onClipEvent (load) {\n\ttype = \"trigger\";\n\titem = \"door1:open\";\n}",
+  "730:561:1": "onClipEvent (load) {\n\ttype = \"primary\";\n\titem = \"Plasma\";\n\tquantity = 25;\n}",
+  "730:596:1": "onClipEvent (load) {\n\tfunction onPickup(){\n\t\ttrigger('door5:open');\n\t}\n}\n\n",
+  "730:631:1": "onClipEvent (load) {\n\ttype = \"trigger\";\n\titem = \"bridge\";\n}\n\n",
+  "730:666:1": "onClipEvent (load) {\n\ttype = \"health\";\n\titem = \"health\";\n\tquantity = 25;\n}",
+  "730:71:1": "onClipEvent (load) {\n\ttype = \"trigger\";\n\titem = \"door1:open\";\n}\n\n",
+  "737:5:1": "onClipEvent (load) {\n\t_visible = false;\n}\n",
+  "741:113:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:100\n\t}\n}",
+  "741:133:1": "onClipEvent (load) {\n\t\n\thealth = 200;\n\t\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Plasma\",\n\t\tquantity:10\n\t}\n}\n",
+  "741:230:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:50,\n\t\tprobability:.5\n\t}\n}",
+  "741:260:1": "onClipEvent (load) {\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Plasma\",\n\t\tquantity:15,\n\t\tprobability:.5\n\t}\n}\n",
+  "741:289:1": "onClipEvent (load) {\n\trefireRate = 20;\n}\n",
+  "741:306:1": "onClipEvent (load) {\n\trefireRate = 20;\n}\n",
+  "741:323:1": "onClipEvent (load) {\n\trefireRate = 20;\n}\n",
+  "741:340:1": "onClipEvent (load) {\n\trefireRate = 20;\n}\n",
+  "741:357:1": "onClipEvent (load) {\n\trefireRate = 20;\n}\n",
+  "741:374:1": "onClipEvent (load) {\n\trefireRate = 20;\n}\n",
+  "741:442:1": "onClipEvent (load) {\n\tshot = \"shot_mcEWhite\";\n\trefireRate = 3;\n\tburstCount = 5;\n\tburstReload = 12;\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:50\n\t}\n}\n",
+  "741:544:1": "onClipEvent (load) {\n\tshot = \"shot_mcEWhite\";\n\trefireRate = 3;\n\tburstCount = 5;\n\tburstReload = 12;\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:50\n\t}\n}\n",
+  "741:561:1": "onClipEvent (load) {\n\thealth = 2400;\n\t//shot = \"shot_mcESeeker\";\n\tvisionRange = 444;\n\t/*powerupDrop = {\n\t\ttype:\"secondary\",\n\t\titem:\"Heatseeker\",\n\t\tquantity:3\n\t}*/\n\t\n\tregisterTrigger(this, \"battery1down\");\n\tfunction onTrigger(){\n\t\t//hit(health,rand(360));\n\t\tstunned = Infinity;\n\t\tmakeShrapnel(this, \"particle_mcDust\", 50, 360);\n\t\tmakeSparks(this);\n\t\tmakeZaps(this, 200);\n\t\tnotify(_player,\"Battery #01 deactivated!\");\n\t}\n}\n",
+  "741:575:1": "onClipEvent (load) {\n\thealth = 2400;\n\t//shot = \"shot_mcESeeker\";\n\tvisionRange = 444;\n\t/*powerupDrop = {\n\t\ttype:\"secondary\",\n\t\titem:\"Heatseeker\",\n\t\tquantity:3\n\t}*/\n\t\n\tregisterTrigger(this, \"battery2down\");\n\tfunction onTrigger(){\n\t\t//hit(health,rand(360));\n\t\tstunned = Infinity;\n\t\tmakeShrapnel(this, \"particle_mcDust\", 50, 360);\n\t\tmakeSparks(this);\n\t\tmakeZaps(this, 200);\n\t\tnotify(_player,\"Battery #02 deactivated!\");\n\t}\n}\n",
+  "741:640:1": "onClipEvent (load) {\n\tshot = \"shot_mcEWhite\";\n\trefireRate = 3;\n\tburstCount = 5;\n\tburstReload = 12;\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:25,\n\t\tprobability:.5\n\t}\n}\n",
+  "741:657:1": "onClipEvent (load) {\n\tshot = \"shot_mcEWhite\";\n\trefireRate = 3;\n\tburstCount = 5;\n\tburstReload = 12;\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:25,\n\t\tprobability:.5\n\t}\n}\n",
+  "741:674:1": "onClipEvent (load) {\n\tshot = \"shot_mcEWhite\";\n\trefireRate = 3;\n\tburstCount = 5;\n\tburstReload = 12;\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:25,\n\t\tprobability:.5\n\t}\n}\n",
+  "741:691:1": "onClipEvent (load) {\n\tshot = \"shot_mcEWhite\";\n\trefireRate = 3;\n\tburstCount = 5;\n\tburstReload = 12;\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Banshee\",\n\t\tquantity:25,\n\t\tprobability:.5\n\t}\n}\n",
+  "741:738:1": "onClipEvent (load) {\n\t\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Plasma\",\n\t\tquantity:25,\n\t\tprobability:.5\n\t}\n}\n",
+  "741:747:1": "onClipEvent (load) {\n\t\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15,\n\t\tprobability:.5\n\t}\n}\n",
+  "741:757:1": "onClipEvent (load) {\n\t\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15,\n\t\tprobability:.5\n\t}\n}\n",
+  "741:797:1": "onClipEvent (load) {\n\tspawnTrigger = \"bridge\";\n}\n",
+  "741:814:1": "onClipEvent (load) {\n\tspawnTrigger = \"bridge\";\n}\n",
+  "741:831:1": "onClipEvent (load) {\n\tspawnTrigger = \"bridge\";\n}\n",
+  "741:848:1": "onClipEvent (load) {\n\tspawnTrigger = \"bridge\";\n}\n",
+  "741:865:1": "onClipEvent (load) {\n\tspawnTrigger = \"bridge\";\n}\n",
+  "741:882:1": "onClipEvent (load) {\n\tspawnTrigger = \"bridge\";\n}\n",
+  "742:1004:6": "onClipEvent (load) {\n\tconnections = [_parent.a2, _parent.a4]\n}\n",
+  "742:1006:6": "onClipEvent (load) {\n\tconnections = [_parent.a3, _parent.a1]\n}\n",
+  "742:1008:6": "onClipEvent (load) {\n\tconnections = [_parent.a4, _parent.a2]\n}\n",
+  "742:1010:6": "onClipEvent (load) {\n\tconnections = [_parent.a1, _parent.a3]\n}\n",
+  "742:117:8": "onClipEvent (load) {\n\tid = \"door4\";\n}\n",
+  "742:144:8": "onClipEvent (load) {\n\tid = \"door5\";\n}\n",
+  "742:2918:2": "onClipEvent (load) {\n\t// params\n\tdamage = 8;\n\tspeed = 40;\n\tblastMark = 1;\n}",
+  "742:2922:2": "onClipEvent (load) {\n\t// params\n\tspeed = 9;\n\tdamage = 8;\n\tblastMark = 3;\n\tblastRange = 25;\n\t\n\tfunction onUpdate(){\n\t\tif(randomPerSecond(10))\n\t\t\tmakeShrapnel(this, \"particle_mcBlue\", 1, 360, {scale:50});\n\t}\n}",
+  "742:2925:2": "onClipEvent (load) {\n\t\n\t// params\n\tblastRange = 100;\n\tdamage = 200;\n\tspeed = 5;\n\taccel = 1.05;\n\tfragCount = random(1) + 3;\n\tfrag = \"shrap_mc\";\n\tblastMark = 2;\n\tsampleSize = 5;\n\t\n\tfunction onUpdate(){\n\t\tif(random(speed / initSpeed) == 0){\n\t\t\t_rotation += -180;\n\t\t\tmakeShrapnel(this, \"particle_mcFire\", 1 + random(3), 5, {scale:75});\n\t\t\t_rotation += 180;\n\t\t}\n\t}\n}",
+  "742:2931:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 500;\n\tblastRange = 150;\n\tspinSpeed = 25;\n\tblastMark = 2;\n\tblastInit = {scale:[125, 125]};\n\tfrag = \"frag_mc\";\n\tfragCount = 10;\n}",
+  "742:2937:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tspinSpeed = 25;\n\tfragCount = 45;\n\tfrag = \"shrap_mc\";\n}",
+  "742:2940:2": "onClipEvent(load){\n\t// params\n\ttype = \"shrapnel\";\n\tspeed = 15 + rand(20);\n\tbounce = 0.65;\n\tdrag = .9;\n\tdamage = 15;\n\tspinSpeed = 45;\n\tsampleSize = 10;\n\tfastBounce = true;\n\tpinnedHit = true;\n\t\n\t// init\n\tfunction onInit(){\n\t\t_xscale = 100 + jitter(20);\n\t\t_yscale = 100 + jitter(20);\n\t}\n\t\n\t// collide with enemies, boxes, and player\n\tfunction onSample(){\n\t\tif(projectileHittest(this)){\n\t\t\tdamage = getDamage(damage * (speed / initSpeed));\n\t\t\thitFunc();\n\t\t}else if(_player.core_mc.hitTest(_x + _screen._x, _y + _screen._y,true)){\n\t\t\tdamage = getDamage(damage * (speed / initSpeed));\n\t\t\t_player.hitPlayer(damage, _rotation);\n\t\t\thitFunc();\n\t\t}\n\t}\n\t\n\t// update heated appearance based on life\n\tfunction onUpdate(){\n\t\tvar percent = 1 - speed / initSpeed;\n\t\tvar frame = Math.ceil(core_mc._totalframes * percent);\n\t\tcore_mc.gotoAndStop(frame);\n\t}\n\t\n\t// die\n\tfunction onDie(){\n\t\tif(speed > speedMin) makeSparks(this, speed / initSpeed);\n\t}\n}",
+  "742:2942:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 200;\n\tblastRange = 90;\n\tspinSpeed = 25;\n\tblastMark = 2;\n}",
+  "742:2948:2": "onClipEvent(load){\n\t// params\n\tdamage = 30;\n\tspeed = 30;\n\tblastMark = 3;\n\tblastRange = 35;\n\tshakeStrength = 0;\n\t\n\tfunction onUpdate(){\n\t\tif(randomPerSecond(frameRate))\n\t\t\tmakeShrapnel(this, \"particle_mcBlue\", 1 + random(3), 360, {scale:75});\n\t}\n}",
+  "742:2952:2": "onClipEvent (load) {\n\t// params\n\tspeed = 9;\n\tdamage = 2;\n\tblastMark = 1;\n}",
+  "742:2955:2": "onClipEvent (load) {\n\t// params\n\tspeed = 15;\n\tdamage = 2;\n\tblastMark = 5;\n}",
+  "742:2958:2": "onClipEvent(load){\n\t// params\n\tdamage = 8;\n\tspeed = 40 + rand(60);\n\tblastMark = 5;\n\t\n\tif(shrapnel){\n\t\tdamage = 30;\n\t\tspeed /= 3;\n\t}\n}",
+  "742:2962:2": "onClipEvent(load){\n\t// params\n\tdamage = 7;\n\tspeed = 25;\n\tblastMark = 6;\n}",
+  "742:2965:2": "onClipEvent(load){\n\t// params\n\tdamage = 25;\n\tspeed = 15;\n\tblastMark = 6;\n\tfragCount = 12;\n\tfrag = \"shot_mcEnergizer\";\n}",
+  "742:2968:2": "onClipEvent(load){\n\t// params\n\ttype = \"projectile\";\n\tdamage = 12;\n\tspeed = 25;\n\tbounce = 1;\n\tdrag = 1;\n\t//blastMark = 3;\n\tsampleSize = 10;\n\tinfluence = 0;\n\t\n\tif(shrapnel){\n\t\tdamage = 25;\n\t\tspeed = 15;\n\t}\n\t\n\t// timeout\n\tvar time = 0, timer = 30 + random(25);\n\tfunction onUpdate(){\n\t\tif(++time >= timer)\n\t\t\thitFunc();\n\t}\n\t\n\tfunction onSample(){\n\t\tif(projectileHittest(this))\n\t\t\thitFunc();\n\t}\n\t\n\t/*var bounceCount = 0, bounces = 5;\n\tfunction onBounce(){\n\t\tif(++bounceCount > bounces) return hitFunc();\n\t}*/\n}",
+  "742:2973:2": "onClipEvent(load){\n\t\n\t// params\n\tdamage = 25;\n\tspeed = 10;\n\tfragCount = 15;\n\tfrag = \"shrap_mc\";\n\tfragSpread = 30;\n\tinfluence = 1.0;\n\tfragInfluence = 1.0;\n\tpinnedHit = true;\n\t\n\t// timeout\n\tvar time = 0, timer = 3;\n\tfunction onUpdate(){\n\t\tif(++time >= timer)\n\t\t\thitFunc();\n\t}\n\t\n\t// brass shells\n\tfunction onInit(){\n\t\tmakeShell(_player, _rotation + 90 + jitter(25), 200, 150);\n\t}\n}",
+  "742:2979:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 75;\n\tblastRange = 75;\n\tspinSpeed = 25;\n\tfragCount = 25;\n\tfrag = \"shot_mcBomblet\";\n\t//blastMark = 2;\n}",
+  "742:2983:2": "onClipEvent(load){\n\t// params\n\ttype = \"bomblet\";\n\tspeed = 15 + rand(15);\n\tbounce = 0.35;\n\tdrag = .85;\n\tdamage = 50;\n\tblastRange = 75;\n\tspinSpeed = 25;\n\tblastMark = 2;\n\tblastInit = {scale:[50,50]};\n\tsampleSize = 5;\n}",
+  "742:2987:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 200;\n\tblastRange = 75;\n\tspinSpeed = 25;\n\tfragCount = 25;\n\tfrag = \"shot_mcBanshee\";\n\tblastMark = 2;\n}",
+  "742:2993:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 75;\n\tblastRange = 75;\n\tspinSpeed = 25;\n\tfragCount = 100;\n\tfrag = \"shot_mcSpitling\";\n\tblastMark = 2;\n}",
+  "742:2997:2": "onClipEvent(load){\n\t// params\n\ttype = \"bomblet\";\n\tspeed = 25 + rand(25);\n\tbounce = 0.35;\n\tdrag = .85;\n\tdamage = 50;\n\tblastRange = 75;\n\tspinSpeed = 25;\n\tblastMark = 2;\n\tblastInit = {scale:[50,50]};\n\tsampleSize = 5;\n}",
+  "742:3001:2": "onClipEvent (load) {\n\t// params\n\tspeed = 12;\n\tdamage = 4;\n\tblastMark = 1;\n}",
+  "742:3004:2": "onClipEvent (load) {\n\t// params\n\tspeed = 8;\n\tdamage = 5;\n\tblastMark = 1;\n}",
+  "742:3007:2": "onClipEvent (load) {\n\t// params\n\thit = false;\n\tspeed = 7;\n\tdamage = 15;\n\tblastRange = 50;\n\tblastMark = 2;\n}",
+  "742:3013:2": "onClipEvent(load){\n\t// params\n\tdamage = 22;\n\tspeed = 25;\n\tblastRange = 25;\n\tblastMark = 3;\n\t\n\tfunction onInit(){\n\t\tif(getDepth(this) % 2){\n\t\t\t_x += ySample;\n\t\t\t_y -= xSample;\n\t\t}else{\n\t\t\t_x -= ySample;\n\t\t\t_y += xSample;\n\t\t}\n\t}\n\t\n\tfunction onUpdate(){\n\t\tif(randomPerSecond(15))\n\t\t\tmakeShrapnel(this, \"particle_mcFire\", 1, 360, {scale:45});\n\t}\n}",
+  "742:3016:2": "onClipEvent(load){\n\t// params\n\tdamage = 75;\n\tspeed = 100 + rand(100);\n\tfragCount = random(4);\n\tfrag = \"scrap_mc\";\n\tpinnedHit = true;\n\t\n\t// brass shells\n\tfunction onInit(){\n\t\tif(!shrapnel)\n\t\t\tmakeShell(_player, _rotation + 90 + jitter(25), 150, 200);\n\t}\n\t\n\t// sparks and rail alignment\n\tfunction onDie(){\n\t\tmakeSparks(this, 1);\n\t}\n}",
+  "742:3019:2": "onClipEvent(load){\n\t// params\n\tdamage = 9;\n\tspeed = 200 + rand(200);\n\tfragCount = random(3) == 0 ? 1 : 0;\n\tfrag = \"scrap_mc\";\n\tblastMark = 1;\n\t\n\tif(shrapnel){\n\t\tdamage = 50;\n\t}\n\t\n\t// brass shells\n\tfunction onInit(){\n\t\tif(!shrapnel)\n\t\t\tmakeShell(_player, _rotation + 90 + jitter(25));\n\t}\n\t\n\t// only one in 4 shots are actually visible in flight\n\t_visible = !random(4);\n\tfunction onDie(){\n\t\t_visible = true;\n\t}\n}",
+  "742:3022:2": "onClipEvent (load) {\n\t// params\n\tdamage = 100;\n\tfadeSpeed = 35;\n}\n",
+  "742:3027:2": "onClipEvent (load) {\n\t// params\n\tdamage = 100;\n\tfadeSpeed = 100;\n}\n",
+  "742:3032:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tspinSpeed = 25;\n\tfrag = \"shot_mcLaser\";\n\tfragCount = 5;\n\t\n\t// function for when the bomb goes off\n\tfunction hitFunc(){\n\t\t_rotation = rand(360);\n\t\tgotoAndPlay(2);\n\t\tdie();\n\t\t\n\t\t// shoot out targetted lasers\n\t\t// target enemies first\n\t\tvar targets = [];\n\t\tvar i = _root.enemies.length, mc;\n\t\twhile(i--){\n\t\t\tmc = _root.enemies[i];\n\t\t\tif(lineOfSight(this,mc,10)){\n\t\t\t\ttargets.push({mc:mc,distance:getDistanceSquare(this,mc)});\n\t\t\t\tif(targets.length >= fragCount) break;\n\t\t\t}\n\t\t}\n\t\t// prioritize by closest\n\t\ttargets.sort(function(a,b){return a.distance-b.distance});\n\t\tif(targets.length < fragCount){\n\t\t\t// traget boxes if not all potential lasers have a target\n\t\t\tvar boxTargets = [];\n\t\t\tvar i = _root.boxes.length, mc;\n\t\t\twhile(i--){\n\t\t\t\tmc = _root.boxes[i];\n\t\t\t\tif(lineOfSight(this,mc,10)){\n\t\t\t\t\ttargets.push({mc:mc,distance:getDistanceSquare(this,mc)});\n\t\t\t\t\tif(targets.length >= fragCount) break;\n\t\t\t\t}\n\t\t\t}\n\t\t\t// prioritize by closest, but all boxes follow any enemies\n\t\t\tboxTargets.sort(function(a,b){return a.distance-b.distance});\n\t\t\ttargets = targets.concat(boxTargets);\n\t\t}\n\t\t// create the targetted lasers\n\t\tvar len = Math.min(fragCount,targets.length);\n\t\tfor(var i=0; i<len; i++){\n\t\t\tvar d = shotID();\n\t\t\tvar init = {\n\t\t\t\t_x:_x,\n\t\t\t\t_y:_y,\n\t\t\t\t_rotation:getAngle(this,targets[i].mc)\n\t\t\t}\n\t\t\t_screen[frag].duplicateMovieClip('shot_mc'+d,d,init);\n\t\t\t_root.shots.push(_root['shot_mc'+d]);\n\t\t}\n\t}\n}",
+  "742:3037:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tspinSpeed = 25;\n\tfrag = \"shot_mcSuperLaser\";\n\tfragCount = 25;\n\t\n\t// function for when the bomb goes off\n\tfunction hitFunc(){\n\t\t_rotation = rand(360);\n\t\tgotoAndPlay(2);\n\t\tdie();\n\t\t\n\t\t// shoot out targetted lasers\n\t\t// target enemies first\n\t\tvar targets = [];\n\t\tvar i = _root.enemies.length, mc;\n\t\twhile(i--){\n\t\t\tmc = _root.enemies[i];\n\t\t\tif(lineOfSight(this,mc,10)){\n\t\t\t\ttargets.push({mc:mc,distance:getDistanceSquare(this,mc)});\n\t\t\t\tif(targets.length >= fragCount) break;\n\t\t\t}\n\t\t}\n\t\t// prioritize by closest\n\t\ttargets.sort(function(a,b){return a.distance-b.distance});\n\t\tif(targets.length < fragCount){\n\t\t\t// traget boxes if not all potential lasers have a target\n\t\t\tvar boxTargets = [];\n\t\t\tvar i = _root.boxes.length, mc;\n\t\t\twhile(i--){\n\t\t\t\tmc = _root.boxes[i];\n\t\t\t\tif(lineOfSight(this,mc,10)){\n\t\t\t\t\ttargets.push({mc:mc,distance:getDistanceSquare(this,mc)});\n\t\t\t\t\tif(targets.length >= fragCount) break;\n\t\t\t\t}\n\t\t\t}\n\t\t\t// prioritize by closest, but all boxes follow any enemies\n\t\t\tboxTargets.sort(function(a, b){ return a.distance - b.distance });\n\t\t\ttargets = targets.concat(boxTargets);\n\t\t}\n\t\t// create the targetted lasers\n\t\tvar len = Math.min(fragCount, targets.length);\n\t\tfor(var i=0; i<len; i++){\n\t\t\tvar d = shotID();\n\t\t\tvar init = {\n\t\t\t\t_x:_x,\n\t\t\t\t_y:_y,\n\t\t\t\t_rotation:getAngle(this,targets[i].mc),\n\t\t\t\tfadeSpeed:35\n\t\t\t}\n\t\t\t_screen[frag].duplicateMovieClip('shot_mc'+d,d,init);\n\t\t\t_root.shots.push(_root['shot_mc'+d]);\n\t\t}\n\t}\n}",
+  "742:3042:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 75;\n\tblastRange = 75;\n\tspinSpeed = 25;\n\tfragCount = 5;\n\tfrag = \"shot_mcCluster\";\n\tblastMark = 2;\n}",
+  "742:3048:2": "onClipEvent(load){\n\t// params\n\ttype = \"shrapnel\";\n\tspeed = 5 + rand(25);\n\tbounce = 0.75;\n\tdrag = .85;\n\tdamage = 5;\n\tspinSpeed = 75;\n\tsampleSize = 10;\n\tfastBounce = true;\n\tpinnedHit = true;\n\t\n\t// init\n\tfunction onInit(){\n\t\t_xscale = 80 + rand(60);\n\t\t_yscale = 80 + rand(60);\n\t}\n\t\n\t// update heated appearance based on life\n\tfunction onUpdate(){\n\t\tvar percent = 1 - speed / initSpeed;\n\t\tvar frame = Math.ceil(core_mc._totalframes * percent);\n\t\tcore_mc.gotoAndStop(frame);\n\t}\n\t\n\t// die\n\tfunction onDie(){\n\t\tif(speed > speedMin) makeSparks(this, speed / initSpeed);\n\t}\n}",
+  "742:3050:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 200;\n\tblastRange = 75;\n\tspinSpeed = 25;\n\tfragCount = 15;\n\tfrag = \"shot_mcPlasma\";\n\tblastMark = 2;\n}",
+  "742:3060:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 50;\n\tblastRange = 50;\n\tblastMark = 11;\n\tspinSpeed = 25;\n\tfragCount = 32;\n\tfrag = \"shot_mcBullet\";\n}",
+  "742:3068:2": "onClipEvent(load){\n\t// params\n\tdamage = 500;\n\tspeed = 8;\n\t//turnSpeed = 10;\n\taccel = 1.05;\n\tblastRange = 50;\n\tblastMark = 11;\n\tminTargetAngle = 90;\n\t\n\tfunction onSample(){\n\t\tmakeSmoke(this, 35, 4);\n\t}\n\t\n\tfunction onUpdate(){\n\t\tacquireTarget();\n\t}\n}",
+  "742:3079:2": "onClipEvent(load){\n\t// params\n\tdamage = 500;\n\tspeed = 100 + rand(100);\n\tblastRange = 40;\n\tblastMark = 11;\n\t\n\tfunction onSample(){\n\t\tmakeSmoke(this, 35, 4);\n\t}\n}",
+  "742:3084:2": "onClipEvent(load){\n\t// params\n\tdamage = 25;\n\tspeed = 15 + rand(15);\n\tblastRange = 50;\n\tblastMark = 11;\n\tblastInit = {scale:[75,75]};\n\t\n\tfunction onSample(){\n\t\tmakeSmoke(this, 15, 15);\n\t}\n}",
+  "742:3089:2": "onClipEvent(load){\n\t// params\n\tdamage = 800;\n\tspeed = 5;\n\t//turnSpeed = 10;\n\taccel = 1.05;\n\tblastRange = 250;\n\tblastMark = 10;\n\tminTargetAngle = 90;\n\t\n\tfunction onSample(){\n\t\tmakeSmoke(this, 35, 4);\n\t}\n\t\n\tfunction onUpdate(){\n\t\tacquireTarget();\n\t}\n}",
+  "742:3095:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 50;\n\tstun = frameRate * 20;\n\tblastMark = 10;\n\tblastRange = 500;\n\tspinSpeed = 25;\n\t\n\tfunction onDie(){\n\t\tvar d = shotID();\n\t\tvar mc = _screen.createEmptyMovieClip('mask_mc'+d,d);\n\t\t//mc.lineStyle(1,0xff0000,100);\n\t\tmc.beginFill(0xffffff,100);\n\t\tvar count = 90, points = [];\n\t\tvar i = count;\n\t\twhile(i--){\n\t\t\tvar a = 360*(i/count);\n\t\t\tvar v = getVector(10,a);\n\t\t\tvar p = {x:_x,y:_y};\n\t\t\twhile(!wallHitTest(p.x,p.y)){\n\t\t\t\tp.x += v.x;\n\t\t\t\tp.y += v.y;\n\t\t\t\t//_screen.attachMovie('dot','dot'+_screen.getNextHighestDepth(),_screen.getNextHighestDepth(),{_x:p.x,_y:p.y});\n\t\t\t}\n\t\t\t//_screen.attachMovie('dot','dot'+_screen.getNextHighestDepth(),_screen.getNextHighestDepth(),{_x:p.x,_y:p.y});\n\t\t\ti == count-1 ? mc.moveTo(p.x,p.y) : mc.lineTo(p.x,p.y);\n\t\t}\n\t\tmc.endFill();\n\t\tsetMask(mc);\n\t\tthis.maskMC = mc;\n\t\tvar bounds = mc.getBounds(mc._parent);\n\t\t_xscale = Math.max(Math.abs(_x-bounds.xMin),Math.abs(_x-bounds.xMax))*2;\n\t\t_yscale = Math.max(Math.abs(_y-bounds.yMin),Math.abs(_y-bounds.yMax))*2;\n\t\t_rotation = 0;\n\t\t\n\t\t/*var init = {\n\t\t\t_x:_x,\n\t\t\t_y:_y,\n\t\t\t_xscale:_xscale,\n\t\t\t_yscale:_yscale\n\t\t}\n\t\tvar b = _screen.blasts_mc.hit_mc.duplicateMovieClip(\"blasts_mc\"+d,d,init);\n\t\tb.gotoAndStop(10);\n\t\tb.setMask(mc);\n\t\t//b.transform.colorTransform = new flash.geom.ColorTransform(1,1,1,.45,255,255,255,0);\n\t\t//b.filters = [new flash.filters.BlurFilter(2,2,3)];\n\t\tblasts_bmp.draw(_screen.blasts_mc);\n\t\tb.removeMovieClip();\n\t\tsetMask(mc);*/\n\t}\n}",
+  "742:3101:2": "onClipEvent(load){\n\t// params\n\tdamage = 10;\n\tspeed = 25;\n\tblastMark = 1;\n\tminTargetAngle = 45;\n\tturnSpeed = minTargetAngle;\n\ttargetBoxes = true;\n\ttargetFunc = targetByAngleDifFunc;\n\t\n\tfunction onInit(){\n\t\tacquireTarget();\n\t}\n\t\n\tfunction onUpdate(){\n\t\tstar_mc._rotation = rand(360);\n\t}\n}",
+  "742:3106:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 75;\n\tblastRange = 100;\n\tblastMark = 2;\n\tspinSpeed = 25;\n\tfragCount = 12;\n\tfrag = \"shot_mcSmarty\";\n}",
+  "742:3117:2": "onClipEvent(load){\n\t// params\n\tdamage = 30;\n\tspeed = 12;\n\tblastMark = 1;\n\tminTargetAngle = 180;\n\tturnSpeed = 15;\n\ttargetBoxes = true;\n\t\n\tfunction onInit(){\n\t\tacquireTarget();\n\t}\n\t\n\tfunction onUpdate(){\n\t\t//if(!target) acquireTarget();\n\t\tstar_mc._rotation = rand(360);\n\t}\n}",
+  "742:3122:2": "onClipEvent(load){\n\t// params\n\tdamage = 12;\n\tstun = frameRate;\n\tspeed = 25;\n\tturnSpeed = 8;\n\tblastMark = 1;\n\tminTargetAngle = 75;\n\ttargetBoxes = true;\n\ttargetFunc = targetByAngleDifFunc;\n\t\n\tfunction onUpdate(){\n\t\tif(!target) acquireTarget();\n\t\tstar_mc._rotation = rand(360);\n\t}\n}",
+  "742:3127:2": "onClipEvent(load){\n\t// params\n\tdamage = 500;\n\tspeed = 10;\n\taccel = 1.2;\n\tblastRange = 50;\n\tblastMark = 11;\n\t\n\tfunction onSample(){\n\t\tmakeSmoke(this, 35, 4);\n\t}\n}",
+  "742:3132:2": "onClipEvent(load){\n\t// params\n\tdamage = 600;\n\tspeed = 5;\n\taccel = 1.1;\n\tblastRange = 50;\n\tblastMark = 11;\n\tfragCount = 12;\n\t//fragInfluence = -.1;\n\tfrag = \"shot_mcSmarty\";\n\t\n\tfunction onSample(){\n\t\tmakeSmoke(this, 35, 4);\n\t}\n}",
+  "742:3137:2": "onClipEvent(load){\n\t// params\n\tdamage = 25;\n\tspeed = 10 + rand(10);\n\tblastRange = 50;\n\tblastMark = 11;\n\tblastInit = {scale:[75,75]};\n\t\n\tvar angle = 0, angleJitter = 6, time = 0, timer = 60;\n\tfunction onUpdate(){\n\t\tangle += jitter(angleJitter);\n\t\t_rotation += angle;\n\t\t\n\t\ttrajectory = getVector(speed,_rotation);\n\t\tsamples = Math.ceil(speed/sampleSize);\n\t\txSample = trajectory.x/samples;\n\t\tySample = trajectory.y/samples;\n\t\t\n\t\tif(++time > timer) hitFunc();\n\t}\n\t\n\tfunction onSample(){\n\t\tmakeSmoke(this, 15, 15);\n\t}\n}",
+  "742:3142:2": "onClipEvent (load) {\n\t// params\n\tspeed = 0;\n\tfragCount = 12;\n\tfrag = \"shot_mcDrunkRocket\";\n\tfragSpread = 15;\n\t\n\tfunction onInit(){\n\t\thitFunc();\n\t}\n}\n",
+  "742:3144:2": "onClipEvent (load) {\n\t// params\n\tspeed = 0;\n\t//fragCount = 3;\n\tfrag = \"shot_mcSeeker\";\n\tfragSpread = 35;\n\t\n\tfunction onInit(){\n\t\tvar angles = [_rotation - fragSpread / 2, _rotation, _rotation + fragSpread / 2];\n\t\tvar i = angles.length;\n\t\twhile(i--){\n\t\t\tvar d = shotID();\n\t\t\tvar init = {\n\t\t\t\t_x:_x,\n\t\t\t\t_y:_y,\n\t\t\t\t_rotation:angles[i]\n\t\t\t}\n\t\t\t_screen.shot_mcSeeker.duplicateMovieClip(\"shot_mc\" + d, d, init);\n\t\t}\n\t\thitFunc();\n\t}\n}\n",
+  "742:3146:2": "onClipEvent (load) {\n\t// params\n\tspeed = 0;\n\tfragCount = 5;\n\tfrag = \"shot_mcSpready\";\n\tfragSpread = 15;\n\t\n\tfunction onInit(){\n\t\thitFunc();\n\t}\n}\n",
+  "742:3148:2": "onClipEvent (load) {\n\t// params\n\tdamage = 15;\n\tspeed = 40;\n\tblastMark = 1;\n\t\n\tfunction onUpdate(){\n\t\txSample += Math.random() - .5;\n\t\tySample += Math.random() - .5;\n\t}\n}",
+  "742:3152:2": "onClipEvent(load){\n\t// params\n\ttype = \"shrapnel\";\n\tspeed = rand(100);\n\tbounce = 0.5;\n\tspinSpeed = 0;\n\tdrag = .7;\n\tfastBounce = true;\n\t\n\tonInit = onUpdate = function(){\n\t\t_yscale = speed;\n\t}\n\t\n\tfunction onBounce(){\n\t\t_rotation = getAngle({_x:0, _y:0}, {_x:trajectory.x, _y:trajectory.y});\n\t}\n\t\n\tfunction onDie(){\n\t\tthis.removeMovieClip();\n\t}\n}",
+  "742:3155:2": "onClipEvent (load) {\n\t// params\n\tdamage = 10;\n\tspeed = 20;\n\tblastMark = 1;\n\twallDrag = .9;\n\t\n\tblendMode = \"invert\";\n\t\n\tfunction update(){\n\t\t\n\t\t// sub sampled shot movement\n\t\tvar i = samples;\n\t\twhile(i--){\n\t\t\t\n\t\t\t// move shot\n\t\t\t_x += xSample;\n\t\t\t_y += ySample;\n\t\t\t\n\t\t\t// check for collisions\n\t\t\tif(wallHitTest(_x, _y)){\n\t\t\t\t//return hitFunc(\"wall\");\n\t\t\t\txSample *= wallDrag;\n\t\t\t\tySample *= wallDrag;\n\t\t\t\tspeed *= wallDrag;\n\t\t\t}else if(projectileHittest(this)){\n\t\t\t\treturn hitFunc();\n\t\t\t}\n\t\t}\n\t\t\n\t\tif(Math.abs(xSample) < 3 && Math.abs(ySample) < 3)\n\t\t\thitFunc();\n\t\telse if(_x < 0 || _x > levelWidth || _y < 0 || _y > levelHeight)\n\t\t\thitFunc();\n\t\t_yscale = speed * 10;\n\t}\n\tfunction onDie(){\n\t\t_yscale = 100;\n\t}\n}",
+  "742:3159:2": "onClipEvent(load){\n\t// params\n\ttype = \"shell\";\n\tspeed = 5 + rand(10);\n\tbounce = 0.75;\n\tdrag = .85;\n\tspinSpeed = rand(360);\n\tfastBounce = true;\n}",
+  "742:3161:2": "onClipEvent(load){\n\t// params\n\tdamage = 25;\n\tblastRange = 0;\n\tshakeStrength = 0;\n\tuseFlash = false;\n\tspeed = 25;\n\taccel = .9;\n\tinfluence = 1.0;\n\t\n\t// fire params\n\tblendMode = \"add\";\n\tlifespan = 1;\n\tgrowSpeed = 5;\n\t\n\t\n\t// init\n\t_xscale = _yscale = 25 + jitter(10);\n\tage = speed;\n\tinitDamage = damage;\n\t\n\tfunction onUpdate(){\n\t\t// aging\n\t\tage *= accel;\n\t\tif(age < lifespan){\n\t\t\tdie();\n\t\t\tthis.kill();\n\t\t}\n\t\tvar life = age/initSpeed;\n\t\t_xscale = _yscale += growSpeed;//maxSize*(1-life);\n\t\t_alpha = 100*life;\n\t\t_rotation += jitter(180*life);\n\t\t\n\t\t// fire damage\n\t\tblastRange = _width/2;\n\t\tdamage = initDamage*life;\n\t\tmakeExplosion(this);\n\t}\n\t\n\tfunction hitFunc(type){\n\t\tif(type == \"wall\"){\n\t\t\t_x -= xSample;\n\t\t\t_y -= ySample;\n\t\t}\n\t\tthis.update = onUpdate;\n\t}\n}",
+  "742:3163:2": "onClipEvent(load){\n\t// params\n\tdamage = 10;\n\tspeed = 12;\n\tturnSpeed = 3;\n\tblastRange = 75;\n\tblastMark = 11;\n\tfrag = \"frag_mc\";\n\tfragCount = random(4);\n\t\n\tfunction onUpdate(){\n\t\tacquireTarget();\n\t\tmakeSmoke(this, 35, 25, 2);\n\t}\n}",
+  "742:3172:2": "onClipEvent (load) {\n\t// params\n\tspeed = 0;\n\tfragCount = 5;\n\tfrag = \"shot_mcSpreadyFader\";\n\tfragSpread = 40;\n\t\n\tfunction onInit(){\n\t\thitFunc();\n\t}\n}\n",
+  "742:3174:2": "onClipEvent (load) {\n\t// params\n\tdamage = 20;\n\tspeed = 40;\n\tblastMark = 1;\n\t\n\tfunction onUpdate(){\n\t\t_xscale = _yscale *= .9;\n\t\tdamage *= .85;\n\t\txSample += Math.random() - .5;\n\t\tySample += Math.random() - .5;\n\t}\n}",
+  "742:3178:2": "onClipEvent(load){\n\t// params\n\tdamage = 20;\n\tspeed = 25;\n\tblastRange = 25;\n\tblastMark = 5;\n\t\n\tfunction onUpdate(){\n\t\tif(randomPerSecond(frameRate))\n\t\t\tmakeShrapnel(this, \"particle_mcBlue\", 1, 360, {scale:55});\n\t}\n}",
+  "742:3187:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 200;\n\tblastRange = 75;\n\tspinSpeed = 25;\n\tfragCount = 12;\n\tfrag = \"shot_mcPulse\";\n\tblastMark = 2;\n}",
+  "742:3197:2": "onClipEvent(load){\n\t// params\n\tspeed = 25;\n\tbounce = 0.35;\n\tdrag = .95;\n\tdamage = 3;\n\tstun = frameRate * 9;\n\tblastRange = 200;\n\tspinSpeed = 0//25;\n\tfrag = \"frag_mc\";\n\tfragCount = 9;\n\tshakeStrength = 0;\n\tuseFlash = true;\n\t\n\t/*function onDie(){\n\t\tmakeZaps({_x:this._x, _y:this._y}, 30);\n\t}*/\n}",
+  "742:3212:2": "onClipEvent (load) {\n\t// params\n\tspeed = 0;\n\tfragCount = 2;\n\tfrag = \"shot_mcSuperPlasma\";\n\tfragSpread = 0;\n\t\n\tfunction onInit(){\n\t\thitFunc();\n\t}\n}\n",
+  "742:3214:2": "onClipEvent (load) {\n\t// params\n\tdamage = 1000;\n\tfadeSpeed = 5;\n\tblastInit = {scale:[150, 150]}\n}\n",
+  "742:3219:2": "onClipEvent(load){\n\t// params\n\ttype = \"shrapnel\";\n\tspeed = 5 + rand(25);\n\tbounce = 0.75;\n\tdrag = .9;\n\tspinSpeed = 75;\n\tsampleSize = 10;\n\tfastBounce = true;\n\tpinnedHit = true;\n\tsmokeTrails = debrisType != \"yellow\" && !random(5);\n\tif(explosive == undefined) explosive = smokeTrails && !random(3);\n\t\n\tvar percent = 1.0;\n\t\n\t// init\n\tfunction onInit(){\n\t\t_xscale = 60 + rand(60);\n\t\t_yscale = 60 + rand(60);\n\t\tcore_mc.gotoAndStop(debrisType);\n\t}\n\t\n\t// update heated appearance based on life\n\tfunction onUpdate(){\n\t\tpercent = speed / initSpeed;\n\t\tvar frame = Math.ceil(this._totalframes * (1 - percent));\n\t\tthis.gotoAndStop(frame);\n\t}\n\t\n\t// smoke trails\n\tfunction onSample(){\n\t\tif(smokeTrails && speed > initSpeed * .45)\n\t\t\tmakeSmoke(this, 50 * percent, 10);\n\t}\n\t\n\t// explosive\n\tfunction onBounce(){\n\t\tif(explosive && speed > initSpeed * .25){\n\t\t\tmakeFireball(this, \"miniExplosion\", 150 + jitter(25));\n\t\t\tdie();\n\t\t\tthis.kill();\n\t\t}\n\t}\n\t\n\t// die\n\tfunction onDie(){\n\t\tthis.gotoAndStop(this._totalframes);\n\t\tmakeCorpse(this);\n\t\tthis.kill();\n\t}\n}",
+  "742:3221:2": "onClipEvent (load) {\n\t// params\n\tspeed = 9;\n\tdamage = 6;\n\tblastMark = 3;\n\tblastMark = 30;\n\tfragCount = 9 + random(6);\n\tfrag = \"shot_mcEYellow\";\n}",
+  "742:3224:2": "onClipEvent (load) {\n\t// params\n\tspeed = 12;\n\tdamage = 3;\n\tblastMark = 1;\n}",
+  "742:3227:2": "onClipEvent (load) {\n\t// params\n\tspeed = 50;\n\tdamage = 20;\n\tblastMark = 11;\n\tblastRange = 50;\n\tfrag = \"frag_mc\";\n\tfragCount = random(4);\n\t\n\tfunction onUpdate(){\n\t\tmakeShrapnel(this, \"particle_mcFire\", 1, 360, {scale:75});\n\t}\n}",
+  "742:3237:1": "#include \"as/object/player.as\"",
+  "742:3389:1": "/*onClipEvent (load) {\n\tsetTimeout(gotoAndStop, 1, 3);\n}*/\n\n/*on (release) {\n\tthis.play();\n}*/\n",
+  "742:3406:5": "on (release) {\n\tcontinueLevel();\n}\non (keyPress \"<Space>\") {\n\tcontinueLevel();\n}\n\non (keyPress \"<Enter>\") {\n\tcontinueLevel();\n}\n",
+  "742:3408:3": "on (release) {\n\tcontinueLevel();\n}\non (keyPress \"<Space>\") {\n\tcontinueLevel();\n}\n\non (keyPress \"<Enter>\") {\n\tcontinueLevel();\n}\n",
+  "742:3410:5": "on (release) {\n\tquit();\n}\n\non (keyPress \"<Escape>\") {\n\tquit();\n}\n",
+  "742:3412:3": "on (release) {\n\tquit();\n}\n\non (keyPress \"<Escape>\") {\n\tquit();\n}\n",
+  "742:3422:1": "on (release) {\n\tcontinueLevel();\n}\non (keyPress \"<Space>\") {\n\tcontinueLevel();\n}\n\non (keyPress \"<Enter>\") {\n\tcontinueLevel();\n}\n",
+  "742:3426:1": "on (release) {\n\tquit();\n}\n\non (keyPress \"<Escape>\") {\n\tquit();\n}\n",
+  "742:3428:7": "on (release) {\n\tcontinueLevel();\n}\non (keyPress \"<Space>\") {\n\tcontinueLevel();\n}\n\non (keyPress \"<Enter>\") {\n\tcontinueLevel();\n}\n",
+  "742:3432:7": "on (release) {\n\tquit();\n}\n\non (keyPress \"<Escape>\") {\n\tquit();\n}\n",
+  "742:36:8": "onClipEvent (load) {\n\t//status = \"open\";\n\tid = \"door1\";\n}\n",
+  "742:63:8": "onClipEvent (load) {\n\tid = \"door2\";\n}\n",
+  "742:90:8": "onClipEvent (load) {\n\tid = \"door3\";\n}\n",
+  "742:9:2": "onClipEvent (load) {\n\tspeed = 3.2;\n}\n",
+  "842:52:1": "on (rollOver) {\n\t_parent.tooltip_mc.show(\"HELP\", this);\n}\n\non (release) {\n\tshowDialog(\"helpScreen\")\n}\n",
+  "842:54:1": "on (rollOver) {\n\t_parent.tooltip_mc.show(currentQuality + \" QUALITY\", this);\n}\n\non (release) {\n\ttoggleQuality();\n\t_parent.tooltip_mc.show(currentQuality + \" QUALITY\", this);\n}\n",
+  "842:56:1": "on (rollOver) {\n\t_parent.tooltip_mc.show(\"MENU\", this);\n}\n\non (release) {\n\tshowDialog(\"menuScreen\")\n}\n"
+ },
+ "symbols": {
+  "0": {
+   "labels": {
+    "game": 30,
+    "main": 2
+   },
+   "linkage": null,
+   "name": "__main__",
+   "scripts": {
+    "1": "//_root._quality = \"BEST\";\n_root.showMenu = false;\nStage.scaleMode = \"noScale\";\nStage.align = \"tl\";",
+    "2": "#include \"as/functionsLevel.as\"",
+    "29": "stop();\n\n//trace([so,so.data,so.data.level])\nif(so.data.level){\n\tcontinue_btn._alpha = 0;\n\tonEnterFrame = function(){\n\t\tcontinue_btn._alpha += 10;\n\t\tif(continue_btn._alpha >= 100)\n\t\t\tdelete onEnterFrame;\n\t}\n}else{\n\tcontinue_btn._visible = false;\n}\n\nvar kb = {};\nkb.onKeyUp = function(){\n\tswitch(Key.getCode()){\n\t\tcase Key.ENTER: case Key.SPACE:\n\t\t\tso.data.level ? continueGame() : gotoAndStop('game');\n\t\t\tbreak;\n\t}\n}\nKey.addListener(kb);",
+    "30": "#include \"as/core.as\"\n\nKey.removeListener(kb);"
+   },
+   "type": "movie clip"
+  },
+  "2": {
+   "labels": {},
+   "linkage": null,
+   "name": "_box",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "4": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/scanlines",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "14": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/menu screen back",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "18": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn resume game",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\""
+   },
+   "type": "movie clip"
+  },
+  "22": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn restart level",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\""
+   },
+   "type": "movie clip"
+  },
+  "26": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn help",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\""
+   },
+   "type": "movie clip"
+  },
+  "30": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn quit",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\""
+   },
+   "type": "movie clip"
+  },
+  "31": {
+   "labels": {},
+   "linkage": "menuScreen",
+   "name": "interface/screens/menu screen",
+   "scripts": {
+    "20": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "32": {
+   "labels": {},
+   "linkage": null,
+   "name": "_hex",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "33": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/hex anim",
+   "scripts": {
+    "1": "nextFrame();",
+    "2": "stop();\nsetTimeout(resume, Math.random() * 250);\nvar hmc = this;\nfunction resume(){\n\thmc.play();\n}",
+    "16": "//if(Math.random() < .5)\n\tstop();",
+    "24": "stop();"
+   },
+   "type": "movie clip"
+  },
+  "34": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/mask wipe",
+   "scripts": {
+    "1": "gotoAndPlay(2);\n",
+    "45": "stop();"
+   },
+   "type": "movie clip"
+  },
+  "37": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn close menu",
+   "scripts": {},
+   "type": "button"
+  },
+  "38": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/help screen back",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "39": {
+   "labels": {
+    "skip": 5
+   },
+   "linkage": "helpScreen",
+   "name": "interface/screens/help screen",
+   "scripts": {
+    "1": "if(skipFade)\n\tgotoAndPlay(\"skip\");",
+    "30": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "41": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/died screen back",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "43": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn retry level",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\""
+   },
+   "type": "movie clip"
+  },
+  "46": {
+   "labels": {},
+   "linkage": null,
+   "name": "_glow",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "55": {
+   "labels": {},
+   "linkage": "diedScreen",
+   "name": "interface/screens/died screen",
+   "scripts": {
+    "1": "//stop();\n//setTimeout(function(){play()}, 2000);\n",
+    "55": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "57": {
+   "labels": {},
+   "linkage": "screenFlash",
+   "name": "interface/alerts/screenFlash",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "59": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/alerts/notification back_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "62": {
+   "labels": {},
+   "linkage": "notification",
+   "name": "interface/alerts/notification",
+   "scripts": {
+    "1": "#include \"as/ui/notification.as\""
+   },
+   "type": "movie clip"
+  },
+  "65": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/alerts/message back_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "69": {
+   "labels": {},
+   "linkage": "message",
+   "name": "interface/alerts/message",
+   "scripts": {
+    "1": "#include \"as/ui/message.as\""
+   },
+   "type": "movie clip"
+  },
+  "71": {
+   "labels": {},
+   "linkage": "attention",
+   "name": "interface/alerts/attention",
+   "scripts": {
+    "1": "function onEnterFrame(){\n\t_x = target._x;\n\t_y = target._y;\n}\nonEnterFrame();",
+    "22": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "72": {
+   "labels": {},
+   "linkage": "zaps",
+   "name": "graphic assets/zaps",
+   "scripts": {
+    "1": "#include \"as/object/zaps.as\"",
+    "11": "onZapComplete();"
+   },
+   "type": "movie clip"
+  },
+  "73": {
+   "labels": {},
+   "linkage": "spark",
+   "name": "graphic assets/sparks",
+   "scripts": {
+    "10": "_root.shots.remove(this);\nthis.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "74": {
+   "labels": {},
+   "linkage": "lightFlash",
+   "name": "graphic assets/lightFlash",
+   "scripts": {
+    "11": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "75": {
+   "labels": {},
+   "linkage": "smokeColumn",
+   "name": "game objects/smokeColumn",
+   "scripts": {
+    "1": "#include \"as/object/smokeColumn.as\""
+   },
+   "type": "movie clip"
+  },
+  "84": {
+   "labels": {},
+   "linkage": "smoke",
+   "name": "game objects/smoke",
+   "scripts": {
+    "1": "#include \"as/object/smoke.as\""
+   },
+   "type": "movie clip"
+  },
+  "92": {
+   "labels": {},
+   "linkage": "miniExplosion",
+   "name": "graphic assets/explosion small",
+   "scripts": {
+    "14": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "94": {
+   "labels": {},
+   "linkage": null,
+   "name": "_circle",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "96": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy gnat body",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "97": {
+   "labels": {},
+   "linkage": "enemyDroneGnat",
+   "name": "enemy assets/enemy gnat",
+   "scripts": {
+    "1": "// gnat drone\n\nif(health == undefined) health = 15;\nif(turnSpeed == undefined) turnSpeed = 8;\nif(speedMax == undefined) speedMax = _player.speedMax * 1.25;\nif(accel == undefined) accel = 1;\nif(resistence == undefined) resistence = 1;\n//if(blastRange == undefined) blastRange = 50;\n//if(damage == undefined) damage = 30;\n//if(shakeStrength == undefined) shakeStrength = 0;\nchaser = true;\nsuicidal = true;\nif(suicideDamage == undefined) suicideDamage = 10;\n\n#include \"as/object/enemyVehicle.as\"",
+    "15": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "99": {
+   "labels": {},
+   "linkage": "dot",
+   "name": "_dot",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "101": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/crosshairs",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "102": {
+   "labels": {
+    "loop": 16
+   },
+   "linkage": null,
+   "name": "graphic assets/crosshairs anim",
+   "scripts": {
+    "30": "stop();\nvar pmc = this;\nresume = function(){\n\tpmc.gotoAndPlay(\"loop\");\n}\nsetTimeout(resume, 5000);"
+   },
+   "type": "movie clip"
+  },
+  "105": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/wep icons primary - projectiles",
+   "scripts": {
+    "1": "stop()"
+   },
+   "type": "movie clip"
+  },
+  "117": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/heat trail",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "118": {
+   "labels": {
+    "loop": 4
+   },
+   "linkage": null,
+   "name": "graphic assets/heat trail anim",
+   "scripts": {
+    "1": "if(_parent._parent != _screen){\n\tstop();\n\t_visible = false;\n}",
+    "11": "gotoAndPlay('loop');\n"
+   },
+   "type": "movie clip"
+  },
+  "120": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/warhead",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "124": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/wep icons secondary ",
+   "scripts": {
+    "1": "stop()"
+   },
+   "type": "movie clip"
+  },
+  "125": {
+   "labels": {
+    "health": 2,
+    "primary": 10,
+    "secondary": 20
+   },
+   "linkage": "powerup",
+   "name": "game objects/powerup",
+   "scripts": {
+    "1": "#include \"as/object/powerup.as\""
+   },
+   "type": "movie clip"
+  },
+  "144": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shrap piece",
+   "scripts": {
+    "1": "gotoAndStop(random(_totalframes) + 1);\nstop();"
+   },
+   "type": "movie clip"
+  },
+  "151": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shell",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "156": {
+   "labels": {},
+   "linkage": "hit",
+   "name": "game objects/hit_mc",
+   "scripts": {
+    "1": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "162": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/preloader",
+   "scripts": {
+    "1": "stop();\n\n_root.stop();\n\nthis.onEnterFrame = function(){\n\tbl = _root.getBytesLoaded();\n\tbt = _root.getBytesTotal();\n\tpercent = Math.ceil((bl/bt)*100);\n\tvar ease = 6;\n\tthis.gotoAndStop( this._currentframe + Math.ceil((percent-this._currentframe)/ease) );\n\tif(percent==100 && this._currentframe==100){\n\t\t_root.play();\n\t\tdelete this.onEnterFrame;\n\t}\n}\n"
+   },
+   "type": "movie clip"
+  },
+  "165": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/titlescreen",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "168": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/titlescreen header",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "171": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/titlescreen menu bar mc",
+   "scripts": {
+    "20": "stop();\nsetTimeout(replay, 2000 + random(10000), this);\n\nfunction replay(mc){\n\tmc.play();\n}"
+   },
+   "type": "movie clip"
+  },
+  "176": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn play game",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\"\n\nif(_root.so.data.level > 2)\n\tlabel_txt.text = \"NEW GAME\";"
+   },
+   "type": "movie clip"
+  },
+  "180": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn missions",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\""
+   },
+   "type": "movie clip"
+  },
+  "182": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/mission panel body",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "183": {
+   "labels": {},
+   "linkage": null,
+   "name": "mission panel list item back",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "185": {
+   "labels": {},
+   "linkage": "missionPanelListItem",
+   "name": "mission panel list item",
+   "scripts": {
+    "1": "#include \"as/ui/missionPanelListItem.as\""
+   },
+   "type": "movie clip"
+  },
+  "199": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/mission panel wire1",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "201": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/mission panel wire2",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "202": {
+   "labels": {
+    "in": 2,
+    "out": 31
+   },
+   "linkage": null,
+   "name": "interface/screens/mission panel",
+   "scripts": {
+    "1": "#include \"as/ui/missionPanel.as\"",
+    "30": "onInComplete();",
+    "60": "onOutComplete();"
+   },
+   "type": "movie clip"
+  },
+  "206": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn continue",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\""
+   },
+   "type": "movie clip"
+  },
+  "207": {
+   "labels": {},
+   "linkage": null,
+   "name": "_blank MC",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "208": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/blasts_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "211": {
+   "labels": {},
+   "linkage": null,
+   "name": "player assets/shadow_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "213": {
+   "labels": {},
+   "linkage": null,
+   "name": "player assets/exhaust flame",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "215": {
+   "labels": {},
+   "linkage": null,
+   "name": "player assets/core_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "221": {
+   "labels": {},
+   "linkage": null,
+   "name": "player assets/damage_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "222": {
+   "labels": {},
+   "linkage": null,
+   "name": "player assets/hits_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "227": {
+   "labels": {},
+   "linkage": null,
+   "name": "player assets/indicator anim - new",
+   "scripts": {
+    "1": "var d = shotID();\n_screen.attachMovie('attention','alert_mc'+d,d,{target:_player});",
+    "10": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "228": {
+   "labels": {
+    "hit": 1,
+    "new": 20,
+    "powerup": 10
+   },
+   "linkage": null,
+   "name": "player assets/indicator_mc",
+   "scripts": {
+    "1": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "233": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/sparking",
+   "scripts": {
+    "1": "gotoAndPlay(random(_totalframes) + 1);\n"
+   },
+   "type": "movie clip"
+  },
+  "237": {
+   "labels": {},
+   "linkage": null,
+   "name": "player assets/fire_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "238": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/explosion",
+   "scripts": {
+    "14": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "248": {
+   "labels": {
+    "attack": 5,
+    "death": 12,
+    "norm": 1
+   },
+   "linkage": null,
+   "name": "player assets/player MC",
+   "scripts": {
+    "1": "stop();\n",
+    "11": "gotoAndPlay(\"attack\");",
+    "40": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "260": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/exit doors",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "266": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/exit gear shadow",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "268": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/exit gear",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "271": {
+   "labels": {},
+   "linkage": null,
+   "name": "player assets/ship38x37",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "272": {
+   "labels": {
+    "exit": 61,
+    "open": 2
+   },
+   "linkage": null,
+   "name": "game objects/exit_mc",
+   "scripts": {
+    "1": "#include \"as/level/exit.as\"",
+    "60": "onOpenComplete();",
+    "120": "onExitComplete();"
+   },
+   "type": "movie clip"
+  },
+  "280": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn play mission",
+   "scripts": {
+    "1": "#include \"as/ui/button.as\"\n"
+   },
+   "type": "movie clip"
+  },
+  "288": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn back to main menu",
+   "scripts": {},
+   "type": "button"
+  },
+  "289": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/briefing monitor scanlines",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "290": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/screens/briefing monitor scanlines anim",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "293": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/background0",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "296": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/level0",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "297": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision0",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "299": {
+   "labels": {},
+   "linkage": null,
+   "name": "_arrow",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "300": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 29",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "301": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 32",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "302": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 4",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "303": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 17",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "304": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 31",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "305": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 36",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "306": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 21",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "307": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 30",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "308": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 10",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "309": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 13",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "310": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 24",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "311": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 26",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "312": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 33",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "313": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 35",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "314": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 14",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "315": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 16",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "316": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 18",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "317": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 19",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "318": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 20",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "319": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 28",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "320": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 34",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "321": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 11",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "322": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 12",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "323": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 15",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "324": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 27",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "325": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 9",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "326": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 25",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "327": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 6",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "328": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 7",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "329": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 8",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "330": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 23",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "331": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 2",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "332": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 3",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "333": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 5",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "334": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 22",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "335": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 37",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "336": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in assets/Symbol 1",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "337": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/warp in cells",
+   "scripts": {
+    "35": "stop()"
+   },
+   "type": "movie clip"
+  },
+  "338": {
+   "labels": {
+    "warp": 2
+   },
+   "linkage": null,
+   "name": "game objects/entrance_mc",
+   "scripts": {
+    "1": "#include \"as/level/entrance.as\"",
+    "35": "onWarpComplete();",
+    "50": "stop();"
+   },
+   "type": "movie clip"
+  },
+  "342": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/box",
+   "scripts": {
+    "1": "#include \"as/object/box.as\"",
+    "15": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "343": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/boxes0",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "345": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/message beacon",
+   "scripts": {
+    "1": "#include \"as/object/powerup.as\""
+   },
+   "type": "movie clip"
+  },
+  "346": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/powerups0",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "348": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy object fire barrel",
+   "scripts": {
+    "1": "if(health == undefined) health = 15;\nif(blastRange == undefined) blastRange = 150;\nif(damage == undefined) damage = 100;\nif(frag == undefined) frag = \"frag_mc\";\nif(fragCount == undefined) fragCount = 15;\n\n#include \"as/object/enemyObject.as\"\ncore_mc._visible = false;",
+    "15": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "349": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/enemies0",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "353": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"",
+    "10": "this.kill();"
+   },
+   "type": "movie clip"
+  },
+  "358": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC enemy",
+   "scripts": {
+    "1": "#include \"as/object/enemyProjectile.as\"",
+    "8": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "362": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/mort fire",
+   "scripts": {
+    "8": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "373": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC mortor",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "382": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC grenade",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "388": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC frag",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "389": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shrap",
+   "scripts": {
+    "45": "stop();\n"
+   },
+   "type": "movie clip"
+  },
+  "390": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC shrap",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "2": "core_mc.gotoAndStop(core_mc._totalframes);\nmakeCorpse(this);\nthis.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "399": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC bomb",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "403": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC pea",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"",
+    "8": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "412": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC orb",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "8": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "417": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC canister",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"",
+    "8": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "421": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC cluster bomb",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "431": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC cluster bomblet",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "439": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC bomb2",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "443": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC pea enemy",
+   "scripts": {
+    "1": "#include \"as/object/enemyProjectile.as\"",
+    "8": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "452": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC enemy missile",
+   "scripts": {
+    "1": "#include \"as/object/enemyProjectile.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "454": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC rail",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"",
+    "10": "makeCorpse(this);\nthis.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "456": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC ray",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"",
+    "10": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "459": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/energy beam",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "460": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC laser",
+   "scripts": {
+    "1": "#include \"as/object/projectileLaser.as\""
+   },
+   "type": "movie clip"
+  },
+  "466": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC split bomb",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "7": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "474": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC bomb3",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "478": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC spikey bomb",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "479": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC homing missile",
+   "scripts": {
+    "1": "#include \"as/object/projectileSeeker.as\"\ncacheAsBitmap = false;",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "480": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC missile",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"\ncacheAsBitmap = false;",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "481": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC mega missile",
+   "scripts": {
+    "1": "#include \"as/object/projectileSeeker.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "486": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC coupled bomb",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "20": "this.maskMC.removeMovieClip();\nthis.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "488": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/star",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "494": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC sparkly seeker",
+   "scripts": {
+    "1": "#include \"as/object/projectileSeeker.as\"\ncacheAsBitmap = false;",
+    "10": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "495": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC composite bomb",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "496": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC group projectile",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"",
+    "2": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "498": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/frag_mc",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\""
+   },
+   "type": "movie clip"
+  },
+  "499": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shell MC",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "2": "makeCorpse(this);\nthis.removeMovieClip()"
+   },
+   "type": "movie clip"
+  },
+  "502": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC flamer",
+   "scripts": {
+    "1": "#include \"as/object/projectile.as\"",
+    "2": "this.kill();"
+   },
+   "type": "movie clip"
+  },
+  "503": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC enemy homing missile",
+   "scripts": {
+    "1": "#include \"as/object/enemyProjectileSeeker.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "506": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/particle blue",
+   "scripts": {
+    "1": "#include \"as/object/particle.as\""
+   },
+   "type": "movie clip"
+  },
+  "510": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/particle fire",
+   "scripts": {
+    "1": "#include \"as/object/particle.as\""
+   },
+   "type": "movie clip"
+  },
+  "512": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/particle dust",
+   "scripts": {
+    "1": "#include \"as/object/particle.as\""
+   },
+   "type": "movie clip"
+  },
+  "516": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC sphere bomb",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "20": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "527": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/debris yellow",
+   "scripts": {
+    "1": "gotoAndStop(random(_totalframes) + 1);\n"
+   },
+   "type": "movie clip"
+  },
+  "538": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/debris gray",
+   "scripts": {
+    "1": "gotoAndStop(random(_totalframes) + 1);\n"
+   },
+   "type": "movie clip"
+  },
+  "539": {
+   "labels": {
+    "gray": 10,
+    "yellow": 1
+   },
+   "linkage": null,
+   "name": "game objects/debris core",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "540": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/debris",
+   "scripts": {
+    "1": "#include \"as/object/projectileBomb.as\"",
+    "30": "stop();"
+   },
+   "type": "movie clip"
+  },
+  "542": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/shot MC enemy shell",
+   "scripts": {
+    "1": "#include \"as/object/enemyProjectile.as\"",
+    "15": "this.removeMovieClip();"
+   },
+   "type": "movie clip"
+  },
+  "543": {
+   "labels": {},
+   "linkage": null,
+   "name": "graphic assets/fade in anim",
+   "scripts": {
+    "16": "stop();"
+   },
+   "type": "movie clip"
+  },
+  "549": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger core - circle",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "551": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger turret - oval body",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "552": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger turret - oval",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "555": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy wolfgun core",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "557": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy wolfgun turret body",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "558": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy wolfgun turret",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "565": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/background1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "568": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/level1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "570": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1-1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "572": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1-2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "574": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1-4",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "576": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1-3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "578": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1-5",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "580": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1-6",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "582": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1-7",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "584": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1-8",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "585": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "586": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/boxes1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "587": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/powerups1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "593": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/box reactor glow",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "604": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy wolfgun",
+   "scripts": {
+    "1": "// wolfgun turret\n\nif(health == undefined) health = 100;\nif(turnSpeed == undefined) turnSpeed = 3;\nif(shot == undefined) shot = \"shot_mcEPlasma\";\nif(shotSpread == undefined) shotSpread = 4;\nif(refireRate == undefined) refireRate = 50;\nif(particleType == undefined) particleType = \"particle_mcBlue\";\nif(powerupDrop == undefined && shot == \"shot_mcEPlasma\")\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Plasma\",\n\t\tquantity:10 + random(6),\n\t\tprobability:.25\n\t}\n\n#include \"as/object/enemyTurret.as\"",
+    "18": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "607": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger",
+   "scripts": {
+    "1": "// stinger turret\n\nif(health == undefined) health = 50;\nif(turnSpeed == undefined) turnSpeed = 5;\nif(shot == undefined) shot = \"shot_mcEYellow\";\nif(shotSpread == undefined) shotSpread = 4;\nif(refireRate == undefined) refireRate = 25;\nif(powerupDrop == undefined && shot == \"shot_mcEYellow\")\n\tpowerupDrop = {\n\t\ttype:\"primary\",\n\t\titem:\"Bolter\",\n\t\tquantity:15 + random(11),\n\t\tprobability:.15\n\t}\n\n#include \"as/object/enemyTurret.as\"",
+    "15": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "608": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/enemies1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "611": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/box reactor core",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "613": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/box reactor rods",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "614": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/box reactor ring pulse",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "625": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/background2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "628": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/level2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "630": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2-1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "632": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2-2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "634": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2-3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "636": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2-4",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "638": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2-5",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "639": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2-6",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "641": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2-7",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "643": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2-8",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "644": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "648": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/box reactor",
+   "scripts": {
+    "1": "#include \"as/object/boxReactor.as\"",
+    "2": "onShockwave();",
+    "11": "onParticles();",
+    "30": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "649": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/boxes2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "650": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/powerups2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "652": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/node",
+   "scripts": {
+    "1": "#include \"as/level/pathNode.as\""
+   },
+   "type": "movie clip"
+  },
+  "654": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger core - hex",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "657": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger2",
+   "scripts": {
+    "1": "if(health == undefined) health = 60;\nif(turnSpeed == undefined) turnSpeed = 10;\nif(shot == undefined) shot = \"shot_mcEWhite\";\nif(shotSpread == undefined) shotSpread = 4;\nif(refireRate == undefined) refireRate = 4;\nif(burstCount == undefined) burstCount = 5;\nif(burstReload == undefined) burstReload = 12;\n\n#include \"as/object/enemyTurret.as\"",
+    "15": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "662": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy scurge",
+   "scripts": {
+    "1": "// scurge turret\n\nif(health == undefined) health = 25;\nif(shot == undefined) shot = \"shot_mcEYellow\";\nif(shotSpread == undefined) shotSpread = 10;\nif(refireRate == undefined) refireRate = 40;\n\n#include \"as/object/enemyTurret.as\"\n\nmovable = true;",
+    "15": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "663": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/enemies2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "666": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy double battery core",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "668": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy double battery turret body",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "669": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy double battery flash",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "670": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy double battery turret",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "679": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/background3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "681": {
+   "labels": {
+    "close": 10,
+    "open": 20
+   },
+   "linkage": null,
+   "name": "game objects/level gate",
+   "scripts": {
+    "1": "#include \"as/level/gate.as\""
+   },
+   "type": "movie clip"
+  },
+  "683": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/door bottom",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "684": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/door top",
+   "scripts": {},
+   "type": "graphic"
+  },
+  "691": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/door",
+   "scripts": {
+    "1": "#include \"as/level/door.as\""
+   },
+   "type": "movie clip"
+  },
+  "693": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/level3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "694": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-1",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "696": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-2",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "698": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "700": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-5",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "702": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-6",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "704": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-7",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "706": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-8",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "708": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-9",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "710": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-10",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "712": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-11",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "714": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-12",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "716": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-13",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "718": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3-14",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "719": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/vision3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "728": {
+   "labels": {},
+   "linkage": null,
+   "name": "game objects/box computer",
+   "scripts": {
+    "1": "health = 50;\nrequired = false;\ndebrisType = \"gray\";\ndebrisCount = 5;\n\n#include \"as/object/box.as\"",
+    "20": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "729": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/boxes3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "730": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/powerups3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "734": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy double battery",
+   "scripts": {
+    "1": "if(health == undefined) health = 600;\nif(turnSpeed == undefined) turnSpeed = 1.5;\nif(shot == undefined) shot = \"shot_mcECannon\";\nif(shotSpread == undefined) shotSpread = 2;\nif(refireRate == undefined) refireRate = 24;\n\n#include \"as/object/enemyTurret.as\"",
+    "15": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "736": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger turret - hex body",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "737": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger turret - hex",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "740": {
+   "labels": {},
+   "linkage": null,
+   "name": "enemy assets/enemy stinger3",
+   "scripts": {
+    "1": "if(health == undefined) health = 80;\nif(turnSpeed == undefined) turnSpeed = 5;\nif(shot == undefined) shot = \"shot_mcERed\";\nif(shotSpread == undefined) shotSpread = 4;\nif(refireRate == undefined) refireRate = 3;\nif(burstCount == undefined) burstCount = 3;\nif(burstReload == undefined) burstReload = 25;\nif(powerupDrop == undefined)\n\tpowerupDrop = {\n\t\ttype:\"health\",\n\t\titem:\"health\",\n\t\tquantity:10,\n\t\tprobability:.25\n\t}\n\n\n#include \"as/object/enemyTurret.as\"",
+    "15": "makeCorpse(this);\nthis.kill();"
+   },
+   "type": "movie clip"
+  },
+  "741": {
+   "labels": {},
+   "linkage": null,
+   "name": "level assets/enemies3",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "742": {
+   "labels": {},
+   "linkage": null,
+   "name": "screen_mc",
+   "scripts": {
+    "1": "stop();\nendLevel();",
+    "2": "startLevel();",
+    "4": "startLevel();",
+    "6": "startLevel();",
+    "8": "startLevel();"
+   },
+   "type": "movie clip"
+  },
+  "793": {
+   "labels": {},
+   "linkage": null,
+   "name": "weapon assets/wep icons primary - guns",
+   "scripts": {
+    "1": "stop()"
+   },
+   "type": "movie clip"
+  },
+  "796": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/game ui/HUD weapon flash",
+   "scripts": {
+    "6": "stop();"
+   },
+   "type": "movie clip"
+  },
+  "799": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/game ui/HUD health flash",
+   "scripts": {
+    "6": "stop()"
+   },
+   "type": "movie clip"
+  },
+  "806": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/game ui/HUD shield bar",
+   "scripts": {
+    "1": "stop()"
+   },
+   "type": "movie clip"
+  },
+  "811": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn <?>",
+   "scripts": {},
+   "type": "button"
+  },
+  "814": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn <qaulity>",
+   "scripts": {},
+   "type": "button"
+  },
+  "817": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/buttons/btn <x>",
+   "scripts": {},
+   "type": "button"
+  },
+  "819": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/game ui/inventory back_mc",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "833": {
+   "labels": {
+    "aquaKey": 50,
+    "blueKey": 10,
+    "greenKey": 30,
+    "purpleKey": 40,
+    "redKey": 20,
+    "yellowKey": 1
+   },
+   "linkage": null,
+   "name": "interface/game ui/inventory item_mc",
+   "scripts": {
+    "1": "#include \"as/ui/hudInventoryItem.as\""
+   },
+   "type": "movie clip"
+  },
+  "834": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/game ui/inventory_mc",
+   "scripts": {
+    "1": "#include \"as/ui/hudInventory.as\""
+   },
+   "type": "movie clip"
+  },
+  "836": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/game ui/tooltip back",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "839": {
+   "labels": {
+    "bottom": 10,
+    "top": 1
+   },
+   "linkage": null,
+   "name": "interface/game ui/tooltip arrow",
+   "scripts": {},
+   "type": "movie clip"
+  },
+  "841": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/game ui/tooltip",
+   "scripts": {
+    "1": "#include \"as/ui/tooltip.as\""
+   },
+   "type": "movie clip"
+  },
+  "842": {
+   "labels": {},
+   "linkage": null,
+   "name": "interface/game ui/HUD",
+   "scripts": {},
+   "type": "movie clip"
+  }
+ }
+}
