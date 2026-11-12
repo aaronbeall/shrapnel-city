@@ -144,7 +144,9 @@ class Compiler {
   }
 
   isLocal(name, scope) {
-    for (let s = scope; s && !s.timeline; s = s.parent) if (s.locals.has(name)) return true;
+    // AVM1: a `var x` local does not exist until its declaration runs, so `var x = f(x)`
+    // reads x from the enclosing scope (pending names skip this function's locals)
+    for (let s = scope; s && !s.timeline; s = s.parent) if (s.locals.has(name) && !(s.pending && s.pending.has(name))) return true;
     return false;
   }
   inFunction(scope) { return !!scope && !scope.timeline; }
@@ -198,7 +200,8 @@ class Compiler {
     for (const p of node.params) locals.add(p.name);
     collectVarNames(node.body, locals);
     if (node.id) locals.add(node.id.name);
-    const scope = { timeline: false, locals, parent: parentScope, calleeName: null, node };
+    const scope = { timeline: false, locals, parent: parentScope, calleeName: null, node,
+      seen: new Set(['arguments', ...node.params.map((p) => p.name), ...(node.id ? [node.id.name] : [])]), pending: new Set() };
     // arguments.callee support (strict-mode safe): name the function
     const usesCallee = JSON.stringify(node.body, (k, v) => (k === 'start' || k === 'end' || k === 'loc' ? undefined : v))
       .includes('"name":"callee"');
@@ -221,8 +224,13 @@ class Compiler {
     switch (node.type) {
       case 'VariableDeclaration': {
         if (this.inFunction(scope)) {
-          return { type: 'VariableDeclaration', kind: 'var', declarations: node.declarations.map((d) => ({
-            type: 'VariableDeclarator', id: id(this.ren(d.id.name)), init: d.init ? this.expr(d.init, scope) : null })) };
+          return { type: 'VariableDeclaration', kind: 'var', declarations: node.declarations.map((d) => {
+            const nm = d.id.name, early = scope.seen && !scope.seen.has(nm);
+            if (early) scope.pending.add(nm);
+            const init = d.init ? this.expr(d.init, scope) : null;
+            if (early) { scope.pending.delete(nm); scope.seen.add(nm); }
+            return { type: 'VariableDeclarator', id: id(this.ren(nm)), init };
+          }) };
         }
         // timeline var: assignment onto the clip; bare `var x;` keeps any existing value
         const exprs = node.declarations.filter((d) => d.init).map((d) => assign(this.writeTarget(d.id.name), this.expr(d.init, scope)));
@@ -283,7 +291,7 @@ class Compiler {
   // assignment target
   lval(node, scope) {
     if (node.type === 'Identifier') {
-      if (this.isLocal(node.name, scope)) return id(this.ren(node.name));
+      if (this.isLocal(node.name, scope)) { if (scope.seen) scope.seen.add(node.name); return id(this.ren(node.name)); }
       return this.writeTarget(node.name);
     }
     if (node.type === 'MemberExpression') {

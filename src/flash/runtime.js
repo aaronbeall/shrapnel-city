@@ -168,6 +168,8 @@ export class Runtime {
   // ---- frame loop ----
   tick() {
     if (!this.root) return;
+    // actions queued outside the frame loop (timers, devtools) run before anything advances
+    this.flush();
     // 1. advance playheads (snapshot so new clips don't advance this frame)
     const list = [];
     collect(this.root, list);
