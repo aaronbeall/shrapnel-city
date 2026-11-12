@@ -19,6 +19,7 @@ export class Renderer {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.pool = [];
+    this.baseMatrix = [scale, 0, 0, scale, 0, 0];
     this.hctx = document.createElement('canvas').getContext('2d');
     this.tintCache = new Map();
     this.quality = 'high';
@@ -34,16 +35,19 @@ export class Renderer {
     this.pool = [];
   }
 
-  acquire() {
-    let c = this.pool.pop();
-    if (!c) {
-      c = document.createElement('canvas');
-      c.width = this.W; c.height = this.H;
-      c.ctx = c.getContext('2d');
+  // scratch canvases of at least w x h, origin at 0,0
+  acquire(w, h) {
+    for (let i = this.pool.length - 1; i >= 0; i--) {
+      const c = this.pool[i];
+      if (c.width >= w && c.height >= h) { this.pool.splice(i, 1); return c; }
     }
+    const c = document.createElement('canvas');
+    c.width = Math.max(64, Math.ceil(w / 64) * 64);
+    c.height = Math.max(64, Math.ceil(h / 64) * 64);
+    c.ctx = c.getContext('2d');
     return c;
   }
-  release(c) { this.pool.push(c); }
+  release(c) { if (c && this.pool.length < 24) this.pool.push(c); }
 
   // ---------------------------------------------------------------------
   render(root, bg) {
@@ -54,12 +58,16 @@ export class Renderer {
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, this.W, this.H);
     const s = this.scale;
-    this.drawNode(ctx, root, [s, 0, 0, s, 0, 0], null, [0, this.W, 0, this.H]);
+    this.baseMatrix = [s, 0, 0, s, 0, 0];
+    this.drawNode(ctx, root, this.baseMatrix, null, [0, this.W, 0, this.H]);
   }
 
   // render a subtree into an arbitrary 2d context (BitmapData.draw)
   renderTo(ctx, node, matrix, cx, w, h) {
+    const prev = this.baseMatrix;
+    this.baseMatrix = mul(matrix, invert(node.worldMatrix()));
     this.drawContent(ctx, node, matrix, cx || null, [0, w, 0, h]);
+    this.baseMatrix = prev;
   }
 
   drawNode(ctx, node, pm, pcx, clip) {
@@ -145,70 +153,143 @@ export class Renderer {
   }
 
   // ---------------------------------------------------------------------
+  // Nodes with filters, a blend mode or a script mask are rendered into their
+  // own small offscreen canvas (in device space, sized to the node's padded
+  // bounds) and composited.  The raster is cached on the node and reused while
+  // its content, color transform and rotation/scale are unchanged, so static
+  // glows and lights cost one drawImage per frame.
   drawLayered(ctx, node, m, cx, blend, fx, clip) {
-    // screen-space bounds of the node, padded for filters
-    let b = transformRect(m, node.localBounds());
-    if (!b) return;
+    const lb = node.localBounds();
+    if (!lb) return;
     let pad = 2;
     if (fx) for (const f of fx) pad += this.filterPad(f);
-    const x0 = Math.max(clip[0], Math.floor(b[0] - pad)), x1 = Math.min(clip[1], Math.ceil(b[1] + pad));
-    const y0 = Math.max(clip[2], Math.floor(b[2] - pad)), y1 = Math.min(clip[3], Math.ceil(b[3] + pad));
-    if (x1 <= x0 || y1 <= y0) return;
-    const w = x1 - x0, h = y1 - y0;
-    const layer = this.acquire();
-    const lc = layer.ctx;
-    lc.setTransform(1, 0, 0, 1, 0, 0);
-    lc.clearRect(x0, y0, w, h);
-    lc.save();
-    lc.beginPath(); lc.rect(x0, y0, w, h); lc.clip();
-    this.drawContent(lc, node, m, cx, [x0, x1, y0, y1]);
-    lc.restore();
-    if (node.maskedBy && !node.maskedBy.removed) {
-      const path = new Path2D();
-      const mk = node.maskedBy;
-      this.collectPaths(mk, mk.worldMatrixScaled(this.scale), path);
-      lc.save();
-      lc.setTransform(1, 0, 0, 1, 0, 0);
-      lc.globalCompositeOperation = 'destination-in';
-      lc.fillStyle = '#000';
-      lc.fill(path);
-      lc.restore();
+    const L = [m[0], m[1], m[2], m[3], 0, 0];
+    const rb = transformRect(L, lb); // bounds relative to the node origin
+    let rx0 = Math.floor(rb[0] - pad), ry0 = Math.floor(rb[2] - pad);
+    let rx1 = Math.ceil(rb[1] + pad), ry1 = Math.ceil(rb[3] + pad);
+    // on-screen test
+    if (m[4] + rx1 < clip[0] || m[4] + rx0 > clip[1] || m[5] + ry1 < clip[2] || m[5] + ry0 > clip[3]) return;
+    let w = rx1 - rx0, h = ry1 - ry0;
+    const huge = w * h > this.W * this.H * 1.2;
+    const cacheable = !node.maskedBy && !huge && this.cacheLayers !== false;
+    if (huge) {
+      // very large nodes: only rasterise the visible part (plus filter padding)
+      const vx0 = Math.max(rx0, Math.floor(clip[0] - m[4] - pad)), vx1 = Math.min(rx1, Math.ceil(clip[1] - m[4] + pad));
+      const vy0 = Math.max(ry0, Math.floor(clip[2] - m[5] - pad)), vy1 = Math.min(ry1, Math.ceil(clip[3] - m[5] + pad));
+      rx0 = vx0; ry0 = vy0; w = vx1 - vx0; h = vy1 - vy0;
+      if (w <= 0 || h <= 0) return;
     }
-    let src = layer;
-    let tmp = null;
-    if (fx) {
-      for (const f of fx) {
-        const out = this.applyFilter(src, f, x0, y0, w, h);
-        if (out !== src) {
-          if (src !== layer) this.release(src);
-          src = out;
+    let raster = null;
+    let key = null;
+    if (cacheable) {
+      key = this.contentHash(node, 0x811c9dc5) + ':' + (cx ? cx.map((v) => Math.round(v * 1000)).join(',') : '') + ':' +
+        L.slice(0, 4).map((v) => Math.round(v * 1000)).join(',') + ':' + (fx ? fx.map(filterKey).join(';') : '') + ':' + this.quality;
+      const c = node.$cache;
+      if (c && c.key === key) raster = c;
+    }
+    if (!raster) {
+      const layer = this.acquire(w, h);
+      const lc = layer.ctx;
+      lc.setTransform(1, 0, 0, 1, 0, 0);
+      lc.clearRect(0, 0, w, h);
+      lc.save();
+      lc.beginPath(); lc.rect(0, 0, w, h); lc.clip();
+      const lm = [m[0], m[1], m[2], m[3], -rx0, -ry0];
+      this.drawContent(lc, node, lm, cx, [0, w, 0, h]);
+      lc.restore();
+      if (node.maskedBy && !node.maskedBy.removed) {
+        const path = new Path2D();
+        const mk = node.maskedBy;
+        const mw = mul([1, 0, 0, 1, -(m[4] + rx0), -(m[5] + ry0)], mul(this.baseMatrix, mk.worldMatrix()));
+        this.collectPaths(mk, mw, path);
+        lc.save();
+        lc.setTransform(1, 0, 0, 1, 0, 0);
+        lc.globalCompositeOperation = 'destination-in';
+        lc.fillStyle = '#000';
+        lc.fill(path);
+        lc.restore();
+      }
+      let src = layer;
+      if (fx) {
+        for (const f of fx) {
+          const out = this.applyFilter(src, f, w, h);
+          if (out !== src) { this.release(src); src = out; }
         }
       }
-      tmp = src !== layer ? src : null;
+      if (cacheable) {
+        let c = node.$cache;
+        if (!c || c.canvas.width < w || c.canvas.height < h || c.canvas.width > w * 2 + 64 || c.canvas.height > h * 2 + 64) {
+          const cv = document.createElement('canvas');
+          cv.width = w; cv.height = h;
+          c = { canvas: cv, ctx: cv.getContext('2d') };
+        }
+        c.ctx.setTransform(1, 0, 0, 1, 0, 0);
+        c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
+        c.ctx.drawImage(src, 0, 0, w, h, 0, 0, w, h);
+        c.key = key; c.w = w; c.h = h;
+        node.$cache = c;
+        this.release(src);
+        raster = c;
+      } else {
+        raster = { canvas: src, w, h, temp: true };
+      }
     }
+    const dx = m[4] + rx0, dy = m[5] + ry0;
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     if (blend === 'invert') {
-      // invert destination wherever the clip has coverage
-      const inv = this.acquire();
+      // invert the destination wherever the clip has coverage
+      const inv = this.acquire(w, h);
       const ic = inv.ctx;
       ic.setTransform(1, 0, 0, 1, 0, 0);
-      ic.clearRect(x0, y0, w, h);
-      ic.drawImage(src, x0, y0, w, h, x0, y0, w, h);
+      ic.clearRect(0, 0, w, h);
+      ic.drawImage(raster.canvas, 0, 0, w, h, 0, 0, w, h);
       ic.globalCompositeOperation = 'source-in';
       ic.fillStyle = '#fff';
-      ic.fillRect(x0, y0, w, h);
+      ic.fillRect(0, 0, w, h);
       ic.globalCompositeOperation = 'source-over';
       ctx.globalCompositeOperation = 'difference';
-      ctx.drawImage(inv, x0, y0, w, h, x0, y0, w, h);
+      ctx.drawImage(inv, 0, 0, w, h, dx, dy, w, h);
       this.release(inv);
     } else {
       ctx.globalCompositeOperation = (blend && BLEND[blend]) || 'source-over';
-      ctx.drawImage(src, x0, y0, w, h, x0, y0, w, h);
+      ctx.drawImage(raster.canvas, 0, 0, w, h, dx, dy, w, h);
     }
     ctx.restore();
-    if (tmp) this.release(tmp);
-    this.release(layer);
+    if (raster.temp) this.release(raster.canvas);
+  }
+
+  // hash of everything that affects how a subtree renders (except the root's
+  // own transform), used to validate cached layer rasters
+  contentHash(n, h, top = true) {
+    h = mix(h, n.uid);
+    if (!top) {
+      h = mix(h, n.__visible ? 1 : 2);
+      const m = n.m;
+      for (let i = 0; i < 6; i++) h = mixf(h, m[i]);
+      if (n.cx) for (let i = 0; i < 8; i++) h = mixf(h, n.cx[i]);
+      if (n.blendMode) h = mix(h, n.blendMode.length);
+      if (n.filters) for (const f of n.filters) h = mix(h, hashStr(filterKey(f)));
+    }
+    if (n.ratio) h = mixf(h, n.ratio);
+    if (n instanceof MovieClip) {
+      h = mix(h, n.__currentframe);
+      if (n.graphics) h = mix(h, n.graphics.ops.length * 7 + (n.graphics.version || 0));
+      if (n.maskedBy) h = mix(h, n.maskedBy.uid);
+      const kids = n.children;
+      h = mix(h, kids.length);
+      for (let i = 0; i < kids.length; i++) h = this.contentHash(kids[i], h, false);
+    } else if (n instanceof SimpleButton) {
+      h = mix(h, n.$state);
+      for (const k of n.children) h = this.contentHash(k, h, false);
+    } else if (n instanceof TextField) {
+      h = mix(h, hashStr(n._text));
+      h = mix(h, n._textColor);
+      h = mixf(h, n.bounds[1] - n.bounds[0]);
+    } else if (n instanceof BitmapNode) {
+      h = mix(h, n.bitmapData.version || 0);
+    }
+    return h >>> 0;
   }
 
   filterPad(f) {
@@ -236,11 +317,12 @@ export class Renderer {
     return Math.sqrt(n * Math.max(0, wdt * wdt - 1) / 12) * this.scale;
   }
 
-  applyFilter(src, f, x0, y0, w, h) {
+  applyFilter(src, f, w, h) {
+    const x0 = 0, y0 = 0;
     if (f.type === 'blur') {
       const sg = this.sigma(f);
       if (sg < 0.3) return src;
-      const out = this.acquire();
+      const out = this.acquire(w, h);
       const oc = out.ctx;
       oc.setTransform(1, 0, 0, 1, 0, 0);
       oc.clearRect(x0, y0, w, h);
@@ -254,7 +336,7 @@ export class Renderer {
       const sg = this.sigma(f);
       const c = this.filterColor(f);
       if (c[3] <= 0) return src;
-      const out = this.acquire();
+      const out = this.acquire(w, h);
       const oc = out.ctx;
       oc.setTransform(1, 0, 0, 1, 0, 0);
       oc.clearRect(x0, y0, w, h);
@@ -264,7 +346,7 @@ export class Renderer {
         dx = Math.cos(f.angle || 0) * (f.distance || 0) * this.scale;
         dy = Math.sin(f.angle || 0) * (f.distance || 0) * this.scale;
       }
-      const sil = this.acquire();
+      const sil = this.acquire(w, h);
       const sc = sil.ctx;
       sc.setTransform(1, 0, 0, 1, 0, 0);
       sc.clearRect(x0, y0, w, h);
@@ -605,4 +687,17 @@ export class Renderer {
     const b = node.localBounds();
     return !!b && lx >= b[0] && lx <= b[1] && ly >= b[2] && ly <= b[3];
   }
+}
+
+function mix(h, v) { return Math.imul(h ^ (v | 0), 16777619); }
+function mixf(h, v) { return Math.imul(h ^ ((v * 1024) | 0), 16777619); }
+function hashStr(s) {
+  let h = 0x811c9dc5;
+  s = String(s);
+  for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 16777619);
+  return h;
+}
+function filterKey(f) {
+  return [f.type, f.blurX, f.blurY, f.strength, f.alpha, Array.isArray(f.color) ? f.color.join('.') : f.color,
+    f.passes || f.quality, f.inner ? 1 : 0, f.knockout ? 1 : 0, f.distance || 0, f.angle || 0].join(',');
 }

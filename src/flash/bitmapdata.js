@@ -60,7 +60,7 @@ export class BitmapData {
     this.fillRect(new Rectangle(0, 0, this.width, this.height), transparent ? fill : (fill | 0xff000000));
   }
 
-  _dirty() { this.pixels = null; }
+  _dirty() { this.pixels = null; this.version = (this.version || 0) + 1; }
 
   _read() {
     if (!this.pixels) {

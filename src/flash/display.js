@@ -77,7 +77,10 @@ export class DisplayObject {
   }
   set _rotation(v) {
     v = +v; if (!isFinite(v)) return;
-    v = ((v % 360) + 540) % 360 - 180;
+    // Flash keeps _rotation in (-180, 180]
+    v %= 360;
+    if (v > 180) v -= 360;
+    else if (v <= -180) v += 360;
     this._decomp().rot = v * DEG; this._recompose();
   }
   get _alpha() { return this.cx ? this.cx[3] * 100 : 100; }
@@ -641,7 +644,7 @@ export class MovieClip extends DisplayObject {
 
 export class Graphics {
   constructor() { this.clear(); }
-  clear() { this.ops = []; this.cur = null; this.line = null; this.fill = null; this.x = 0; this.y = 0; this._b = null; }
+  clear() { this.version = (this.version || 0) + 1; this.ops = []; this.cur = null; this.line = null; this.fill = null; this.x = 0; this.y = 0; this._b = null; }
   _seg() {
     if (!this.cur) {
       this.cur = { path: new Path2D(), line: this.line, fill: this.fill };
@@ -660,7 +663,7 @@ export class Graphics {
   }
   endFill() { if (this.cur && this.cur.fill) this.cur.path.closePath(); this.cur = null; this.fill = null; }
   moveTo(x, y) { this._ext(x, y); this.x = x; this.y = y; if (this.cur) this.cur.path.moveTo(x, y); }
-  lineTo(x, y) { this._ext(this.x, this.y); this._ext(x, y); this._seg().path.lineTo(x, y); this.x = x; this.y = y; }
+  lineTo(x, y) { this.version = (this.version || 0) + 1; this._ext(this.x, this.y); this._ext(x, y); this._seg().path.lineTo(x, y); this.x = x; this.y = y; }
   curveTo(cx, cy, x, y) { this._ext(cx, cy); this._ext(x, y); this._seg().path.quadraticCurveTo(cx, cy, x, y); this.x = x; this.y = y; }
   _ext(x, y) {
     const b = this._b;
