@@ -17,6 +17,7 @@ Seeded, so re-running gives the same image.
 import json
 import os
 import re
+import sys
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -70,6 +71,15 @@ def down(m):
 wall = down(label == 1)    # coverage 0..1, anti-aliased
 chasm = down(label == 2)
 wallb, chasmb = wall > 0.5, chasm > 0.5
+
+if len(sys.argv) > 1 and sys.argv[1] == '--layout':
+    # Plain layout map, no art: light walls, dark floor, black chasms. This is
+    # what the image model gets as its layout guide (generate_bridge_ai.sh),
+    # so the only style it sees is the original levels'.
+    out = sys.argv[2]
+    v = 0.25 * (1 - wall - chasm) + 0.75 * wall + 0.0 * chasm
+    Image.fromarray((np.clip(v, 0, 1) * 255).astype(np.uint8), 'L').convert('RGB').save(out)
+    print('wrote', out); sys.exit(0)
 
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
 

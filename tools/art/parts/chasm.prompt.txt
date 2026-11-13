@@ -1,0 +1,1 @@
+Create a seamless tileable texture of a deep dark industrial shaft seen straight down from above, in the style of the reference game: near-black depths, faint steel girders and cross-bracing far below, a few tiny distant orange and blue lights, subtle haze. Very dark overall. No walls at the edges, no borders. It must tile seamlessly.
