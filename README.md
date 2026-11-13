@@ -5,7 +5,11 @@ ActionScript runs unchanged: it is compiled to JavaScript and executed on a smal
 Flash-like runtime, so the hand-crafted pixel collision, line of sight, timeline state
 and blend-mode lighting behave as they did in Flash Player.
 
-## Run
+## Play
+
+Online: https://aaronbeall.github.io/shrapnel-city/ (GitHub Pages serves `main` as is; there is no build step).
+
+## Run locally
 
 No build step. Serve the folder and open it:
 
