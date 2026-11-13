@@ -33,6 +33,7 @@ Open `index.html?bench` to run seven scripted heavy scenes (Heat Ray, Flamer, cl
 
 | Path | What |
 | --- | --- |
+| `original/` | The untouched v14 `shrapnel.fla` and `shrapnel.swf` (July 2012) that everything below was extracted from |
 | `as2/` | Original AS2 sources (`#include`d by the FLA's frame and instance scripts) |
 | `assets/swf.json`, `assets/bitmaps/` | Shapes, morphs, sprites, fonts, bitmaps extracted from the v14 SWF |
 | `assets/symbols.json` | FLA (XFL) symbol names, linkage ids, frame scripts and instance scripts mapped onto SWF character ids |
