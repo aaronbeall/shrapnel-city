@@ -17,6 +17,10 @@ npm run serve        # python3 -m http.server 8123
 Controls: arrows to maneuver, Z/X strafe, Space primary, Ctrl secondary,
 Ins / Shift+Ins and Del / Shift+Del to switch weapons, Esc menu, H help.
 
+## Benchmark
+
+Open `index.html?bench` to run seven scripted heavy scenes (Heat Ray, Flamer, cluster bombs, a whole level exploding at once, a Bridge firefight, the Esc menu) with seeded randomness. A table of game-logic (tick) and drawing (render) times per frame is shown when it finishes. `&only=heatray,flamer`, `&quality=low|medium|high`, `&scale=2` and `&stats` (per-layer counts) narrow it down. `node tools/bench.mjs scale=2` runs the same thing headless.
+
 ## Layout
 
 | Path | What |
