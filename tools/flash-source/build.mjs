@@ -2,7 +2,7 @@
 //   source/movie.json, source/library/**  ->  assets/swf.json, assets/symbols.json, assets/bitmaps/
 //
 // Usage: node tools/flash-source/build.mjs           (write the assets)
-//        node tools/flash-source/build.mjs --check   (compare with the current assets, write nothing)
+//        node tools/flash-source/build.mjs --check   (compare with an existing build in assets/, write nothing)
 //
 // Character ids come from source/ids.json; a new library file gets the next free id.
 import fs from 'node:fs';
@@ -124,6 +124,7 @@ if (check) {
   if (diffs.length) { console.log('DIFFERENT:\n' + diffs.join('\n')); process.exit(1); }
   console.log(`identical: ${Object.keys(chars).length} characters, ${Object.keys(symbols).length} symbols, ${Object.keys(instances).length} instance scripts, ${bitmaps.length} bitmaps`);
 } else {
+  fs.mkdirSync(ASSETS, { recursive: true });
   fs.writeFileSync(path.join(ASSETS, 'swf.json'), JSON.stringify(swf));
   fs.writeFileSync(path.join(ASSETS, 'symbols.json'), JSON.stringify(sym, null, 1));
   fs.rmSync(path.join(ASSETS, 'bitmaps'), { recursive: true, force: true });

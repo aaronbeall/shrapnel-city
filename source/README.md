@@ -2,7 +2,7 @@
 
 This folder is the editable source for the game's art, animation and timelines: everything that used to live only in `shrapnel.fla`. It's a straight transpilation of the v14 FLA and SWF: one file per library symbol, under the symbol's FLA library name, with nothing reinterpreted.
 
-`npm run build:assets` turns it into what the runtime loads (`assets/swf.json`, `assets/symbols.json`, `assets/bitmaps/`). `npm run build` also recompiles the ActionScript. `node tools/flash-source/build.mjs --check` confirms the source rebuilds to exactly the current assets.
+`npm run build:assets` turns it into what the runtime loads (`assets/swf.json`, `assets/symbols.json`, `assets/bitmaps/`), and `npm run build` also recompiles the ActionScript. That output isn't committed; GitHub Actions builds it on every push. `node tools/flash-source/build.mjs --check` compares the source with an existing build in `assets/` without writing anything.
 
 ## Layout
 
