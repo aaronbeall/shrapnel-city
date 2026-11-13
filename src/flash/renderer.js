@@ -351,7 +351,7 @@ export class Renderer {
       sc.setTransform(1, 0, 0, 1, 0, 0);
       sc.clearRect(x0, y0, w, h);
       sc.drawImage(src, x0, y0, w, h, x0, y0, w, h);
-      sc.globalCompositeOperation = 'source-in';
+      sc.globalCompositeOperation = 'source-atop'; // source-in would clear the whole pooled canvas
       sc.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${(c[3] / 255).toFixed(3)})`;
       sc.fillRect(x0, y0, w, h);
       sc.globalCompositeOperation = 'source-over';
@@ -375,7 +375,88 @@ export class Renderer {
       }
       return out;
     }
-    return src; // bevel etc: content unchanged
+    if (f.type === 'bevel') return this.bevel(src, f, w, h);
+    return src; // gradient glow/bevel etc: content unchanged
+  }
+
+  // Inner bevel: the highlight lands on edges facing away from the light angle
+  // (where the content shifted by +distance does not cover it), the shadow on the
+  // opposite edges; both stay inside the content's own alpha.
+  bevel(src, f, w, h) {
+    const dist = (f.distance || 0) * this.scale;
+    const ox = Math.cos(f.angle || 0) * dist, oy = Math.sin(f.angle || 0) * dist;
+    const strength = Math.max(0, f.strength === undefined ? 1 : f.strength);
+    const bx = (f.blurX || 0) * this.scale, by = (f.blurY || 0) * this.scale;
+    if (!strength || (!ox && !oy && bx < 2 && by < 2)) return src;
+    const out = this.acquire(w, h);
+    const oc = out.ctx;
+    oc.setTransform(1, 0, 0, 1, 0, 0);
+    oc.clearRect(0, 0, w, h);
+    oc.drawImage(src, 0, 0, w, h, 0, 0, w, h);
+    // the cutter is the content's alpha, softened with Flash's box blur; done in JS
+    // because canvas `filter` costs milliseconds even on tiny layers
+    const cut = this.boxBlurAlpha(src, w, h, bx, by, f.passes || f.quality || 1);
+    const edge = this.acquire(w, h);
+    const ec = edge.ctx;
+    ec.setTransform(1, 0, 0, 1, 0, 0);
+    for (const [c, sx, sy] of [[f.highlight, ox, oy], [f.shadow, -ox, -oy]]) {
+      if (!c || c[3] <= 0) continue;
+      ec.globalCompositeOperation = 'source-over';
+      ec.clearRect(0, 0, w, h);
+      ec.drawImage(src, 0, 0, w, h, 0, 0, w, h);
+      ec.globalCompositeOperation = 'source-atop'; // source-in would clear the whole pooled canvas
+      ec.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${(c[3] / 255).toFixed(3)})`;
+      ec.fillRect(0, 0, w, h);
+      ec.globalCompositeOperation = 'destination-out';
+      ec.drawImage(cut, 0, 0, w, h, sx, sy, w, h);
+      ec.globalCompositeOperation = 'source-over';
+      oc.globalCompositeOperation = 'source-atop';
+      for (let s = strength; s > 0; s -= 1) {
+        oc.globalAlpha = Math.min(1, s);
+        oc.drawImage(edge, 0, 0, w, h, 0, 0, w, h);
+      }
+      oc.globalAlpha = 1;
+      oc.globalCompositeOperation = 'source-over';
+    }
+    this.release(edge);
+    if (cut !== src) this.release(cut);
+    return out;
+  }
+
+  // Flash-style box blur (width bx/by device px, repeated `passes` times) of the
+  // alpha channel only. Returns `src` untouched when the blur is below a pixel.
+  boxBlurAlpha(src, w, h, bx, by, passes) {
+    const rx = Math.max(0, Math.round((bx - 1) / 2)), ry = Math.max(0, Math.round((by - 1) / 2));
+    if (!rx && !ry) return src;
+    const c = this.acquire(w, h);
+    const x = c.ctx;
+    x.setTransform(1, 0, 0, 1, 0, 0);
+    x.clearRect(0, 0, w, h);
+    x.drawImage(src, 0, 0, w, h, 0, 0, w, h);
+    const img = x.getImageData(0, 0, w, h), d = img.data;
+    let a = new Float32Array(w * h), t = new Float32Array(w * h);
+    for (let i = 0; i < w * h; i++) a[i] = d[i * 4 + 3];
+    const pass = (from, to, r, horiz) => {
+      const n = horiz ? w : h, m = horiz ? h : w, step = horiz ? 1 : w, lineStep = horiz ? w : 1, k = 1 / (2 * r + 1);
+      for (let l = 0; l < m; l++) {
+        const base = l * lineStep;
+        let sum = 0;
+        for (let i = -r; i <= r; i++) if (i >= 0 && i < n) sum += from[base + i * step];
+        for (let i = 0; i < n; i++) {
+          to[base + i * step] = sum * k;
+          const add = i + r + 1, sub = i - r;
+          if (add < n) sum += from[base + add * step];
+          if (sub >= 0) sum -= from[base + sub * step];
+        }
+      }
+    };
+    for (let p = 0; p < passes; p++) {
+      if (rx) { pass(a, t, rx, true); [a, t] = [t, a]; }
+      if (ry) { pass(a, t, ry, false); [a, t] = [t, a]; }
+    }
+    for (let i = 0; i < w * h; i++) { d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = 0; d[i * 4 + 3] = a[i]; }
+    x.putImageData(img, 0, 0);
+    return c;
   }
 
   // ---------------------------------------------------------------------
