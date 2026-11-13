@@ -10,6 +10,11 @@ const BLEND = {
   subtract: 'difference', alpha: 'destination-in', erase: 'destination-out',
 };
 
+// blend modes that are separable per pixel: for content that is a single
+// path, drawing it straight onto the target with this mode gives the same
+// pixels as Flash's render-to-layer-then-blend
+const DIRECT_BLEND = new Set(['add', 'screen', 'multiply', 'lighten', 'darken', 'difference', 'overlay', 'hardlight']);
+
 const FILL_RULE = 'evenodd';
 
 export class Renderer {
@@ -77,11 +82,44 @@ export class Renderer {
     if (cx && cx[3] <= 0 && cx[7] <= 0) return;
     const blend = node.blendMode;
     const fx = node.filters && node.filters.length && this.quality !== 'low' ? node.filters : null;
-    if ((blend && blend !== 'normal' && blend !== 'layer') || fx || node.maskedBy) {
+    if (blend && DIRECT_BLEND.has(blend) && !fx && !node.maskedBy && this.directBlend !== false && this.singlePath(node)) {
+      // one visible path: blend it straight in, no offscreen layer
+      if (this.stats) { const k = this.stats.kinds['direct-' + blend] || (this.stats.kinds['direct-' + blend] = { n: 0, miss: 0, missPx: 0, drawPx: 0, ms: 0 }); k.n++; }
+      ctx.save();
+      ctx.globalCompositeOperation = BLEND[blend];
+      this.drawContent(ctx, node, m, cx, clip);
+      ctx.restore();
+    } else if ((blend && blend !== 'normal' && blend !== 'layer') || fx || node.maskedBy) {
       this.drawLayered(ctx, node, m, cx, blend, fx, clip);
     } else {
       this.drawContent(ctx, node, m, cx, clip);
     }
+  }
+
+  // true when a subtree draws exactly one visible path (fill, or stroke with
+  // some alpha) and nothing in it needs its own layer
+  singlePath(node) {
+    let count = 0, visited = 0;
+    const walk = (n) => {
+      if (!n.__visible || n.maskOf) return true;
+      if (++visited > 16) return false;
+      if (n instanceof MovieClip) {
+        if (n.graphics && n.graphics.cmds && n.graphics.cmds.length) return false;
+        for (const c of n.children) {
+          if (!c.__visible || c.maskOf) continue;
+          if ((c.blendMode && c.blendMode !== 'normal' && c.blendMode !== 'layer') || (c.filters && c.filters.length) || c.maskedBy || c.clipDepth) return false;
+          if (!walk(c)) return false;
+        }
+        return true;
+      }
+      let paths;
+      if (n instanceof Shape) paths = n.char.paths.map((p) => (p.f !== undefined ? 1 : visibleLine(n.char.lines[p.l])));
+      else if (n instanceof MorphShape) paths = this.lib.morphAt(n.char, n.ratio).paths.map((p) => (p.f !== undefined ? 1 : visibleLine(p.style)));
+      else return false; // text and bitmaps: keep the layer
+      for (const v of paths) count += v;
+      return count <= 1;
+    };
+    return walk(node) && count === 1;
   }
 
   drawContent(ctx, node, m, cx, clip) {
@@ -181,21 +219,43 @@ export class Renderer {
     }
     let raster = null;
     let key = null;
+    const st = this.stats;
+    const t0 = st ? performance.now() : 0;
     if (cacheable) {
       key = this.contentHash(node, 0x811c9dc5) + ':' + (cx ? cx.map((v) => Math.round(v * 1000)).join(',') : '') + ':' +
         L.slice(0, 4).map((v) => Math.round(v * 1000)).join(',') + ':' + (fx ? fx.map(filterKey).join(';') : '') + ':' + this.quality;
       const c = node.$cache;
       if (c && c.key === key) raster = c;
     }
+    if (st) {
+      const kind = (blend && blend !== 'normal' ? blend : '') + (fx ? '+' + fx.map((f) => f.type).join('+') : '') + (node.maskedBy ? '+mask' : '');
+      const k = st.kinds[kind] || (st.kinds[kind] = { n: 0, miss: 0, missPx: 0, drawPx: 0, ms: 0 });
+      k.n++; k.drawPx += w * h;
+      if (!raster) { k.miss++; k.missPx += w * h; }
+      st.cur = k;
+    }
+    // A layer whose only filter is a blur loses all detail finer than the blur,
+    // so it is rendered and blurred at reduced resolution (ds) and scaled back
+    // up when composited: same picture, up to 16x fewer pixels.
+    let ds = 1;
+    if (fx && fx.length === 1 && fx[0].type === 'blur' && blend !== 'invert' && !node.maskedBy && this.downsampleBlur !== false) {
+      const f = fx[0], b = Math.min(f.blurX || 0, f.blurY || 0) * this.scale, n = f.passes || f.quality || 1;
+      const sigma = Math.sqrt(n * Math.max(0, b * b - 1) / 12);
+      ds = Math.max(1, Math.min(4, Math.floor(sigma / 3)));
+    }
+    const lw = ds > 1 ? Math.ceil(w / ds) : w, lh = ds > 1 ? Math.ceil(h / ds) : h;
+    if (raster && raster.ds !== ds) raster = null;
     if (!raster) {
-      const layer = this.acquire(w, h);
+      const prevScale = this.scale;
+      this.scale = prevScale / ds; // line widths and filter radii follow the layer's resolution
+      const layer = this.acquire(lw, lh);
       const lc = layer.ctx;
       lc.setTransform(1, 0, 0, 1, 0, 0);
-      lc.clearRect(0, 0, w, h);
+      lc.clearRect(0, 0, lw, lh);
       lc.save();
-      lc.beginPath(); lc.rect(0, 0, w, h); lc.clip();
-      const lm = [m[0], m[1], m[2], m[3], -rx0, -ry0];
-      this.drawContent(lc, node, lm, cx, [0, w, 0, h]);
+      lc.beginPath(); lc.rect(0, 0, lw, lh); lc.clip();
+      const lm = [m[0] / ds, m[1] / ds, m[2] / ds, m[3] / ds, -rx0 / ds, -ry0 / ds];
+      this.drawContent(lc, node, lm, cx, [0, lw, 0, lh]);
       lc.restore();
       if (node.maskedBy && !node.maskedBy.removed) {
         const path = new Path2D();
@@ -212,26 +272,27 @@ export class Renderer {
       let src = layer;
       if (fx) {
         for (const f of fx) {
-          const out = this.applyFilter(src, f, w, h);
+          const out = this.applyFilter(src, f, lw, lh);
           if (out !== src) { this.release(src); src = out; }
         }
       }
+      this.scale = prevScale;
       if (cacheable) {
         let c = node.$cache;
-        if (!c || c.canvas.width < w || c.canvas.height < h || c.canvas.width > w * 2 + 64 || c.canvas.height > h * 2 + 64) {
+        if (!c || c.canvas.width < lw || c.canvas.height < lh || c.canvas.width > lw * 2 + 64 || c.canvas.height > lh * 2 + 64) {
           const cv = document.createElement('canvas');
-          cv.width = w; cv.height = h;
+          cv.width = lw; cv.height = lh;
           c = { canvas: cv, ctx: cv.getContext('2d') };
         }
         c.ctx.setTransform(1, 0, 0, 1, 0, 0);
         c.ctx.clearRect(0, 0, c.canvas.width, c.canvas.height);
-        c.ctx.drawImage(src, 0, 0, w, h, 0, 0, w, h);
-        c.key = key; c.w = w; c.h = h;
+        c.ctx.drawImage(src, 0, 0, lw, lh, 0, 0, lw, lh);
+        c.key = key; c.w = lw; c.h = lh; c.ds = ds;
         node.$cache = c;
         this.release(src);
         raster = c;
       } else {
-        raster = { canvas: src, w, h, temp: true };
+        raster = { canvas: src, w: lw, h: lh, ds, temp: true };
       }
     }
     const dx = m[4] + rx0, dy = m[5] + ry0;
@@ -253,10 +314,11 @@ export class Renderer {
       this.release(inv);
     } else {
       ctx.globalCompositeOperation = (blend && BLEND[blend]) || 'source-over';
-      ctx.drawImage(raster.canvas, 0, 0, w, h, dx, dy, w, h);
+      ctx.drawImage(raster.canvas, 0, 0, lw, lh, dx, dy, lw * ds, lh * ds);
     }
     ctx.restore();
     if (raster.temp) this.release(raster.canvas);
+    if (st) st.cur.ms += performance.now() - t0; // includes nested layers
   }
 
   // hash of everything that affects how a subtree renders (except the root's
@@ -326,9 +388,13 @@ export class Renderer {
       const oc = out.ctx;
       oc.setTransform(1, 0, 0, 1, 0, 0);
       oc.clearRect(x0, y0, w, h);
+      // clip to the layer: a canvas filter otherwise processes the whole
+      // (pooled, often much larger) canvas
+      oc.save();
+      oc.beginPath(); oc.rect(0, 0, w, h); oc.clip();
       oc.filter = `blur(${sg.toFixed(2)}px)`;
       oc.drawImage(src, x0, y0, w, h, x0, y0, w, h);
-      oc.filter = 'none';
+      oc.restore();
       return out;
     }
     if (f.type === 'glow' || f.type === 'dropShadow') {
@@ -355,6 +421,8 @@ export class Renderer {
       sc.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${(c[3] / 255).toFixed(3)})`;
       sc.fillRect(x0, y0, w, h);
       sc.globalCompositeOperation = 'source-over';
+      oc.save();
+      oc.beginPath(); oc.rect(0, 0, w, h); oc.clip(); // see blur above
       oc.filter = sg >= 0.3 ? `blur(${sg.toFixed(2)}px)` : 'none';
       const strength = Math.max(0, f.strength === undefined ? 1 : f.strength);
       let s = strength;
@@ -363,8 +431,7 @@ export class Renderer {
         oc.drawImage(sil, x0, y0, w, h, x0 + dx, y0 + dy, w, h);
         s -= 1;
       }
-      oc.globalAlpha = 1;
-      oc.filter = 'none';
+      oc.restore();
       this.release(sil);
       if (f.knockout) {
         oc.globalCompositeOperation = 'destination-out';
@@ -481,6 +548,7 @@ export class Renderer {
 
   strokePath(ctx, l, m, cx, path) {
     if (!l || !l.c) return;
+    if (l.c[3] === 0 && !(cx && cx[7] > 0)) return; // fully transparent outline
     ctx.setTransform(m[0], m[1], m[2], m[3], m[4], m[5]);
     ctx.lineWidth = this.lineWidth(l.w, m);
     ctx.lineCap = l.cap === 1 ? 'butt' : l.cap === 2 ? 'square' : 'round';
@@ -500,7 +568,12 @@ export class Renderer {
     } else if (t === 0x10 || t === 0x12 || t === 0x13) {
       const gm = fill.m;
       if (!(gm[0] * gm[3] - gm[1] * gm[2])) return;
-      const g = this.gradient(ctx, fill, cx);
+      // a fade (alpha-only colour transform) is applied as globalAlpha so the
+      // gradient object can be built once per fill and reused
+      const fade = cx && cx[0] === 1 && cx[1] === 1 && cx[2] === 1 && !cx[4] && !cx[5] && !cx[6] && !cx[7] && cx[3] >= 0 && cx[3] <= 1;
+      let g;
+      if (!cx || fade) g = fill.$grad || (fill.$grad = this.gradient(ctx, fill, null));
+      else g = this.gradient(ctx, fill, cx);
       const mm = mul(m, gm);
       let gp;
       if (dynamic) {
@@ -509,7 +582,12 @@ export class Renderer {
       } else gp = this.lib.gradientPath(entry, fill, 0);
       ctx.setTransform(mm[0], mm[1], mm[2], mm[3], mm[4], mm[5]);
       ctx.fillStyle = g;
-      ctx.fill(gp, FILL_RULE);
+      if (fade) {
+        const ga = ctx.globalAlpha;
+        ctx.globalAlpha = ga * cx[3];
+        ctx.fill(gp, FILL_RULE);
+        ctx.globalAlpha = ga;
+      } else ctx.fill(gp, FILL_RULE);
     } else {
       const img = this.bitmapFor(fill.bitmap, cx);
       if (!img) return;
@@ -748,6 +826,11 @@ export class Renderer {
       return false;
     }
     const [lx, ly] = apply(invert(m), gx, gy);
+    if (node instanceof Shape || node instanceof MorphShape) {
+      // cheap reject: SWF shape bounds already include stroke widths (+1 for hairlines)
+      const b = node.localBounds();
+      if (b && (lx < b[0] - 1 || lx > b[1] + 1 || ly < b[2] - 1 || ly > b[3] + 1)) return false;
+    }
     if (node instanceof Shape) {
       for (const p of node.char.paths) {
         if (p.f !== undefined && h.isPointInPath(p.path, lx, ly, FILL_RULE)) return true;
@@ -782,3 +865,5 @@ function filterKey(f) {
   return [f.type, f.blurX, f.blurY, f.strength, f.alpha, Array.isArray(f.color) ? f.color.join('.') : f.color,
     f.passes || f.quality, f.inner ? 1 : 0, f.knockout ? 1 : 0, f.distance || 0, f.angle || 0].join(',');
 }
+
+function visibleLine(l) { return l && l.c && l.c[3] > 0 ? 1 : 0; }

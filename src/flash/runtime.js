@@ -54,7 +54,12 @@ export class Runtime {
   }
 
   get quality() { return (this.renderer.quality || 'high').toUpperCase(); }
-  setQuality(v) { this.renderer.quality = String(v || 'HIGH').toLowerCase(); }
+  setQuality(v) {
+    const q = String(v || 'HIGH').toLowerCase();
+    if (q === this.renderer.quality) return;
+    this.renderer.quality = q;
+    if (this.onQualityChange) this.onQualityChange(q); // the page picks a render resolution for it
+  }
 
   // AS2 timers keep running on wall-clock time; track them so a reset can clear them
   setTimer(kind, fn, delay) {
