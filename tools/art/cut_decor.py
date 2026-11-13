@@ -39,6 +39,9 @@ for sheet in sorted(glob.glob(os.path.join(D, 'sheet_*.png'))):
         if cat in ('floorpaint', 'wallmarks'):  # feather the patch edge
             d = ndi.distance_transform_edt(m)
             al = al * np.clip(d / 6, 0, 1)
+        if cat == 'floorpaint':  # keep only the paint, not the patch of floor it was drawn on
+            px = a[sl]; med = np.median(px[m], axis=0)
+            al = al * np.clip((np.abs(px - med).sum(-1) - 25) / 60, 0, 1)
         rgba = np.dstack([np.clip(a2[sl], 0, 255), al * 255]).astype(np.uint8)
         k = len(items)
         Image.fromarray(rgba, 'RGBA').save(os.path.join(out, f'{k:02d}.png'))

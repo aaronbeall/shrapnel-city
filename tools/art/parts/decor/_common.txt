@@ -1,3 +1,5 @@
-The attached images are top-down levels from a 2D shooter game. Match their art style exactly: the same top-down orthographic camera, the same light grey metal with soft smooth bevels and subtle shading lit from the top-left, the same rendering technique, colour palette and level of detail, with occasional rust and red paint wear.
+The attached image is one level from a top-down 2D shooter game. Use it ONLY as a style reference: the top-down orthographic camera, light grey metal with soft smooth bevels and subtle shading lit from the top-left, dark grey floors, occasional rust and red paint wear, crisp semi-realistic rendering at that level of detail.
 
-Make a SPRITE SHEET: about 20 to 30 separate items laid out in a loose grid with generous empty space between every item so none touch. Each item is seen straight from above. Place everything on a perfectly flat, uniform pure magenta (#FF00FF) background with no texture, no gradient, no vignette and no cast shadows on the background; shading only inside each item. No text, no labels, no frames.
+Do NOT copy any object, wall, sign or marking from the reference image. Design brand-new items of the kind listed below, all different from each other.
+
+Make a SPRITE SHEET of about 24 separate items in a loose grid with generous empty space between every item so none touch. Every item is seen straight from above. Background: perfectly flat, uniform pure magenta (#FF00FF), no texture, gradient or cast shadows on the background; shading only inside each item. No text, no labels, no frames, no wall segments.

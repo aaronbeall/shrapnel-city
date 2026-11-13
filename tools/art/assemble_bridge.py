@@ -173,9 +173,10 @@ if os.path.exists(os.path.join(DECOR, 'index.json')):
     lip_ring = (ndi.distance_transform_edt(~chasmb) <= 16) & (ndi.distance_transform_edt(~chasmb) >= 8) & ~wallb
     wdist = dist  # distance into the wall art
 
-    def fit(sp, short, long_max, ang):
+    def fit(sp, short, long_max, ang, upright=False):
         w, h = sp.size
-        if h > w: sp = sp.rotate(90, expand=True); w, h = h, w
+        if h > w and not upright: sp = sp.rotate(90, expand=True); w, h = h, w
+        if upright: short = short * max(w, h) / min(w, h) if h > w else short
         s = min(short / h, long_max / w)
         sp = sp.resize((max(2, int(w * s)), max(2, int(h * s))), Image.LANCZOS)
         return sp.rotate(np.degrees(-ang), resample=Image.BICUBIC, expand=True)
@@ -195,29 +196,38 @@ if os.path.exists(os.path.join(DECOR, 'index.json')):
             bloom[y0:y0 + h, x0:x0 + w] += glow * hot[..., None] * rgb_
         return True
 
-    def scatter(cat, count, surface, short, long_max, tries=4000, cast=0.0, glow=0.0, along=True):
-        lst = sprites.get(cat) or []
+    def scatter(cat, count, surface, short, long_max, tries=4000, cast=0.0, glow=0.0, along=True, orient=None, min_aspect=0, unique=False):
+        lst = [sp for sp in sprites.get(cat) or [] if max(sp.size) >= min_aspect * min(sp.size)]
         if not lst: return 0
         pts = np.argwhere(surface)
         n = 0
         for _ in range(tries):
             if n >= count: break
             cy, cx = pts[rng.integers(len(pts))]
-            ang = q[cy, cx] * np.pi / 4 if along else rng.integers(0, 4) * np.pi / 2
+            ang = (orient if orient is not None else q)[cy, cx] * np.pi / 4 if along else 0.0
             s_ = short(cy, cx) if callable(short) else short
             if s_ < 5: continue
-            sp = fit(lst[rng.integers(len(lst))], s_, long_max, ang)
-            n += place(sp, cx, cy, surface, cast, glow)
+            k = rng.integers(len(lst))
+            sp = fit(lst[k], s_, long_max, ang, upright=not along)
+            if place(sp, cx, cy, surface, cast, glow):
+                n += 1
+                if unique: lst.pop(k)
+                if not lst: break
         return n
 
     wall_w = lambda cy, cx: 2 * wdist[cy, cx] - 4          # sprite thickness to fit the wall here
-    print('greebles', scatter('greebles', 40, wall_in, lambda cy, cx: min(wall_w(cy, cx), 40), 70, cast=0.35))
-    print('vents', scatter('vents', 45, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.7, 16), 40, cast=0.3))
-    print('rails', scatter('rails', 30, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.5, 10), 60, cast=0.25))
-    print('wallmarks', scatter('wallmarks', 35, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.8, 18), 36))
-    print('lights', scatter('lights', 45, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.45, 9), 22, glow=0.9))
-    print('floorpaint', scatter('floorpaint', 18, floor_ok, 46, 90, along=False))
-    print('lip rails', scatter('rails', 24, lip_ring, 7, 70))
+    sprites['greebles'] = sprites.get('greebles', []) + sprites.get('greebles2', [])
+    # floor paint first (it sits under everything else), then wall decor, big to small
+    print('floorpaint', scatter('floorpaint', 22, floor_ok, 40, 80, along=False, unique=True))
+    cd_ = ndi.distance_transform_edt(~chasmb).astype(np.float32)
+    ly, lx = np.gradient(blur(cd_, 3))
+    q_lip = ndi.median_filter(np.round((np.arctan2(ly, lx) + np.pi / 2) / (np.pi / 4)).astype(int) % 4, 5)
+    print('lip rails', scatter('rails', 40, lip_ring, 7, 90, orient=q_lip, min_aspect=6, tries=8000))
+    print('greebles', scatter('greebles', 70, wall_in, lambda cy, cx: min(wall_w(cy, cx), 44), 60, cast=0.35))
+    print('vents', scatter('vents', 40, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.75, 18), 34, cast=0.3))
+    print('pipes', scatter('rails', 30, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.4, 8), 60, cast=0.25))
+    print('wallmarks', scatter('wallmarks', 40, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.75, 16), 30))
+    print('lights', scatter('lights', 55, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.5, 9), 24, glow=0.9))
     used_core = np.zeros((H, W), np.float32)
     out_ = np.array(canvas.convert('RGB'), np.float32) / 255
     out_ *= (1 - 0.5 * blur(np.clip(ndi.shift(shadow, (2, 2), order=0), 0, 1), 1.5) * (1 - used_core))[..., None]

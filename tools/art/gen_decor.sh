@@ -6,13 +6,18 @@
 set -uo pipefail
 cd "$(dirname "$0")/parts/decor"
 R="../../../../source/library/level assets"
-sheets=("$@"); [ ${#sheets[@]} -eq 0 ] && sheets=(vents greebles lights floorpaint wallmarks rails)
+sheets=("$@"); [ ${#sheets[@]} -eq 0 ] && sheets=(vents greebles greebles2 lights floorpaint wallmarks rails)
 one() {
   local n=$1 tmp; tmp=$(mktemp)
-  curl -s https://api.openai.com/v1/images/edits -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -F model=gpt-image-2 -F size=1536x1024 -F quality=high \
-    -F "image[]=@$R/background2/shape 1/bitmap 1.png" -F "image[]=@$R/background0/shape 1/bitmap 1.png" \
-    -F "image[]=@$R/background1/shape 1/bitmap 1.png" -F "prompt=$(cat _common.txt $n.txt)" > "$tmp"
+  if [ -f "$n.noref" ]; then  # this sheet works better without a reference image
+    python3 -c "import json,sys; print(json.dumps({'model':'gpt-image-2','size':'1536x1024','quality':'high','prompt':open('$n.txt').read()+'\n'+open('_common.txt').read().replace('The attached image is one level','Style: like a level')}))" |
+      curl -s https://api.openai.com/v1/images/generations -H "Authorization: Bearer $OPENAI_API_KEY" -H "Content-Type: application/json" -d @- > "$tmp"
+  else
+    curl -s https://api.openai.com/v1/images/edits -H "Authorization: Bearer $OPENAI_API_KEY" \
+      -F model=gpt-image-2 -F size=1536x1024 -F quality=high \
+      -F "image[]=@$R/background2/shape 1/bitmap 1.png" \
+      -F "prompt=$(cat $n.txt; echo; cat _common.txt)" > "$tmp"
+  fi
   python3 - "$tmp" "sheet_$n.png" <<'PY'
 import json, base64, sys
 d = json.load(open(sys.argv[1]))
