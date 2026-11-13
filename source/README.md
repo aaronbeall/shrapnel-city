@@ -95,4 +95,4 @@ Instance properties:
 
 ## Generated art
 
-- `level assets/background3/shape 1/bitmap 1.png` (the Bridge floor and walls) is painted by `tools/art/paint_bridge.py` from the level's collision shape, so it lines up with `level_mc` pixel for pixel. It replaces the original placeholder art. Re-run it (needs numpy, scipy and Pillow) after changing `level assets/level3`.
+- `level assets/background3/shape 1/bitmap 1.png` (the Bridge floor and walls) replaces the original placeholder art. `tools/art/generate_bridge_ai.sh` makes it in three steps: `paint_bridge.py` paints a collision-accurate base from `level assets/level3`; OpenAI `gpt-image-2` repaints that base in the style of backgrounds 0-2, which it gets as references (prompt in `tools/art/bridge_prompt.txt`); and `align.py` warps the result so its walls line up with `level_mc` again. It needs `OPENAI_API_KEY`, numpy, scipy and Pillow. Image generation isn't deterministic, so re-running gives a different picture.
