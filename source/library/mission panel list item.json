@@ -1,0 +1,51 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "missionPanelListItem"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/ui/missionPanelListItem.as\"",
+      "changes": [
+        {
+          "place": "mission panel list item back",
+          "depth": 1,
+          "x": 2,
+          "y": 3,
+          "name": "back_mc",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00e8e8",
+              "blurX": 0,
+              "blurY": 0,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        },
+        {
+          "place": "mission panel list item/text field 1",
+          "depth": 3,
+          "x": 2,
+          "y": 2,
+          "name": "label_txt",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 12,
+              "blurY": 12,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

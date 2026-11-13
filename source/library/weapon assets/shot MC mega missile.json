@@ -1,0 +1,220 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 17,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectileSeeker.as\"",
+      "changes": [
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 1,
+          "x": -0.1,
+          "y": 19.65,
+          "scale": [1.089996, 0.609985],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "scale": [1.096497, 0.614761],
+          "color": {"add": [204, 0, 0, 0]}
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 1},
+        {"remove": 3},
+        {
+          "place": "graphic assets/explosion",
+          "depth": 1,
+          "x": 0.35,
+          "y": 0.4,
+          "scale": 2.030579,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 1], "add": [122, 0, 0, 0]}
+        },
+        {
+          "place": "_shared/shape tween 239",
+          "depth": 2,
+          "x": 0.35,
+          "y": 0.4,
+          "scale": 2.030579,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 1], "add": [122, 0, 0, 0]}
+        },
+        {
+          "place": "_glow",
+          "depth": 3,
+          "x": 0.85,
+          "y": 1.8,
+          "scale": 5.828735,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 1], "add": [122, 0, 0, 0]},
+          "ratio": 0.000015259021896696422,
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}],
+          "blend": "add"
+        },
+        {
+          "place": "_shared/shape tween 240",
+          "depth": 5,
+          "x": 0.35,
+          "y": 0.4,
+          "scale": 2.030579,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 1], "add": [122, 0, 0, 0]}
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "ratio": 0.11111619745174334},
+        {"update": 2, "ratio": 0.5555504692149233},
+        {
+          "update": 3,
+          "x": 0.75,
+          "y": 1.8,
+          "scale": 5.828735,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 0.97265625], "add": [122, 0, 0, 0]},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 5, "ratio": 0.5555504692149233}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"update": 1, "ratio": 0.44446478980697335},
+        {"update": 2, "ratio": 0.8888990615701533},
+        {
+          "update": 3,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 0.890625], "add": [122, 0, 0, 0]},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 5, "ratio": 0.8888990615701533}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"replace": "_shared/shape tween 241", "depth": 1, "ratio": 0},
+        {"replace": "_shared/shape tween 242", "depth": 2, "ratio": 0},
+        {
+          "update": 3,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 0.75], "add": [122, 0, 0, 0]},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"replace": "_shared/shape tween 243", "depth": 5, "ratio": 0}
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"update": 1, "ratio": 0.2653086137178607},
+        {"update": 2, "ratio": 0.2},
+        {
+          "update": 3,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 0.5546875], "add": [122, 0, 0, 0]},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 5, "ratio": 0.5555504692149233}
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"update": 1, "ratio": 0.4898146028839551},
+        {"update": 2, "ratio": 0.4},
+        {
+          "update": 3,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 0.3046875], "add": [122, 0, 0, 0]},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 5, "ratio": 0.8888990615701533}
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {"remove": 5},
+        {"update": 1, "ratio": 0.67348744945449},
+        {"update": 2, "ratio": 0.6000152590218967},
+        {
+          "update": 3,
+          "x": 0.85,
+          "y": 1.8,
+          "scale": 5.828735,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 0], "add": [122, 0, 0, 0]},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {
+          "place": "_shared/shape 244",
+          "depth": 5,
+          "x": 0.35,
+          "y": 0.4,
+          "scale": 2.030579,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 1], "add": [122, 0, 0, 0]}
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {"remove": 3},
+        {"remove": 5},
+        {"update": 1, "ratio": 0.8163424124513619},
+        {"update": 2, "ratio": 0.8000152590218967}
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [{"update": 1, "ratio": 0.9183794918745708}, {"replace": "_shared/shape tween 245", "depth": 2, "ratio": 0}]
+    },
+    {"frame": 11, "changes": [{"update": 1, "ratio": 0.9796139467460135}, {"update": 2, "ratio": 0.2}]},
+    {
+      "frame": 12,
+      "changes": [
+        {"remove": 1},
+        {
+          "place": "_shared/shape 246",
+          "depth": 1,
+          "x": 0.35,
+          "y": 0.4,
+          "scale": 2.030579,
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 1], "add": [122, 0, 0, 0]}
+        },
+        {"update": 2, "ratio": 0.4}
+      ]
+    },
+    {"frame": 13, "changes": [{"remove": 1}, {"update": 2, "ratio": 0.6000152590218967}]},
+    {"frame": 14, "changes": [{"update": 2, "ratio": 0.8000152590218967}]},
+    {
+      "frame": 15,
+      "script": "this.removeMovieClip();",
+      "changes": [
+        {"remove": 2},
+        {
+          "place": "_shared/shape 247",
+          "depth": 1,
+          "x": -0.25,
+          "y": 2,
+          "scale": [1.37114, 1.476364],
+          "color": {"multiply": [0.51953125, 0.51953125, 0.51953125, 1], "add": [122, 0, 0, 0]}
+        }
+      ]
+    }
+  ]
+}

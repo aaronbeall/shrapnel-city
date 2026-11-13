@@ -1,0 +1,20 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "level assets/vision1-1", "depth": 1, "x": 736.95, "y": 297.95},
+        {"place": "level assets/vision1-2", "depth": 3, "x": 368.45, "y": 231.95, "scale": [1.13739, 1]},
+        {"place": "level assets/vision1-4", "depth": 5, "x": 314.4, "y": 303.9},
+        {"place": "level assets/vision1-3", "depth": 7, "x": 639.4, "y": 297.95},
+        {"place": "level assets/vision1-5", "depth": 9, "x": 137.45, "y": 302.95},
+        {"place": "level assets/vision1-6", "depth": 11, "x": 254.45, "y": 149.95},
+        {"place": "level assets/vision1-7", "depth": 13, "x": 515.45, "y": 177.95},
+        {"place": "level assets/vision1-8", "depth": 15, "x": 311.45, "y": 285.95}
+      ]
+    }
+  ]
+}

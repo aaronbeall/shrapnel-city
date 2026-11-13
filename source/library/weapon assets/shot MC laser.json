@@ -1,0 +1,33 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectileLaser.as\"",
+      "changes": [
+        {"place": "weapon assets/shot MC laser/shape 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "graphic assets/energy beam",
+          "depth": 2,
+          "x": -0.5,
+          "y": -49.95,
+          "scale": [1, 1.305878],
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "filters": [{"type": "blur", "blurX": 55, "blurY": 55, "passes": 1}],
+          "blend": "add"
+        },
+        {
+          "place": "graphic assets/energy beam",
+          "depth": 4,
+          "x": -0.5,
+          "y": -49.95,
+          "scale": [1, 1.305878],
+          "filters": [{"type": "blur", "blurX": 5, "blurY": 5, "passes": 1}],
+          "blend": "add"
+        }
+      ]
+    }
+  ]
+}

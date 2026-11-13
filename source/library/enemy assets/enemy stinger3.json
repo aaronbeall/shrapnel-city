@@ -1,0 +1,197 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 15,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/frames/enemy stinger3.as\"",
+      "changes": [
+        {"place": "enemy assets/enemy stinger core - hex", "depth": 1, "x": 0, "y": 0, "name": "core_mc"},
+        {
+          "place": "enemy assets/enemy stinger turret - hex",
+          "depth": 6,
+          "x": 0,
+          "y": 0,
+          "scale": [0.99498, 1.002136],
+          "name": "turret_mc"
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 1},
+        {"remove": 6},
+        {"place": "enemy assets/enemy stinger3/shape 1", "depth": 2, "x": 0, "y": 0},
+        {
+          "place": "graphic assets/explosion",
+          "depth": 3,
+          "x": 0.95,
+          "y": -1.85,
+          "matrix": [0.25882, -0.965912, 0.965912, 0.25882]
+        },
+        {
+          "place": "_shared/shape tween 239",
+          "depth": 4,
+          "x": 0.95,
+          "y": -1.85,
+          "matrix": [0.25882, -0.965912, 0.965912, 0.25882]
+        },
+        {
+          "place": "_glow",
+          "depth": 5,
+          "x": 1.7,
+          "y": -1.9,
+          "matrix": [0.742935, -2.772629, 2.772629, 0.742935],
+          "ratio": 0.000015259021896696422,
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}],
+          "blend": "add"
+        },
+        {
+          "place": "_shared/shape tween 240",
+          "depth": 7,
+          "x": 0.95,
+          "y": -1.85,
+          "matrix": [0.25882, -0.965912, 0.965912, 0.25882]
+        },
+        {"place": "enemy assets/enemy stinger3/shape tween 1", "depth": 8, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 3, "ratio": 0.11111619745174334},
+        {"update": 4, "ratio": 0.5555504692149233},
+        {
+          "update": 5,
+          "x": 1.7,
+          "y": -1.85,
+          "matrix": [0.742935, -2.772629, 2.772629, 0.742935],
+          "color": {"alpha": 0.97265625},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 7, "ratio": 0.5555504692149233},
+        {"update": 8, "ratio": 0.5555504692149233},
+        {
+          "place": "enemy assets/enemy stinger turret - oval",
+          "depth": 9,
+          "x": 0,
+          "y": 0,
+          "scale": [0.99498, 1.002136],
+          "color": {"multiply": [0.25, 0.25, 0.25, 1]},
+          "ratio": 0.000030518043793392844
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"update": 3, "ratio": 0.44446478980697335},
+        {"update": 4, "ratio": 0.8888990615701533},
+        {"update": 5, "color": {"alpha": 0.890625}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 7, "ratio": 0.8888990615701533},
+        {"update": 8, "ratio": 0.8888990615701533},
+        {"update": 9, "x": 2.2, "y": -14.3, "matrix": [0.520493, -0.846268, 0.852371, 0.524246]}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"remove": 8},
+        {"replace": "_shared/shape tween 241", "depth": 3, "ratio": 0},
+        {"replace": "_shared/shape tween 242", "depth": 4, "ratio": 0},
+        {"update": 5, "color": {"alpha": 0.75}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"replace": "_shared/shape tween 243", "depth": 7, "ratio": 0},
+        {"place": "_shared/shape 598", "depth": 8, "x": 0, "y": 0},
+        {"update": 9, "x": 3.5, "y": -22.85, "matrix": [-0.056763, -0.993179, 1.000336, -0.057175]}
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"update": 3, "ratio": 0.2653086137178607},
+        {"update": 4, "ratio": 0.2},
+        {"update": 5, "color": {"alpha": 0.5546875}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 7, "ratio": 0.5555504692149233},
+        {"update": 9, "x": 3.95, "y": -25.7, "matrix": [-0.257523, -0.961075, 0.968002, -0.259369]}
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"update": 3, "ratio": 0.4898146028839551},
+        {"update": 4, "ratio": 0.4},
+        {"update": 5, "color": {"alpha": 0.3046875}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 7, "ratio": 0.8888990615701533}
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {"remove": 7},
+        {"update": 3, "ratio": 0.67348744945449},
+        {"update": 4, "ratio": 0.6000152590218967},
+        {
+          "update": 5,
+          "x": 1.7,
+          "y": -1.9,
+          "matrix": [0.742935, -2.772629, 2.772629, 0.742935],
+          "color": {"alpha": 0},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {
+          "place": "_shared/shape 244",
+          "depth": 7,
+          "x": 0.95,
+          "y": -1.85,
+          "matrix": [0.25882, -0.965912, 0.965912, 0.25882]
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {"remove": 5},
+        {"remove": 7},
+        {"update": 3, "ratio": 0.8163424124513619},
+        {"update": 4, "ratio": 0.8000152590218967}
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [{"update": 3, "ratio": 0.9183794918745708}, {"replace": "_shared/shape tween 245", "depth": 4, "ratio": 0}]
+    },
+    {"frame": 11, "changes": [{"update": 3, "ratio": 0.9796139467460135}, {"update": 4, "ratio": 0.2}]},
+    {
+      "frame": 12,
+      "changes": [
+        {"remove": 3},
+        {
+          "place": "_shared/shape 246",
+          "depth": 3,
+          "x": 0.95,
+          "y": -1.85,
+          "matrix": [0.25882, -0.965912, 0.965912, 0.25882]
+        },
+        {"update": 4, "ratio": 0.4}
+      ]
+    },
+    {"frame": 13, "changes": [{"remove": 3}, {"update": 4, "ratio": 0.6000152590218967}]},
+    {"frame": 14, "changes": [{"update": 4, "ratio": 0.8000152590218967}]},
+    {
+      "frame": 15,
+      "script": ["makeCorpse(this);", "this.kill();"],
+      "changes": [
+        {"remove": 4},
+        {
+          "place": "_shared/shape 247",
+          "depth": 3,
+          "x": 1.6,
+          "y": -1.35,
+          "matrix": [0.174774, -0.652222, 0.702286, 0.188171]
+        }
+      ]
+    }
+  ]
+}

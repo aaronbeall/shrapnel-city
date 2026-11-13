@@ -1,0 +1,16 @@
+{
+  "kind": "shape",
+  "bounds": [-12, 14, -22.05, 18.95],
+  "fills": [
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "game objects/hit_mc/shape 2/bitmap 1",
+      "m": [1, 0, 0, 1, -12, -22.05],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 1, "d": "M -12 -22.05 L 14 -22.05 L 14 18.95 L -12 18.95 L -12 -22.05 Z"}]
+}

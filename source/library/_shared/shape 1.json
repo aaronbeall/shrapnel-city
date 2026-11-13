@@ -1,0 +1,7 @@
+{
+  "kind": "shape",
+  "bounds": [0, 1, 0, 7],
+  "fills": [{"type": "solid", "color": "#ff0000"}],
+  "lines": [],
+  "paths": [{"fill": 0, "d": "M 1 7 L 0 7 L 0 0 L 1 0 L 1 7 Z"}]
+}

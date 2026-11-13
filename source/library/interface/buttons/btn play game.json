@@ -1,0 +1,45 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": ["#include \"as/ui/button.as\"", "", "if(_root.so.data.level > 2)", "    label_txt.text = \"NEW GAME\";"],
+      "changes": [
+        {"place": "interface/buttons/btn play game/shape 1", "depth": 2, "x": 0, "y": 0},
+        {
+          "place": "interface/buttons/btn play game/text field 1",
+          "depth": 3,
+          "x": 38.5,
+          "y": 10.25,
+          "name": "label_txt",
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#000000",
+              "blurX": 3,
+              "blurY": 3,
+              "angle": 0.7853851318359375,
+              "distance": 1,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            },
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 20,
+              "blurY": 20,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

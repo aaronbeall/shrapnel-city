@@ -1,0 +1,13 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 2,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectile.as\"",
+      "changes": [{"place": "_arrow", "depth": 1, "x": 0, "y": 0, "scale": [0.189667, 0.219574]}]
+    },
+    {"frame": 2, "script": "this.removeMovieClip();", "changes": [{"remove": 1}]}
+  ]
+}

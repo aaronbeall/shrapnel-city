@@ -1,0 +1,41 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 30,
+  "timeline": [
+    {"frame": 1, "changes": [{"place": "graphic assets/crosshairs", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 2, "changes": [{"update": 1, "x": 0.1, "y": 0, "scale": 3.142853, "color": {"alpha": 0}}]},
+    {"frame": 3, "changes": [{"update": 1, "x": 0.05, "y": 0, "scale": 2.84758, "color": {"alpha": 0.13671875}}]},
+    {"frame": 4, "changes": [{"update": 1, "x": 0.05, "y": 0, "scale": 2.57428, "color": {"alpha": 0.265625}}]},
+    {"frame": 5, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 2.322845, "color": {"alpha": 0.3828125}}]},
+    {"frame": 6, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 2.093231, "color": {"alpha": 0.48828125}}]},
+    {"frame": 7, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.885498, "color": {"alpha": 0.5859375}}]},
+    {"frame": 8, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.699661, "color": {"alpha": 0.671875}}]},
+    {"frame": 9, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.535706, "color": {"alpha": 0.75}}]},
+    {"frame": 10, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.393555, "color": {"alpha": 0.81640625}}]},
+    {"frame": 11, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.273285, "color": {"alpha": 0.87109375}}]},
+    {"frame": 12, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.174927, "color": {"alpha": 0.91796875}}]},
+    {"frame": 13, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.098389, "color": {"alpha": 0.953125}}]},
+    {"frame": 14, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.043716, "color": {"alpha": 0.98046875}}]},
+    {"frame": 15, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.01091, "color": {"alpha": 0.99609375}}]},
+    {"frame": 16, "label": "loop", "changes": [{"update": 1, "x": 0, "y": 0, "color": {}}]},
+    {"frame": 17, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.053055}]},
+    {"frame": 18, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.097946}]},
+    {"frame": 19, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.134689}]},
+    {"frame": 20, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.163254}]},
+    {"frame": 21, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.183655}]},
+    {"frame": 22, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.195908}]},
+    {"frame": 23, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.199982}]},
+    {"frame": 24, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.195892}]},
+    {"frame": 25, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.183655}]},
+    {"frame": 26, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.163254}]},
+    {"frame": 27, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.134689}]},
+    {"frame": 28, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.097946}]},
+    {"frame": 29, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.053055}]},
+    {
+      "frame": 30,
+      "script": "#include \"as/frames/crosshairs anim frame 30.as\"",
+      "changes": [{"update": 1, "x": 0, "y": 0}]
+    }
+  ]
+}

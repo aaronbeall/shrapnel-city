@@ -1,0 +1,81 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 10,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "player assets/fire_mc/shape 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "_glow",
+          "depth": 11,
+          "x": 0,
+          "y": -7.65,
+          "scale": [1.319687, 1.639465],
+          "color": {"alpha": 0.25},
+          "filters": [{"type": "blur", "blurX": 5, "blurY": 5, "passes": 1}],
+          "blend": "add"
+        }
+      ]
+    },
+    {"frame": 2, "changes": [{"replace": "player assets/fire_mc/shape 2", "depth": 1}]},
+    {
+      "frame": 3,
+      "changes": [
+        {"remove": 1},
+        {
+          "place": "graphic assets/sparking",
+          "depth": 1,
+          "x": 0.9,
+          "y": -1.1,
+          "scale": -0.540207,
+          "ratio": 0.000030518043793392844
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"remove": 1},
+        {"place": "player assets/fire_mc/shape 3", "depth": 2, "x": 0, "y": 0},
+        {
+          "update": 11,
+          "x": 0,
+          "y": 8,
+          "scale": [1.319687, 1.951599],
+          "filters": [{"type": "blur", "blurX": 5, "blurY": 5, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"remove": 2},
+        {"place": "player assets/fire_mc/shape 4", "depth": 1, "x": 0, "y": 0},
+        {
+          "update": 11,
+          "x": 0,
+          "y": -7.65,
+          "scale": [1.319687, 1.639465],
+          "filters": [{"type": "blur", "blurX": 5, "blurY": 5, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"replace": "player assets/fire_mc/shape 5", "depth": 1},
+        {
+          "update": 11,
+          "x": 0,
+          "y": -4.3,
+          "scale": [1.656738, 1.884201],
+          "color": {"alpha": 0.3515625},
+          "filters": [{"type": "blur", "blurX": 5, "blurY": 5, "passes": 1}]
+        }
+      ]
+    },
+    {"frame": 7, "changes": [{"remove": 1}]}
+  ]
+}

@@ -9495,45 +9495,19 @@ const frames = {}, instances = {};
   $o($v($c, "label_txt")).autoSize = "center";
   $call($c, "hide");
 };
-instances["0:39:21"] = {
-  "on:release": function ($c) {
-    $c.gotoAndStop("game");
-  }
-};
-instances["0:39:27"] = {
-  "on:release": function ($c) {
-    $c._root?.gotoAndStop?.("game");
-  }
-};
-instances["0:43:23"] = {
-  "on:release": function ($c) {
-    $c._root?.missionPanel_mc?.toggle?.();
-  }
-};
-instances["0:46:29"] = {
-  "on:release": function ($c) {
-    G.gotoLevel.call($c, $c._root?.so?.data?.level);
-  }
-};
-instances["125:1:1"] = {
-  "clip:load": function ($c) {
-    $o($c._parent).hitArea = $c;
-    $c._visible = false;
-  }
-};
 instances["14:2:1"] = {
   "on:release": function ($c) {
     G.hideDialog.call($c);
   }
 };
-instances["248:1:1"] = {
-  "clip:load": function ($c) {
-    $c._visible = false;
+instances["31:1:1"] = {
+  "on:rollOver": function ($c) {
+    $c.useHandCursor = false;
   }
 };
-instances["248:4:1"] = {
-  "clip:load": function ($c) {
-    $c._visible = false;
+instances["31:7:13"] = {
+  "on:release": function ($c) {
+    G.hideDialog.call($c);
   }
 };
 instances["31:10:14"] = {
@@ -9554,14 +9528,89 @@ instances["31:16:16"] = {
     G.quit.call($c);
   }
 };
-instances["31:1:1"] = {
+instances["38:2:1"] = {
+  "on:key27": function ($c) {
+    G.hideDialog.call($c);
+  },
+  "on:release": function ($c) {
+    G.hideDialog.call($c);
+  }
+};
+instances["39:1:1"] = {
   "on:rollOver": function ($c) {
     $c.useHandCursor = false;
   }
 };
-instances["31:7:13"] = {
+instances["55:1:2"] = {
+  "on:rollOver": function ($c) {
+    $c.useHandCursor = false;
+  }
+};
+instances["55:17:13"] = {
   "on:release": function ($c) {
     G.hideDialog.call($c);
+  }
+};
+instances["55:20:15"] = {
+  "on:release": function ($c) {
+    G.quit.call($c);
+  }
+};
+instances["55:17:19"] = {
+  "on:release": function ($c) {
+    G.retryLevel.call($c);
+    $c._parent?.removeMovieClip?.();
+  },
+  "on:key13": function ($c) {
+    G.retryLevel.call($c);
+    $c._parent?.removeMovieClip?.();
+  },
+  "on:key32": function ($c) {
+    G.retryLevel.call($c);
+    $c._parent?.removeMovieClip?.();
+  }
+};
+instances["55:20:21"] = {
+  "on:release": function ($c) {
+    G.quit.call($c);
+    $c._parent?.removeMovieClip?.();
+  }
+};
+instances["125:1:1"] = {
+  "clip:load": function ($c) {
+    $o($c._parent).hitArea = $c;
+    $c._visible = false;
+  }
+};
+instances["248:1:1"] = {
+  "clip:load": function ($c) {
+    $c._visible = false;
+  }
+};
+instances["248:4:1"] = {
+  "clip:load": function ($c) {
+    $c._visible = false;
+  }
+};
+instances["346:1:1"] = {
+  "clip:load": function ($c) {
+    $c.type = "primary";
+    $c.item = "Bolter";
+    $c.quantity = 15;
+  }
+};
+instances["346:36:1"] = {
+  "clip:load": function ($c) {
+    $c.type = "secondary";
+    $c.item = "Carbon Bomb";
+    $c.quantity = 1;
+  }
+};
+instances["346:71:1"] = {
+  "clip:load": function ($c) {
+    $c.type = "primary";
+    $c.item = "Bolter";
+    $c.quantity = 15;
   }
 };
 instances["346:106:1"] = {
@@ -9583,13 +9632,6 @@ instances["346:141:1"] = {
   }
 };
 instances["346:176:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "primary";
-    $c.item = "Bolter";
-    $c.quantity = 15;
-  }
-};
-instances["346:1:1"] = {
   "clip:load": function ($c) {
     $c.type = "primary";
     $c.item = "Bolter";
@@ -9633,20 +9675,6 @@ instances["346:324:1"] = {
     $c.persistent = true;
   }
 };
-instances["346:36:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "secondary";
-    $c.item = "Carbon Bomb";
-    $c.quantity = 1;
-  }
-};
-instances["346:71:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "primary";
-    $c.item = "Bolter";
-    $c.quantity = 15;
-  }
-};
 instances["349:1:1"] = {
   "clip:load": function ($c) {
     $c.health = 0.1;
@@ -9654,19 +9682,6 @@ instances["349:1:1"] = {
     $c.damage = 200;
     $c.frag = "frag_mc";
     $c.fragCount = 15;
-  }
-};
-instances["38:2:1"] = {
-  "on:key27": function ($c) {
-    G.hideDialog.call($c);
-  },
-  "on:release": function ($c) {
-    G.hideDialog.call($c);
-  }
-};
-instances["39:1:1"] = {
-  "on:rollOver": function ($c) {
-    $c.useHandCursor = false;
   }
 };
 instances["552:4:1"] = {
@@ -9677,41 +9692,6 @@ instances["552:4:1"] = {
 instances["558:9:1"] = {
   "clip:load": function ($c) {
     $c._visible = false;
-  }
-};
-instances["55:17:13"] = {
-  "on:release": function ($c) {
-    G.hideDialog.call($c);
-  }
-};
-instances["55:17:19"] = {
-  "on:release": function ($c) {
-    G.retryLevel.call($c);
-    $c._parent?.removeMovieClip?.();
-  },
-  "on:key13": function ($c) {
-    G.retryLevel.call($c);
-    $c._parent?.removeMovieClip?.();
-  },
-  "on:key32": function ($c) {
-    G.retryLevel.call($c);
-    $c._parent?.removeMovieClip?.();
-  }
-};
-instances["55:1:2"] = {
-  "on:rollOver": function ($c) {
-    $c.useHandCursor = false;
-  }
-};
-instances["55:20:15"] = {
-  "on:release": function ($c) {
-    G.quit.call($c);
-  }
-};
-instances["55:20:21"] = {
-  "on:release": function ($c) {
-    G.quit.call($c);
-    $c._parent?.removeMovieClip?.();
   }
 };
 instances["587:1:1"] = {
@@ -9735,6 +9715,15 @@ instances["587:71:1"] = {
     $c.quantity = 25;
   }
 };
+instances["608:1:1"] = {
+  "clip:load": function ($c) {
+    $c.powerupDrop = {
+      type: "primary",
+      item: "Plasma",
+      quantity: 50
+    };
+  }
+};
 instances["608:10:1"] = {
   "clip:load": function ($c) {
     $c.powerupDrop = {
@@ -9744,13 +9733,14 @@ instances["608:10:1"] = {
     };
   }
 };
-instances["608:1:1"] = {
+instances["649:16:1"] = {
   "clip:load": function ($c) {
-    $c.powerupDrop = {
-      type: "primary",
-      item: "Plasma",
-      quantity: 50
-    };
+    $c.health = 25;
+  }
+};
+instances["649:61:1"] = {
+  "clip:load": function ($c) {
+    $c.health = 25;
   }
 };
 instances["649:121:1"] = {
@@ -9761,11 +9751,6 @@ instances["649:121:1"] = {
       item: "Bolter",
       quantity: 25
     };
-  }
-};
-instances["649:16:1"] = {
-  "clip:load": function ($c) {
-    $c.health = 25;
   }
 };
 instances["649:316:1"] = {
@@ -9808,9 +9793,25 @@ instances["649:361:1"] = {
     };
   }
 };
-instances["649:61:1"] = {
+instances["650:1:1"] = {
   "clip:load": function ($c) {
-    $c.health = 25;
+    $c.type = "health";
+    $c.item = "health";
+    $c.quantity = 25;
+  }
+};
+instances["650:36:1"] = {
+  "clip:load": function ($c) {
+    $c.type = "health";
+    $c.item = "health";
+    $c.quantity = 25;
+  }
+};
+instances["650:71:1"] = {
+  "clip:load": function ($c) {
+    $c.type = "secondary";
+    $c.item = "Shrapnel Bomb";
+    $c.quantity = 1;
   }
 };
 instances["650:106:1"] = {
@@ -9828,13 +9829,6 @@ instances["650:141:1"] = {
   }
 };
 instances["650:176:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "health";
-    $c.item = "health";
-    $c.quantity = 25;
-  }
-};
-instances["650:1:1"] = {
   "clip:load": function ($c) {
     $c.type = "health";
     $c.item = "health";
@@ -9876,13 +9870,6 @@ instances["650:351:1"] = {
     $c.quantity = 25;
   }
 };
-instances["650:36:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "health";
-    $c.item = "health";
-    $c.quantity = 25;
-  }
-};
 instances["650:386:1"] = {
   "clip:load": function ($c) {
     $c.type = "primary";
@@ -9890,21 +9877,9 @@ instances["650:386:1"] = {
     $c.quantity = 25;
   }
 };
-instances["650:71:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "secondary";
-    $c.item = "Shrapnel Bomb";
-    $c.quantity = 1;
-  }
-};
 instances["662:16:1"] = {
   "clip:load": function ($c) {
     $c._visible = false;
-  }
-};
-instances["663:192:1"] = {
-  "clip:load": function ($c) {
-    $c.refireRate = 25;
   }
 };
 instances["663:1:1"] = {
@@ -9914,6 +9889,16 @@ instances["663:1:1"] = {
       item: "Plasma",
       quantity: 10
     };
+  }
+};
+instances["663:50:1"] = {
+  "clip:load": function ($c) {
+    
+  }
+};
+instances["663:192:1"] = {
+  "clip:load": function ($c) {
+    $c.refireRate = 25;
   }
 };
 instances["663:209:1"] = {
@@ -9951,11 +9936,6 @@ instances["663:388:1"] = {
     
   }
 };
-instances["663:50:1"] = {
-  "clip:load": function ($c) {
-    
-  }
-};
 instances["670:11:1"] = {
   "clip:load": function ($c) {
     $c._visible = false;
@@ -9967,16 +9947,6 @@ instances["691:1:1"] = {
     $c.id = $c._parent?.id;
   }
 };
-instances["729:106:1"] = {
-  "clip:load": function ($c) {
-    $c.health = 50;
-    $c.powerupDrop = {
-      type: "secondary",
-      item: "Splinter Bomb",
-      quantity: 3
-    };
-  }
-};
 instances["729:16:1"] = {
   "clip:load": function ($c) {
     $c.health = 25;
@@ -9984,6 +9954,26 @@ instances["729:16:1"] = {
       type: "secondary",
       item: "Carbon Bomb",
       quantity: 1
+    };
+  }
+};
+instances["729:61:1"] = {
+  "clip:load": function ($c) {
+    $c.health = 25;
+    $c.powerupDrop = {
+      type: "health",
+      item: "health",
+      quantity: 50
+    };
+  }
+};
+instances["729:106:1"] = {
+  "clip:load": function ($c) {
+    $c.health = 50;
+    $c.powerupDrop = {
+      type: "secondary",
+      item: "Splinter Bomb",
+      quantity: 3
     };
   }
 };
@@ -10109,16 +10099,6 @@ instances["729:391:1"] = {
     };
   }
 };
-instances["729:61:1"] = {
-  "clip:load": function ($c) {
-    $c.health = 25;
-    $c.powerupDrop = {
-      type: "health",
-      item: "health",
-      quantity: 50
-    };
-  }
-};
 instances["729:841:1"] = {
   "clip:load": function ($c) {
     $c.powerupDrop = {
@@ -10144,6 +10124,25 @@ instances["729:984:1"] = {
     };
   }
 };
+instances["730:1:1"] = {
+  "clip:load": function ($c) {
+    $c.type = "primary";
+    $c.item = "Bolter";
+    $c.quantity = 50;
+  }
+};
+instances["730:36:1"] = {
+  "clip:load": function ($c) {
+    $c.type = "trigger";
+    $c.item = "door1:close";
+  }
+};
+instances["730:71:1"] = {
+  "clip:load": function ($c) {
+    $c.type = "trigger";
+    $c.item = "door1:open";
+  }
+};
 instances["730:106:1"] = {
   "clip:load": function ($c) {
     $c.onPickup = function () {
@@ -10163,13 +10162,6 @@ instances["730:176:1"] = {
     $c.onPickup = function () {
       G.trigger.call($c, "door4:open");
     };
-  }
-};
-instances["730:1:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "primary";
-    $c.item = "Bolter";
-    $c.quantity = 50;
   }
 };
 instances["730:211:1"] = {
@@ -10205,12 +10197,6 @@ instances["730:351:1"] = {
     $c.type = "secondary";
     $c.item = "Shrapnel Bomb";
     $c.quantity = 1;
-  }
-};
-instances["730:36:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "trigger";
-    $c.item = "door1:close";
   }
 };
 instances["730:386:1"] = {
@@ -10272,12 +10258,6 @@ instances["730:666:1"] = {
     $c.type = "health";
     $c.item = "health";
     $c.quantity = 25;
-  }
-};
-instances["730:71:1"] = {
-  "clip:load": function ($c) {
-    $c.type = "trigger";
-    $c.item = "door1:open";
   }
 };
 instances["737:5:1"] = {
@@ -10524,34 +10504,871 @@ instances["741:882:1"] = {
     $c.spawnTrigger = "bridge";
   }
 };
-instances["742:1004:6"] = {
+instances["742:3237:1"] = {
   "clip:load": function ($c) {
-    $c.connections = [$c._parent?.a2, $c._parent?.a4];
+    $c.hitPlayer = function (damage, angle) {
+      $c.health = $v($c, "health") - AS.int(damage);
+      if ($v($c, "health") <= 0) {
+        if (angle != undefined) $call($c, "thrust", Math.min(damage, $v($c, "speedMax") * 2), angle);
+        if (!$v($c, "dying")) {
+          $c.dying = true;
+          $c.gotoAndStop("norm");
+          $call($c, "deathRoll");
+          for (var mc of $keys(G._screen?.vision_mc)) $o(G._screen?.vision_mc?.[mc]).active = false;
+          $o($v($c, "indicator_mc"))._visible = false;
+          $o($v($c, "damage_mc"))._visible = false;
+          $v($c, "damage_mc")?.stop?.();
+        }
+      } else {
+        if (angle != undefined) $call($c, "thrust", Math.min(damage / 10, $v($c, "speedMax") * 2), angle);
+        $call($c, "indicate", "hit");
+      }
+      if ($v($c, "health") <= $v($c, "healthLow") && !$v($c, "damage_mc")?._visible && !$v($c, "dying")) {
+        $o($v($c, "damage_mc"))._visible = true;
+        $v($c, "damage_mc")?.play?.();
+      }
+      G.updateDisplay.call($c, "health");
+    };
+    $c.indicate = function (type) {
+      $o($v($c, "indicator_mc"))._visible = true;
+      $o($v($c, "indicator_mc"))._alpha = 100;
+      $v($c, "indicator_mc")?.gotoAndStop?.(type);
+    };
+    $c.hitTestPerimeter = function () {
+      for (var h of $keys($v($c, "hits_mc"))) {
+        var p = {
+          x: $v($c, "hits_mc")?.[h]?._x,
+          y: $v($c, "hits_mc")?.[h]?._y
+        };
+        $v($c, "hits_mc")?.localToGlobal?.(p);
+        G._screen?.globalToLocal?.(p);
+        if (G.wallHitTest.call($c, p?.x, p?.y, G.impassThreshold)) return true;
+      }
+      return false;
+    };
+    $c.thrust = function (speed, angle) {
+      var delta = G.getVector.call($c, speed, angle);
+      $c.xSpeed = $v($c, "xSpeed") + delta?.x;
+      $c.ySpeed = $v($c, "ySpeed") + delta?.y;
+    };
+    $c.changeWep = function (version, id, dir) {
+      var weapon = this["weapon" + version];
+      var weapons = this["weapons" + version];
+      if (id == undefined || id == null) {
+        if (!dir) dir = 1;
+        var id = weapon?.id;
+        var i = 0;
+        do {
+          id += dir;
+          if (id > weapons?.length - 1) id = 0;
+          if (id < 0) id = weapons?.length - 1;
+        } while (weapons?.[id]?.ammo <= 0 && ++i < weapons?.length);
+      }
+      if (id == weapon?.id) return;
+      weapon = this["weapon" + version] = weapons?.[id];
+      if (weapon?.ammo) G.notify.call($c, this, weapon?.name + "(" + weapon?.ammo + ")");
+      this["refire" + version] = 0;
+      this["shotCount" + version] = 0;
+      this["firing" + version] = false;
+      G.updateDisplay.call($c, "wep" + version);
+    };
+    $c.wepByName = function (version, name) {
+      var weapons = this["weapons" + version];
+      for (var i of $keys(weapons)) {
+        if (weapons?.[i]?.name == name) return weapons?.[i];
+      }
+    };
+    $c.deathRoll = function () {
+      $o($v($c, "exhaust_mc"))._visible = false;
+      $c.deathTime = 0;
+      $c.onEnterFrame = function () {
+        $inc($c, "deathTime", 1, false);
+        if ($v($c, "deathTime") > $v($c, "deathControl")) $c.gotoAndStop("norm");
+        $c._rotation += Math.max(G.rand.call($c, 3) + 1, $v($c, "speed") * 3);
+        if ($v($c, "speed") < 0.05 && $v($c, "xSpeed") < 0.05 && $v($c, "ySpeed") < 0.05) {
+          $c.dead = true;
+          $c.gotoAndPlay("death");
+          $o($c._parent?.shadow_mc)._visible = false;
+          AS.setTimeout(G.showDialog, 1000, "diedScreen");
+          G.makeShrapnel.call($c, this, "scrap_mc", 25);
+          G.makeShrapnel.call($c, this, "frag_mc", 15);
+          G.makeShrapnel.call($c, this, "debris_mc", 15, 360, {
+            debrisType: "gray",
+            explosive: true
+          });
+          G.makeBlastmark.call($c, this, 10, {
+            _xscale: 80,
+            _yscale: 80
+          });
+          delete $c.onEnterFrame;
+        } else if (G.randomPerSecond.call($c, 5)) {
+          G.makeFireball.call($c, G.randomPointOn.call($c, this), "miniExplosion", 50 + G.rand.call($c, 100));
+        }
+      };
+    };
+    $c.hide = function () {
+      $c.dead = $c.dying = true;
+      $c._visible = $o(G._screen?.shadow_mc)._visible = false;
+      $c.xSpeed = $c.ySpeed = 0;
+    };
+    $c.spawn = function () {
+      $c.dead = $c.dying = false;
+      $c._visible = $o(G._screen?.shadow_mc)._visible = true;
+      $o(G._player?.blasts_mc)._alpha = 100;
+    };
+    $c.update = function (time) {
+      if ($v($c, "dead")) return;
+      if ($v($c, "scrolling")) {
+        $c.screenTargetX = -$c._x + G.screenWidth / 2;
+        $c.screenTargetY = -$c._y + G.screenHeight / 2;
+        $c.screenTargetX = Math.min(Math.max(-G.level_bmp?.width + G.screenWidth, $v($c, "screenTargetX")), 0);
+        $c.screenTargetY = Math.min(Math.max(-G.level_bmp?.height + G.screenHeight, $v($c, "screenTargetY")), 0);
+        $o(G._screen)._x += AS.int(($v($c, "screenTargetX") - G._screen?._x) / 4);
+        $o(G._screen)._y += AS.int(($v($c, "screenTargetY") - G._screen?._y) / 4);
+      }
+      $c.xSpeed = $v($c, "xSpeed") * $v($c, "decel");
+      $c.ySpeed = $v($c, "ySpeed") * $v($c, "decel");
+      if (!$v($c, "dying")) {
+        if (AS.Key?.isDown?.(AS.Key?.UP)) {
+          $call($c, "thrust", $v($c, "accel"), $c._rotation);
+          $o($v($c, "exhaust_mc"))._visible = true;
+          $o($v($c, "exhaust_mc"))._xscale = $o($v($c, "exhaust_mc"))._yscale = 75 + G.rand.call($c, 50);
+        } else if (AS.Key?.isDown?.(AS.Key?.DOWN)) {
+          $call($c, "thrust", -$v($c, "accel"), $c._rotation);
+          $o($v($c, "exhaust_mc"))._visible = false;
+        } else if ($v($c, "exhaust_mc")?._visible) {
+          $o($v($c, "exhaust_mc"))._visible = false;
+        }
+        if (AS.Key?.isDown?.($v($c, "KEY_X"))) {
+          $call($c, "thrust", $v($c, "strafeAccel"), $c._rotation + 90);
+        } else if (AS.Key?.isDown?.($v($c, "KEY_Z"))) {
+          $call($c, "thrust", $v($c, "strafeAccel"), $c._rotation - 90);
+        }
+      }
+      $c.speed = G.getLength.call($c, {
+        x: $v($c, "xSpeed"),
+        y: $v($c, "ySpeed")
+      });
+      if ($v($c, "speed") > $v($c, "speedMax")) {
+        $c.xSpeed = $v($c, "xSpeed") * ($v($c, "speedMax") / $v($c, "speed"));
+        $c.ySpeed = $v($c, "ySpeed") * ($v($c, "speedMax") / $v($c, "speed"));
+        $c.speed = $v($c, "speedMax");
+      }
+      if ($v($c, "speed") > $v($c, "speedMin")) {
+        var xSample = $v($c, "xSpeed") * time, ySample = $v($c, "ySpeed") * time;
+        $c._x += xSample;
+        $c._y += ySample;
+        if ($call($c, "hitTestPerimeter")) {
+          var hit = G.findCollision.call($c, {
+            x: $c._x,
+            y: $c._y
+          }, 180, $v($c, "radius"), G.impassThreshold);
+          if (hit) {
+            var reflect = G.reflectVector.call($c, {
+              x: $v($c, "xSpeed"),
+              y: $v($c, "ySpeed")
+            }, G.normalizeVector.call($c, hit?.vector));
+            $c.xSpeed = reflect?.x * $v($c, "bounce");
+            $c.ySpeed = reflect?.y * $v($c, "bounce");
+            G.makeSparks.call($c, {
+              _x: $c._x + hit?.vector?.x,
+              _y: $c._y + hit?.vector?.y
+            }, $v($c, "speed") / $v($c, "speedMax"));
+            var d = Math.ceil($v($c, "speed"));
+            do {
+              hit = G.findCollision.call($c, {
+                x: $c._x,
+                y: $c._y
+              }, 180, $v($c, "radius"), G.impassThreshold);
+              if (hit) {
+                var delta = G.getVector.call($c, 1, hit?.angle - 180);
+                $c._x += delta?.x;
+                $c._y += delta?.y;
+              }
+            } while (d-- && hit);
+          }
+        }
+      }
+      if (!$v($c, "dying")) {
+        var scrX = $c._x + G._screen?._x, scrY = $c._y + G._screen?._y;
+        for (var mc of $keys(G._screen?.vision_mc)) {
+          $o(G._screen?.vision_mc?.[mc]).active = (!$v($c, "invisible") || $v($c, "firing1") || $v($c, "firing2")) && G._screen?.vision_mc?.[mc]?.hitTest?.(scrX, scrY, true);
+        }
+      }
+      if (!$v($c, "dying") || $v($c, "deathTime") < $v($c, "deathControl")) {
+        if (AS.Key?.isDown?.(AS.Key?.LEFT)) {
+          if ($v($c, "turn") == 0) {
+            $c.turn = $v($c, "turnAccel");
+          } else {
+            $c.turn = $v($c, "turn") * $v($c, "turnAccel");
+            if ($v($c, "turn") > $v($c, "turnSpeed")) $c.turn = $v($c, "turnSpeed");
+          }
+          $c._rotation -= $v($c, "turn") * time;
+        } else if (AS.Key?.isDown?.(AS.Key?.RIGHT)) {
+          if ($v($c, "turn") == 0) {
+            $c.turn = $v($c, "turnAccel");
+          } else {
+            $c.turn = $v($c, "turn") * $v($c, "turnAccel");
+            if ($v($c, "turn") > $v($c, "turnSpeed")) $c.turn = $v($c, "turnSpeed");
+          }
+          $c._rotation += $v($c, "turn") * time;
+        } else {
+          $c.turn = 0;
+        }
+        if ($v($c, "refire1") < $v($c, "weapon1")?.refire) $c.refire1 = $v($c, "refire1") + time;
+        if (AS.Key?.isDown?.(AS.Key?.SPACE)) $c.firing1 = true; else if (!$v($c, "weapon1")?.burst || $v($c, "shotCount1") == 0) $c.firing1 = false;
+        if ($v($c, "firing1") && $v($c, "refire1") >= $v($c, "weapon1")?.refire && $v($c, "weapon1")?.ammo > 0) {
+          $o($c._root?.stats).shots++;
+          $c.refire1 = 0;
+          if ($v($c, "weapon1")?.burst) {
+            $inc($c, "shotCount1", 1, false);
+            if ($v($c, "shotCount1") >= $v($c, "weapon1")?.burst) {
+              $c.shotCount1 = 0;
+              if ($v($c, "weapon1")?.burstReload) $c.refire1 = -($v($c, "weapon1")?.burstReload - $v($c, "weapon1")?.refire);
+              $c.firing1 = false;
+            }
+          } else {
+            $c.shotCount1 = 0;
+            $c.firing1 = false;
+          }
+          var d = G.shotID.call($c);
+          if ($c._currentframe < 5) this.gotoAndStop("attack");
+          $v($c, "fire_mc")?.gotoAndStop?.($v($c, "weapon1")?.fire);
+          $o($v($c, "fire_mc"))._xscale = 100 * (AS.random(2) ? -1 : 1) + G.jitter.call($c, 50);
+          $o($v($c, "fire_mc"))._yscale = 100 + G.jitter.call($c, 50);
+          $o($v($c, "weapon1")).ammo--;
+          G.updateDisplay.call($c, "ammo1");
+          $c.point = new Object();
+          $o($v($c, "point")).x = $v($c, "muzzle_mc")?._x;
+          $o($v($c, "point")).y = $v($c, "muzzle_mc")?._y;
+          $c.localToGlobal($v($c, "point"));
+          G._screen?.globalToLocal?.($v($c, "point"));
+          var init = {
+            _rotation: $c._rotation + G.jitter.call($c, $v($c, "weapon1")?.spread),
+            _x: $v($c, "point")?.x,
+            _y: $v($c, "point")?.y,
+            xSpeed: $v($c, "xSpeed"),
+            ySpeed: $v($c, "ySpeed")
+          };
+          $o($v($c, "fire_mc"))._rotation = init?._rotation - $c._rotation;
+          G._screen?.[$v($c, "weapon1")?.shot]?.duplicateMovieClip?.("shot_mc" + d, d, init);
+          if ($v($c, "weapon1")?.ammo <= 0) {
+            $call($c, "changeWep", 1);
+            if ($v($c, "weapon1")?.id == 0) $call($c, "changeWep", 1, null, -1);
+          }
+        } else {
+          this.gotoAndStop("norm");
+        }
+        if ($v($c, "refire2") < $v($c, "weapon2")?.refire) $c.refire2 = $v($c, "refire2") + time;
+        if (AS.Key?.isDown?.(AS.Key?.CONTROL) && $v($c, "refire2") >= $v($c, "weapon2")?.refire && $v($c, "weapon2")?.ammo > 0) {
+          $o($c._root?.stats).bombs++;
+          $c.refire2 = 0;
+          var d = G.shotID.call($c);
+          $o($v($c, "weapon2")).ammo--;
+          G.updateDisplay.call($c, "ammo2");
+          $c.point = new Object();
+          $o($v($c, "point")).x = $v($c, "muzzle_mc")?._x;
+          $o($v($c, "point")).y = $v($c, "muzzle_mc")?._y;
+          $c.localToGlobal($v($c, "point"));
+          G._screen?.globalToLocal?.($v($c, "point"));
+          var init = {
+            _rotation: $c._rotation + G.jitter.call($c, $v($c, "weapon2")?.spread),
+            _x: $v($c, "point")?.x,
+            _y: $v($c, "point")?.y,
+            xSpeed: $v($c, "xSpeed"),
+            ySpeed: $v($c, "ySpeed")
+          };
+          G._screen?.[$v($c, "weapon2")?.shot]?.duplicateMovieClip?.("shot_mc" + d, d, init);
+          $call($c, "thrust", -$v($c, "weapon2")?.refire / 10, $c._rotation);
+          if ($v($c, "weapon2")?.ammo <= 0) {
+            $call($c, "changeWep", 2);
+          }
+        }
+        if (this.core_mc?.hitTest?.(G._screen?.powerups_mc)) {
+          var i = $c._root?.powerups?.length;
+          while (i--) {
+            if (this.core_mc?.hitTest?.($c._root?.powerups?.[i])) $c._root?.powerups?.[i]?.pickup?.();
+          }
+        }
+      }
+      $o($c._parent?.shadow_mc)._x = $c._x + $v($c, "shadowHeight");
+      $o($c._parent?.shadow_mc)._y = $c._y + $v($c, "shadowHeight");
+      $o($c._parent?.shadow_mc)._rotation = $c._rotation;
+      if ($v($c, "indicator_mc")?._visible) {
+        $o($v($c, "indicator_mc"))._alpha -= $v($c, "indicatorFade");
+        if ($v($c, "indicator_mc")?._alpha <= 0) {
+          $o($v($c, "indicator_mc"))._visible = false;
+          $v($c, "indicator_mc")?.gotoAndStop?.(1);
+        } else {
+          $o($v($c, "indicator_mc"))._rotation = -$c._rotation;
+        }
+      }
+      if ($v($c, "damage_mc")?._visible) {
+        if (G.randomPerSecond.call($c, 4)) G.makeShrapnel.call($c, G.randomPointOn.call($c, this), "particle_mcDust", 1, 360, {
+          scale: 35
+        });
+        if (G.randomPerSecond.call($c, 1)) G.makeSparks.call($c, G.randomPointOn.call($c, this));
+      }
+    };
+    $c.health = 100;
+    $c.healthMax = 100;
+    $c.healthLow = 25;
+    $c.speedMax = 9;
+    $c.speedMin = 0.1;
+    $c.turnSpeed = 6;
+    $c.turnAccel = 1.5;
+    $c.accel = 2;
+    $c.decel = 0.9;
+    $c.bounce = 0.75;
+    $c.strafeAccel = 1;
+    $c.radius = 19;
+    $c.shadowHeight = 15;
+    $c.indicatorFade = 15;
+    $c.deathControl = 15;
+    $c.weapons1 = [{
+      name: "Energizer",
+      shot: "shot_mcEnergizer",
+      ammo: Infinity,
+      max: Infinity,
+      refire: 4,
+      spread: 12,
+      fullname: "Energizer Gun",
+      fire: 1,
+      key: 1
+    }, {
+      name: "Bolter",
+      shot: "shot_mc",
+      ammo: 200,
+      max: 999,
+      refire: 2,
+      spread: 8,
+      fullname: "Bolter Cannon",
+      fire: 1,
+      key: 1
+    }, {
+      name: "Plasma",
+      shot: "shot_mcPlasma",
+      ammo: 0,
+      max: 200,
+      refire: 10,
+      spread: 6,
+      fullname: "Plasma Cannon",
+      fire: 2,
+      key: 2
+    }, {
+      name: "Vertigo",
+      shot: "shot_mcBurstPlasma",
+      ammo: 0,
+      max: 300,
+      refire: 2,
+      spread: 7,
+      fullname: "Vertigo Cannon",
+      burst: 3,
+      burstReload: 6,
+      fire: 2,
+      key: 2
+    }, {
+      name: "Phoenix",
+      shot: "shot_mcPhoenix",
+      ammo: 0,
+      max: 200,
+      refire: 4,
+      spread: 7,
+      fullname: "Phoenix Cannon",
+      fire: 4,
+      key: 2
+    }, {
+      name: "Gatling",
+      shot: "shot_mcEnergizer",
+      ammo: 0,
+      max: Infinity,
+      refire: 1,
+      spread: 16,
+      fullname: "Gatling Gun",
+      fire: 1,
+      key: 1
+    }, {
+      name: "Banshee",
+      shot: "shot_mcBanshee",
+      ammo: 0,
+      max: 600,
+      refire: 1,
+      spread: 24,
+      fullname: "Banshee Cannon",
+      fire: 1,
+      key: 1
+    }, {
+      name: "Spreader",
+      shot: "shot_mcSpreader",
+      ammo: 0,
+      max: 150,
+      refire: 8,
+      spread: 6,
+      fullname: "Spreader Cannon",
+      fire: 6,
+      key: 2
+    }, {
+      name: "Hailstorm",
+      shot: "shot_mcStorm",
+      ammo: 0,
+      max: 150,
+      refire: 1,
+      spread: 6,
+      fullname: "Hailstorm Cannon",
+      burst: 3,
+      burstReload: 15,
+      fire: 6,
+      key: 2
+    }, {
+      name: "Hydra",
+      shot: "shot_mcHydra",
+      ammo: 0,
+      max: 250,
+      refire: 5,
+      spread: 8,
+      fullname: "Hydra Cannon",
+      fire: 6,
+      key: 2
+    }, {
+      name: "Pulse",
+      shot: "shot_mcPulse",
+      ammo: 0,
+      max: 200,
+      refire: 4,
+      spread: 8,
+      fullname: "Pulse Cannon",
+      fire: 6,
+      key: 2
+    }, {
+      name: "Vendetta",
+      shot: "shot_mcVendetta",
+      ammo: 0,
+      max: 250,
+      refire: 5,
+      spread: 8,
+      fullname: "Vendetta Cannon",
+      fire: 5,
+      key: 2
+    }, {
+      name: "Auto Cannon",
+      shot: "shot_mcAuto",
+      ammo: 0,
+      max: 250,
+      refire: 3,
+      spread: 8,
+      fullname: "Auto Cannon",
+      fire: 5,
+      key: 2
+    }, {
+      name: "Flak",
+      shot: "shot_mcFlak",
+      ammo: 0,
+      max: 50,
+      refire: 10,
+      spread: 4,
+      fullname: "Flak Cannon",
+      fire: 5,
+      key: 3
+    }, {
+      name: "Shredder",
+      shot: "shrap_mc",
+      ammo: 0,
+      max: null,
+      refire: 1,
+      spread: 16,
+      fullname: "Shredder",
+      fire: 5,
+      key: 3
+    }, {
+      name: "Stinger",
+      shot: "frag_mc",
+      ammo: 0,
+      max: null,
+      refire: 1,
+      spread: 6,
+      fullname: "Stinger",
+      fire: 5,
+      key: 3
+    }, {
+      name: "Railgun",
+      shot: "shot_mcRail",
+      ammo: 0,
+      max: 75,
+      refire: 10,
+      spread: 2,
+      fullname: "Railgun",
+      fire: 5,
+      key: 3
+    }, {
+      name: "Minigun",
+      shot: "shot_mcBullet",
+      ammo: 0,
+      max: 750,
+      refire: 1,
+      spread: 2,
+      fullname: "Minigun",
+      fire: 5,
+      key: 3
+    }, {
+      name: "Flamer",
+      shot: "shot_mcFlamer",
+      ammo: 0,
+      max: 600,
+      refire: 1,
+      spread: 14,
+      fullname: "Flamer Unit",
+      fire: 7,
+      burst: 3,
+      key: 4
+    }, {
+      name: "Reaper",
+      shot: "shot_mcReaper",
+      ammo: 0,
+      max: 200,
+      refire: 6,
+      spread: 8,
+      fullname: "Reaper Cannon",
+      fire: 7,
+      key: 4
+    }, {
+      name: "Laser",
+      shot: "shot_mcLaser",
+      ammo: 0,
+      max: 100,
+      refire: 11,
+      spread: 0,
+      fullname: "Laser",
+      fire: 3,
+      key: 5
+    }, {
+      name: "Super Laser",
+      shot: "shot_mcSuperLaser",
+      ammo: 0,
+      max: 500,
+      refire: 1,
+      spread: 0,
+      fullname: "Super Laser",
+      fire: 3,
+      key: 5
+    }, {
+      name: "Heat Ray",
+      shot: "shot_mcUltraLaser",
+      ammo: 0,
+      max: 300,
+      refire: 1,
+      spread: 0,
+      fullname: "Death Ray",
+      burst: 5,
+      burstReload: 20,
+      fire: 3,
+      key: 5
+    }];
+    for ($c.i of $keys($v($c, "weapons1"))) $o($v($c, "weapons1")?.[$v($c, "i")]).id = AS.int($v($c, "i"));
+    $c.weapons2 = [{
+      name: "Carbon Bomb",
+      shot: "shot_mcBomb",
+      ammo: 2,
+      max: 20,
+      refire: 15,
+      spread: 4,
+      key: 6
+    }, {
+      name: "Thermal Bomb",
+      shot: "shot_mcGrenade",
+      ammo: 0,
+      max: 10,
+      refire: 25,
+      spread: 4,
+      key: 6
+    }, {
+      name: "Impact Mortar",
+      shot: "shot_mcMort",
+      ammo: 0,
+      max: 5,
+      refire: 15,
+      spread: 4,
+      key: 7
+    }, {
+      name: "Stun Bomb",
+      shot: "shot_mcStun",
+      ammo: 0,
+      max: 12,
+      refire: 15,
+      spread: 4,
+      key: 6
+    }, {
+      name: "Shrapnel Bomb",
+      shot: "shot_mcFrag",
+      ammo: 0,
+      max: 5,
+      refire: 35,
+      spread: 0,
+      key: 8
+    }, {
+      name: "Splinter Bomb",
+      shot: "shot_mcSplinter",
+      ammo: 0,
+      max: 5,
+      refire: 10,
+      spread: 4,
+      key: 8
+    }, {
+      name: "Plasma Bomb",
+      shot: "shot_mcPlasmaBomb",
+      ammo: 0,
+      max: 5,
+      refire: 25,
+      spread: 4,
+      key: 8
+    }, {
+      name: "Pulse Bomb",
+      shot: "shot_mcPulseBomb",
+      ammo: 0,
+      max: 5,
+      refire: 25,
+      spread: 4,
+      key: 8
+    }, {
+      name: "Spikey Bomb",
+      shot: "shot_mcSpikey",
+      ammo: 0,
+      max: 5,
+      refire: 25,
+      spread: 4,
+      key: 8
+    }, {
+      name: "Cluster Bomb",
+      shot: "shot_mcCluster",
+      ammo: 0,
+      max: 5,
+      refire: 35,
+      spread: 6,
+      key: 8
+    }, {
+      name: "Spitfire Bomb",
+      shot: "shot_mcSpitfire",
+      ammo: 0,
+      max: 3,
+      refire: 35,
+      spread: 6,
+      key: 8
+    }, {
+      name: "Smart Bomb",
+      shot: "shot_mcSmart",
+      ammo: 0,
+      max: 10,
+      refire: 35,
+      spread: 6,
+      key: 8
+    }, {
+      name: "Pepper Bombs",
+      shot: "shot_mcSpitling",
+      ammo: 0,
+      max: 50,
+      refire: 3,
+      spread: 10,
+      key: 7
+    }, {
+      name: "Rocket Pod",
+      shot: "shot_mcRocket",
+      ammo: 0,
+      max: 50,
+      refire: 3,
+      spread: 18,
+      key: 9
+    }, {
+      name: "Drunken Rockets",
+      shot: "shot_mcDrunken",
+      ammo: 0,
+      max: 20,
+      refire: 20,
+      spread: 4,
+      key: 9
+    }, {
+      name: "Missile",
+      shot: "shot_mcMissile",
+      ammo: 0,
+      max: 20,
+      refire: 10,
+      spread: 2,
+      key: 9
+    }, {
+      name: "Heatseeker",
+      shot: "shot_mcSeeker",
+      ammo: 0,
+      max: 10,
+      refire: 15,
+      spread: 2,
+      key: 9
+    }, {
+      name: "Trident Missiles",
+      shot: "shot_mcHellfire",
+      ammo: 0,
+      max: 5,
+      refire: 15,
+      spread: 2,
+      key: 9
+    }, {
+      name: "Warp Missile",
+      shot: "shot_mcWarpMissile",
+      ammo: 0,
+      max: 15,
+      refire: 15,
+      spread: 2,
+      key: 9
+    }, {
+      name: "Smart Missile",
+      shot: "shot_mcSmartMissile",
+      ammo: 0,
+      max: 5,
+      refire: 15,
+      spread: 2,
+      key: 9
+    }, {
+      name: "Mega Missile",
+      shot: "shot_mcMega",
+      ammo: 0,
+      max: 1,
+      refire: 70,
+      spread: 2,
+      key: 9
+    }, {
+      name: "Synapse Bomb",
+      shot: "shot_mcSynapse",
+      ammo: 0,
+      max: 1,
+      refire: 60,
+      spread: 10,
+      key: 7
+    }, {
+      name: "Shock Bomb",
+      shot: "shot_mcShock",
+      ammo: 0,
+      max: 1,
+      refire: 60,
+      spread: 6,
+      key: 6
+    }, {
+      name: "Laser Bomb",
+      shot: "shot_mcLaserBomb",
+      ammo: 0,
+      max: 5,
+      refire: 30,
+      spread: 2,
+      key: 0
+    }, {
+      name: "Laser Anhilator",
+      shot: "shot_mcSuperLaserBomb",
+      ammo: 0,
+      max: 1,
+      refire: 30,
+      spread: 2,
+      key: 0
+    }];
+    for ($c.i of $keys($v($c, "weapons2"))) $o($v($c, "weapons2")?.[$v($c, "i")]).id = AS.int($v($c, "i"));
+    AS.trace($v($c, "weapons1")?.length + " primary weapons, " + $v($c, "weapons2")?.length + " secondary weapons, " + ($v($c, "weapons1")?.length + $v($c, "weapons2")?.length) + " total");
+    $c.weapon1 = $v($c, "weapons1")?.[1];
+    $c.weapon2 = $v($c, "weapons2")?.[0];
+    $c.inventory = [];
+    $c.turn = 0;
+    $c.xSpeed = 0;
+    $c.ySpeed = 0;
+    $c.speed = 0;
+    $c.dead = $c.dying = false;
+    $c.deathTime = 0;
+    $c.refire1 = 0;
+    $c.refire2 = 0;
+    $c.firing1 = false;
+    $c.shotCount1 = 0;
+    $c.stop();
+    $c.point = new Object();
+    ($c.KEY_X = 88, $c.KEY_Z = 90);
+    $o($v($c, "indicator_mc"))._visible = false;
+    $o($v($c, "exhaust_mc"))._visible = false;
+    $o($v($c, "damage_mc"))._visible = false;
+    $v($c, "damage_mc")?.stop?.();
+    $o($c._parent?.shadow_mc)._x = $c._x + $v($c, "shadowHeight");
+    $o($c._parent?.shadow_mc)._y = $c._y + $v($c, "shadowHeight");
+    $o($c._parent?.shadow_mc)._rotation = $c._rotation;
+    $call($c, "hide");
+    G.updateDisplay.call($c);
+  },
+  "clip:keyDown": function ($c) {
+    $c.cheat = function () {
+      G.notify.call($c, this, "Cheater!");
+      $o(G._player).hasCheated = true;
+    };
+    if ($v($c, "dead")) return;
+    ($c.KEY_F1 = 112, $c.KEY_H = 72);
+    switch (AS.Key?.getCode?.()) {
+      case AS.Key?.INSERT:
+        AS.Key?.isDown?.(AS.Key?.SHIFT) ? $call($c, "changeWep", 1, null, -1) : $call($c, "changeWep", 1);
+        break;
+      case AS.Key?.DELETEKEY:
+        AS.Key?.isDown?.(AS.Key?.SHIFT) ? $call($c, "changeWep", 2, null, -1) : $call($c, "changeWep", 2);
+        break;
+      case AS.Key?.ESCAPE:
+        !$c._root?.dialogScreen_mc ? G.showDialog.call($c, "menuScreen") : G.hideDialog.call($c);
+        break;
+      case $v($c, "KEY_F1"):
+      case $v($c, "KEY_H"):
+        $c._root?.dialogScreen_mc?.name != "helpScreen" ? G.showDialog.call($c, "helpScreen") : G.hideDialog.call($c);
+        break;
+    }
+    if (AS.Key?.isDown?.(AS.Key?.CONTROL) && AS.Key?.isDown?.(AS.Key?.SHIFT)) {
+      switch (AS.Key?.getCode?.()) {
+        case AS.Key?.PGUP:
+          $c.health = Infinity;
+          G.updateDisplay.call($c);
+          $call($c, "cheat");
+          break;
+        case AS.Key?.PGDN:
+          $c.health = $v($c, "healthMax");
+          G.updateDisplay.call($c);
+          $call($c, "cheat");
+          break;
+        case AS.Key?.HOME:
+          $c.w = $v($c, "weapons1")?.length;
+          if (AS.Key?.isDown?.(AS.Key?.ALT)) $c.a = Infinity;
+          while ($inc($c, "w", -1, false)) $o($v($c, "weapons1")?.[$v($c, "w")]).ammo = $v($c, "a") || $v($c, "weapons1")?.[$v($c, "w")]?.max || Infinity;
+          $c.w = $v($c, "weapons2")?.length;
+          while ($inc($c, "w", -1, false)) $o($v($c, "weapons2")?.[$v($c, "w")]).ammo = $v($c, "a") || $v($c, "weapons2")?.[$v($c, "w")]?.max || Infinity;
+          G.updateDisplay.call($c);
+          $call($c, "cheat");
+          break;
+        case AS.Key?.END:
+          $c.b = $c._root?.boxes?.length;
+          while ($inc($c, "b", -1, false)) $c._root?.boxes?.[$v($c, "b")]?.hit?.($c, $c._root?.boxes?.[$v($c, "b")]?.health, G.rand.call($c, 360));
+          $c.e = $c._root?.enemies?.length;
+          while ($inc($c, "e", -1, false)) $c._root?.enemies?.[$v($c, "e")]?.hit?.($c, $c._root?.enemies?.[$v($c, "e")]?.health, G.rand.call($c, 360));
+          $call($c, "cheat");
+          break;
+      }
+    }
   }
 };
-instances["742:1006:6"] = {
-  "clip:load": function ($c) {
-    $c.connections = [$c._parent?.a3, $c._parent?.a1];
+instances["742:3422:1"] = {
+  "on:release": function ($c) {
+    G.continueLevel.call($c);
+  },
+  "on:key32": function ($c) {
+    G.continueLevel.call($c);
+  },
+  "on:key13": function ($c) {
+    G.continueLevel.call($c);
   }
 };
-instances["742:1008:6"] = {
-  "clip:load": function ($c) {
-    $c.connections = [$c._parent?.a4, $c._parent?.a2];
+instances["742:3426:1"] = {
+  "on:release": function ($c) {
+    G.quit.call($c);
+  },
+  "on:key27": function ($c) {
+    G.quit.call($c);
   }
 };
-instances["742:1010:6"] = {
+instances["742:9:2"] = {
   "clip:load": function ($c) {
-    $c.connections = [$c._parent?.a1, $c._parent?.a3];
-  }
-};
-instances["742:117:8"] = {
-  "clip:load": function ($c) {
-    $c.id = "door4";
-  }
-};
-instances["742:144:8"] = {
-  "clip:load": function ($c) {
-    $c.id = "door5";
+    $c.speed = 3.2;
   }
 };
 instances["742:2918:2"] = {
@@ -11642,850 +12459,7 @@ instances["742:3227:2"] = {
     $c.fragCount = AS.random(4);
   }
 };
-instances["742:3237:1"] = {
-  "clip:load": function ($c) {
-    $c.hitPlayer = function (damage, angle) {
-      $c.health = $v($c, "health") - AS.int(damage);
-      if ($v($c, "health") <= 0) {
-        if (angle != undefined) $call($c, "thrust", Math.min(damage, $v($c, "speedMax") * 2), angle);
-        if (!$v($c, "dying")) {
-          $c.dying = true;
-          $c.gotoAndStop("norm");
-          $call($c, "deathRoll");
-          for (var mc of $keys(G._screen?.vision_mc)) $o(G._screen?.vision_mc?.[mc]).active = false;
-          $o($v($c, "indicator_mc"))._visible = false;
-          $o($v($c, "damage_mc"))._visible = false;
-          $v($c, "damage_mc")?.stop?.();
-        }
-      } else {
-        if (angle != undefined) $call($c, "thrust", Math.min(damage / 10, $v($c, "speedMax") * 2), angle);
-        $call($c, "indicate", "hit");
-      }
-      if ($v($c, "health") <= $v($c, "healthLow") && !$v($c, "damage_mc")?._visible && !$v($c, "dying")) {
-        $o($v($c, "damage_mc"))._visible = true;
-        $v($c, "damage_mc")?.play?.();
-      }
-      G.updateDisplay.call($c, "health");
-    };
-    $c.indicate = function (type) {
-      $o($v($c, "indicator_mc"))._visible = true;
-      $o($v($c, "indicator_mc"))._alpha = 100;
-      $v($c, "indicator_mc")?.gotoAndStop?.(type);
-    };
-    $c.hitTestPerimeter = function () {
-      for (var h of $keys($v($c, "hits_mc"))) {
-        var p = {
-          x: $v($c, "hits_mc")?.[h]?._x,
-          y: $v($c, "hits_mc")?.[h]?._y
-        };
-        $v($c, "hits_mc")?.localToGlobal?.(p);
-        G._screen?.globalToLocal?.(p);
-        if (G.wallHitTest.call($c, p?.x, p?.y, G.impassThreshold)) return true;
-      }
-      return false;
-    };
-    $c.thrust = function (speed, angle) {
-      var delta = G.getVector.call($c, speed, angle);
-      $c.xSpeed = $v($c, "xSpeed") + delta?.x;
-      $c.ySpeed = $v($c, "ySpeed") + delta?.y;
-    };
-    $c.changeWep = function (version, id, dir) {
-      var weapon = this["weapon" + version];
-      var weapons = this["weapons" + version];
-      if (id == undefined || id == null) {
-        if (!dir) dir = 1;
-        var id = weapon?.id;
-        var i = 0;
-        do {
-          id += dir;
-          if (id > weapons?.length - 1) id = 0;
-          if (id < 0) id = weapons?.length - 1;
-        } while (weapons?.[id]?.ammo <= 0 && ++i < weapons?.length);
-      }
-      if (id == weapon?.id) return;
-      weapon = this["weapon" + version] = weapons?.[id];
-      if (weapon?.ammo) G.notify.call($c, this, weapon?.name + "(" + weapon?.ammo + ")");
-      this["refire" + version] = 0;
-      this["shotCount" + version] = 0;
-      this["firing" + version] = false;
-      G.updateDisplay.call($c, "wep" + version);
-    };
-    $c.wepByName = function (version, name) {
-      var weapons = this["weapons" + version];
-      for (var i of $keys(weapons)) {
-        if (weapons?.[i]?.name == name) return weapons?.[i];
-      }
-    };
-    $c.deathRoll = function () {
-      $o($v($c, "exhaust_mc"))._visible = false;
-      $c.deathTime = 0;
-      $c.onEnterFrame = function () {
-        $inc($c, "deathTime", 1, false);
-        if ($v($c, "deathTime") > $v($c, "deathControl")) $c.gotoAndStop("norm");
-        $c._rotation += Math.max(G.rand.call($c, 3) + 1, $v($c, "speed") * 3);
-        if ($v($c, "speed") < 0.05 && $v($c, "xSpeed") < 0.05 && $v($c, "ySpeed") < 0.05) {
-          $c.dead = true;
-          $c.gotoAndPlay("death");
-          $o($c._parent?.shadow_mc)._visible = false;
-          AS.setTimeout(G.showDialog, 1000, "diedScreen");
-          G.makeShrapnel.call($c, this, "scrap_mc", 25);
-          G.makeShrapnel.call($c, this, "frag_mc", 15);
-          G.makeShrapnel.call($c, this, "debris_mc", 15, 360, {
-            debrisType: "gray",
-            explosive: true
-          });
-          G.makeBlastmark.call($c, this, 10, {
-            _xscale: 80,
-            _yscale: 80
-          });
-          delete $c.onEnterFrame;
-        } else if (G.randomPerSecond.call($c, 5)) {
-          G.makeFireball.call($c, G.randomPointOn.call($c, this), "miniExplosion", 50 + G.rand.call($c, 100));
-        }
-      };
-    };
-    $c.hide = function () {
-      $c.dead = $c.dying = true;
-      $c._visible = $o(G._screen?.shadow_mc)._visible = false;
-      $c.xSpeed = $c.ySpeed = 0;
-    };
-    $c.spawn = function () {
-      $c.dead = $c.dying = false;
-      $c._visible = $o(G._screen?.shadow_mc)._visible = true;
-      $o(G._player?.blasts_mc)._alpha = 100;
-    };
-    $c.update = function (time) {
-      if ($v($c, "dead")) return;
-      if ($v($c, "scrolling")) {
-        $c.screenTargetX = -$c._x + G.screenWidth / 2;
-        $c.screenTargetY = -$c._y + G.screenHeight / 2;
-        $c.screenTargetX = Math.min(Math.max(-G.level_bmp?.width + G.screenWidth, $v($c, "screenTargetX")), 0);
-        $c.screenTargetY = Math.min(Math.max(-G.level_bmp?.height + G.screenHeight, $v($c, "screenTargetY")), 0);
-        $o(G._screen)._x += AS.int(($v($c, "screenTargetX") - G._screen?._x) / 4);
-        $o(G._screen)._y += AS.int(($v($c, "screenTargetY") - G._screen?._y) / 4);
-      }
-      $c.xSpeed = $v($c, "xSpeed") * $v($c, "decel");
-      $c.ySpeed = $v($c, "ySpeed") * $v($c, "decel");
-      if (!$v($c, "dying")) {
-        if (AS.Key?.isDown?.(AS.Key?.UP)) {
-          $call($c, "thrust", $v($c, "accel"), $c._rotation);
-          $o($v($c, "exhaust_mc"))._visible = true;
-          $o($v($c, "exhaust_mc"))._xscale = $o($v($c, "exhaust_mc"))._yscale = 75 + G.rand.call($c, 50);
-        } else if (AS.Key?.isDown?.(AS.Key?.DOWN)) {
-          $call($c, "thrust", -$v($c, "accel"), $c._rotation);
-          $o($v($c, "exhaust_mc"))._visible = false;
-        } else if ($v($c, "exhaust_mc")?._visible) {
-          $o($v($c, "exhaust_mc"))._visible = false;
-        }
-        if (AS.Key?.isDown?.($v($c, "KEY_X"))) {
-          $call($c, "thrust", $v($c, "strafeAccel"), $c._rotation + 90);
-        } else if (AS.Key?.isDown?.($v($c, "KEY_Z"))) {
-          $call($c, "thrust", $v($c, "strafeAccel"), $c._rotation - 90);
-        }
-      }
-      $c.speed = G.getLength.call($c, {
-        x: $v($c, "xSpeed"),
-        y: $v($c, "ySpeed")
-      });
-      if ($v($c, "speed") > $v($c, "speedMax")) {
-        $c.xSpeed = $v($c, "xSpeed") * ($v($c, "speedMax") / $v($c, "speed"));
-        $c.ySpeed = $v($c, "ySpeed") * ($v($c, "speedMax") / $v($c, "speed"));
-        $c.speed = $v($c, "speedMax");
-      }
-      if ($v($c, "speed") > $v($c, "speedMin")) {
-        var xSample = $v($c, "xSpeed") * time, ySample = $v($c, "ySpeed") * time;
-        $c._x += xSample;
-        $c._y += ySample;
-        if ($call($c, "hitTestPerimeter")) {
-          var hit = G.findCollision.call($c, {
-            x: $c._x,
-            y: $c._y
-          }, 180, $v($c, "radius"), G.impassThreshold);
-          if (hit) {
-            var reflect = G.reflectVector.call($c, {
-              x: $v($c, "xSpeed"),
-              y: $v($c, "ySpeed")
-            }, G.normalizeVector.call($c, hit?.vector));
-            $c.xSpeed = reflect?.x * $v($c, "bounce");
-            $c.ySpeed = reflect?.y * $v($c, "bounce");
-            G.makeSparks.call($c, {
-              _x: $c._x + hit?.vector?.x,
-              _y: $c._y + hit?.vector?.y
-            }, $v($c, "speed") / $v($c, "speedMax"));
-            var d = Math.ceil($v($c, "speed"));
-            do {
-              hit = G.findCollision.call($c, {
-                x: $c._x,
-                y: $c._y
-              }, 180, $v($c, "radius"), G.impassThreshold);
-              if (hit) {
-                var delta = G.getVector.call($c, 1, hit?.angle - 180);
-                $c._x += delta?.x;
-                $c._y += delta?.y;
-              }
-            } while (d-- && hit);
-          }
-        }
-      }
-      if (!$v($c, "dying")) {
-        var scrX = $c._x + G._screen?._x, scrY = $c._y + G._screen?._y;
-        for (var mc of $keys(G._screen?.vision_mc)) {
-          $o(G._screen?.vision_mc?.[mc]).active = (!$v($c, "invisible") || $v($c, "firing1") || $v($c, "firing2")) && G._screen?.vision_mc?.[mc]?.hitTest?.(scrX, scrY, true);
-        }
-      }
-      if (!$v($c, "dying") || $v($c, "deathTime") < $v($c, "deathControl")) {
-        if (AS.Key?.isDown?.(AS.Key?.LEFT)) {
-          if ($v($c, "turn") == 0) {
-            $c.turn = $v($c, "turnAccel");
-          } else {
-            $c.turn = $v($c, "turn") * $v($c, "turnAccel");
-            if ($v($c, "turn") > $v($c, "turnSpeed")) $c.turn = $v($c, "turnSpeed");
-          }
-          $c._rotation -= $v($c, "turn") * time;
-        } else if (AS.Key?.isDown?.(AS.Key?.RIGHT)) {
-          if ($v($c, "turn") == 0) {
-            $c.turn = $v($c, "turnAccel");
-          } else {
-            $c.turn = $v($c, "turn") * $v($c, "turnAccel");
-            if ($v($c, "turn") > $v($c, "turnSpeed")) $c.turn = $v($c, "turnSpeed");
-          }
-          $c._rotation += $v($c, "turn") * time;
-        } else {
-          $c.turn = 0;
-        }
-        if ($v($c, "refire1") < $v($c, "weapon1")?.refire) $c.refire1 = $v($c, "refire1") + time;
-        if (AS.Key?.isDown?.(AS.Key?.SPACE)) $c.firing1 = true; else if (!$v($c, "weapon1")?.burst || $v($c, "shotCount1") == 0) $c.firing1 = false;
-        if ($v($c, "firing1") && $v($c, "refire1") >= $v($c, "weapon1")?.refire && $v($c, "weapon1")?.ammo > 0) {
-          $o($c._root?.stats).shots++;
-          $c.refire1 = 0;
-          if ($v($c, "weapon1")?.burst) {
-            $inc($c, "shotCount1", 1, false);
-            if ($v($c, "shotCount1") >= $v($c, "weapon1")?.burst) {
-              $c.shotCount1 = 0;
-              if ($v($c, "weapon1")?.burstReload) $c.refire1 = -($v($c, "weapon1")?.burstReload - $v($c, "weapon1")?.refire);
-              $c.firing1 = false;
-            }
-          } else {
-            $c.shotCount1 = 0;
-            $c.firing1 = false;
-          }
-          var d = G.shotID.call($c);
-          if ($c._currentframe < 5) this.gotoAndStop("attack");
-          $v($c, "fire_mc")?.gotoAndStop?.($v($c, "weapon1")?.fire);
-          $o($v($c, "fire_mc"))._xscale = 100 * (AS.random(2) ? -1 : 1) + G.jitter.call($c, 50);
-          $o($v($c, "fire_mc"))._yscale = 100 + G.jitter.call($c, 50);
-          $o($v($c, "weapon1")).ammo--;
-          G.updateDisplay.call($c, "ammo1");
-          $c.point = new Object();
-          $o($v($c, "point")).x = $v($c, "muzzle_mc")?._x;
-          $o($v($c, "point")).y = $v($c, "muzzle_mc")?._y;
-          $c.localToGlobal($v($c, "point"));
-          G._screen?.globalToLocal?.($v($c, "point"));
-          var init = {
-            _rotation: $c._rotation + G.jitter.call($c, $v($c, "weapon1")?.spread),
-            _x: $v($c, "point")?.x,
-            _y: $v($c, "point")?.y,
-            xSpeed: $v($c, "xSpeed"),
-            ySpeed: $v($c, "ySpeed")
-          };
-          $o($v($c, "fire_mc"))._rotation = init?._rotation - $c._rotation;
-          G._screen?.[$v($c, "weapon1")?.shot]?.duplicateMovieClip?.("shot_mc" + d, d, init);
-          if ($v($c, "weapon1")?.ammo <= 0) {
-            $call($c, "changeWep", 1);
-            if ($v($c, "weapon1")?.id == 0) $call($c, "changeWep", 1, null, -1);
-          }
-        } else {
-          this.gotoAndStop("norm");
-        }
-        if ($v($c, "refire2") < $v($c, "weapon2")?.refire) $c.refire2 = $v($c, "refire2") + time;
-        if (AS.Key?.isDown?.(AS.Key?.CONTROL) && $v($c, "refire2") >= $v($c, "weapon2")?.refire && $v($c, "weapon2")?.ammo > 0) {
-          $o($c._root?.stats).bombs++;
-          $c.refire2 = 0;
-          var d = G.shotID.call($c);
-          $o($v($c, "weapon2")).ammo--;
-          G.updateDisplay.call($c, "ammo2");
-          $c.point = new Object();
-          $o($v($c, "point")).x = $v($c, "muzzle_mc")?._x;
-          $o($v($c, "point")).y = $v($c, "muzzle_mc")?._y;
-          $c.localToGlobal($v($c, "point"));
-          G._screen?.globalToLocal?.($v($c, "point"));
-          var init = {
-            _rotation: $c._rotation + G.jitter.call($c, $v($c, "weapon2")?.spread),
-            _x: $v($c, "point")?.x,
-            _y: $v($c, "point")?.y,
-            xSpeed: $v($c, "xSpeed"),
-            ySpeed: $v($c, "ySpeed")
-          };
-          G._screen?.[$v($c, "weapon2")?.shot]?.duplicateMovieClip?.("shot_mc" + d, d, init);
-          $call($c, "thrust", -$v($c, "weapon2")?.refire / 10, $c._rotation);
-          if ($v($c, "weapon2")?.ammo <= 0) {
-            $call($c, "changeWep", 2);
-          }
-        }
-        if (this.core_mc?.hitTest?.(G._screen?.powerups_mc)) {
-          var i = $c._root?.powerups?.length;
-          while (i--) {
-            if (this.core_mc?.hitTest?.($c._root?.powerups?.[i])) $c._root?.powerups?.[i]?.pickup?.();
-          }
-        }
-      }
-      $o($c._parent?.shadow_mc)._x = $c._x + $v($c, "shadowHeight");
-      $o($c._parent?.shadow_mc)._y = $c._y + $v($c, "shadowHeight");
-      $o($c._parent?.shadow_mc)._rotation = $c._rotation;
-      if ($v($c, "indicator_mc")?._visible) {
-        $o($v($c, "indicator_mc"))._alpha -= $v($c, "indicatorFade");
-        if ($v($c, "indicator_mc")?._alpha <= 0) {
-          $o($v($c, "indicator_mc"))._visible = false;
-          $v($c, "indicator_mc")?.gotoAndStop?.(1);
-        } else {
-          $o($v($c, "indicator_mc"))._rotation = -$c._rotation;
-        }
-      }
-      if ($v($c, "damage_mc")?._visible) {
-        if (G.randomPerSecond.call($c, 4)) G.makeShrapnel.call($c, G.randomPointOn.call($c, this), "particle_mcDust", 1, 360, {
-          scale: 35
-        });
-        if (G.randomPerSecond.call($c, 1)) G.makeSparks.call($c, G.randomPointOn.call($c, this));
-      }
-    };
-    $c.health = 100;
-    $c.healthMax = 100;
-    $c.healthLow = 25;
-    $c.speedMax = 9;
-    $c.speedMin = 0.1;
-    $c.turnSpeed = 6;
-    $c.turnAccel = 1.5;
-    $c.accel = 2;
-    $c.decel = 0.9;
-    $c.bounce = 0.75;
-    $c.strafeAccel = 1;
-    $c.radius = 19;
-    $c.shadowHeight = 15;
-    $c.indicatorFade = 15;
-    $c.deathControl = 15;
-    $c.weapons1 = [{
-      name: "Energizer",
-      shot: "shot_mcEnergizer",
-      ammo: Infinity,
-      max: Infinity,
-      refire: 4,
-      spread: 12,
-      fullname: "Energizer Gun",
-      fire: 1,
-      key: 1
-    }, {
-      name: "Bolter",
-      shot: "shot_mc",
-      ammo: 200,
-      max: 999,
-      refire: 2,
-      spread: 8,
-      fullname: "Bolter Cannon",
-      fire: 1,
-      key: 1
-    }, {
-      name: "Plasma",
-      shot: "shot_mcPlasma",
-      ammo: 0,
-      max: 200,
-      refire: 10,
-      spread: 6,
-      fullname: "Plasma Cannon",
-      fire: 2,
-      key: 2
-    }, {
-      name: "Vertigo",
-      shot: "shot_mcBurstPlasma",
-      ammo: 0,
-      max: 300,
-      refire: 2,
-      spread: 7,
-      fullname: "Vertigo Cannon",
-      burst: 3,
-      burstReload: 6,
-      fire: 2,
-      key: 2
-    }, {
-      name: "Phoenix",
-      shot: "shot_mcPhoenix",
-      ammo: 0,
-      max: 200,
-      refire: 4,
-      spread: 7,
-      fullname: "Phoenix Cannon",
-      fire: 4,
-      key: 2
-    }, {
-      name: "Gatling",
-      shot: "shot_mcEnergizer",
-      ammo: 0,
-      max: Infinity,
-      refire: 1,
-      spread: 16,
-      fullname: "Gatling Gun",
-      fire: 1,
-      key: 1
-    }, {
-      name: "Banshee",
-      shot: "shot_mcBanshee",
-      ammo: 0,
-      max: 600,
-      refire: 1,
-      spread: 24,
-      fullname: "Banshee Cannon",
-      fire: 1,
-      key: 1
-    }, {
-      name: "Spreader",
-      shot: "shot_mcSpreader",
-      ammo: 0,
-      max: 150,
-      refire: 8,
-      spread: 6,
-      fullname: "Spreader Cannon",
-      fire: 6,
-      key: 2
-    }, {
-      name: "Hailstorm",
-      shot: "shot_mcStorm",
-      ammo: 0,
-      max: 150,
-      refire: 1,
-      spread: 6,
-      fullname: "Hailstorm Cannon",
-      burst: 3,
-      burstReload: 15,
-      fire: 6,
-      key: 2
-    }, {
-      name: "Hydra",
-      shot: "shot_mcHydra",
-      ammo: 0,
-      max: 250,
-      refire: 5,
-      spread: 8,
-      fullname: "Hydra Cannon",
-      fire: 6,
-      key: 2
-    }, {
-      name: "Pulse",
-      shot: "shot_mcPulse",
-      ammo: 0,
-      max: 200,
-      refire: 4,
-      spread: 8,
-      fullname: "Pulse Cannon",
-      fire: 6,
-      key: 2
-    }, {
-      name: "Vendetta",
-      shot: "shot_mcVendetta",
-      ammo: 0,
-      max: 250,
-      refire: 5,
-      spread: 8,
-      fullname: "Vendetta Cannon",
-      fire: 5,
-      key: 2
-    }, {
-      name: "Auto Cannon",
-      shot: "shot_mcAuto",
-      ammo: 0,
-      max: 250,
-      refire: 3,
-      spread: 8,
-      fullname: "Auto Cannon",
-      fire: 5,
-      key: 2
-    }, {
-      name: "Flak",
-      shot: "shot_mcFlak",
-      ammo: 0,
-      max: 50,
-      refire: 10,
-      spread: 4,
-      fullname: "Flak Cannon",
-      fire: 5,
-      key: 3
-    }, {
-      name: "Shredder",
-      shot: "shrap_mc",
-      ammo: 0,
-      max: null,
-      refire: 1,
-      spread: 16,
-      fullname: "Shredder",
-      fire: 5,
-      key: 3
-    }, {
-      name: "Stinger",
-      shot: "frag_mc",
-      ammo: 0,
-      max: null,
-      refire: 1,
-      spread: 6,
-      fullname: "Stinger",
-      fire: 5,
-      key: 3
-    }, {
-      name: "Railgun",
-      shot: "shot_mcRail",
-      ammo: 0,
-      max: 75,
-      refire: 10,
-      spread: 2,
-      fullname: "Railgun",
-      fire: 5,
-      key: 3
-    }, {
-      name: "Minigun",
-      shot: "shot_mcBullet",
-      ammo: 0,
-      max: 750,
-      refire: 1,
-      spread: 2,
-      fullname: "Minigun",
-      fire: 5,
-      key: 3
-    }, {
-      name: "Flamer",
-      shot: "shot_mcFlamer",
-      ammo: 0,
-      max: 600,
-      refire: 1,
-      spread: 14,
-      fullname: "Flamer Unit",
-      fire: 7,
-      burst: 3,
-      key: 4
-    }, {
-      name: "Reaper",
-      shot: "shot_mcReaper",
-      ammo: 0,
-      max: 200,
-      refire: 6,
-      spread: 8,
-      fullname: "Reaper Cannon",
-      fire: 7,
-      key: 4
-    }, {
-      name: "Laser",
-      shot: "shot_mcLaser",
-      ammo: 0,
-      max: 100,
-      refire: 11,
-      spread: 0,
-      fullname: "Laser",
-      fire: 3,
-      key: 5
-    }, {
-      name: "Super Laser",
-      shot: "shot_mcSuperLaser",
-      ammo: 0,
-      max: 500,
-      refire: 1,
-      spread: 0,
-      fullname: "Super Laser",
-      fire: 3,
-      key: 5
-    }, {
-      name: "Heat Ray",
-      shot: "shot_mcUltraLaser",
-      ammo: 0,
-      max: 300,
-      refire: 1,
-      spread: 0,
-      fullname: "Death Ray",
-      burst: 5,
-      burstReload: 20,
-      fire: 3,
-      key: 5
-    }];
-    for ($c.i of $keys($v($c, "weapons1"))) $o($v($c, "weapons1")?.[$v($c, "i")]).id = AS.int($v($c, "i"));
-    $c.weapons2 = [{
-      name: "Carbon Bomb",
-      shot: "shot_mcBomb",
-      ammo: 2,
-      max: 20,
-      refire: 15,
-      spread: 4,
-      key: 6
-    }, {
-      name: "Thermal Bomb",
-      shot: "shot_mcGrenade",
-      ammo: 0,
-      max: 10,
-      refire: 25,
-      spread: 4,
-      key: 6
-    }, {
-      name: "Impact Mortar",
-      shot: "shot_mcMort",
-      ammo: 0,
-      max: 5,
-      refire: 15,
-      spread: 4,
-      key: 7
-    }, {
-      name: "Stun Bomb",
-      shot: "shot_mcStun",
-      ammo: 0,
-      max: 12,
-      refire: 15,
-      spread: 4,
-      key: 6
-    }, {
-      name: "Shrapnel Bomb",
-      shot: "shot_mcFrag",
-      ammo: 0,
-      max: 5,
-      refire: 35,
-      spread: 0,
-      key: 8
-    }, {
-      name: "Splinter Bomb",
-      shot: "shot_mcSplinter",
-      ammo: 0,
-      max: 5,
-      refire: 10,
-      spread: 4,
-      key: 8
-    }, {
-      name: "Plasma Bomb",
-      shot: "shot_mcPlasmaBomb",
-      ammo: 0,
-      max: 5,
-      refire: 25,
-      spread: 4,
-      key: 8
-    }, {
-      name: "Pulse Bomb",
-      shot: "shot_mcPulseBomb",
-      ammo: 0,
-      max: 5,
-      refire: 25,
-      spread: 4,
-      key: 8
-    }, {
-      name: "Spikey Bomb",
-      shot: "shot_mcSpikey",
-      ammo: 0,
-      max: 5,
-      refire: 25,
-      spread: 4,
-      key: 8
-    }, {
-      name: "Cluster Bomb",
-      shot: "shot_mcCluster",
-      ammo: 0,
-      max: 5,
-      refire: 35,
-      spread: 6,
-      key: 8
-    }, {
-      name: "Spitfire Bomb",
-      shot: "shot_mcSpitfire",
-      ammo: 0,
-      max: 3,
-      refire: 35,
-      spread: 6,
-      key: 8
-    }, {
-      name: "Smart Bomb",
-      shot: "shot_mcSmart",
-      ammo: 0,
-      max: 10,
-      refire: 35,
-      spread: 6,
-      key: 8
-    }, {
-      name: "Pepper Bombs",
-      shot: "shot_mcSpitling",
-      ammo: 0,
-      max: 50,
-      refire: 3,
-      spread: 10,
-      key: 7
-    }, {
-      name: "Rocket Pod",
-      shot: "shot_mcRocket",
-      ammo: 0,
-      max: 50,
-      refire: 3,
-      spread: 18,
-      key: 9
-    }, {
-      name: "Drunken Rockets",
-      shot: "shot_mcDrunken",
-      ammo: 0,
-      max: 20,
-      refire: 20,
-      spread: 4,
-      key: 9
-    }, {
-      name: "Missile",
-      shot: "shot_mcMissile",
-      ammo: 0,
-      max: 20,
-      refire: 10,
-      spread: 2,
-      key: 9
-    }, {
-      name: "Heatseeker",
-      shot: "shot_mcSeeker",
-      ammo: 0,
-      max: 10,
-      refire: 15,
-      spread: 2,
-      key: 9
-    }, {
-      name: "Trident Missiles",
-      shot: "shot_mcHellfire",
-      ammo: 0,
-      max: 5,
-      refire: 15,
-      spread: 2,
-      key: 9
-    }, {
-      name: "Warp Missile",
-      shot: "shot_mcWarpMissile",
-      ammo: 0,
-      max: 15,
-      refire: 15,
-      spread: 2,
-      key: 9
-    }, {
-      name: "Smart Missile",
-      shot: "shot_mcSmartMissile",
-      ammo: 0,
-      max: 5,
-      refire: 15,
-      spread: 2,
-      key: 9
-    }, {
-      name: "Mega Missile",
-      shot: "shot_mcMega",
-      ammo: 0,
-      max: 1,
-      refire: 70,
-      spread: 2,
-      key: 9
-    }, {
-      name: "Synapse Bomb",
-      shot: "shot_mcSynapse",
-      ammo: 0,
-      max: 1,
-      refire: 60,
-      spread: 10,
-      key: 7
-    }, {
-      name: "Shock Bomb",
-      shot: "shot_mcShock",
-      ammo: 0,
-      max: 1,
-      refire: 60,
-      spread: 6,
-      key: 6
-    }, {
-      name: "Laser Bomb",
-      shot: "shot_mcLaserBomb",
-      ammo: 0,
-      max: 5,
-      refire: 30,
-      spread: 2,
-      key: 0
-    }, {
-      name: "Laser Anhilator",
-      shot: "shot_mcSuperLaserBomb",
-      ammo: 0,
-      max: 1,
-      refire: 30,
-      spread: 2,
-      key: 0
-    }];
-    for ($c.i of $keys($v($c, "weapons2"))) $o($v($c, "weapons2")?.[$v($c, "i")]).id = AS.int($v($c, "i"));
-    AS.trace($v($c, "weapons1")?.length + " primary weapons, " + $v($c, "weapons2")?.length + " secondary weapons, " + ($v($c, "weapons1")?.length + $v($c, "weapons2")?.length) + " total");
-    $c.weapon1 = $v($c, "weapons1")?.[1];
-    $c.weapon2 = $v($c, "weapons2")?.[0];
-    $c.inventory = [];
-    $c.turn = 0;
-    $c.xSpeed = 0;
-    $c.ySpeed = 0;
-    $c.speed = 0;
-    $c.dead = $c.dying = false;
-    $c.deathTime = 0;
-    $c.refire1 = 0;
-    $c.refire2 = 0;
-    $c.firing1 = false;
-    $c.shotCount1 = 0;
-    $c.stop();
-    $c.point = new Object();
-    ($c.KEY_X = 88, $c.KEY_Z = 90);
-    $o($v($c, "indicator_mc"))._visible = false;
-    $o($v($c, "exhaust_mc"))._visible = false;
-    $o($v($c, "damage_mc"))._visible = false;
-    $v($c, "damage_mc")?.stop?.();
-    $o($c._parent?.shadow_mc)._x = $c._x + $v($c, "shadowHeight");
-    $o($c._parent?.shadow_mc)._y = $c._y + $v($c, "shadowHeight");
-    $o($c._parent?.shadow_mc)._rotation = $c._rotation;
-    $call($c, "hide");
-    G.updateDisplay.call($c);
-  },
-  "clip:keyDown": function ($c) {
-    $c.cheat = function () {
-      G.notify.call($c, this, "Cheater!");
-      $o(G._player).hasCheated = true;
-    };
-    if ($v($c, "dead")) return;
-    ($c.KEY_F1 = 112, $c.KEY_H = 72);
-    switch (AS.Key?.getCode?.()) {
-      case AS.Key?.INSERT:
-        AS.Key?.isDown?.(AS.Key?.SHIFT) ? $call($c, "changeWep", 1, null, -1) : $call($c, "changeWep", 1);
-        break;
-      case AS.Key?.DELETEKEY:
-        AS.Key?.isDown?.(AS.Key?.SHIFT) ? $call($c, "changeWep", 2, null, -1) : $call($c, "changeWep", 2);
-        break;
-      case AS.Key?.ESCAPE:
-        !$c._root?.dialogScreen_mc ? G.showDialog.call($c, "menuScreen") : G.hideDialog.call($c);
-        break;
-      case $v($c, "KEY_F1"):
-      case $v($c, "KEY_H"):
-        $c._root?.dialogScreen_mc?.name != "helpScreen" ? G.showDialog.call($c, "helpScreen") : G.hideDialog.call($c);
-        break;
-    }
-    if (AS.Key?.isDown?.(AS.Key?.CONTROL) && AS.Key?.isDown?.(AS.Key?.SHIFT)) {
-      switch (AS.Key?.getCode?.()) {
-        case AS.Key?.PGUP:
-          $c.health = Infinity;
-          G.updateDisplay.call($c);
-          $call($c, "cheat");
-          break;
-        case AS.Key?.PGDN:
-          $c.health = $v($c, "healthMax");
-          G.updateDisplay.call($c);
-          $call($c, "cheat");
-          break;
-        case AS.Key?.HOME:
-          $c.w = $v($c, "weapons1")?.length;
-          if (AS.Key?.isDown?.(AS.Key?.ALT)) $c.a = Infinity;
-          while ($inc($c, "w", -1, false)) $o($v($c, "weapons1")?.[$v($c, "w")]).ammo = $v($c, "a") || $v($c, "weapons1")?.[$v($c, "w")]?.max || Infinity;
-          $c.w = $v($c, "weapons2")?.length;
-          while ($inc($c, "w", -1, false)) $o($v($c, "weapons2")?.[$v($c, "w")]).ammo = $v($c, "a") || $v($c, "weapons2")?.[$v($c, "w")]?.max || Infinity;
-          G.updateDisplay.call($c);
-          $call($c, "cheat");
-          break;
-        case AS.Key?.END:
-          $c.b = $c._root?.boxes?.length;
-          while ($inc($c, "b", -1, false)) $c._root?.boxes?.[$v($c, "b")]?.hit?.($c, $c._root?.boxes?.[$v($c, "b")]?.health, G.rand.call($c, 360));
-          $c.e = $c._root?.enemies?.length;
-          while ($inc($c, "e", -1, false)) $c._root?.enemies?.[$v($c, "e")]?.hit?.($c, $c._root?.enemies?.[$v($c, "e")]?.health, G.rand.call($c, 360));
-          $call($c, "cheat");
-          break;
-      }
-    }
-  }
-};
-instances["742:3406:5"] = {
+instances["742:3408:3"] = {
   "on:release": function ($c) {
     G.continueLevel.call($c);
   },
@@ -12496,7 +12470,15 @@ instances["742:3406:5"] = {
     G.continueLevel.call($c);
   }
 };
-instances["742:3408:3"] = {
+instances["742:3412:3"] = {
+  "on:release": function ($c) {
+    G.quit.call($c);
+  },
+  "on:key27": function ($c) {
+    G.quit.call($c);
+  }
+};
+instances["742:3406:5"] = {
   "on:release": function ($c) {
     G.continueLevel.call($c);
   },
@@ -12515,31 +12497,24 @@ instances["742:3410:5"] = {
     G.quit.call($c);
   }
 };
-instances["742:3412:3"] = {
-  "on:release": function ($c) {
-    G.quit.call($c);
-  },
-  "on:key27": function ($c) {
-    G.quit.call($c);
+instances["742:1004:6"] = {
+  "clip:load": function ($c) {
+    $c.connections = [$c._parent?.a2, $c._parent?.a4];
   }
 };
-instances["742:3422:1"] = {
-  "on:release": function ($c) {
-    G.continueLevel.call($c);
-  },
-  "on:key32": function ($c) {
-    G.continueLevel.call($c);
-  },
-  "on:key13": function ($c) {
-    G.continueLevel.call($c);
+instances["742:1006:6"] = {
+  "clip:load": function ($c) {
+    $c.connections = [$c._parent?.a3, $c._parent?.a1];
   }
 };
-instances["742:3426:1"] = {
-  "on:release": function ($c) {
-    G.quit.call($c);
-  },
-  "on:key27": function ($c) {
-    G.quit.call($c);
+instances["742:1008:6"] = {
+  "clip:load": function ($c) {
+    $c.connections = [$c._parent?.a4, $c._parent?.a2];
+  }
+};
+instances["742:1010:6"] = {
+  "clip:load": function ($c) {
+    $c.connections = [$c._parent?.a1, $c._parent?.a3];
   }
 };
 instances["742:3428:7"] = {
@@ -12576,9 +12551,14 @@ instances["742:90:8"] = {
     $c.id = "door3";
   }
 };
-instances["742:9:2"] = {
+instances["742:117:8"] = {
   "clip:load": function ($c) {
-    $c.speed = 3.2;
+    $c.id = "door4";
+  }
+};
+instances["742:144:8"] = {
+  "clip:load": function ($c) {
+    $c.id = "door5";
   }
 };
 instances["842:52:1"] = {
@@ -12604,6 +12584,26 @@ instances["842:56:1"] = {
   },
   "on:release": function ($c) {
     G.showDialog.call($c, "menuScreen");
+  }
+};
+instances["0:39:21"] = {
+  "on:release": function ($c) {
+    $c.gotoAndStop("game");
+  }
+};
+instances["0:43:23"] = {
+  "on:release": function ($c) {
+    $c._root?.missionPanel_mc?.toggle?.();
+  }
+};
+instances["0:39:27"] = {
+  "on:release": function ($c) {
+    $c._root?.gotoAndStop?.("game");
+  }
+};
+instances["0:46:29"] = {
+  "on:release": function ($c) {
+    G.gotoLevel.call($c, $c._root?.so?.data?.level);
   }
 };
 return { frames, instances };

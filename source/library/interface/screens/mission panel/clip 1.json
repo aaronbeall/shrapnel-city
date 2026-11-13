@@ -1,0 +1,6 @@
+{
+  "kind": "sprite",
+  "frames": 1,
+  "timeline": [{"frame": 1, "changes": [{"place": "mission panel list item", "depth": 1, "x": 0, "y": 0, "name": "item_mc0"}]}],
+  "swfScriptFrames": [0]
+}

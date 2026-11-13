@@ -1,0 +1,42 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "game objects/powerup",
+          "depth": 1,
+          "x": 57.15,
+          "y": 267.25,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 36,
+          "x": 57.15,
+          "y": 237.25,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"secondary\";",
+            "    item = \"Carbon Bomb\";",
+            "    quantity = 1;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 71,
+          "x": 57.15,
+          "y": 207.25,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 25;", "}"]
+        }
+      ]
+    }
+  ]
+}

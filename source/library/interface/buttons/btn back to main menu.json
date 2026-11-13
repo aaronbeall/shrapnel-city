@@ -1,0 +1,110 @@
+{
+  "kind": "button",
+  "symbol": {"type": "button"},
+  "records": [
+    {
+      "symbol": "interface/buttons/btn back to main menu/shape 1",
+      "depth": 1,
+      "states": ["up"],
+      "x": 0,
+      "y": 0,
+      "color": {}
+    },
+    {
+      "symbol": "interface/buttons/btn back to main menu/text 1",
+      "depth": 2,
+      "states": ["up"],
+      "x": -0.25,
+      "y": 8.25,
+      "color": {},
+      "filters": [
+        {
+          "type": "dropShadow",
+          "color": "#000000",
+          "blurX": 3,
+          "blurY": 3,
+          "angle": 0.7853851318359375,
+          "distance": 1,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        },
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 20,
+          "blurY": 20,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        }
+      ]
+    },
+    {
+      "symbol": "interface/buttons/btn back to main menu/shape 2",
+      "depth": 3,
+      "states": ["up"],
+      "x": 0,
+      "y": 0,
+      "color": {}
+    },
+    {
+      "symbol": "interface/buttons/btn back to main menu/shape 3",
+      "depth": 1,
+      "states": ["over", "down"],
+      "x": 0,
+      "y": 0,
+      "color": {}
+    },
+    {
+      "symbol": "interface/buttons/btn back to main menu/text 2",
+      "depth": 2,
+      "states": ["over", "down"],
+      "x": -0.25,
+      "y": 8.25,
+      "color": {},
+      "filters": [
+        {
+          "type": "dropShadow",
+          "color": "#000000",
+          "blurX": 3,
+          "blurY": 3,
+          "angle": 0.7853851318359375,
+          "distance": 1,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        },
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 20,
+          "blurY": 20,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        }
+      ]
+    },
+    {
+      "symbol": "interface/buttons/btn back to main menu/shape 2",
+      "depth": 3,
+      "states": ["over", "down"],
+      "x": 0,
+      "y": 0,
+      "color": {}
+    },
+    {
+      "symbol": "interface/buttons/btn back to main menu/shape 4",
+      "depth": 1,
+      "states": ["hit"],
+      "x": 0,
+      "y": 0,
+      "color": {}
+    }
+  ]
+}

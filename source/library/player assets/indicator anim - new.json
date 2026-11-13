@@ -1,0 +1,19 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 10,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": ["var d = shotID();", "_screen.attachMovie('attention','alert_mc'+d,d,{target:_player});"],
+      "changes": [{"place": "player assets/indicator anim - new/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 2, "changes": [{"update": 1, "x": 0.05, "y": 0, "scale": 0.673737}]},
+    {"frame": 3, "changes": [{"update": 1, "x": 0.05, "y": 0, "scale": 0.560928}]},
+    {"frame": 4, "changes": [{"update": 1, "x": 0.05, "y": 0, "scale": 0.499313}]},
+    {"frame": 5, "changes": [{"update": 1, "x": 0.05, "y": 0, "scale": 0.461914}]},
+    {"frame": 6, "changes": [{"update": 1, "x": 0.05, "y": 0, "scale": 0.438828}]},
+    {"frame": 7, "changes": [{"replace": "player assets/indicator anim - new/shape 2", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 10, "script": ["stop();", ""]}
+  ]
+}

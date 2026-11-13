@@ -12,6 +12,18 @@ const status = document.getElementById('status');
 await rt.load((p) => { status.textContent = `loading art… ${Math.round(p * 100)}%`; });
 const lib = rt.lib;
 const R = rt.renderer;
+
+// Large frame scripts and the projectile templates live in as2/ and are pulled
+// in with #include; inline them here so the stats below can read them.
+{
+  const re = /^[ \t]*#include\s+"as\/((?:frames|shots)\/[^"]+)"[^\n]*$/gm;
+  const texts = [...lib.symbols.values()].flatMap((s) => Object.values(s.scripts || {})).concat(Object.values(lib.instanceScripts));
+  const paths = new Set(texts.flatMap((t) => [...t.matchAll(re)].map((m) => m[1])));
+  const files = new Map(await Promise.all([...paths].map(async (p) => [p, await fetch('../as2/' + p.split('/').map(encodeURIComponent).join('/')).then((r) => r.text())])));
+  const inline = (t) => t.replace(re, (m, p) => files.get(p) ?? m);
+  for (const s of lib.symbols.values()) for (const f in s.scripts || {}) s.scripts[f] = inline(s.scripts[f]);
+  for (const k in lib.instanceScripts) lib.instanceScripts[k] = inline(lib.instanceScripts[k]);
+}
 R.quality = 'high';
 const DPR = Math.min(2, window.devicePixelRatio || 1);
 const FPS = rt.frameRate || 31;

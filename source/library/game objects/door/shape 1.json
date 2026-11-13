@@ -1,0 +1,74 @@
+{
+  "kind": "shape",
+  "bounds": [-15.45, 15.55, -28.15, 26.85],
+  "fills": [
+    {
+      "type": "linear gradient",
+      "m": [0, 9.999974400000001, -9.999974400000001, 0, 0.55, -13.15],
+      "spread": 0,
+      "interp": 0,
+      "stops": [[0, "#0000007f"], [0.9803921568627451, "#00000000"]]
+    },
+    {
+      "type": "linear gradient",
+      "m": [0, -8.5000192, 8.5000192, 0, 0.55, 15.35],
+      "spread": 0,
+      "interp": 0,
+      "stops": [[0, "#0000007f"], [0.9803921568627451, "#00000000"]]
+    },
+    {"type": "solid", "color": "#272727"},
+    {"type": "solid", "color": "#484848"},
+    {"type": "solid", "color": "#484848"},
+    {"type": "solid", "color": "#272727"},
+    {"type": "solid", "color": "#707070"},
+    {"type": "solid", "color": "#484848"},
+    {"type": "solid", "color": "#272727"},
+    {"type": "solid", "color": "#707070"},
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "game objects/door/shape 1/bitmap 1",
+      "m": [1, 0, 0, 1, -15.45, -28.15],
+      "repeat": false,
+      "smooth": false
+    },
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "game objects/door/shape 1/bitmap 2",
+      "m": [1, 0, 0, 1, 0.55, -26.15],
+      "repeat": false,
+      "smooth": false
+    },
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "game objects/door/shape 1/bitmap 3",
+      "m": [1, 0, 0, 1, 1.55, 16.85],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [
+    {"fill": 0, "d": "M -2.45 -23.15 L 3.55 -23.15 L 3.55 -3.15 L -2.45 -3.15 L -2.45 -23.15 Z"},
+    {"fill": 1, "d": "M 3.55 23.85 L -2.45 23.85 L -2.45 6.85 L 3.55 6.85 L 3.55 23.85 Z"},
+    {
+      "fill": 2,
+      "d": "M -4.45 -14.15 L -4.45 -25.15 L 5.55 -25.15 L 5.55 -14.15 L 2.55 -20.15 L -1.45 -20.15 L -4.45 -14.15 Z"
+    },
+    {
+      "fill": 3,
+      "d": "M -4.45 24.85 L -4.45 14.85 L -1.45 20.85 L 2.55 20.85 L 5.55 14.85 L 5.55 24.85 L -4.45 24.85 Z"
+    },
+    {"fill": 4, "d": "M -1.45 22.85 L 2.55 22.85 L 2.55 24.85 L -1.45 24.85 L -1.45 22.85 Z"},
+    {"fill": 5, "d": "M 2.55 22.85 L 5.55 16.85 L 5.55 24.85 L 2.55 24.85 L 2.55 22.85 Z"},
+    {"fill": 6, "d": "M -4.45 16.85 L -1.45 22.85 L -1.45 24.85 L -4.45 24.85 L -4.45 16.85 Z"},
+    {"fill": 7, "d": "M 2.55 -23.15 L -1.45 -23.15 L -1.45 -25.15 L 2.55 -25.15 L 2.55 -23.15 Z"},
+    {"fill": 8, "d": "M 5.55 -17.15 L 2.55 -23.15 L 2.55 -25.15 L 5.55 -25.15 L 5.55 -17.15 Z"},
+    {"fill": 9, "d": "M -1.45 -23.15 L -4.45 -17.15 L -4.45 -25.15 L -1.45 -25.15 L -1.45 -23.15 Z"},
+    {"fill": 11, "d": "M -15.45 -28.15 L -3.45 -28.15 L -3.45 -15.15 L -15.45 -15.15 L -15.45 -28.15 Z"},
+    {"fill": 13, "d": "M 0.55 -26.15 L 15.55 -26.15 L 15.55 -19.15 L 0.55 -19.15 L 0.55 -26.15 Z"},
+    {"fill": 15, "d": "M 1.55 16.85 L 9.55 16.85 L 9.55 26.85 L 1.55 26.85 L 1.55 16.85 Z"}
+  ]
+}

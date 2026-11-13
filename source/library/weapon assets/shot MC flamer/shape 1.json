@@ -1,0 +1,16 @@
+{
+  "kind": "shape",
+  "bounds": [-34.5, 34.5, -39, 39],
+  "fills": [
+    {"type": "clipped bitmap", "bitmap": null, "m": [0.75, 0, 0, 0.75, 0, 0], "repeat": false, "smooth": true},
+    {
+      "type": "clipped bitmap",
+      "bitmap": "weapon assets/shot MC flamer/shape 1/bitmap 1",
+      "m": [0.75, 0, 0, 0.75, -34.5, -39],
+      "repeat": false,
+      "smooth": true
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 1, "d": "M -34.5 -39 L 34.5 -39 L 34.5 39 L -34.5 39 L -34.5 -39 Z"}]
+}

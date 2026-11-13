@@ -1,0 +1,52 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 10,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectile.as\"",
+      "changes": [{"place": "weapon assets/shot MC ray/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 1},
+        {"place": "_shared/shape tween 44", "depth": 1, "x": 0, "y": 0, "scale": 0.792953},
+        {
+          "place": "_glow",
+          "depth": 2,
+          "x": -0.65,
+          "y": 5.35,
+          "scale": 1.34346,
+          "color": {"alpha": 0.5},
+          "ratio": 0.000015259021896696422
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "ratio": 0.4375066758220798},
+        {"update": 2, "x": -0.65, "y": 5.3, "scale": 1.343475, "color": {"alpha": 0.22265625}}
+      ]
+    },
+    {"frame": 4, "changes": [{"update": 1, "ratio": 0.7500114442664225}, {"update": 2, "color": {"alpha": 0.0546875}}]},
+    {
+      "frame": 5,
+      "changes": [
+        {"update": 1, "ratio": 0.9375143053330282},
+        {"update": 2, "x": -0.65, "y": 5.35, "scale": 1.34346, "color": {"alpha": 0}}
+      ]
+    },
+    {"frame": 6, "changes": [{"remove": 2}, {"replace": "_shared/shape tween 47", "depth": 1, "ratio": 0}]},
+    {"frame": 7, "changes": [{"update": 1, "ratio": 0.2500038147554742}]},
+    {"frame": 8, "changes": [{"update": 1, "ratio": 0.5000076295109483}]},
+    {"frame": 9, "changes": [{"update": 1, "ratio": 0.7500114442664225}]},
+    {
+      "frame": 10,
+      "script": "this.removeMovieClip();",
+      "changes": [{"remove": 1}, {"place": "_shared/shape 48", "depth": 1, "x": 0, "y": 0, "scale": 0.792953}]
+    }
+  ]
+}

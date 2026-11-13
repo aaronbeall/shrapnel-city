@@ -1,0 +1,28 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "level assets/vision3-1", "depth": 1, "x": 22, "y": 16.9},
+        {"place": "level assets/vision3-2", "depth": 3, "x": 84.9, "y": 22, "scale": [1.164917, 1.953278]},
+        {"place": "level assets/vision3-3", "depth": 5, "x": 191.9, "y": 9},
+        {"place": "_box", "depth": 7, "x": 436.1, "y": 300.95, "scale": [3.782196, 11.996765]},
+        {"place": "_box", "depth": 9, "x": 685.15, "y": 53.8, "scale": [14.591553, 1.367432]},
+        {"place": "_box", "depth": 11, "x": 685.15, "y": 547.75, "scale": [14.591553, 1.367432]},
+        {"place": "level assets/vision3-5", "depth": 13, "x": 837.3, "y": 90},
+        {"place": "level assets/vision3-6", "depth": 15, "x": 818.3, "y": 526},
+        {"place": "level assets/vision3-7", "depth": 17, "x": 1269.25, "y": 330.45},
+        {"place": "level assets/vision3-8", "depth": 19, "x": 1314.75, "y": 225.95},
+        {"place": "level assets/vision3-9", "depth": 21, "x": 1372.75, "y": 413.95},
+        {"place": "level assets/vision3-10", "depth": 23, "x": 1193.25, "y": 307},
+        {"place": "level assets/vision3-11", "depth": 25, "x": 1474.75, "y": 468.95},
+        {"place": "level assets/vision3-12", "depth": 27, "x": 1144.75, "y": 301.95},
+        {"place": "level assets/vision3-13", "depth": 29, "x": 669.2, "y": 307.45},
+        {"place": "level assets/vision3-14", "depth": 31, "x": 1455.5, "y": 262.5}
+      ]
+    }
+  ]
+}

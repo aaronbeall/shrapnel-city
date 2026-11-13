@@ -1,0 +1,42 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "zaps"},
+  "frames": 11,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/zaps.as\"",
+      "changes": [
+        {"place": "_shared/shape 49", "depth": 10, "x": 0, "y": 0},
+        {"place": "_glow", "depth": 11, "x": 0, "y": 0, "scale": 2.881256}
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 10},
+        {"place": "_shared/shape 50", "depth": 6, "x": 0, "y": 0},
+        {"update": 11, "x": 0, "y": 0, "scale": 2.714172, "color": {"alpha": 0.578125}}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [{"remove": 6}, {"place": "_shared/shape 51", "depth": 8, "x": 0, "y": 0}, {"update": 11, "color": {}}]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"remove": 8},
+        {"place": "_shared/shape 52", "depth": 9, "x": 0, "y": 0},
+        {"update": 11, "color": {"alpha": 0.421875}}
+      ]
+    },
+    {"frame": 5, "changes": [{"replace": "_shared/shape 53", "depth": 9}, {"update": 11, "color": {}}]},
+    {"frame": 6, "changes": [{"remove": 9}, {"place": "_shared/shape 54", "depth": 7, "x": 0, "y": 0}]},
+    {"frame": 7, "changes": [{"remove": 7}, {"update": 11, "color": {"alpha": 0.75}}]},
+    {"frame": 8, "changes": [{"update": 11, "color": {"alpha": 0.5}}]},
+    {"frame": 9, "changes": [{"update": 11, "color": {"alpha": 0.25}}]},
+    {"frame": 10, "changes": [{"update": 11, "color": {"alpha": 0}}]},
+    {"frame": 11, "script": "onZapComplete();"}
+  ]
+}

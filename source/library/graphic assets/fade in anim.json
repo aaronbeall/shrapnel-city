@@ -1,0 +1,32 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 31,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [{"place": "_box", "depth": 1, "x": 400, "y": 300, "scale": [16, 11.999268], "color": {"multiply": [0, 0, 0, 1]}}]
+    },
+    {
+      "frame": 2,
+      "changes": [{"update": 1, "x": 400, "y": 300, "scale": [16, 12], "color": {"multiply": [0, 0, 0, 0.9296875]}}]
+    },
+    {"frame": 3, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.85546875]}}]},
+    {"frame": 4, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.78515625]}}]},
+    {"frame": 5, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.71484375]}}]},
+    {"frame": 6, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.64453125]}}]},
+    {"frame": 7, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.5703125]}}]},
+    {"frame": 8, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.5]}}]},
+    {"frame": 9, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.4296875]}}]},
+    {"frame": 10, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.35546875]}}]},
+    {"frame": 11, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.28515625]}}]},
+    {"frame": 12, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.21484375]}}]},
+    {"frame": 13, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.14453125]}}]},
+    {"frame": 14, "changes": [{"update": 1, "color": {"multiply": [0, 0, 0, 0.0703125]}}]},
+    {
+      "frame": 15,
+      "changes": [{"update": 1, "x": 400, "y": 300, "scale": [16, 11.999268], "color": {"multiply": [0, 0, 0, 0]}}]
+    },
+    {"frame": 16, "script": "stop();", "changes": [{"remove": 1}]}
+  ]
+}

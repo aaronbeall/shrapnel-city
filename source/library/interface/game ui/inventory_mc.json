@@ -1,0 +1,34 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/ui/hudInventory.as\"",
+      "changes": [
+        {
+          "place": "interface/game ui/inventory back_mc",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "name": "back_mc",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 3,
+              "blurY": 3,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"place": "interface/game ui/inventory_mc/text 1", "depth": 3, "x": -37, "y": 3},
+        {"place": "interface/game ui/inventory item_mc", "depth": 4, "x": 65, "y": 5, "name": "item_mc"}
+      ]
+    }
+  ]
+}

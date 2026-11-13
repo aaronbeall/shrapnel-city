@@ -1,0 +1,2124 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 8,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": ["stop();", "endLevel();"],
+      "changes": [
+        {"place": "_blank MC", "depth": 1, "x": 0, "y": 0, "name": "backgroundContainer_mc"},
+        {"place": "game objects/blasts_mc", "depth": 3233, "x": -0.05, "y": 0, "name": "blasts_mc"},
+        {
+          "place": "player assets/shadow_mc",
+          "depth": 3235,
+          "x": -92.8,
+          "y": 299,
+          "scale": [1.000061, 1.000305],
+          "name": "shadow_mc"
+        },
+        {
+          "place": "player assets/player MC",
+          "depth": 3237,
+          "x": -150,
+          "y": 285.1,
+          "scale": [1.000061, 1.000305],
+          "name": "player_mc",
+          "clipEvents": [1, 64],
+          "script": "#include \"as/object/player.as\""
+        },
+        {"place": "interface/mask wipe", "depth": 3281, "x": 0, "y": 0, "clipDepth": 3439},
+        {"place": "screen_mc/shape 1", "depth": 3370, "x": 0, "y": 0},
+        {
+          "place": "screen_mc/text 1",
+          "depth": 3371,
+          "x": 87.05,
+          "y": 81.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"place": "screen_mc/text 2", "depth": 3372, "x": 90.05, "y": 164.9, "scale": [1.000061, 1.000305]},
+        {"place": "_circle", "depth": 3373, "x": 638.5, "y": 249.05, "scale": [0.59761, 0.597763], "color": {"alpha": 0}},
+        {"place": "_shared/shape 254", "depth": 3386, "x": 638.5, "y": 249.05, "scale": [1.000061, 1.000305]},
+        {
+          "place": "screen_mc/text 3",
+          "depth": 3387,
+          "x": 607.2,
+          "y": 219.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "screen_mc/text 4",
+          "depth": 3388,
+          "x": 592.2,
+          "y": 305.2,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "game objects/exit_mc",
+          "depth": 3389,
+          "x": 636.95,
+          "y": 376.5,
+          "scale": [1.000061, 1.000305],
+          "clipEvents": [],
+          "script": [
+            "/*onClipEvent (load) {",
+            "    setTimeout(gotoAndStop, 1, 3);",
+            "}*/",
+            "",
+            "/*on (release) {",
+            "    this.play();",
+            "}*/",
+            ""
+          ]
+        },
+        {"place": "screen_mc/text 5", "depth": 3419, "x": 590.55, "y": 259.8, "scale": [1.000061, 1.000305]},
+        {"place": "screen_mc/text 6", "depth": 3420, "x": 630.65, "y": 429.8, "scale": [1.000061, 1.000305]},
+        {
+          "place": "screen_mc/text 7",
+          "depth": 3421,
+          "x": 89.05,
+          "y": 75.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "interface/buttons/btn play mission",
+          "depth": 3422,
+          "x": 548,
+          "y": 544,
+          "clipEvents": [2048, 131072, 131072],
+          "script": [
+            "on (release) {",
+            "    continueLevel();",
+            "}",
+            "on (keyPress \"<Space>\") {",
+            "    continueLevel();",
+            "}",
+            "",
+            "on (keyPress \"<Enter>\") {",
+            "    continueLevel();",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "interface/buttons/btn back to main menu",
+          "depth": 3426,
+          "x": 65,
+          "y": 3.05,
+          "script": ["on (release) {", "    quit();", "}", "", "on (keyPress \"<Escape>\") {", "    quit();", "}", ""]
+        },
+        {
+          "place": "interface/screens/briefing monitor scanlines anim",
+          "depth": 3430,
+          "x": 0,
+          "y": 0,
+          "color": {"alpha": 0.1484375},
+          "blend": "overlay"
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "script": "startLevel();",
+      "changes": [
+        {"remove": 3281},
+        {"remove": 3370},
+        {"remove": 3371},
+        {"remove": 3372},
+        {"remove": 3373},
+        {"remove": 3386},
+        {"remove": 3387},
+        {"remove": 3388},
+        {"remove": 3389},
+        {"remove": 3419},
+        {"remove": 3420},
+        {"remove": 3421},
+        {"remove": 3422},
+        {"remove": 3426},
+        {"remove": 3430},
+        {
+          "place": "level assets/background0",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.000015259021896696422,
+          "name": "background_mc"
+        },
+        {
+          "place": "level assets/level0",
+          "depth": 5,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.000015259021896696422,
+          "name": "level_mc"
+        },
+        {
+          "place": "level assets/vision0",
+          "depth": 7,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.000015259021896696422,
+          "name": "vision_mc"
+        },
+        {
+          "place": "game objects/entrance_mc",
+          "depth": 9,
+          "x": 400.05,
+          "y": 300.05,
+          "scale": [-0.999939, -1],
+          "ratio": 0.000015259021896696422,
+          "name": "entrance_mc",
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    speed = 3.2;", "}", ""]
+        },
+        {
+          "place": "game objects/exit_mc",
+          "depth": 125,
+          "x": 619,
+          "y": 489,
+          "ratio": 0.000015259021896696422,
+          "name": "exit_mc"
+        },
+        {
+          "place": "level assets/boxes0",
+          "depth": 155,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.000015259021896696422,
+          "name": "boxes_mc"
+        },
+        {
+          "place": "level assets/powerups0",
+          "depth": 307,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.000015259021896696422,
+          "name": "powerups_mc"
+        },
+        {
+          "place": "level assets/enemies0",
+          "depth": 632,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999863, 1],
+          "ratio": 0.000015259021896696422,
+          "name": "enemies_mc"
+        },
+        {
+          "place": "weapon assets/shot MC",
+          "depth": 2918,
+          "x": -22.8,
+          "y": 504,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mc",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mc.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy",
+          "depth": 2922,
+          "x": -22.8,
+          "y": 425,
+          "scale": [1.281921, 1.048691],
+          "color": {"add": [-149, 0, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcEPlasma",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcEPlasma.as\""
+        },
+        {
+          "place": "weapon assets/shot MC mortor",
+          "depth": 2925,
+          "x": -48.7,
+          "y": 563,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcMort",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcMort.as\""
+        },
+        {
+          "place": "weapon assets/shot MC grenade",
+          "depth": 2931,
+          "x": -22.95,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcGrenade",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcGrenade.as\""
+        },
+        {
+          "place": "weapon assets/shot MC frag",
+          "depth": 2937,
+          "x": -76.05,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcFrag",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcFrag.as\""
+        },
+        {
+          "place": "weapon assets/shot MC shrap",
+          "depth": 2940,
+          "x": -75.95,
+          "y": 588.55,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shrap_mc",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shrap_mc.as\""
+        },
+        {
+          "place": "weapon assets/shot MC bomb",
+          "depth": 2942,
+          "x": -102.55,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcBomb",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcBomb.as\""
+        },
+        {
+          "place": "weapon assets/shot MC",
+          "depth": 2948,
+          "x": -57.25,
+          "y": 502.9,
+          "scale": 2,
+          "color": {"add": [-151, 0, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcPlasma",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcPlasma.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy",
+          "depth": 2952,
+          "x": -55.9,
+          "y": 425,
+          "scale": [0.748734, 0.65361],
+          "color": {"add": [0, 106, 0, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcEYellow",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcEYellow.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy",
+          "depth": 2955,
+          "x": -113.9,
+          "y": 425,
+          "scale": [0.748734, 0.65361],
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 255, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcEWhite",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcEWhite.as\""
+        },
+        {
+          "place": "weapon assets/shot MC",
+          "depth": 2958,
+          "x": -140.75,
+          "y": 503.55,
+          "scale": [0.613297, 1.142502],
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 255, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcBanshee",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcBanshee.as\""
+        },
+        {
+          "place": "weapon assets/shot MC pea",
+          "depth": 2962,
+          "x": -165.2,
+          "y": 504.5,
+          "scale": [0.850052, 0.850235],
+          "color": {"add": [-61, 111, -112, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcEnergizer",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcEnergizer.as\""
+        },
+        {
+          "place": "weapon assets/shot MC pea",
+          "depth": 2965,
+          "x": -195.35,
+          "y": 503.35,
+          "scale": [1.200058, 1.200363],
+          "color": {"add": [18, 0, 69, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcHydra",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcHydra.as\""
+        },
+        {
+          "place": "weapon assets/shot MC orb",
+          "depth": 2968,
+          "x": -231.35,
+          "y": 507.4,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcPulse",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcPulse.as\""
+        },
+        {
+          "place": "weapon assets/shot MC canister",
+          "depth": 2973,
+          "x": -265.95,
+          "y": 506.35,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcFlak",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcFlak.as\""
+        },
+        {
+          "place": "weapon assets/shot MC cluster bomb",
+          "depth": 2979,
+          "x": -125.1,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcCluster",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcCluster.as\""
+        },
+        {
+          "place": "weapon assets/shot MC cluster bomblet",
+          "depth": 2983,
+          "x": -124.65,
+          "y": 591.7,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcBomblet",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcBomblet.as\""
+        },
+        {
+          "place": "weapon assets/shot MC bomb2",
+          "depth": 2987,
+          "x": -147.45,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [200, 200, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSplinter",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSplinter.as\""
+        },
+        {
+          "place": "weapon assets/shot MC cluster bomb",
+          "depth": 2993,
+          "x": -216.05,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [190, 190, 4, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSpitfire",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSpitfire.as\""
+        },
+        {
+          "place": "weapon assets/shot MC cluster bomblet",
+          "depth": 2997,
+          "x": -216,
+          "y": 591.7,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [106, 139, 18, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSpitling",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSpitling.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy",
+          "depth": 3001,
+          "x": -141.9,
+          "y": 424.9,
+          "scale": [0.717972, 1.008087],
+          "color": {"add": [255, -107, -116, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcERed",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcERed.as\""
+        },
+        {
+          "place": "weapon assets/shot MC pea enemy",
+          "depth": 3004,
+          "x": -170.9,
+          "y": 425,
+          "scale": [0.850052, 0.850235],
+          "color": {"add": [-98, -42, 204, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcEPurple",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcEPurple.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy missile",
+          "depth": 3007,
+          "x": -228,
+          "y": 425,
+          "scale": [0.414642, 0.650482],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcERocket",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcERocket.as\""
+        },
+        {
+          "place": "weapon assets/shot MC pea",
+          "depth": 3013,
+          "x": -113.3,
+          "y": 503.55,
+          "scale": 1.25,
+          "color": {"add": [255, 0, -218, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSuperPlasma",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSuperPlasma.as\""
+        },
+        {
+          "place": "weapon assets/shot MC rail",
+          "depth": 3016,
+          "x": -286.55,
+          "y": 507.4,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcRail",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcRail.as\""
+        },
+        {
+          "place": "weapon assets/shot MC ray",
+          "depth": 3019,
+          "x": -297.65,
+          "y": 506.95,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcBullet",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcBullet.as\""
+        },
+        {
+          "place": "weapon assets/shot MC laser",
+          "depth": 3022,
+          "x": -323.25,
+          "y": 517.35,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcLaser",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcLaser.as\""
+        },
+        {
+          "place": "weapon assets/shot MC laser",
+          "depth": 3027,
+          "x": -356.35,
+          "y": 517.35,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [-102, 0, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSuperLaser",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSuperLaser.as\""
+        },
+        {
+          "place": "weapon assets/shot MC split bomb",
+          "depth": 3032,
+          "x": -238.85,
+          "y": 566.95,
+          "scale": [1.330078, 1.330429],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcLaserBomb",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcLaserBomb.as\""
+        },
+        {
+          "place": "weapon assets/shot MC split bomb",
+          "depth": 3037,
+          "x": -264.9,
+          "y": 566.95,
+          "scale": [1.330078, 1.330429],
+          "color": {"add": [-70, 0, 74, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSuperLaserBomb",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSuperLaserBomb.as\""
+        },
+        {
+          "place": "weapon assets/shot MC bomb",
+          "depth": 3042,
+          "x": -335.65,
+          "y": 566.95,
+          "scale": [1.637207, 1.637604],
+          "color": {"add": [176, -14, -14, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSynapse",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSynapse.as\""
+        },
+        {
+          "place": "weapon assets/shot MC shrap",
+          "depth": 3048,
+          "x": -75.95,
+          "y": 608.55,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "scrap_mc",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/scrap_mc.as\""
+        },
+        {
+          "place": "weapon assets/shot MC bomb3",
+          "depth": 3050,
+          "x": -290.5,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [35, 55, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcPlasmaBomb",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#6afaff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 3.5,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ],
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcPlasmaBomb.as\""
+        },
+        {
+          "place": "weapon assets/shot MC spikey bomb",
+          "depth": 3060,
+          "x": -193.05,
+          "y": 567,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSpikey",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSpikey.as\""
+        },
+        {
+          "place": "weapon assets/shot MC homing missile",
+          "depth": 3068,
+          "x": -422.05,
+          "y": 563.8,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSeeker",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSeeker.as\""
+        },
+        {
+          "place": "weapon assets/shot MC missile",
+          "depth": 3079,
+          "x": -400.9,
+          "y": 562,
+          "scale": [0.910461, 1.564423],
+          "color": {"add": [106, 0, -116, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcWarpMissile",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcWarpMissile.as\""
+        },
+        {
+          "place": "weapon assets/shot MC missile",
+          "depth": 3084,
+          "x": -357.3,
+          "y": 565,
+          "scale": [0.619202, 0.619354],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcRocket",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcRocket.as\""
+        },
+        {
+          "place": "weapon assets/shot MC mega missile",
+          "depth": 3089,
+          "x": -471.3,
+          "y": 563.75,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcMega",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcMega.as\""
+        },
+        {
+          "place": "weapon assets/shot MC coupled bomb",
+          "depth": 3095,
+          "x": -497.9,
+          "y": 566.95,
+          "scale": [1.337158, 1.337509],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcShock",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcShock.as\""
+        },
+        {
+          "place": "weapon assets/shot MC sparkly seeker",
+          "depth": 3101,
+          "x": -430.45,
+          "y": 507.4,
+          "scale": 0.5,
+          "color": {"add": [176, 0, -228, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcAuto",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcAuto.as\""
+        },
+        {
+          "place": "weapon assets/shot MC composite bomb",
+          "depth": 3106,
+          "x": -520.6,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSmart",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#99ff00",
+              "blurX": 9,
+              "blurY": 9,
+              "strength": 2,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ],
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSmart.as\""
+        },
+        {
+          "place": "weapon assets/shot MC sparkly seeker",
+          "depth": 3117,
+          "x": -524.9,
+          "y": 591.7,
+          "scale": [0.579987, 0.580109],
+          "color": {"add": [0, 74, -144, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSmarty",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSmarty.as\""
+        },
+        {
+          "place": "weapon assets/shot MC sparkly seeker",
+          "depth": 3122,
+          "x": -457.75,
+          "y": 507.4,
+          "scale": [0.650024, 0.650177],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcVendetta",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcVendetta.as\""
+        },
+        {
+          "place": "weapon assets/shot MC missile",
+          "depth": 3127,
+          "x": -378.45,
+          "y": 563.8,
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcMissile",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcMissile.as\""
+        },
+        {
+          "place": "weapon assets/shot MC missile",
+          "depth": 3132,
+          "x": -444.9,
+          "y": 563.65,
+          "scale": [1.297394, 1.043701],
+          "color": {"add": [0, 64, 0, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSmartMissile",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSmartMissile.as\""
+        },
+        {
+          "place": "weapon assets/shot MC missile",
+          "depth": 3137,
+          "x": -543.55,
+          "y": 589.75,
+          "scale": [0.619202, 0.619354],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcDrunkRocket",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcDrunkRocket.as\""
+        },
+        {
+          "place": "weapon assets/shot MC group projectile",
+          "depth": 3142,
+          "x": -542.85,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcDrunken",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcDrunken.as\""
+        },
+        {
+          "place": "weapon assets/shot MC group projectile",
+          "depth": 3144,
+          "x": -566.6,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcHellfire",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcHellfire.as\""
+        },
+        {
+          "place": "weapon assets/shot MC group projectile",
+          "depth": 3146,
+          "x": -487.8,
+          "y": 483.4,
+          "scale": [1.000061, 1.000305],
+          "color": {"multiply": [0, 0, 0, 1], "add": [239, 88, 207, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSpreader",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSpreader.as\""
+        },
+        {
+          "place": "weapon assets/shot MC",
+          "depth": 3148,
+          "x": -487.7,
+          "y": 504.65,
+          "scale": [1.000061, 0.806702],
+          "color": {"add": [0, 0, 171, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSpready",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSpready.as\""
+        },
+        {
+          "place": "weapon assets/frag_mc",
+          "depth": 3152,
+          "x": -102.9,
+          "y": 586.9,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "frag_mc",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/frag_mc.as\""
+        },
+        {
+          "place": "weapon assets/shot MC",
+          "depth": 3155,
+          "x": -518.4,
+          "y": 504,
+          "scale": [1.000061, 1.000305],
+          "color": {"multiply": [0, 0, 0, 1]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcReaper",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcReaper.as\""
+        },
+        {
+          "place": "weapon assets/shell MC",
+          "depth": 3159,
+          "x": -285.65,
+          "y": 530.9,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shell_mc",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shell_mc.as\""
+        },
+        {
+          "place": "weapon assets/shot MC flamer",
+          "depth": 3161,
+          "x": -593.95,
+          "y": 477.45,
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcFlamer",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcFlamer.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy homing missile",
+          "depth": 3163,
+          "x": -248.05,
+          "y": 425,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcESeeker",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcESeeker.as\""
+        },
+        {
+          "place": "weapon assets/shot MC group projectile",
+          "depth": 3172,
+          "x": -547.8,
+          "y": 483.4,
+          "scale": [1.000061, 1.000305],
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcStorm",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcStorm.as\""
+        },
+        {
+          "place": "weapon assets/shot MC",
+          "depth": 3174,
+          "x": -547.7,
+          "y": 504.65,
+          "scale": 1.109985,
+          "color": {"add": [255, -49, -48, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcSpreadyFader",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcSpreadyFader.as\""
+        },
+        {
+          "place": "weapon assets/shot MC pea",
+          "depth": 3178,
+          "x": -86.3,
+          "y": 503.6,
+          "scale": [1.25, 1.75],
+          "color": {"add": [-253, 0, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcBurstPlasma",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcBurstPlasma.as\""
+        },
+        {
+          "place": "weapon assets/particle blue",
+          "depth": 3181,
+          "x": -137.4,
+          "y": 633.95,
+          "ratio": 0.000015259021896696422,
+          "name": "particle_mcBlue"
+        },
+        {
+          "place": "weapon assets/particle fire",
+          "depth": 3183,
+          "x": -157.4,
+          "y": 633.95,
+          "ratio": 0.000015259021896696422,
+          "name": "particle_mcFire"
+        },
+        {
+          "place": "weapon assets/particle dust",
+          "depth": 3185,
+          "x": -177.4,
+          "y": 633.95,
+          "ratio": 0.000015259021896696422,
+          "name": "particle_mcDust"
+        },
+        {
+          "place": "weapon assets/shot MC bomb3",
+          "depth": 3187,
+          "x": -313.5,
+          "y": 566.95,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [155, 0, 155, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcPulseBomb",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#6afaff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 3.5,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ],
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcPulseBomb.as\""
+        },
+        {
+          "place": "weapon assets/shot MC sphere bomb",
+          "depth": 3197,
+          "x": -169.9,
+          "y": 566.95,
+          "scale": [1.337158, 1.337509],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcStun",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcStun.as\""
+        },
+        {
+          "place": "weapon assets/shot MC group projectile",
+          "depth": 3212,
+          "x": -112.8,
+          "y": 482.4,
+          "scale": [1.000061, 1.000305],
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 153, 0, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcPhoenix",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcPhoenix.as\""
+        },
+        {
+          "place": "weapon assets/shot MC laser",
+          "depth": 3214,
+          "x": -396.35,
+          "y": 517.35,
+          "scale": [2.818344, 1.000305],
+          "color": {"add": [0, 0, -82, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcUltraLaser",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcUltraLaser.as\""
+        },
+        {
+          "place": "game objects/debris",
+          "depth": 3219,
+          "x": -73.65,
+          "y": 634.3,
+          "ratio": 0.000015259021896696422,
+          "name": "debris_mc",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/debris_mc.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy",
+          "depth": 3221,
+          "x": -85.9,
+          "y": 425,
+          "scale": [1.145493, 1],
+          "color": {"add": [255, 0, -255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcEOrange",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcEOrange.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy",
+          "depth": 3224,
+          "x": -202.9,
+          "y": 424.85,
+          "scale": [0.717972, 1.25],
+          "color": {"add": [-99, -45, 254, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcEPurpleLong",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcEPurpleLong.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy shell",
+          "depth": 3227,
+          "x": -274.8,
+          "y": 426.35,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcECannon",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcECannon.as\""
+        },
+        {"place": "graphic assets/fade in anim", "depth": 3281, "x": 0, "y": 0, "ratio": 0.000015259021896696422}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"remove": 3},
+        {"remove": 5},
+        {"remove": 7},
+        {"remove": 9},
+        {"remove": 125},
+        {"remove": 155},
+        {"remove": 307},
+        {"remove": 632},
+        {"remove": 3281},
+        {
+          "place": "interface/mask wipe",
+          "depth": 3281,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.000030518043793392844,
+          "clipDepth": 3425
+        },
+        {"place": "screen_mc/shape 2", "depth": 3369, "x": 0, "y": 0},
+        {"place": "screen_mc/text 8", "depth": 3370, "x": 90, "y": 164, "scale": [1.000061, 1.000305]},
+        {
+          "place": "screen_mc/text 9",
+          "depth": 3371,
+          "x": 606,
+          "y": 219.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "screen_mc/text 10",
+          "depth": 3372,
+          "x": 591,
+          "y": 315.2,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger core - circle",
+          "depth": 3373,
+          "x": 634.75,
+          "y": 255,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000030518043793392844,
+          "name": "core_mc"
+        },
+        {
+          "place": "enemy assets/enemy stinger turret - oval",
+          "depth": 3377,
+          "x": 634.75,
+          "y": 255,
+          "scale": [0.995041, 1.002441],
+          "ratio": 0.000030518043793392844,
+          "name": "turret_mc"
+        },
+        {"place": "screen_mc/text 11", "depth": 3384, "x": 606, "y": 266.8, "scale": [1.000061, 1.000305]},
+        {
+          "place": "enemy assets/enemy wolfgun core",
+          "depth": 3385,
+          "x": 637.3,
+          "y": 375,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000030518043793392844,
+          "name": "core_mc"
+        },
+        {
+          "place": "enemy assets/enemy wolfgun turret",
+          "depth": 3392,
+          "x": 637.3,
+          "y": 375,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.000030518043793392844,
+          "name": "turret_mc"
+        },
+        {"place": "screen_mc/text 12", "depth": 3404, "x": 606, "y": 406.25, "scale": [1.000061, 1.000305]},
+        {
+          "place": "screen_mc/text 13",
+          "depth": 3405,
+          "x": 87.05,
+          "y": 81.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "screen_mc/text 14",
+          "depth": 3406,
+          "x": 89.05,
+          "y": 75.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"place": "screen_mc/shape 3", "depth": 3407, "x": 0, "y": -40},
+        {
+          "place": "interface/buttons/btn play mission",
+          "depth": 3408,
+          "x": 548,
+          "y": 544,
+          "ratio": 0.000030518043793392844,
+          "clipEvents": [2048, 131072, 131072],
+          "script": [
+            "on (release) {",
+            "    continueLevel();",
+            "}",
+            "on (keyPress \"<Space>\") {",
+            "    continueLevel();",
+            "}",
+            "",
+            "on (keyPress \"<Enter>\") {",
+            "    continueLevel();",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "interface/buttons/btn back to main menu",
+          "depth": 3412,
+          "x": 65,
+          "y": 3.05,
+          "ratio": 0.000030518043793392844,
+          "script": ["on (release) {", "    quit();", "}", "", "on (keyPress \"<Escape>\") {", "    quit();", "}", ""]
+        },
+        {
+          "place": "interface/screens/briefing monitor scanlines anim",
+          "depth": 3416,
+          "x": 0,
+          "y": 0,
+          "color": {"alpha": 0.1484375},
+          "ratio": 0.000030518043793392844,
+          "blend": "overlay"
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "script": "startLevel();",
+      "changes": [
+        {"remove": 3281},
+        {"remove": 3369},
+        {"remove": 3370},
+        {"remove": 3371},
+        {"remove": 3372},
+        {"remove": 3373},
+        {"remove": 3377},
+        {"remove": 3384},
+        {"remove": 3385},
+        {"remove": 3392},
+        {"remove": 3404},
+        {"remove": 3405},
+        {"remove": 3406},
+        {"remove": 3407},
+        {"remove": 3408},
+        {"remove": 3412},
+        {"remove": 3416},
+        {
+          "place": "level assets/background1",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.000045777065690089265,
+          "name": "background_mc"
+        },
+        {
+          "place": "level assets/level1",
+          "depth": 5,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.000045777065690089265,
+          "name": "level_mc"
+        },
+        {
+          "place": "level assets/vision1",
+          "depth": 7,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.000045777065690089265,
+          "name": "vision_mc"
+        },
+        {
+          "place": "game objects/entrance_mc",
+          "depth": 23,
+          "x": 202.7,
+          "y": 495.25,
+          "matrix": [0, 1, -0.999939, 0],
+          "ratio": 0.000045777065690089265,
+          "name": "entrance_mc"
+        },
+        {
+          "place": "game objects/exit_mc",
+          "depth": 139,
+          "x": 355,
+          "y": 501,
+          "ratio": 0.000045777065690089265,
+          "name": "exit_mc"
+        },
+        {
+          "place": "level assets/boxes1",
+          "depth": 169,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.000045777065690089265,
+          "name": "boxes_mc"
+        },
+        {
+          "place": "level assets/powerups1",
+          "depth": 636,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.000045777065690089265,
+          "name": "powerups_mc"
+        },
+        {
+          "place": "level assets/enemies1",
+          "depth": 708,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999863, 1],
+          "ratio": 0.000045777065690089265,
+          "name": "enemies_mc"
+        },
+        {"place": "graphic assets/fade in anim", "depth": 3281, "x": 0, "y": 0, "ratio": 0.000045777065690089265}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"remove": 3},
+        {"remove": 5},
+        {"remove": 7},
+        {"remove": 23},
+        {"remove": 139},
+        {"remove": 169},
+        {"remove": 636},
+        {"remove": 708},
+        {"remove": 3281},
+        {
+          "place": "interface/mask wipe",
+          "depth": 3281,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.00006103608758678569,
+          "clipDepth": 3423
+        },
+        {"place": "screen_mc/shape 2", "depth": 3369, "x": 0, "y": 0},
+        {
+          "place": "game objects/box reactor core",
+          "depth": 3370,
+          "x": 590,
+          "y": 357,
+          "ratio": 0.00006103608758678569,
+          "name": "core_mc"
+        },
+        {
+          "place": "game objects/box reactor rods",
+          "depth": 3372,
+          "x": 637,
+          "y": 387.5,
+          "ratio": 0.00006103608758678569
+        },
+        {
+          "place": "game objects/box reactor ring pulse",
+          "depth": 3377,
+          "x": 637.2,
+          "y": 387.15,
+          "ratio": 0.00006103608758678569
+        },
+        {
+          "place": "game objects/box reactor glow",
+          "depth": 3379,
+          "x": 637,
+          "y": 388,
+          "color": {"alpha": 0.3515625},
+          "ratio": 0.00006103608758678569,
+          "blend": "screen"
+        },
+        {"place": "screen_mc/text 15", "depth": 3381, "x": 90, "y": 164, "scale": [1.000061, 1.000305]},
+        {
+          "place": "screen_mc/text 16",
+          "depth": 3382,
+          "x": 606.35,
+          "y": 229.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "screen_mc/text 17",
+          "depth": 3383,
+          "x": 591.35,
+          "y": 334.2,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger core - circle",
+          "depth": 3384,
+          "x": 637.05,
+          "y": 265,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.00006103608758678569,
+          "name": "core_mc"
+        },
+        {"place": "_shared/shape 618", "depth": 3396, "x": 637.05, "y": 265, "scale": [1.000061, 1.000305]},
+        {
+          "place": "_blank MC",
+          "depth": 3397,
+          "x": 637.05,
+          "y": 265,
+          "scale": [1.000061, 1.000305],
+          "ratio": 0.00006103608758678569,
+          "name": "muzzle_mc"
+        },
+        {
+          "place": "_glow",
+          "depth": 3399,
+          "x": 637.05,
+          "y": 265,
+          "scale": [1.000061, 1.000305],
+          "color": {"alpha": 0.859375},
+          "ratio": 0.00006103608758678569,
+          "name": "flash_mc",
+          "blend": "add",
+          "clipEvents": [1]
+        },
+        {"place": "screen_mc/text 18", "depth": 3401, "x": 606.35, "y": 276.8, "scale": [1.000061, 1.000305]},
+        {"place": "screen_mc/text 19", "depth": 3402, "x": 606.35, "y": 426.25, "scale": [1.000061, 1.000305]},
+        {
+          "place": "screen_mc/text 20",
+          "depth": 3403,
+          "x": 87.05,
+          "y": 81.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "screen_mc/text 21",
+          "depth": 3404,
+          "x": 89.05,
+          "y": 75.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"place": "screen_mc/shape 3", "depth": 3405, "x": 0, "y": -30},
+        {
+          "place": "interface/buttons/btn play mission",
+          "depth": 3406,
+          "x": 548,
+          "y": 544,
+          "ratio": 0.00006103608758678569,
+          "clipEvents": [2048, 131072, 131072],
+          "script": [
+            "on (release) {",
+            "    continueLevel();",
+            "}",
+            "on (keyPress \"<Space>\") {",
+            "    continueLevel();",
+            "}",
+            "",
+            "on (keyPress \"<Enter>\") {",
+            "    continueLevel();",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "interface/buttons/btn back to main menu",
+          "depth": 3410,
+          "x": 65,
+          "y": 3.05,
+          "ratio": 0.00006103608758678569,
+          "script": ["on (release) {", "    quit();", "}", "", "on (keyPress \"<Escape>\") {", "    quit();", "}", ""]
+        },
+        {
+          "place": "interface/screens/briefing monitor scanlines anim",
+          "depth": 3414,
+          "x": 0,
+          "y": 0,
+          "color": {"alpha": 0.1484375},
+          "ratio": 0.00006103608758678569,
+          "blend": "overlay"
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "script": "startLevel();",
+      "changes": [
+        {"remove": 3281},
+        {"remove": 3369},
+        {"remove": 3370},
+        {"remove": 3372},
+        {"remove": 3377},
+        {"remove": 3379},
+        {"remove": 3381},
+        {"remove": 3382},
+        {"remove": 3383},
+        {"remove": 3384},
+        {"remove": 3396},
+        {"remove": 3397},
+        {"remove": 3399},
+        {"remove": 3401},
+        {"remove": 3402},
+        {"remove": 3403},
+        {"remove": 3404},
+        {"remove": 3405},
+        {"remove": 3406},
+        {"remove": 3410},
+        {"remove": 3414},
+        {
+          "place": "level assets/background2",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.00007629510948348211,
+          "name": "background_mc"
+        },
+        {
+          "place": "level assets/level2",
+          "depth": 5,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.00007629510948348211,
+          "name": "level_mc"
+        },
+        {
+          "place": "level assets/vision2",
+          "depth": 7,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.00007629510948348211,
+          "name": "vision_mc"
+        },
+        {
+          "place": "game objects/entrance_mc",
+          "depth": 23,
+          "x": 75,
+          "y": 511.4,
+          "scale": [0.999939, 1],
+          "ratio": 0.00007629510948348211,
+          "name": "entrance_mc"
+        },
+        {
+          "place": "game objects/exit_mc",
+          "depth": 139,
+          "x": 700,
+          "y": 494,
+          "ratio": 0.00007629510948348211,
+          "name": "exit_mc"
+        },
+        {
+          "place": "level assets/boxes2",
+          "depth": 169,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1.000092],
+          "ratio": 0.00007629510948348211,
+          "name": "boxes_mc"
+        },
+        {
+          "place": "level assets/powerups2",
+          "depth": 591,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999863, 1],
+          "ratio": 0.00007629510948348211,
+          "name": "powerups_mc"
+        },
+        {
+          "place": "game objects/node",
+          "depth": 978,
+          "x": 729.5,
+          "y": 164.4,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 980,
+          "x": 740.5,
+          "y": 312,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 982,
+          "x": 516.5,
+          "y": 316,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 984,
+          "x": 266.5,
+          "y": 297,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 986,
+          "x": 211.5,
+          "y": 226.5,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 988,
+          "x": 157.5,
+          "y": 156.5,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 990,
+          "x": 77.5,
+          "y": 156.5,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 992,
+          "x": 83.5,
+          "y": 493.7,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 994,
+          "x": 250.5,
+          "y": 449.6,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 996,
+          "x": 186.5,
+          "y": 523.75,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 998,
+          "x": 361.5,
+          "y": 454.45,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 1000,
+          "x": 621.5,
+          "y": 503.4,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 1002,
+          "x": 623.5,
+          "y": 164.4,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "ratio": 0.00007629510948348211
+        },
+        {
+          "place": "game objects/node",
+          "depth": 1004,
+          "x": 605.5,
+          "y": 540.3,
+          "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+          "ratio": 0.00007629510948348211,
+          "name": "a3",
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    connections = [_parent.a2, _parent.a4]", "}", ""]
+        },
+        {
+          "place": "game objects/node",
+          "depth": 1006,
+          "x": 361.55,
+          "y": 540.3,
+          "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+          "ratio": 0.00007629510948348211,
+          "name": "a4",
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    connections = [_parent.a3, _parent.a1]", "}", ""]
+        },
+        {
+          "place": "game objects/node",
+          "depth": 1008,
+          "x": 361.55,
+          "y": 416.3,
+          "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+          "ratio": 0.00007629510948348211,
+          "name": "a1",
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    connections = [_parent.a4, _parent.a2]", "}", ""]
+        },
+        {
+          "place": "game objects/node",
+          "depth": 1010,
+          "x": 606.5,
+          "y": 416.75,
+          "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+          "ratio": 0.00007629510948348211,
+          "name": "a2",
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    connections = [_parent.a1, _parent.a3]", "}", ""]
+        },
+        {
+          "place": "level assets/enemies2",
+          "depth": 1012,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999863, 1.000183],
+          "ratio": 0.00007629510948348211,
+          "name": "enemies_mc"
+        },
+        {"place": "graphic assets/fade in anim", "depth": 3281, "x": 0, "y": 0, "ratio": 0.00007629510948348211}
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"remove": 3},
+        {"remove": 5},
+        {"remove": 7},
+        {"remove": 23},
+        {"remove": 139},
+        {"remove": 169},
+        {"remove": 591},
+        {"remove": 978},
+        {"remove": 980},
+        {"remove": 982},
+        {"remove": 984},
+        {"remove": 986},
+        {"remove": 988},
+        {"remove": 990},
+        {"remove": 992},
+        {"remove": 994},
+        {"remove": 996},
+        {"remove": 998},
+        {"remove": 1000},
+        {"remove": 1002},
+        {"remove": 1004},
+        {"remove": 1006},
+        {"remove": 1008},
+        {"remove": 1010},
+        {"remove": 1012},
+        {"remove": 3281},
+        {
+          "place": "interface/mask wipe",
+          "depth": 3281,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.00009155413138017853,
+          "clipDepth": 3445
+        },
+        {"place": "screen_mc/shape 2", "depth": 3369, "x": 0, "y": 0},
+        {"place": "screen_mc/text 22", "depth": 3370, "x": 90, "y": 164, "scale": [1.000061, 1.000305]},
+        {
+          "place": "enemy assets/enemy double battery core",
+          "depth": 3371,
+          "x": 636.55,
+          "y": 282.8,
+          "ratio": 0.00009155413138017853,
+          "name": "core_mc"
+        },
+        {
+          "place": "enemy assets/enemy double battery turret",
+          "depth": 3375,
+          "x": 637.05,
+          "y": 281.8,
+          "scale": [1.001648, 1],
+          "ratio": 0.00009155413138017853,
+          "name": "turret_mc"
+        },
+        {
+          "place": "screen_mc/text 23",
+          "depth": 3387,
+          "x": 605.25,
+          "y": 209.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"place": "screen_mc/text 24", "depth": 3388, "x": 605.25, "y": 316.8, "scale": [1.000061, 1.000305]},
+        {"place": "_shared/shape 673", "depth": 3422, "x": 636.55, "y": 394.55},
+        {
+          "place": "screen_mc/text 25",
+          "depth": 3423,
+          "x": 605.25,
+          "y": 359.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"place": "screen_mc/text 26", "depth": 3424, "x": 605.25, "y": 416.8, "scale": [1.000061, 1.000305]},
+        {
+          "place": "screen_mc/text 27",
+          "depth": 3425,
+          "x": 87.05,
+          "y": 81.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "screen_mc/text 28",
+          "depth": 3426,
+          "x": 89.05,
+          "y": 75.8,
+          "scale": [1.000061, 1.000305],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 15,
+              "blurY": 15,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"place": "screen_mc/shape 3", "depth": 3427, "x": 0, "y": 0},
+        {
+          "place": "interface/buttons/btn play mission",
+          "depth": 3428,
+          "x": 548,
+          "y": 544,
+          "ratio": 0.00009155413138017853,
+          "clipEvents": [2048, 131072, 131072],
+          "script": [
+            "on (release) {",
+            "    continueLevel();",
+            "}",
+            "on (keyPress \"<Space>\") {",
+            "    continueLevel();",
+            "}",
+            "",
+            "on (keyPress \"<Enter>\") {",
+            "    continueLevel();",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "interface/buttons/btn back to main menu",
+          "depth": 3432,
+          "x": 65,
+          "y": 3.05,
+          "ratio": 0.00009155413138017853,
+          "script": ["on (release) {", "    quit();", "}", "", "on (keyPress \"<Escape>\") {", "    quit();", "}", ""]
+        },
+        {
+          "place": "interface/screens/briefing monitor scanlines anim",
+          "depth": 3436,
+          "x": 0,
+          "y": 0,
+          "color": {"alpha": 0.1484375},
+          "ratio": 0.00009155413138017853,
+          "blend": "overlay"
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "script": "startLevel();",
+      "changes": [
+        {"remove": 3281},
+        {"remove": 3369},
+        {"remove": 3370},
+        {"remove": 3371},
+        {"remove": 3375},
+        {"remove": 3387},
+        {"remove": 3388},
+        {"remove": 3422},
+        {"remove": 3423},
+        {"remove": 3424},
+        {"remove": 3425},
+        {"remove": 3426},
+        {"remove": 3427},
+        {"remove": 3428},
+        {"remove": 3432},
+        {"remove": 3436},
+        {
+          "place": "level assets/background3",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.00010681315327687495,
+          "name": "background_mc",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#785949",
+              "blurX": 50,
+              "blurY": 50,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        },
+        {
+          "place": "game objects/door",
+          "depth": 36,
+          "x": 187.95,
+          "y": 50.4,
+          "ratio": 0.00010681315327687495,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    //status = \"open\";", "    id = \"door1\";", "}", ""]
+        },
+        {
+          "place": "game objects/door",
+          "depth": 63,
+          "x": 1009.9,
+          "y": 50.4,
+          "ratio": 0.00010681315327687495,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    id = \"door2\";", "}", ""]
+        },
+        {
+          "place": "game objects/door",
+          "depth": 90,
+          "x": 1009.9,
+          "y": 550.35,
+          "ratio": 0.00010681315327687495,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    id = \"door3\";", "}", ""]
+        },
+        {
+          "place": "game objects/door",
+          "depth": 117,
+          "x": 1211.9,
+          "y": 501.15,
+          "scale": [1, 0.857391],
+          "ratio": 0.00010681315327687495,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    id = \"door4\";", "}", ""]
+        },
+        {
+          "place": "game objects/door",
+          "depth": 144,
+          "x": 1281.35,
+          "y": 81.75,
+          "matrix": [0.707108, -0.707092, 0.750122, 0.750137],
+          "ratio": 0.00010681315327687495,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    id = \"door5\";", "}", ""]
+        },
+        {
+          "place": "level assets/level3",
+          "depth": 171,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.00010681315327687495,
+          "name": "level_mc"
+        },
+        {
+          "place": "level assets/vision3",
+          "depth": 205,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1],
+          "ratio": 0.00010681315327687495,
+          "name": "vision_mc"
+        },
+        {
+          "place": "game objects/entrance_mc",
+          "depth": 237,
+          "x": 86.05,
+          "y": 522,
+          "matrix": [0.865982, 0.499969, -0.5, 0.866028],
+          "ratio": 0.00010681315327687495,
+          "name": "entrance_mc"
+        },
+        {
+          "place": "game objects/exit_mc",
+          "depth": 353,
+          "x": 1499,
+          "y": 101,
+          "ratio": 0.00010681315327687495,
+          "name": "exit_mc"
+        },
+        {
+          "place": "level assets/boxes3",
+          "depth": 383,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999939, 1.000092],
+          "ratio": 0.00010681315327687495,
+          "name": "boxes_mc"
+        },
+        {
+          "place": "level assets/powerups3",
+          "depth": 1368,
+          "x": 0,
+          "y": 0,
+          "scale": [0.999863, 1],
+          "ratio": 0.00010681315327687495,
+          "name": "powerups_mc"
+        },
+        {
+          "place": "level assets/enemies3",
+          "depth": 2035,
+          "x": 0,
+          "y": 0,
+          "scale": [1.000031, 1.000092],
+          "ratio": 0.00010681315327687495,
+          "name": "enemies_mc"
+        }
+      ]
+    }
+  ]
+}

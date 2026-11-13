@@ -1,0 +1,23 @@
+{
+  "kind": "text field",
+  "bounds": [12.9, 67.1, -2, 13],
+  "wordWrap": false,
+  "multiline": false,
+  "password": false,
+  "readOnly": true,
+  "font": "fonts/uni 05_53",
+  "size": 8,
+  "color": "#ffffff",
+  "autoSize": false,
+  "align": "center",
+  "leftMargin": 0,
+  "rightMargin": 0,
+  "indent": 0,
+  "leading": 0.75,
+  "noSelect": true,
+  "border": false,
+  "html": true,
+  "useOutlines": true,
+  "variable": "",
+  "text": "<p align=\"center\"><font face=\"uni 05_53_8pt_st\" size=\"8\" color=\"#ffffff\" letterSpacing=\"0.000000\" kerning=\"1\">ATTENTION</font></p>"
+}

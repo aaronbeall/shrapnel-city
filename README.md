@@ -7,11 +7,11 @@ and blend-mode lighting behave as they did in Flash Player.
 
 ## Play
 
-Online: https://aaronbeall.github.io/shrapnel-city/ (GitHub Pages serves `main` as is; there is no build step).
+Online: https://aaronbeall.github.io/shrapnel-city/ (GitHub Pages serves `main` as is).
 
 ## Run locally
 
-No build step. Serve the folder and open it:
+Serve the folder and open it (the built files are committed, so no build is needed to play):
 
 ```sh
 npm run serve        # python3 -m http.server 8123
@@ -29,18 +29,29 @@ Open `tools/explorer.html` (online: https://aaronbeall.github.io/shrapnel-city/t
 
 Open `index.html?bench` to run seven scripted heavy scenes (Heat Ray, Flamer, cluster bombs, a whole level exploding at once, a Bridge firefight, the Esc menu) with seeded randomness. A table of game-logic (tick) and drawing (render) times per frame is shown when it finishes. `&only=heatray,flamer`, `&quality=low|medium|high`, `&scale=2` and `&stats` (per-layer counts) narrow it down. `node tools/bench.mjs scale=2` runs the same thing headless.
 
+## Editing the game
+
+Art, animation, timelines and the scripts attached to them live in `source/` (see [source/README.md](source/README.md)); game code lives in `as2/`. After changing either:
+
+```sh
+npm run build        # source/ -> assets/, then as2/ + scripts -> src/generated/scripts.js
+```
+
+Commit the rebuilt `assets/` and `src/generated/` with your change, since GitHub Pages serves the repo as is. `npm run check` verifies `assets/` matches `source/`.
+
 ## Layout
 
 | Path | What |
 | --- | --- |
-| `original/` | The untouched v14 `shrapnel.fla` and `shrapnel.swf` (July 2012) that everything below was extracted from |
-| `as2/` | Original AS2 sources (`#include`d by the FLA's frame and instance scripts) |
-| `assets/swf.json`, `assets/bitmaps/` | Shapes, morphs, sprites, fonts, bitmaps extracted from the v14 SWF |
-| `assets/symbols.json` | FLA (XFL) symbol names, linkage ids, frame scripts and instance scripts mapped onto SWF character ids |
+| `source/` | **The editable source for art and timelines**: the FLA as one readable file per library symbol, plus the main timeline. See [source/README.md](source/README.md) |
+| `as2/` | ActionScript 2 sources. `as2/*.as` are the original files; `as2/frames/` and `as2/shots/` hold the larger frame scripts and the 66 projectile templates moved out of the FLA, `#include`d from `source/` |
+| `assets/swf.json`, `assets/symbols.json`, `assets/bitmaps/` | What the runtime loads. Built from `source/` with `npm run build:assets`; never hand-edit |
+| `original/` | The untouched v14 `shrapnel.fla` and `shrapnel.swf` (July 2012) that `source/` was converted from |
 | `src/generated/scripts.js` | Compiled game scripts. Regenerate with `npm run build:scripts`; never hand-edit |
+| `tools/flash-source/` | `build.mjs` turns `source/` into `assets/` (`--check` proves they match); `export.mjs` did the one-time conversion |
 | `src/flash/` | Runtime: display list and timeline, renderer (blend modes, glow/blur filters, masks), AS2 environment and builtins, BitmapData |
-| `tools/swf2json.py` | SWF parser that produces `assets/swf.json` and `assets/bitmaps/` |
-| `tools/xflmap.py` | Maps the FLA's XFL library onto SWF character ids, producing `assets/symbols.json` |
+| `tools/swf2json.py` | SWF parser used for the original extraction from `original/shrapnel.swf` |
+| `tools/xflmap.py` | Mapped the FLA's library names and scripts onto the SWF for the original extraction |
 | `tools/as2js.mjs` | AS2 to JS compiler (acorn + astring) that keeps AVM1 scoping rules |
 | `tools/explorer.html` | Asset explorer: weapons, enemies, objects, items, player, effects, level maps and the full library, animated by the runtime, with a frame-by-frame inspector |
 | `tools/gallery.html` | Symbol contact sheet for checking extracted art |

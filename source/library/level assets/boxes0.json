@@ -1,0 +1,23 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "game objects/box", "depth": 1, "x": 722, "y": 62},
+        {"place": "game objects/box", "depth": 16, "x": 658, "y": 62},
+        {"place": "game objects/box", "depth": 31, "x": 594, "y": 62},
+        {"place": "game objects/box", "depth": 46, "x": 722, "y": 125},
+        {"place": "game objects/box", "depth": 61, "x": 658, "y": 125},
+        {"place": "game objects/box", "depth": 76, "x": 594, "y": 125},
+        {"place": "game objects/box", "depth": 91, "x": 651, "y": 344},
+        {"place": "game objects/box", "depth": 106, "x": 631, "y": 324},
+        {"place": "game objects/box", "depth": 121, "x": 671, "y": 324},
+        {"place": "game objects/box", "depth": 136, "x": 631, "y": 364},
+        {"place": "game objects/box", "depth": 151, "x": 671, "y": 364}
+      ]
+    }
+  ]
+}

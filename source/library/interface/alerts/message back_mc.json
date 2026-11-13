@@ -1,0 +1,7 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "scale9": [-119.05, 122.35, -25.5, 25.5],
+  "frames": 1,
+  "timeline": [{"frame": 1, "changes": [{"place": "interface/alerts/message back_mc/shape 1", "depth": 1, "x": 0, "y": 0}]}]
+}

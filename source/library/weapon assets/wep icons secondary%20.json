@@ -1,0 +1,426 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 25,
+  "timeline": [
+    {"frame": 1, "script": "stop()", "changes": [{"place": "_shared/shape 106", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 2, "changes": [{"replace": "_shared/shape 107", "depth": 1, "x": 0, "y": 0, "scale": [1.000061, 1.000305]}]},
+    {"frame": 3, "changes": [{"replace": "weapon assets/wep icons secondary /shape 1", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 4, "changes": [{"replace": "_shared/shape 109", "depth": 1, "x": 0, "y": 0, "scale": [1.337158, 1.337509]}]},
+    {
+      "frame": 5,
+      "changes": [{"replace": "_shared/shape 110", "depth": 1, "x": -0.05, "y": 0, "scale": [1.000061, 1.000305]}]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {
+          "replace": "_shared/shape 111",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [200, 200, 255, 0]}
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"remove": 1},
+        {
+          "place": "_shared/shape 112",
+          "depth": 9,
+          "x": 0,
+          "y": 0,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [35, 55, 255, 0]}
+        }
+      ]
+    },
+    {"frame": 8, "changes": [{"update": 9, "color": {"add": [155, 0, 155, 0]}}]},
+    {
+      "frame": 9,
+      "changes": [{"remove": 9}, {"place": "_shared/shape 113", "depth": 7, "x": 0, "y": 0.05, "scale": [1.000061, 1.000305]}]
+    },
+    {
+      "frame": 10,
+      "changes": [{"remove": 7}, {"place": "_shared/shape 114", "depth": 1, "x": -0.1, "y": 0, "scale": [1.000061, 1.000305]}]
+    },
+    {"frame": 11, "changes": [{"update": 1, "color": {"add": [190, 190, 4, 0]}}]},
+    {
+      "frame": 12,
+      "changes": [{"remove": 1}, {"place": "_shared/shape 115", "depth": 10, "x": 0, "y": 0, "scale": [1.000061, 1.000305]}]
+    },
+    {"frame": 13, "changes": [{"remove": 10}]},
+    {
+      "frame": 14,
+      "changes": [
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 1,
+          "x": -10.3,
+          "y": 0.05,
+          "matrix": [0, 0.377701, -0.377792, 0],
+          "ratio": 0.00019836728465705348,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 3,
+          "x": 1.95,
+          "y": 0,
+          "matrix": [0, 0.380005, -0.380096, 0],
+          "ratio": 0.00019836728465705348
+        }
+      ]
+    },
+    {
+      "frame": 15,
+      "changes": [
+        {
+          "update": 1,
+          "x": -8.8,
+          "y": 0.05,
+          "matrix": [0, 0.377701, -0.377792, 0],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"update": 3, "x": 3.45, "y": 0, "matrix": [0, 0.380005, -0.380096, 0]},
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 10,
+          "x": -11.8,
+          "y": -5.95,
+          "matrix": [0, 0.377701, -0.377792, 0],
+          "ratio": 0.0002136263065537499,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 12,
+          "x": 0.45,
+          "y": -6,
+          "matrix": [0, 0.380005, -0.380096, 0],
+          "ratio": 0.0002136263065537499
+        },
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 19,
+          "x": -14.8,
+          "y": 6.05,
+          "matrix": [0, 0.377701, -0.377792, 0],
+          "ratio": 0.0002136263065537499,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 21,
+          "x": -2.55,
+          "y": 6,
+          "matrix": [0, 0.380005, -0.380096, 0],
+          "ratio": 0.0002136263065537499
+        }
+      ]
+    },
+    {
+      "frame": 16,
+      "changes": [
+        {"remove": 10},
+        {"remove": 12},
+        {"remove": 19},
+        {"remove": 21},
+        {
+          "update": 1,
+          "x": -19.2,
+          "y": -0.15,
+          "matrix": [0, 0.660645, -0.660767, 0],
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"update": 3, "x": 2.2, "y": -0.2, "matrix": [0, 0.664658, -0.66478, 0]}
+      ]
+    },
+    {
+      "frame": 17,
+      "changes": [
+        {"remove": 1},
+        {"remove": 3},
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 1,
+          "x": -16.45,
+          "y": -0.1,
+          "matrix": [0, 0.610016, -0.610168, 0],
+          "ratio": 0.00024414435034714275,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 3,
+          "x": 3.2,
+          "y": 0,
+          "matrix": [0, 0.613724, -0.613876, 0],
+          "ratio": 0.00024414435034714275
+        },
+        {"place": "_shared/shape 121", "depth": 10, "x": 3.2, "y": 0, "matrix": [0, 1.000061, -1.000305, 0]}
+      ]
+    },
+    {
+      "frame": 18,
+      "changes": [
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 11,
+          "x": -22.45,
+          "y": -6.1,
+          "matrix": [0, 0.610016, -0.610168, 0],
+          "ratio": 0.00025940337224383917,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 13,
+          "x": -2.8,
+          "y": -6,
+          "matrix": [0, 0.613724, -0.613876, 0],
+          "ratio": 0.00025940337224383917
+        },
+        {"place": "_shared/shape 121", "depth": 20, "x": -2.8, "y": -6, "matrix": [0, 1.000061, -1.000305, 0]},
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 21,
+          "x": -22.45,
+          "y": 5.9,
+          "matrix": [0, 0.610016, -0.610168, 0],
+          "ratio": 0.00025940337224383917,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 23,
+          "x": -2.8,
+          "y": 6,
+          "matrix": [0, 0.613724, -0.613876, 0],
+          "ratio": 0.00025940337224383917
+        },
+        {"place": "_shared/shape 121", "depth": 30, "x": -2.8, "y": 6, "matrix": [0, 1.000061, -1.000305, 0]}
+      ]
+    },
+    {
+      "frame": 19,
+      "changes": [
+        {"remove": 1},
+        {"remove": 3},
+        {"remove": 10},
+        {"remove": 11},
+        {"remove": 13},
+        {"remove": 20},
+        {"remove": 21},
+        {"remove": 23},
+        {"remove": 30},
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 1,
+          "x": -28.15,
+          "y": 0.05,
+          "matrix": [0, 0.507095, -0.871323, 0],
+          "color": {"add": [106, 0, -116, 0]},
+          "ratio": 0.0002746623941405356,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 3,
+          "x": 0.05,
+          "y": 0,
+          "matrix": [0, 0.510178, -0.876617, 0],
+          "color": {"add": [106, 0, -116, 0]},
+          "ratio": 0.0002746623941405356
+        }
+      ]
+    },
+    {
+      "frame": 20,
+      "changes": [
+        {
+          "update": 1,
+          "x": -17.3,
+          "y": 0.05,
+          "matrix": [0, 0.791397, -0.636642, 0],
+          "color": {"add": [0, 64, 0, 0]},
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {"update": 3, "x": 3.3, "y": 0, "matrix": [0, 0.796204, -0.640518, 0], "color": {"add": [0, 64, 0, 0]}}
+      ]
+    },
+    {
+      "frame": 21,
+      "changes": [
+        {"remove": 1},
+        {"remove": 3},
+        {
+          "place": "graphic assets/heat trail anim",
+          "depth": 1,
+          "x": -16.45,
+          "y": -0.1,
+          "matrix": [0, 1.090057, -0.610168, 0],
+          "ratio": 0.00030518043793392844,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 10,
+              "blurY": 10,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "weapon assets/warhead",
+          "depth": 3,
+          "x": 3.2,
+          "y": 0,
+          "matrix": [0, 1.096558, -0.614944, 0],
+          "color": {"add": [204, 0, 0, 0]},
+          "ratio": 0.00030518043793392844
+        }
+      ]
+    },
+    {
+      "frame": 22,
+      "changes": [
+        {"remove": 1},
+        {"remove": 3},
+        {
+          "place": "_shared/shape 106",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "scale": [1.000061, 1.000305],
+          "color": {"add": [176, -14, -14, 0]}
+        }
+      ]
+    },
+    {
+      "frame": 23,
+      "changes": [{"remove": 1}, {"place": "_shared/shape 122", "depth": 5, "x": 0, "y": 0, "scale": [1.337158, 1.337509]}]
+    },
+    {
+      "frame": 24,
+      "changes": [{"remove": 5}, {"place": "_shared/shape 123", "depth": 4, "x": 0, "y": 0, "scale": [1.330078, 1.330429]}]
+    },
+    {"frame": 25, "changes": [{"update": 4, "color": {"add": [-70, 0, 74, 0]}}]}
+  ]
+}

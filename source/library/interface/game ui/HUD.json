@@ -1,0 +1,125 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "interface/game ui/HUD/shape 1", "depth": 1, "x": 0, "y": 0},
+        {"place": "interface/game ui/HUD/text 1", "depth": 2, "x": 295, "y": 1},
+        {"place": "interface/game ui/HUD/text field 1", "depth": 3, "x": 168, "y": 4, "name": "weapon1_txt"},
+        {"place": "interface/game ui/HUD/text field 2", "depth": 4, "x": 526, "y": 4, "name": "weapon2_txt"},
+        {"place": "interface/game ui/HUD/text field 3", "depth": 5, "x": 149, "y": 4, "name": "ammo1_txt"},
+        {"place": "interface/game ui/HUD/text field 4", "depth": 6, "x": 516, "y": 4, "name": "ammo2_txt"},
+        {"place": "interface/game ui/HUD/text field 5", "depth": 7, "x": 4, "y": 1, "name": "level_txt"},
+        {"place": "interface/game ui/HUD/shape 2", "depth": 8, "x": 0, "y": 0},
+        {"place": "weapon assets/wep icons primary - guns", "depth": 9, "x": 140, "y": 10, "name": "weapon1_mc"},
+        {
+          "place": "weapon assets/wep icons secondary ",
+          "depth": 11,
+          "x": 508.3,
+          "y": 11,
+          "name": "weapon2_mc",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#000000",
+              "blurX": 5,
+              "blurY": 5,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        },
+        {"place": "interface/game ui/HUD weapon flash", "depth": 42, "x": 214.65, "y": 11.15, "name": "flash1_mc"},
+        {
+          "place": "interface/game ui/HUD weapon flash",
+          "depth": 44,
+          "x": 584.55,
+          "y": 11.15,
+          "scale": [-1, 1],
+          "name": "flash2_mc"
+        },
+        {"place": "interface/game ui/HUD health flash", "depth": 46, "x": 400.4, "y": 13.5, "name": "healthFlash_mc"},
+        {"place": "interface/game ui/HUD/shape 3", "depth": 48, "x": 0, "y": 0},
+        {"place": "interface/game ui/HUD shield bar", "depth": 49, "x": 351, "y": 13, "name": "healthbar_mc"},
+        {"place": "interface/game ui/HUD/shape 4", "depth": 51, "x": 0, "y": 0},
+        {
+          "place": "interface/buttons/btn <?>",
+          "depth": 52,
+          "x": 743,
+          "y": 11,
+          "clipEvents": [8192, 2048],
+          "script": [
+            "on (rollOver) {",
+            "    _parent.tooltip_mc.show(\"HELP\", this);",
+            "}",
+            "",
+            "on (release) {",
+            "    showDialog(\"helpScreen\")",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "interface/buttons/btn <qaulity>",
+          "depth": 54,
+          "x": 765,
+          "y": 11,
+          "clipEvents": [8192, 2048],
+          "script": [
+            "on (rollOver) {",
+            "    _parent.tooltip_mc.show(currentQuality + \" QUALITY\", this);",
+            "}",
+            "",
+            "on (release) {",
+            "    toggleQuality();",
+            "    _parent.tooltip_mc.show(currentQuality + \" QUALITY\", this);",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "interface/buttons/btn <x>",
+          "depth": 56,
+          "x": 787,
+          "y": 11,
+          "clipEvents": [8192, 2048],
+          "script": [
+            "on (rollOver) {",
+            "    _parent.tooltip_mc.show(\"MENU\", this);",
+            "}",
+            "",
+            "on (release) {",
+            "    showDialog(\"menuScreen\")",
+            "}",
+            ""
+          ]
+        },
+        {"place": "interface/game ui/inventory_mc", "depth": 58, "x": 315, "y": 580, "name": "inventory_mc"},
+        {
+          "place": "interface/game ui/tooltip",
+          "depth": 63,
+          "x": 762,
+          "y": 29,
+          "name": "tooltip_mc",
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#ffffff",
+              "blurX": 3,
+              "blurY": 3,
+              "strength": 0.546875,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

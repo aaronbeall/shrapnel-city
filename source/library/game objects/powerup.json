@@ -1,0 +1,67 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "powerup"},
+  "frames": 29,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/powerup.as\"",
+      "changes": [
+        {
+          "place": "_box",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "scale": 0.5,
+          "color": {"alpha": 0.25},
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    _parent.hitArea = this;", "    _visible = false;", "}", ""]
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "label": "health",
+      "changes": [
+        {"place": "game objects/powerup/shape 1", "depth": 3, "x": 0, "y": 0},
+        {
+          "place": "graphic assets/crosshairs anim",
+          "depth": 34,
+          "x": -0.05,
+          "y": 0.15,
+          "ratio": 0.000015259021896696422
+        }
+      ]
+    },
+    {"frame": 9, "changes": [{"remove": 3}]},
+    {
+      "frame": 10,
+      "label": "primary",
+      "changes": [
+        {
+          "place": "weapon assets/wep icons primary - projectiles",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.0001373311970702678,
+          "name": "icons_mc"
+        }
+      ]
+    },
+    {"frame": 19, "changes": [{"remove": 3}]},
+    {
+      "frame": 20,
+      "label": "secondary",
+      "changes": [
+        {
+          "place": "weapon assets/wep icons secondary ",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.000289921416037232,
+          "name": "icons_mc"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,562 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "enemy assets/enemy scurge", "depth": 1, "x": 39.45, "y": 404.7},
+        {"place": "enemy assets/enemy scurge", "depth": 18, "x": 39.45, "y": 344.7},
+        {"place": "enemy assets/enemy scurge", "depth": 35, "x": 69.45, "y": 374.7},
+        {"place": "enemy assets/enemy scurge", "depth": 52, "x": 159.4, "y": 253.4},
+        {"place": "enemy assets/enemy scurge", "depth": 69, "x": 159.4, "y": 193.4},
+        {"place": "enemy assets/enemy scurge", "depth": 86, "x": 129.4, "y": 223.4},
+        {"place": "enemy assets/enemy stinger", "depth": 103, "x": 323.9, "y": 228.5, "matrix": [0, -1, 1, 0]},
+        {
+          "place": "enemy assets/enemy stinger2",
+          "depth": 113,
+          "x": 39.4,
+          "y": 38.9,
+          "matrix": [-0.707108, 0.707108, -0.707108, -0.707108],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Banshee\",",
+            "        quantity:100",
+            "    }",
+            "}"
+          ]
+        },
+        {"place": "enemy assets/enemy stinger", "depth": 123, "x": 323.9, "y": 351.5, "matrix": [0, -1, 1, 0]},
+        {
+          "place": "enemy assets/enemy wolfgun",
+          "depth": 133,
+          "x": 246.95,
+          "y": 475.75,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    ",
+            "    health = 200;",
+            "    ",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Plasma\",",
+            "        quantity:10",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 142,
+          "x": 149.95,
+          "y": 50.5,
+          "matrix": [-0.25882, 0.965927, -0.965927, -0.25882]
+        },
+        {
+          "place": "enemy assets/enemy wolfgun",
+          "depth": 152,
+          "x": 468,
+          "y": 202.8,
+          "matrix": [-0.5, -0.866028, 0.866028, -0.5]
+        },
+        {
+          "place": "enemy assets/enemy wolfgun",
+          "depth": 161,
+          "x": 468,
+          "y": 386.8,
+          "matrix": [0.5, -0.866028, 0.866028, 0.5]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 170,
+          "x": 370.8,
+          "y": 48.5,
+          "matrix": [-0.866028, 0.5, -0.5, -0.866028]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 180,
+          "x": 369.8,
+          "y": 555.45,
+          "matrix": [0.806778, 0.588211, -0.588211, 0.806778]
+        },
+        {"place": "enemy assets/enemy stinger", "depth": 190, "x": 216.95, "y": 435.45},
+        {"place": "enemy assets/enemy stinger", "depth": 200, "x": 277.9, "y": 435.45},
+        {"place": "enemy assets/enemy stinger", "depth": 210, "x": 216.95, "y": 288.5},
+        {"place": "enemy assets/enemy stinger", "depth": 220, "x": 277.9, "y": 288.5},
+        {
+          "place": "enemy assets/enemy stinger2",
+          "depth": 230,
+          "x": 284.35,
+          "y": 44.9,
+          "matrix": [-0.707108, -0.707108, 0.707108, -0.707108],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Banshee\",",
+            "        quantity:50,",
+            "        probability:.5",
+            "    }",
+            "}"
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 240,
+          "x": 430.8,
+          "y": 48.5,
+          "matrix": [-0.965927, -0.25882, 0.258835, -0.965927]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 250,
+          "x": 429.8,
+          "y": 555.45,
+          "matrix": [0.986404, -0.154556, 0.154556, 0.986404]
+        },
+        {
+          "place": "enemy assets/enemy wolfgun",
+          "depth": 260,
+          "x": 1310.95,
+          "y": 313.85,
+          "matrix": [0, -1, 1, 0],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Plasma\",",
+            "        quantity:15,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 269,
+          "x": 1106.75,
+          "y": 239.5,
+          "matrix": [-0.5, -0.866028, 0.866043, -0.499985]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 279,
+          "x": 1112.75,
+          "y": 387.45,
+          "matrix": [0.258835, -0.965927, 0.965942, 0.258835]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 289,
+          "x": 1159.35,
+          "y": 270.7,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    refireRate = 20;", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 306,
+          "x": 1159.35,
+          "y": 350.7,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    refireRate = 20;", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 323,
+          "x": 1219.35,
+          "y": 270.7,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    refireRate = 20;", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 340,
+          "x": 1219.35,
+          "y": 350.7,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    refireRate = 20;", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 357,
+          "x": 1279.35,
+          "y": 270.7,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    refireRate = 20;", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 374,
+          "x": 1279.35,
+          "y": 350.7,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    refireRate = 20;", "}", ""]
+        },
+        {"place": "enemy assets/enemy scurge", "depth": 391, "x": 1339.3, "y": 556.8},
+        {"place": "enemy assets/enemy scurge", "depth": 408, "x": 1379.3, "y": 556.8},
+        {"place": "enemy assets/enemy scurge", "depth": 425, "x": 1359.3, "y": 526.8},
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 442,
+          "x": 1359.3,
+          "y": 378.5,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    shot = \"shot_mcEWhite\";",
+            "    refireRate = 3;",
+            "    burstCount = 5;",
+            "    burstReload = 12;",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Banshee\",",
+            "        quantity:50",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {"place": "enemy assets/enemy scurge", "depth": 459, "x": 1116.15, "y": 129.4},
+        {"place": "enemy assets/enemy scurge", "depth": 476, "x": 1146.15, "y": 129.4},
+        {"place": "enemy assets/enemy scurge", "depth": 493, "x": 1176.15, "y": 129.4},
+        {"place": "enemy assets/enemy scurge", "depth": 510, "x": 1206.15, "y": 129.4},
+        {"place": "enemy assets/enemy scurge", "depth": 527, "x": 1236.15, "y": 129.4},
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 544,
+          "x": 1374.3,
+          "y": 49.25,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    shot = \"shot_mcEWhite\";",
+            "    refireRate = 3;",
+            "    burstCount = 5;",
+            "    burstReload = 12;",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Banshee\",",
+            "        quantity:50",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy double battery",
+          "depth": 561,
+          "x": 914.3,
+          "y": 224.5,
+          "matrix": [0.013596, -0.99884, 0.99884, 0.013596],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    health = 2400;",
+            "    //shot = \"shot_mcESeeker\";",
+            "    visionRange = 444;",
+            "    /*powerupDrop = {",
+            "        type:\"secondary\",",
+            "        item:\"Heatseeker\",",
+            "        quantity:3",
+            "    }*/",
+            "    ",
+            "    registerTrigger(this, \"battery1down\");",
+            "    function onTrigger(){",
+            "        //hit(health,rand(360));",
+            "        stunned = Infinity;",
+            "        makeShrapnel(this, \"particle_mcDust\", 50, 360);",
+            "        makeSparks(this);",
+            "        makeZaps(this, 200);",
+            "        notify(_player,\"Battery #01 deactivated!\");",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy double battery",
+          "depth": 575,
+          "x": 918.65,
+          "y": 379.45,
+          "matrix": [0.002731, -0.998688, 0.998688, 0.002731],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    health = 2400;",
+            "    //shot = \"shot_mcESeeker\";",
+            "    visionRange = 444;",
+            "    /*powerupDrop = {",
+            "        type:\"secondary\",",
+            "        item:\"Heatseeker\",",
+            "        quantity:3",
+            "    }*/",
+            "    ",
+            "    registerTrigger(this, \"battery2down\");",
+            "    function onTrigger(){",
+            "        //hit(health,rand(360));",
+            "        stunned = Infinity;",
+            "        makeShrapnel(this, \"particle_mcDust\", 50, 360);",
+            "        makeSparks(this);",
+            "        makeZaps(this, 200);",
+            "        notify(_player,\"Battery #02 deactivated!\");",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {"place": "enemy assets/enemy scurge", "depth": 589, "x": 1119.4, "y": 549.4},
+        {"place": "enemy assets/enemy scurge", "depth": 606, "x": 1149.4, "y": 549.4},
+        {"place": "enemy assets/enemy scurge", "depth": 623, "x": 1179.4, "y": 549.4},
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 640,
+          "x": 1454.4,
+          "y": 54.4,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    shot = \"shot_mcEWhite\";",
+            "    refireRate = 3;",
+            "    burstCount = 5;",
+            "    burstReload = 12;",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Banshee\",",
+            "        quantity:25,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 657,
+          "x": 1544.4,
+          "y": 54.4,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    shot = \"shot_mcEWhite\";",
+            "    refireRate = 3;",
+            "    burstCount = 5;",
+            "    burstReload = 12;",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Banshee\",",
+            "        quantity:25,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 674,
+          "x": 1544.4,
+          "y": 144.4,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    shot = \"shot_mcEWhite\";",
+            "    refireRate = 3;",
+            "    burstCount = 5;",
+            "    burstReload = 12;",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Banshee\",",
+            "        quantity:25,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 691,
+          "x": 1454.4,
+          "y": 144.4,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    shot = \"shot_mcEWhite\";",
+            "    refireRate = 3;",
+            "    burstCount = 5;",
+            "    burstReload = 12;",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Banshee\",",
+            "        quantity:25,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 708,
+          "x": 1550,
+          "y": 200,
+          "matrix": [-0.5, -0.866028, 0.866043, -0.499985]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 718,
+          "x": 1550,
+          "y": 250,
+          "matrix": [-0.5, -0.866028, 0.866043, -0.499985]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 728,
+          "x": 1550,
+          "y": 300,
+          "matrix": [-0.5, -0.866028, 0.866043, -0.499985]
+        },
+        {
+          "place": "enemy assets/enemy wolfgun",
+          "depth": 738,
+          "x": 1525,
+          "y": 525,
+          "matrix": [0.707108, -0.707108, 0.707108, 0.707108],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    ",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Plasma\",",
+            "        quantity:25,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 747,
+          "x": 1475,
+          "y": 550,
+          "matrix": [0.707108, -0.707108, 0.707108, 0.707123],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    ",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 757,
+          "x": 1550,
+          "y": 475,
+          "matrix": [0.707108, -0.707108, 0.707108, 0.707123],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    ",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "enemy assets/enemy stinger3",
+          "depth": 767,
+          "x": 1275,
+          "y": 500,
+          "matrix": [-0.707108, -0.707108, 0.707108, -0.707108]
+        },
+        {
+          "place": "enemy assets/enemy stinger3",
+          "depth": 777,
+          "x": 1116.55,
+          "y": 47.85,
+          "matrix": [-0.707092, 0.707092, -0.707092, -0.707092]
+        },
+        {
+          "place": "enemy assets/enemy stinger3",
+          "depth": 787,
+          "x": 1229.55,
+          "y": 47.85,
+          "matrix": [-0.707108, -0.707108, 0.707108, -0.707108]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 797,
+          "x": 772.25,
+          "y": 228.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    spawnTrigger = \"bridge\";", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 814,
+          "x": 700.25,
+          "y": 228.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    spawnTrigger = \"bridge\";", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 831,
+          "x": 623.25,
+          "y": 228.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    spawnTrigger = \"bridge\";", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 848,
+          "x": 772.25,
+          "y": 374.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    spawnTrigger = \"bridge\";", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 865,
+          "x": 700.25,
+          "y": 374.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    spawnTrigger = \"bridge\";", "}", ""]
+        },
+        {
+          "place": "enemy assets/enemy scurge",
+          "depth": 882,
+          "x": 623.25,
+          "y": 374.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    spawnTrigger = \"bridge\";", "}", ""]
+        }
+      ]
+    }
+  ]
+}
