@@ -4,18 +4,22 @@
 
 Reads source/library/level assets/level3/shape 1.json (black = wall, #999999 =
 chasm the player can't cross but shots fly over, white = floor) and writes
-source/library/level assets/background3/shape 1/bitmap 1.png at 1600x600, in the style
-of the other levels' backgrounds: dark tiled floor, light greebled metal walls
-with bevel and drop shadow, hazard markings, rust, and additive light glows.
-The output lines up with the collision map pixel for pixel, so the walls you see
-are the walls you hit. Seeded, so re-running gives the same image.
+source/library/level assets/background3/shape 1/bitmap 1.png at 1600x600.
+
+It follows how the other levels' backgrounds were made: wall tops are flat light
+plates with fine panel lines, and the walls are extruded along z and rendered
+dark, seen from a camera above the middle of the map, so each wall shows a dark
+stepped side face on the side that faces the centre. The floor is dark plating
+with faint panel and circuit lines, dust patches, scratches, stencilled decals
+and soft lighting. The wall tops line up with the collision map pixel for pixel.
+Seeded, so re-running gives the same image.
 """
 import json
 import os
 import re
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 from scipy import ndimage as ndi
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
@@ -60,12 +64,11 @@ for p in shape['paths']:
 
 
 def down(m):
-    return m.reshape(H, SS, W, SS).mean(axis=(1, 3))
+    return m.reshape(H, SS, W, SS).mean(axis=(1, 3)).astype(np.float32)
 
 
 wall = down(label == 1)    # coverage 0..1, anti-aliased
 chasm = down(label == 2)
-floor = np.clip(1 - wall - chasm, 0, 1)
 wallb, chasmb = wall > 0.5, chasm > 0.5
 
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
@@ -89,128 +92,243 @@ def rgb(h):
     h = h.lstrip('#'); return np.array([int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)], np.float32)
 
 
-img = np.zeros((H, W, 3), np.float32)
+def layer(draw_fn, mode='L'):
+    im = Image.new(mode, (W, H), 0); draw_fn(ImageDraw.Draw(im)); return np.array(im, np.float32) / 255
+
+
+def sample(a, sy, sx):
+    return ndi.map_coordinates(a, [sy, sx], order=1, mode='nearest')
+
+
+# Pseudo-perspective: a camera above the middle of the map. A wall's base sits
+# nearer the centre than its top, by K * (distance from centre) at full height.
+CX, CY, K, MAXOFF = W / 2, H / 2, 0.02, 9.0
+vx = np.clip(K * (xx - CX), -MAXOFF, MAXOFF)
+vy = np.clip(K * (yy - CY), -MAXOFF, MAXOFF)
+
+
+def extrude(solid, steps=14):
+    """Side faces of `solid` (tops) dropping toward the centre. Returns
+    (coverage, t) where t in 0..1 is how far down the face (0 = top edge)."""
+    cov = np.zeros((H, W), np.float32); tt = np.ones((H, W), np.float32)
+    for i in range(steps, 0, -1):  # far (base) first, so nearer steps win
+        t = i / steps
+        s = sample(solid, yy + t * vy, xx + t * vx)
+        hit = s > 0.5
+        tt[hit] = t; cov = np.maximum(cov, s)
+    return cov * (1 - solid), tt
+
 
 # ---------------------------------------------------------------- floor
-grime = noise(80, 5, 1)
-base = 0.20 + 0.05 * (grime - 0.5) + 0.025 * (rng.random((H, W)) - 0.5)
-# 25px deck plates (the level is laid out on a 25px grid) with darker seams
-seam = ((xx % 50 < 1) | (yy % 50 < 1)).astype(np.float32) * 0.5 + ((xx % 25 < 1) | (yy % 25 < 1)) * 0.25
-base -= 0.03 * seam
-plate_var = rng.random((H // 50 + 1, W // 50 + 1)).astype(np.float32)
-base += 0.02 * (np.kron(plate_var, np.ones((50, 50)))[:H, :W] - 0.5)
-# scorch / oil blotches
-blot = np.clip((noise(120, 3, 7) - 0.62) * 4, 0, 1)
-base -= 0.07 * blot
-floor_col = base[..., None] * rgb('#e6e9ea')[None, None] / 0.9
-img += floor_col
+base = np.full((H, W), 0.215, np.float32)
+base += 0.05 * (blur(noise(220, 2, 1), 30) - 0.5) * 2        # soft lighting pools
+base += 0.012 * (rng.random((H, W)) - 0.5)                    # fine grain
 
-# faint circuit traces on the floor, like levels 1 and 2
-trace = Image.new('L', (W, H), 0); td = ImageDraw.Draw(trace)
-for _ in range(70):
-    x, y = rng.integers(25, W - 25), rng.integers(25, H - 25)
-    for _ in range(rng.integers(2, 5)):
-        if rng.random() < 0.5: nx, ny = x + rng.integers(-180, 180), y
-        else: nx, ny = x, y + rng.integers(-120, 120)
-        td.line([(x, y), (nx, ny)], fill=255, width=1); x, y = nx, ny
-    td.ellipse([x - 2, y - 2, x + 2, y + 2], outline=255)
-img += (np.array(trace, np.float32) / 255 * 0.035)[..., None]
+# panel lines: a fine 25px grid plus a scatter of larger plate outlines
+lines = layer(lambda d: [d.line([(x, 0), (x, H)], fill=60) for x in range(0, W, 25)] +
+                        [d.line([(0, y), (W, y)], fill=60) for y in range(0, H, 25)])
+def plates(d):
+    for _ in range(260):
+        x, y = rng.integers(0, W // 25) * 25, rng.integers(0, H // 25) * 25
+        w, h = rng.integers(1, 6) * 25, rng.integers(1, 5) * 25
+        d.rectangle([x, y, x + w, y + h], outline=int(rng.integers(90, 170)))
+    for _ in range(160):  # small inset squares
+        x, y = rng.integers(0, W), rng.integers(0, H); s = rng.integers(4, 14)
+        d.rectangle([x, y, x + s, y + s], outline=90)
+plate_lines = layer(plates)
+base -= 0.018 * lines + 0.03 * plate_lines
+base += 0.01 * ndi.shift(plate_lines, (1, 1), order=0)        # tiny lip highlight
 
-# ---------------------------------------------------------------- chasm (the bridge spans it)
-inside = ndi.distance_transform_edt(chasmb)
-depth = np.clip(inside / 60, 0, 1)
-ch = (0.10 - 0.08 * depth)[..., None] * rgb('#8fa3b5')[None, None]
-# girders far below, receding: a lattice that darkens with depth
-lat = (((xx + yy * 0.0) % 75 < 6) | (yy % 60 < 5)).astype(np.float32)
-diag = (((xx + yy) % 106 < 4) | ((xx - yy) % 106 < 4)).astype(np.float32)
-ch += ((0.06 * lat + 0.035 * diag) * (1 - 0.6 * depth))[..., None] * rgb('#9fb0c0')[None, None]
-ch *= (0.75 + 0.5 * noise(60, 3, 9))[..., None]
-img = img * (1 - chasm[..., None]) + ch * chasm[..., None]
+# plate tone variation
+tone = rng.random((H // 25 + 1, W // 25 + 1)).astype(np.float32)
+base += 0.012 * (np.kron(tone, np.ones((25, 25), np.float32))[:H, :W] - 0.5)
 
-# ---------------------------------------------------------------- walls: greebled metal panels
-pan = np.full((H, W), 0.66, np.float32)
-for _ in range(2600):  # overlapping plates of slightly different tone
-    w, h = rng.integers(4, 40), rng.integers(4, 40)
-    x, y = rng.integers(0, W), rng.integers(0, H)
-    v = rng.normal(0, 0.06)
-    pan[y:y + h, x:x + w] += v
-    pan[y:y + 1, x:x + w] += 0.05; pan[y + h - 1:y + h, x:x + w] -= 0.06
-    pan[y:y + h, x:x + 1] += 0.04; pan[y:y + h, x + w - 1:x + w] -= 0.05
-pan = np.clip(pan, 0.35, 0.95)
-pan += 0.03 * (rng.random((H, W)) - 0.5)
-# bevel: height from distance to the wall edge, lit from the top-left
-dist = ndi.distance_transform_edt(wallb).astype(np.float32)
-height = np.clip(dist / 7, 0, 1) ** 0.6
-gy, gx = np.gradient(blur(height, 1.0))
-light = np.clip(-(gx * -0.7 + gy * -0.7) * 6, -0.5, 0.5)
-edge = np.clip(1 - dist / 2.0, 0, 1)
-wcol = (pan + light * 0.9 - 0.25 * edge)[..., None] * rgb('#e9ecee')[None, None]
+# circuit traces with rounded corners and terminal pads
+def traces(d):
+    for _ in range(55):
+        x, y = int(rng.integers(30, W - 30)), int(rng.integers(30, H - 30))
+        horiz = rng.random() < 0.5
+        pts = [(x, y)]
+        for _ in range(int(rng.integers(2, 5))):
+            if horiz: x = int(np.clip(x + rng.integers(-220, 220), 5, W - 5))
+            else: y = int(np.clip(y + rng.integers(-150, 150), 5, H - 5))
+            pts.append((x, y)); horiz = not horiz
+        d.line(pts, fill=255, width=1, joint='curve')
+        d.rectangle([pts[-1][0] - 2, pts[-1][1] - 2, pts[-1][0] + 2, pts[-1][1] + 2], outline=255)
+base += 0.035 * layer(traces)
 
-# rust and red paint flecks on the walls, like the other levels
-rust = blur(np.clip((noise(40, 4, 3) - 0.74) * 5, 0, 1) * (rng.random((H, W)) > 0.6), 0.7)
-wcol = wcol * (1 - 0.6 * rust[..., None]) + rust[..., None] * rgb('#a8341f')[None, None] * 0.6
+# dust: clusters of fine speckle
+dust = np.zeros((H, W), np.float32)
+for _ in range(40):
+    cx, cy, r = rng.uniform(0, W), rng.uniform(0, H), rng.uniform(15, 45)
+    dust += np.exp(-((xx - cx) ** 2 + (yy - cy) ** 2) / (2 * r * r))
+speck = rng.random((H, W)) > 0.55
+base += 0.05 * np.clip(dust, 0, 1) * speck * (noise(6, 2, 5) - 0.3)
 
-# drop shadow onto the floor and into the chasm (light from the top-left)
-shadow = blur(ndi.shift(wall, (5, 5), order=1, mode='nearest'), 3.5)
-img *= (1 - 0.55 * shadow * (1 - wall))[..., None]
-img = img * (1 - wall[..., None]) + wcol * wall[..., None]
+# scratches: short thin light strokes, mostly along the traffic lanes
+def scratches(d):
+    for _ in range(900):
+        x, y = rng.uniform(0, W), rng.uniform(0, H)
+        a = rng.normal(0, 0.35) + (0 if rng.random() < 0.6 else np.pi / 2)
+        l = rng.uniform(3, 18)
+        d.line([(x, y), (x + l * np.cos(a), y + l * np.sin(a))], fill=int(rng.integers(60, 200)))
+base += 0.05 * layer(scratches)
 
-# ---------------------------------------------------------------- markings on the floor
-over = Image.new('RGBA', (W, H), (0, 0, 0, 0)); od = ImageDraw.Draw(over)
+# oil / scorch stains
+stain = np.clip((noise(90, 4, 7) - 0.66) * 4, 0, 1)
+base -= 0.06 * stain
 
-# yellow/black hazard rim round both chasms, on the floor side
-rim = (ndi.distance_transform_edt(~chasmb) <= 8) & ~chasmb & ~wallb
-stripe = ((xx + yy) % 16 < 8)
-hz = np.where(stripe, 1, 0)[..., None] * rgb('#d7a91c')[None, None] + np.where(stripe, 0, 1)[..., None] * rgb('#1b1b1b')[None, None]
-hz *= (0.8 + 0.2 * noise(30, 3, 4))[..., None]
-rimf = blur(rim, 0.6) * floor
-img = img * (1 - 0.85 * rimf[..., None]) + hz * 0.85 * rimf[..., None]
+img = base[..., None] * np.array([1.0, 1.0, 1.02], np.float32)[None, None]
 
-# bridge deck: centre-line dashes and direction chevrons across the span
+# ---------------------------------------------------------------- decals
+def decals(d):
+    try:
+        font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 30)
+        small = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 14)
+    except OSError:
+        font = small = ImageFont.load_default()
+    return font, small
+
+font, small = decals(None)
+red = Image.new('L', (W, H), 0); rd = ImageDraw.Draw(red)
+yel = Image.new('L', (W, H), 0); ydr = ImageDraw.Draw(yel)
+plate = Image.new('L', (W, H), 0); pd = ImageDraw.Draw(plate)
+# stencilled sector numbers on dark plates, as in Drop Zone ("326")
+blocked = ndi.binary_dilation(wallb | chasmb, iterations=6)
+
+
+def clear_spot(x, y, w, h):
+    # nearest spot to (x, y) where a w*h decal sits on open floor
+    for r in range(0, 200, 4):
+        for dx, dy in [(0, 0), (r, 0), (-r, 0), (0, r), (0, -r), (r, r), (-r, r), (r, -r), (-r, -r)]:
+            X, Y = x + dx, y + dy
+            if 0 <= X and 0 <= Y and X + w < W and Y + h < H and not blocked[Y:Y + h, X:X + w].any():
+                return X, Y
+    raise ValueError((x, y))
+
+
+for (x, y, txt) in [(40, 300, '03'), (1150, 410, "3B"), (1180, 100, '3C'), (1500, 280, '3D')]:
+    w = 26 * len(txt) + 20
+    x, y = clear_spot(x, y, w, 46)
+    pd.rounded_rectangle([x, y, x + w, y + 46], 6, fill=255)
+    rd.text((x + 10, y + 6), txt, font=font, fill=230)
+# bridge deck: centre dashes and chevrons
 for x in range(480, 930, 50):
-    od.rectangle([x, 298, x + 24, 301], fill=(225, 190, 60, 120))
-for cx in (560, 840):
+    ydr.rectangle([x, 298, x + 22, 301], fill=200)
+for cx in (560, 820):
     for k in range(3):
-        x0 = cx + k * 14
-        od.polygon([(x0, 280), (x0 + 10, 300), (x0, 320), (x0 + 5, 320), (x0 + 15, 300), (x0 + 5, 280)], fill=(225, 190, 60, 70))
+        x0 = cx + k * 12
+        ydr.line([(x0, 288), (x0 + 10, 300), (x0, 312)], fill=170, width=3)
+# red hatched danger boxes in the two big end rooms
+for (x, y, w, h) in [(1475, 455, 75, 75), (35, 30, 50, 60)]:
+    box = Image.new('L', (w, h), 0); bd = ImageDraw.Draw(box)
+    for i in range(-h, w, 9): bd.line([(i, h), (i + h, 0)], fill=150, width=3)
+    bd.rectangle([0, 0, w - 1, h - 1], outline=200)
+    red.paste(box, (x, y), box)
 
-# east and west landing pads
-for (x, y) in [(1490, 105), (95, 520)]:
-    od.rectangle([x - 32, y - 32, x + 32, y + 32], outline=(200, 200, 200, 50), width=2)
-    od.rectangle([x - 24, y - 24, x + 24, y + 24], fill=(0, 0, 0, 35))
+wear = np.clip(noise(5, 2, 11) * 1.6 - 0.25, 0, 1)            # chipped paint
+pl = np.array(plate, np.float32) / 255
+img *= (1 - 0.35 * pl)[..., None]
+img += (0.025 * pl * (rng.random((H, W)) - 0.5))[..., None]
+ra = np.array(red, np.float32) / 255 * wear
+ya = np.array(yel, np.float32) / 255 * wear
+img = img * (1 - 0.7 * ra[..., None]) + rgb('#9c2018')[None, None] * 0.7 * ra[..., None]
+img = img * (1 - 0.55 * ya[..., None]) + rgb('#b89a2e')[None, None] * 0.55 * ya[..., None]
 
-ov = np.array(over, np.float32) / 255
-ov_a = ov[..., 3:4] * floor[..., None]
-img = img * (1 - ov_a) + ov[..., :3] * ov_a
+# ---------------------------------------------------------------- chasms
+# the floor plate's edge drops away into the chasm: extrude the floor down
+notch = 1 - chasm
+pside, pt = extrude(notch * (1 - wall) + wall)
+inside = ndi.distance_transform_edt(chasmb).astype(np.float32)
+depth = np.clip(inside / 70, 0, 1)
+ch = (0.075 - 0.06 * depth)[..., None] * rgb('#9aaabb')[None, None]
+lat = ((xx % 75 < 5) | (yy % 60 < 4)).astype(np.float32)
+diag = (((xx + yy) % 106 < 3) | ((xx - yy) % 106 < 3)).astype(np.float32)
+ch += ((0.05 * lat + 0.025 * diag) * (1 - 0.7 * depth))[..., None] * rgb('#9fb0c0')[None, None]
+ch *= (0.8 + 0.4 * noise(50, 3, 9))[..., None]
+img = img * (1 - chasm[..., None]) + ch * chasm[..., None]
+# the drop face of the floor plate: dark with fine steps
+step = (np.floor(pt * 14) % 2) * 0.012
+pcol = (0.10 - 0.07 * pt + step)
+pcov = pside * chasm
+img = img * (1 - pcov[..., None]) + pcol[..., None] * pcov[..., None]
+# thin hazard edge along the lip
+lip = (ndi.distance_transform_edt(~chasmb) <= 5) & ~chasmb & ~wallb
+stripe = ((xx + yy) % 14 < 7)
+lipf = blur(lip, 0.5)
+hz = np.where(stripe[..., None], rgb('#b8901c')[None, None], rgb('#161616')[None, None])
+img = img * (1 - 0.75 * lipf[..., None]) + hz * 0.75 * lipf[..., None]
 
-# ---------------------------------------------------------------- additive glows
+# ---------------------------------------------------------------- walls
+side, st = extrude(wall, steps=18)
+# ambient occlusion where the extruded side meets the floor
+ao = blur(np.maximum(side, wall), 4)
+img *= (1 - 0.45 * ao * (1 - wall) * (1 - side))[..., None]
+step = (np.floor(st * 9) % 2) * 0.025
+scol = 0.035 + 0.07 * (1 - st) ** 2 + step
+img = img * (1 - side[..., None]) + scol[..., None] * side[..., None]
+
+# wall tops: flat plates of slightly different greys with fine outlines, laid
+# along each wall's run (rotated on the diagonals), like the hand-built walls
+top = np.full((H, W), 0.70, np.float32)
+top += 0.05 * (blur(noise(160, 2, 21), 20) - 0.5) * 2        # smooth large shading
+dist = ndi.distance_transform_edt(wallb).astype(np.float32)
+ny, nx = np.gradient(blur(dist, 2.5))                         # points into the wall
+outl = Image.new('L', (W, H), 0); od = ImageDraw.Draw(outl)
+fill = Image.new('L', (W, H), 128); fd = ImageDraw.Draw(fill)
+cand = np.argwhere(wallb)
+for _ in range(2600):
+    cy, cx = cand[rng.integers(len(cand))]
+    a = np.arctan2(ny[cy, cx], nx[cy, cx]) + np.pi / 2       # along the wall
+    a = np.round(a / (np.pi / 4)) * (np.pi / 4)
+    L, T = rng.uniform(8, 50), rng.uniform(4, 14)
+    if rng.random() < 0.15: L, T = T, L * 0.5                 # occasional cross plate
+    ca, sa = np.cos(a), np.sin(a)
+    pts = [(cx + ca * u - sa * v, cy + sa * u + ca * v) for u, v in
+           [(-L / 2, -T / 2), (L / 2, -T / 2), (L / 2, T / 2), (-L / 2, T / 2)]]
+    fd.polygon(pts, fill=int(np.clip(128 + rng.normal(0, 14), 90, 170)))
+    od.polygon(pts, outline=int(rng.integers(60, 140)))
+    if rng.random() < 0.04:                                   # small dark sockets
+        od.rectangle([cx - 2, cy - 2, cx + 2, cy + 2], fill=200)
+top += (np.array(fill, np.float32) - 128) / 255 * 0.55
+top -= 0.07 * np.array(outl, np.float32) / 255
+top += 0.006 * (rng.random((H, W)) - 0.5)
+# a soft rim: 1px light top-left lip and slightly darker bottom-right edge
+gy, gx = np.gradient(blur(wall, 0.8))
+rim = np.clip(1.5 - dist, 0, 1)
+top += rim * np.clip((gx + gy) * 2.0, -0.12, 0.12)
+top -= 0.05 * np.clip(1 - dist / 3, 0, 1)
+tcol = top[..., None] * np.array([1.0, 1.0, 1.015], np.float32)[None, None]
+# rust and red paint splats: a few dotty clusters
+rust = np.zeros((H, W), np.float32)
+for _ in range(22):
+    cy, cx = cand[rng.integers(len(cand))]; r = rng.uniform(3, 9)
+    rust += np.exp(-((xx - cx) ** 2 + (yy - cy) ** 2) / (2 * r * r))
+rust = np.clip(rust * 1.3 - 0.15, 0, 1) * (rng.random((H, W)) > 0.6) * wall
+tcol = tcol * (1 - 0.75 * rust[..., None]) + rust[..., None] * rgb('#c0441f')[None, None] * 0.75
+img = img * (1 - wall[..., None]) + tcol * wall[..., None]
+
+# ---------------------------------------------------------------- lights (additive)
 glow = np.zeros_like(img)
 
 
-def lamp(x, y, col, r=10, k=0.6):
+def lamp(x, y, col, r=10, k=0.6, core=0.6):
     d2 = (xx - x) ** 2 + (yy - y) ** 2
     glow[...] += (np.exp(-d2 / (2 * r * r)) * k)[..., None] * rgb(col)[None, None]
-    glow[...] += (np.exp(-d2 / 3.0) * 0.8)[..., None] * rgb('#ffffff')[None, None]
+    glow[...] += (np.exp(-d2 / 2.0) * core)[..., None] * rgb('#ffffff')[None, None]
 
 
-# running lights along the bridge rails (the chasm-side walls)
-for x in range(475, 950, 50):
-    lamp(x, 88, '#5fd7ff', 9, 0.5); lamp(x, 512, '#5fd7ff', 9, 0.5)
-# lights deep in the chasm
-for _ in range(26):
-    m = np.argwhere(inside > 25)
+for x in range(487, 950, 50):          # running lights on the bridge rails
+    lamp(x, 88, '#5fd7ff', 7, 0.3, 0.5); lamp(x, 512, '#5fd7ff', 7, 0.3, 0.5)
+m = np.argwhere(inside > 25)
+for _ in range(22):                     # lights deep in the chasms
     y, x = m[rng.integers(len(m))]
-    lamp(x, y, rng.choice(['#ff8a3c', '#5fd7ff', '#ff5040']), rng.uniform(6, 14), rng.uniform(0.15, 0.35))
-# warning lamps by the doors and in the corners of the big rooms
-for (x, y) in [(188, 82), (1010, 82), (1010, 518), (1212, 470), (1300, 88)]:
-    lamp(x, y, '#ff4030', 12, 0.55)
-for (x, y) in [(38, 38), (1560, 38), (38, 562), (1560, 562), (460, 40), (460, 560)]:
-    lamp(x, y, '#ffd28a', 18, 0.25)
-img = img + glow  # additive, like the game's ADD-blended lights
+    lamp(x, y, str(rng.choice(['#ff8a3c', '#5fd7ff', '#ff5040'])), rng.uniform(5, 10), rng.uniform(0.1, 0.22), 0.35)
+for (x, y) in [(188, 84), (1010, 84), (1010, 516), (1212, 468)]:
+    lamp(x, y, '#ff4030', 9, 0.35, 0.6)
+img = img + glow
 
-# light vignette so the playfield edges sit back
-vig = 1 - 0.18 * (((xx / W - 0.5) * 2) ** 4 + ((yy / H - 0.5) * 2) ** 4)
-img *= vig[..., None]
+img *= (1 - 0.12 * (((xx / W - 0.5) * 2) ** 4 + ((yy / H - 0.5) * 2) ** 4))[..., None]
 
 out = (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
 Image.fromarray(out, 'RGB').convert('RGBA').save(OUT, optimize=True)
