@@ -375,7 +375,50 @@ export class Renderer {
       }
       return out;
     }
-    return src; // bevel etc: content unchanged
+    if (f.type === 'bevel') return this.bevel(src, f, w, h);
+    return src; // gradient glow/bevel etc: content unchanged
+  }
+
+  // Inner bevel: the highlight lands on edges facing away from the light angle
+  // (where the content shifted by +distance does not cover it), the shadow on the
+  // opposite edges; both stay inside the content's own alpha.
+  bevel(src, f, w, h) {
+    const dist = (f.distance || 0) * this.scale;
+    const ox = Math.cos(f.angle || 0) * dist, oy = Math.sin(f.angle || 0) * dist;
+    const sg = this.sigma(f);
+    const strength = Math.max(0, f.strength === undefined ? 1 : f.strength);
+    if (!strength || (!ox && !oy && sg < 0.3)) return src;
+    const out = this.acquire(w, h);
+    const oc = out.ctx;
+    oc.setTransform(1, 0, 0, 1, 0, 0);
+    oc.clearRect(0, 0, w, h);
+    oc.drawImage(src, 0, 0, w, h, 0, 0, w, h);
+    const edge = this.acquire(w, h);
+    const ec = edge.ctx;
+    ec.setTransform(1, 0, 0, 1, 0, 0);
+    for (const [c, sx, sy] of [[f.highlight, ox, oy], [f.shadow, -ox, -oy]]) {
+      if (!c || c[3] <= 0) continue;
+      ec.globalCompositeOperation = 'source-over';
+      ec.clearRect(0, 0, w, h);
+      ec.drawImage(src, 0, 0, w, h, 0, 0, w, h);
+      ec.globalCompositeOperation = 'source-in';
+      ec.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${(c[3] / 255).toFixed(3)})`;
+      ec.fillRect(0, 0, w, h);
+      ec.globalCompositeOperation = 'destination-out';
+      ec.filter = sg >= 0.3 ? `blur(${sg.toFixed(2)}px)` : 'none';
+      ec.drawImage(src, 0, 0, w, h, sx, sy, w, h);
+      ec.filter = 'none';
+      ec.globalCompositeOperation = 'source-over';
+      oc.globalCompositeOperation = 'source-atop';
+      for (let s = strength; s > 0; s -= 1) {
+        oc.globalAlpha = Math.min(1, s);
+        oc.drawImage(edge, 0, 0, w, h, 0, 0, w, h);
+      }
+      oc.globalAlpha = 1;
+      oc.globalCompositeOperation = 'source-over';
+    }
+    this.release(edge);
+    return out;
   }
 
   // ---------------------------------------------------------------------

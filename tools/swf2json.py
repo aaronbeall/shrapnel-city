@@ -684,8 +684,9 @@ def read_filters(r):
                         'inner': bool(fl & 0x80), 'knockout': bool(fl & 0x40),
                         'passes': fl & 0x1F})
         elif fid == 3:  # bevel
-            sc = r.rgba()
+            # the SWF spec lists shadow first, but Flash actually writes the highlight colour first
             hc = r.rgba()
+            sc = r.rgba()
             bx = r.fixed()
             by = r.fixed()
             ang = r.fixed()
