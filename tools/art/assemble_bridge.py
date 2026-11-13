@@ -156,6 +156,74 @@ top *= (0.70 + 0.42 * lam)[..., None]
 top *= (1 - 0.18 * np.clip(1 - dist / 1.5, 0, 1))[..., None]   # crisp dark edge line
 img = img * (1 - wr[..., None]) + top * wr[..., None]
 
+# ---------------------------------------------------------------- decor
+# Sprites cut from AI-generated sheets (gen_decor.sh, cut_decor.py), placed on
+# walls, floor and along the chasm lips. Each must fit inside its surface and
+# not overlap another.
+DECOR = os.path.join(PARTS, 'decor')
+if os.path.exists(os.path.join(DECOR, 'index.json')):
+    index = json.load(open(os.path.join(DECOR, 'index.json')))
+    sprites = {c: [Image.open(os.path.join(DECOR, it['file'])) for it in items] for c, items in index.items()}
+    used = np.zeros((H, W), bool)
+    canvas = Image.fromarray((np.clip(img, 0, 1) * 255).astype(np.uint8), 'RGB').convert('RGBA')
+    shadow = np.zeros((H, W), np.float32)
+    bloom = np.zeros((H, W, 3), np.float32)
+    wall_in = ndi.binary_erosion(wrb, iterations=2)
+    floor_ok = ndi.binary_erosion(~(wallb | chasmb), iterations=10) & (side < 0.05)
+    lip_ring = (ndi.distance_transform_edt(~chasmb) <= 16) & (ndi.distance_transform_edt(~chasmb) >= 8) & ~wallb
+    wdist = dist  # distance into the wall art
+
+    def fit(sp, short, long_max, ang):
+        w, h = sp.size
+        if h > w: sp = sp.rotate(90, expand=True); w, h = h, w
+        s = min(short / h, long_max / w)
+        sp = sp.resize((max(2, int(w * s)), max(2, int(h * s))), Image.LANCZOS)
+        return sp.rotate(np.degrees(-ang), resample=Image.BICUBIC, expand=True)
+
+    def place(sp, cx, cy, surface, cast=0.0, glow=0.0):
+        w, h = sp.size
+        x0, y0 = int(cx - w / 2), int(cy - h / 2)
+        if x0 < 0 or y0 < 0 or x0 + w > W or y0 + h > H: return False
+        a = np.array(sp)[..., 3] > 40
+        if not surface[y0:y0 + h, x0:x0 + w][a].all() or used[y0:y0 + h, x0:x0 + w][a].any(): return False
+        used[y0:y0 + h, x0:x0 + w] |= ndi.binary_dilation(a, iterations=2)
+        canvas.alpha_composite(sp, (x0, y0))
+        if cast: shadow[y0:y0 + h, x0:x0 + w] += cast * a
+        if glow:
+            rgb_ = np.array(sp, np.float32)[..., :3] / 255
+            hot = np.clip((rgb_.max(-1) - 0.75) * 4, 0, 1) * (rgb_.max(-1) - rgb_.min(-1) > 0.25)
+            bloom[y0:y0 + h, x0:x0 + w] += glow * hot[..., None] * rgb_
+        return True
+
+    def scatter(cat, count, surface, short, long_max, tries=4000, cast=0.0, glow=0.0, along=True):
+        lst = sprites.get(cat) or []
+        if not lst: return 0
+        pts = np.argwhere(surface)
+        n = 0
+        for _ in range(tries):
+            if n >= count: break
+            cy, cx = pts[rng.integers(len(pts))]
+            ang = q[cy, cx] * np.pi / 4 if along else rng.integers(0, 4) * np.pi / 2
+            s_ = short(cy, cx) if callable(short) else short
+            if s_ < 5: continue
+            sp = fit(lst[rng.integers(len(lst))], s_, long_max, ang)
+            n += place(sp, cx, cy, surface, cast, glow)
+        return n
+
+    wall_w = lambda cy, cx: 2 * wdist[cy, cx] - 4          # sprite thickness to fit the wall here
+    print('greebles', scatter('greebles', 40, wall_in, lambda cy, cx: min(wall_w(cy, cx), 40), 70, cast=0.35))
+    print('vents', scatter('vents', 45, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.7, 16), 40, cast=0.3))
+    print('rails', scatter('rails', 30, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.5, 10), 60, cast=0.25))
+    print('wallmarks', scatter('wallmarks', 35, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.8, 18), 36))
+    print('lights', scatter('lights', 45, wall_in, lambda cy, cx: min(wall_w(cy, cx) * 0.45, 9), 22, glow=0.9))
+    print('floorpaint', scatter('floorpaint', 18, floor_ok, 46, 90, along=False))
+    print('lip rails', scatter('rails', 24, lip_ring, 7, 70))
+    used_core = np.zeros((H, W), np.float32)
+    out_ = np.array(canvas.convert('RGB'), np.float32) / 255
+    out_ *= (1 - 0.5 * blur(np.clip(ndi.shift(shadow, (2, 2), order=0), 0, 1), 1.5) * (1 - used_core))[..., None]
+    out_ += np.stack([blur(bloom[..., c], 5) for c in range(3)], -1) * 1.5
+    img = out_
+
 img *= (1 - 0.12 * (((xx / W - 0.5) * 2) ** 4 + ((yy / H - 0.5) * 2) ** 4))[..., None]
 out = (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
 Image.fromarray(out, 'RGB').convert('RGBA').save(OUT, optimize=True)
