@@ -8,7 +8,7 @@ try { ({ chromium } = require('playwright')); } catch { ({ chromium } = createRe
 
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.split('=')));
 const scale = +(args.scale || 1);
-const url = (args.url || 'http://localhost:8123/') + '?bench' + (args.only ? '&only=' + args.only : '') + (args.stats ? '&stats' : '') + (args.quality ? '&quality=' + args.quality : '');
+const url = (args.url || 'http://localhost:8123/') + '?bench' + (args.only ? '&only=' + args.only : '') + (args.stats ? '&stats' : '') + (args.quality ? '&quality=' + args.quality : '') + (args.cab ? '&cab' + (args.cab === 'naive' ? '=naive' : '') : '');
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 800, height: 600 }, deviceScaleFactor: scale });
 const errors = [];

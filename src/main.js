@@ -7,6 +7,7 @@ const params = new URLSearchParams(location.search);
 
 const rt = new Runtime(canvas, { base: 'assets/' });
 rt.debug = params.has('debug');
+const cacheAsBitmap = params.has('cab'); // experimental: honour cacheAsBitmap
 window.rt = rt; // handy for debugging from the console
 
 // Render resolution follows the game's own quality toggle (HUD button):
@@ -34,6 +35,8 @@ function fit() {
 }
 
 await rt.load((p) => { loading.textContent = `loading… ${Math.round(p * 100)}%`; });
+rt.renderer.cacheAsBitmap = cacheAsBitmap;
+rt.renderer.cabAdaptive = params.get('cab') !== 'naive';
 loading.remove();
 fit();
 window.addEventListener('resize', fit);

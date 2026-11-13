@@ -91,6 +91,16 @@ export class Renderer {
       ctx.restore();
     } else if ((blend && blend !== 'normal' && blend !== 'layer') || fx || node.maskedBy) {
       this.drawLayered(ctx, node, m, cx, blend, fx, clip);
+    } else if (node.cacheAsBitmap && this.cacheAsBitmap && !(node.$cabOff > 0 && node.$cabOff--)) {
+      // Flash's bitmap caching: rasterise once, reuse while only the position
+      // changes (the layer cache is keyed on content, colour and rotation/scale).
+      // Clips too big to cache, or that keep changing, are drawn directly for a while.
+      const prev = node.$cache && node.$cache.key;
+      this.drawLayered(ctx, node, m, cx, null, null, clip);
+      const c = node.$cache;
+      if (!c) node.$cabOff = this.cabAdaptive ? 60 : 0;
+      else if (c.key !== prev) { if ((node.$cabMiss = (node.$cabMiss | 0) + 1) >= 3 && this.cabAdaptive) { node.$cabOff = 30; node.$cabMiss = 0; } }
+      else node.$cabMiss = 0;
     } else {
       this.drawContent(ctx, node, m, cx, clip);
     }
@@ -228,7 +238,7 @@ export class Renderer {
       if (c && c.key === key) raster = c;
     }
     if (st) {
-      const kind = (blend && blend !== 'normal' ? blend : '') + (fx ? '+' + fx.map((f) => f.type).join('+') : '') + (node.maskedBy ? '+mask' : '');
+      const kind = ((blend && blend !== 'normal' ? blend : '') + (fx ? '+' + fx.map((f) => f.type).join('+') : '') + (node.maskedBy ? '+mask' : '')) || 'cacheAsBitmap';
       const k = st.kinds[kind] || (st.kinds[kind] = { n: 0, miss: 0, missPx: 0, drawPx: 0, ms: 0 });
       k.n++; k.drawPx += w * h;
       if (!raster) { k.miss++; k.missPx += w * h; }
