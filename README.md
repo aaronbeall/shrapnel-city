@@ -21,6 +21,10 @@ npm run serve        # python3 -m http.server 8123
 Controls: arrows to maneuver, Z/X strafe, Space primary, Ctrl secondary,
 Ins / Shift+Ins and Del / Shift+Del to switch weapons, Esc menu, H help.
 
+## Asset explorer
+
+Open `tools/explorer.html` (online: https://aaronbeall.github.io/shrapnel-city/tools/explorer.html) to browse every game asset drawn by the port's own renderer: all 48 weapons with their HUD icon, pickup and projectile (in flight and impact), the 8 enemies with stats read from their frame scripts, boxes, level gear, pickups and keys, the player ship, effects, the four level maps as the game dresses them, and the whole symbol library. Timelines play without running the game's ActionScript. Click any preview to open the inspector: play, step and scrub frames, jump to labels, zoom and pan, see bounds, the children on the current frame and the symbol's scripts. `#tab=enemies&inspect=<char id>` links straight to a symbol.
+
 ## Benchmark
 
 Open `index.html?bench` to run seven scripted heavy scenes (Heat Ray, Flamer, cluster bombs, a whole level exploding at once, a Bridge firefight, the Esc menu) with seeded randomness. A table of game-logic (tick) and drawing (render) times per frame is shown when it finishes. `&only=heatray,flamer`, `&quality=low|medium|high`, `&scale=2` and `&stats` (per-layer counts) narrow it down. `node tools/bench.mjs scale=2` runs the same thing headless.
@@ -37,6 +41,7 @@ Open `index.html?bench` to run seven scripted heavy scenes (Heat Ray, Flamer, cl
 | `tools/swf2json.py` | SWF parser that produces `assets/swf.json` and `assets/bitmaps/` |
 | `tools/xflmap.py` | Maps the FLA's XFL library onto SWF character ids, producing `assets/symbols.json` |
 | `tools/as2js.mjs` | AS2 to JS compiler (acorn + astring) that keeps AVM1 scoping rules |
+| `tools/explorer.html` | Asset explorer: weapons, enemies, objects, items, player, effects, level maps and the full library, animated by the runtime, with a frame-by-frame inspector |
 | `tools/gallery.html` | Symbol contact sheet for checking extracted art |
 
 ## How the compiler keeps AS2 semantics
