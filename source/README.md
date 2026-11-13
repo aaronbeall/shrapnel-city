@@ -92,3 +92,7 @@ Instance properties:
 - **A new symbol:** add a JSON file under `library/` and `place` it by name, or give it `"symbol": {"type": "movie clip", "linkage": "myThing"}` and `attachMovie("myThing", …)` it from code.
 - **A new frame script or instance script:** add it in the timeline, or as an `.as` file in `as2/` that the script `#include`s.
 - **After any edit:** run `npm run build`.
+
+## Generated art
+
+- `level assets/background3/shape 1/bitmap 1.png` (the Bridge floor and walls) is painted by `tools/art/paint_bridge.py` from the level's collision shape, so it lines up with `level_mc` pixel for pixel. It replaces the original placeholder art. Re-run it (needs numpy, scipy and Pillow) after changing `level assets/level3`.
