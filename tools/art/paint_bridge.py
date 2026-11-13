@@ -121,7 +121,9 @@ def extrude(solid, steps=14):
 
 # ---------------------------------------------------------------- floor
 base = np.full((H, W), 0.215, np.float32)
-base += 0.05 * (blur(noise(220, 2, 1), 30) - 0.5) * 2        # soft lighting pools
+base += 0.06 * (blur(noise(260, 2, 1), 40) - 0.5) * 2        # soft lighting pools
+open_d = ndi.distance_transform_edt(~(wallb | chasmb)).astype(np.float32)
+base += 0.07 * blur(np.clip(open_d / 90, 0, 1), 12) - 0.03     # brighter away from walls
 base += 0.012 * (rng.random((H, W)) - 0.5)                    # fine grain
 
 # panel lines: a fine 25px grid plus a scatter of larger plate outlines
@@ -260,53 +262,153 @@ hz = np.where(stripe[..., None], rgb('#b8901c')[None, None], rgb('#161616')[None
 img = img * (1 - 0.75 * lipf[..., None]) + hz * 0.75 * lipf[..., None]
 
 # ---------------------------------------------------------------- walls
-side, st = extrude(wall, steps=18)
-# ambient occlusion where the extruded side meets the floor
-ao = blur(np.maximum(side, wall), 4)
-img *= (1 - 0.45 * ao * (1 - wall) * (1 - side))[..., None]
-step = (np.floor(st * 9) % 2) * 0.025
-scol = 0.035 + 0.07 * (1 - st) ** 2 + step
+# Rounded art mask: convex corners softened, inside corners filleted, as in the
+# hand-drawn walls. It stays within a few pixels of the collision edge.
+wr = np.clip((blur(wall, 3.2) - 0.5) * 3.0 + 0.5, 0, 1)
+wrb = wr > 0.5
+
+# dark extruded sides, smooth (no steps), plus soft contact shadow on the floor
+side, st = extrude(wr, steps=24)
+side = blur(side, 0.6) * (1 - wr)
+ao = blur(np.maximum(side, wr), 5)
+img *= (1 - 0.5 * ao * (1 - wr) * (1 - side))[..., None]
+scol = 0.025 + 0.05 * (1 - st) ** 3
 img = img * (1 - side[..., None]) + scol[..., None] * side[..., None]
 
-# wall tops: flat plates of slightly different greys with fine outlines, laid
-# along each wall's run (rotated on the diagonals), like the hand-built walls
-top = np.full((H, W), 0.70, np.float32)
-top += 0.05 * (blur(noise(160, 2, 21), 20) - 0.5) * 2        # smooth large shading
-dist = ndi.distance_transform_edt(wallb).astype(np.float32)
-ny, nx = np.gradient(blur(dist, 2.5))                         # points into the wall
-outl = Image.new('L', (W, H), 0); od = ImageDraw.Draw(outl)
-fill = Image.new('L', (W, H), 128); fd = ImageDraw.Draw(fill)
-cand = np.argwhere(wallb)
-for _ in range(2600):
-    cy, cx = cand[rng.integers(len(cand))]
-    a = np.arctan2(ny[cy, cx], nx[cy, cx]) + np.pi / 2       # along the wall
+# soft bevel: height rises over ~7px from the edge, lit from the top-left
+dist = ndi.distance_transform_edt(wrb).astype(np.float32)
+hgt = np.clip(dist / 7.0, 0, 1); hgt = hgt * hgt * (3 - 2 * hgt)
+hgt = blur(hgt, 1.2)
+gy, gx = np.gradient(hgt)
+nz = 0.18
+norm = np.sqrt(gx * gx + gy * gy + nz * nz)
+lx, ly, lz = -0.55, -0.6, 0.58
+lam = (-gx * lx - gy * ly + nz * lz) / norm
+top = 0.50 + 0.30 * lam
+top += 0.035 * (blur(noise(160, 2, 21), 20) - 0.5) * 2        # broad soft shading
+
+# brushed metal grain and a few low-contrast inset panels and seams
+ny, nx = np.gradient(blur(dist, 2.5))
+grain = blur(rng.random((H, W)).astype(np.float32), 0.6) - 0.5
+top += 0.05 * grain
+seams = Image.new('L', (W, H), 0); sd = ImageDraw.Draw(seams)
+panels = Image.new('L', (W, H), 128); pd2 = ImageDraw.Draw(panels)
+core = np.argwhere(dist >= 6)
+for _ in range(700):
+    cy, cx = core[rng.integers(len(core))]
+    a = np.arctan2(ny[cy, cx], nx[cy, cx]) + np.pi / 2
     a = np.round(a / (np.pi / 4)) * (np.pi / 4)
-    L, T = rng.uniform(8, 50), rng.uniform(4, 14)
-    if rng.random() < 0.15: L, T = T, L * 0.5                 # occasional cross plate
     ca, sa = np.cos(a), np.sin(a)
-    pts = [(cx + ca * u - sa * v, cy + sa * u + ca * v) for u, v in
-           [(-L / 2, -T / 2), (L / 2, -T / 2), (L / 2, T / 2), (-L / 2, T / 2)]]
-    fd.polygon(pts, fill=int(np.clip(128 + rng.normal(0, 14), 90, 170)))
-    od.polygon(pts, outline=int(rng.integers(60, 140)))
-    if rng.random() < 0.04:                                   # small dark sockets
-        od.rectangle([cx - 2, cy - 2, cx + 2, cy + 2], fill=200)
-top += (np.array(fill, np.float32) - 128) / 255 * 0.55
-top -= 0.07 * np.array(outl, np.float32) / 255
-top += 0.006 * (rng.random((H, W)) - 0.5)
-# a soft rim: 1px light top-left lip and slightly darker bottom-right edge
-gy, gx = np.gradient(blur(wall, 0.8))
-rim = np.clip(1.5 - dist, 0, 1)
-top += rim * np.clip((gx + gy) * 2.0, -0.12, 0.12)
-top -= 0.05 * np.clip(1 - dist / 3, 0, 1)
-tcol = top[..., None] * np.array([1.0, 1.0, 1.015], np.float32)[None, None]
+    if rng.random() < 0.45:   # seam across the wall
+        L = 30
+        sd.line([(cx - sa * L, cy + ca * L), (cx + sa * L, cy - ca * L)], fill=255)
+    else:                     # inset panel along the wall
+        L, T = rng.uniform(10, 40), rng.uniform(4, 10)
+        pts = [(cx + ca * u - sa * v, cy + sa * u + ca * v) for u, v in
+               [(-L / 2, -T / 2), (L / 2, -T / 2), (L / 2, T / 2), (-L / 2, T / 2)]]
+        pd2.polygon(pts, fill=int(128 + rng.normal(0, 8)), outline=110)
+seam = np.array(seams, np.float32) / 255
+top -= 0.07 * seam
+top += 0.04 * ndi.shift(seam, (1, 1), order=0)
+top += (np.array(panels, np.float32) - 128) / 255 * 0.5
+top -= 0.05 * np.clip(1 - dist / 1.5, 0, 1)                 # crisp dark edge line
+tcol = top[..., None] * np.array([1.0, 1.0, 1.02], np.float32)[None, None]
+
 # rust and red paint splats: a few dotty clusters
+cand = np.argwhere(wrb)
 rust = np.zeros((H, W), np.float32)
-for _ in range(22):
-    cy, cx = cand[rng.integers(len(cand))]; r = rng.uniform(3, 9)
+for _ in range(16):
+    cy, cx = cand[rng.integers(len(cand))]; r = rng.uniform(3, 8)
     rust += np.exp(-((xx - cx) ** 2 + (yy - cy) ** 2) / (2 * r * r))
-rust = np.clip(rust * 1.3 - 0.15, 0, 1) * (rng.random((H, W)) > 0.6) * wall
-tcol = tcol * (1 - 0.75 * rust[..., None]) + rust[..., None] * rgb('#c0441f')[None, None] * 0.75
-img = img * (1 - wall[..., None]) + tcol * wall[..., None]
+rust = np.clip(rust * 1.3 - 0.15, 0, 1) * (rng.random((H, W)) > 0.6) * wr
+tcol = tcol * (1 - 0.75 * rust[..., None]) + rust[..., None] * rgb('#b8381c')[None, None] * 0.75
+img = img * (1 - wr[..., None]) + tcol * wr[..., None]
+
+# ---------------------------------------------------------------- wall ornaments
+# vents, indicator lights, bolts and cables, drawn at 4x and scaled down
+Q = 4
+orn = Image.new('RGBA', (W * Q, H * Q), (0, 0, 0, 0)); odr = ImageDraw.Draw(orn)
+shad = Image.new('L', (W * Q, H * Q), 0); shd = ImageDraw.Draw(shad)
+glow_pts = []
+placed = []
+spots = np.argwhere(dist >= 9.5)
+
+
+def free(x, y, r):
+    return all((x - px) ** 2 + (y - py) ** 2 > (r + pr) ** 2 for px, py, pr in placed)
+
+
+def vent(cx, cy, vertical, n):
+    w, h = (14, 6 * n + 4) if vertical else (6 * n + 4, 14)
+    x0, y0 = cx - w / 2, cy - h / 2
+    shd.rounded_rectangle([(x0 + 1.5) * Q, (y0 + 1.5) * Q, (x0 + w + 1.5) * Q, (y0 + h + 1.5) * Q], 2 * Q, fill=200)
+    odr.rounded_rectangle([x0 * Q, y0 * Q, (x0 + w) * Q, (y0 + h) * Q], 2 * Q, fill=(40, 42, 44, 255))
+    for i in range(n):
+        for k in range(5 * Q):  # chrome bar with a vertical gradient
+            v = int(235 - 150 * k / (5 * Q))
+            if vertical:
+                yy0 = (y0 + 2 + 6 * i) * Q + k
+                odr.line([(x0 + 1.5) * Q, yy0, (x0 + w - 1.5) * Q, yy0], fill=(v, v, v + 4, 255))
+            else:
+                xx0 = (x0 + 2 + 6 * i) * Q + k
+                odr.line([xx0, (y0 + 1.5) * Q, xx0, (y0 + h - 1.5) * Q], fill=(v, v, v + 4, 255))
+
+
+def light(cx, cy, col, r=3.2):
+    c = tuple(int(255 * v) for v in rgb(col))
+    shd.ellipse([(cx - r + 1) * Q, (cy - r + 1) * Q, (cx + r + 1) * Q, (cy + r + 1) * Q], fill=180)
+    odr.ellipse([(cx - r - 1) * Q, (cy - r - 1) * Q, (cx + r + 1) * Q, (cy + r + 1) * Q], fill=(70, 72, 76, 255))
+    odr.ellipse([(cx - r) * Q, (cy - r) * Q, (cx + r) * Q, (cy + r) * Q], fill=c + (255,))
+    odr.ellipse([(cx - r * 0.45) * Q, (cy - r * 0.6) * Q, (cx + r * 0.1) * Q, (cy - r * 0.05) * Q], fill=(255, 255, 255, 170))
+    glow_pts.append((cx, cy, col))
+
+
+def bolts(cx, cy, vertical):
+    for s in (-1, 1):
+        bx, by = (cx, cy + s * 5) if vertical else (cx + s * 5, cy)
+        odr.ellipse([(bx - 1.3) * Q, (by - 1.3) * Q, (bx + 1.3) * Q, (by + 1.3) * Q], fill=(60, 62, 64, 255))
+        odr.ellipse([(bx - 0.9) * Q, (by - 1.0) * Q, (bx + 0.2) * Q, (by - 0.1) * Q], fill=(215, 215, 220, 255))
+
+
+def box(cx, cy, vertical):
+    w, h = (10, 16) if vertical else (16, 10)
+    x0, y0 = cx - w / 2, cy - h / 2
+    shd.rectangle([(x0 + 2) * Q, (y0 + 2) * Q, (x0 + w + 2) * Q, (y0 + h + 2) * Q], fill=200)
+    for k in range(int(h * Q)):
+        v = int(205 - 70 * k / (h * Q))
+        odr.line([x0 * Q, y0 * Q + k, (x0 + w) * Q, y0 * Q + k], fill=(v, v, v + 3, 255))
+    odr.rectangle([x0 * Q, y0 * Q, (x0 + w) * Q, (y0 + h) * Q], outline=(80, 82, 86, 255), width=Q // 2)
+    odr.rectangle([(x0 + 2) * Q, (y0 + 2) * Q, (x0 + 4) * Q, (y0 + 4) * Q], fill=(170, 40, 30, 255))
+
+
+prev = None
+for _ in range(2000):
+    if len(placed) >= 110: break
+    cy, cx = spots[rng.integers(len(spots))]
+    vertical = abs(nx[cy, cx]) > abs(ny[cy, cx])
+    diag = min(abs(nx[cy, cx]), abs(ny[cy, cx])) > 0.35 * max(abs(nx[cy, cx]), abs(ny[cy, cx]))
+    kind = rng.choice(['vent', 'light', 'bolts', 'box'], p=[0.4, 0.1, 0.3, 0.2])
+    if diag and kind in ('vent', 'box'): kind = 'bolts'
+    r = {'vent': 16, 'light': 5, 'bolts': 7, 'box': 10}[kind]
+    if not free(cx, cy, r): continue
+    if kind == 'vent': vent(cx, cy, vertical, int(rng.integers(2, 5)))
+    elif kind == 'light': light(cx, cy, str(rng.choice(['#ff3322', '#3388ff', '#ff3322', '#ffbb22'])))
+    elif kind == 'bolts': bolts(cx, cy, vertical)
+    else: box(cx, cy, vertical)
+    placed.append((cx, cy, r))
+    if prev is not None and rng.random() < 0.35:  # cable to the previous ornament
+        px, py = prev
+        if (px - cx) ** 2 + (py - cy) ** 2 < 70 ** 2 and wrb[(py + cy) // 2, (px + cx) // 2]:
+            mx, my = (px + cx) / 2 + rng.normal(0, 5), (py + cy) / 2 + rng.normal(0, 5)
+            pts = [((1 - t) ** 2 * px + 2 * (1 - t) * t * mx + t * t * cx, (1 - t) ** 2 * py + 2 * (1 - t) * t * my + t * t * cy) for t in np.linspace(0, 1, 20)]
+            odr.line([(x * Q, y * Q) for x, y in pts], fill=(35, 35, 38, 230), width=int(Q * 0.9), joint='curve')
+    prev = (cx, cy)
+
+orn = np.array(orn.resize((W, H), Image.LANCZOS), np.float32) / 255
+shd = np.array(shad.resize((W, H), Image.LANCZOS), np.float32) / 255
+img *= (1 - 0.35 * blur(shd, 1.0) * wr)[..., None]
+oa = orn[..., 3:4] * wr[..., None]
+img = img * (1 - oa) + orn[..., :3] * oa
 
 # ---------------------------------------------------------------- lights (additive)
 glow = np.zeros_like(img)
@@ -326,6 +428,8 @@ for _ in range(22):                     # lights deep in the chasms
     lamp(x, y, str(rng.choice(['#ff8a3c', '#5fd7ff', '#ff5040'])), rng.uniform(5, 10), rng.uniform(0.1, 0.22), 0.35)
 for (x, y) in [(188, 84), (1010, 84), (1010, 516), (1212, 468)]:
     lamp(x, y, '#ff4030', 9, 0.35, 0.6)
+for (gx_, gy_, gc) in glow_pts:
+    lamp(gx_, gy_, gc, 6, 0.35, 0.0)
 img = img + glow
 
 img *= (1 - 0.12 * (((xx / W - 0.5) * 2) ** 4 + ((yy / H - 0.5) * 2) ** 4))[..., None]
