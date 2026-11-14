@@ -1,0 +1,118 @@
+{
+  "kind": "sprite",
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/designs/plasma core/shape 20",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "clipDepth": 6
+        },
+        {
+          "place": "enemy assets/designs/plasma core/shape 21",
+          "depth": 2,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#000000",
+              "blurX": 0,
+              "blurY": 0,
+              "angle": 4.712389,
+              "distance": 1.0,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/designs/plasma core/shape 22",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#000000",
+              "blurX": 0,
+              "blurY": 0,
+              "angle": 4.712389,
+              "distance": 1.0,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/designs/plasma core/shape 23",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#000000",
+              "blurX": 0,
+              "blurY": 0,
+              "angle": 4.712389,
+              "distance": 1.0,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/designs/plasma core/shape 24",
+          "depth": 5,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#000000",
+              "blurX": 0,
+              "blurY": 0,
+              "angle": 4.712389,
+              "distance": 1.0,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/designs/plasma core/shape 25",
+          "depth": 6,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#000000",
+              "blurX": 0,
+              "blurY": 0,
+              "angle": 4.712389,
+              "distance": 1.0,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

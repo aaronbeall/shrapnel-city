@@ -1,0 +1,32 @@
+{
+  "kind": "shape",
+  "bounds": [
+    -6,
+    6,
+    -23,
+    -11
+  ],
+  "fills": [
+    {
+      "type": "clipped bitmap",
+      "bitmap": "enemy assets/designs/carrier nuke/bitmap 1",
+      "m": [
+        1,
+        0,
+        0,
+        1,
+        -6,
+        -23
+      ],
+      "repeat": false,
+      "smooth": true
+    }
+  ],
+  "lines": [],
+  "paths": [
+    {
+      "fill": 0,
+      "d": "M -6 -23 L 6 -23 L 6 -11 L -6 -11 Z"
+    }
+  ]
+}

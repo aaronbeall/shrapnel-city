@@ -1,0 +1,50 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/designs/tank twin angled/shape 1",
+          "depth": 1,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/tank twin angled/shape 2",
+          "depth": 2,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/tank twin angled/shape 3",
+          "depth": 3,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/tank twin angled/shape 4",
+          "depth": 4,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/tank twin angled/shape 5",
+          "depth": 5,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/tank twin angled/shape 6",
+          "depth": 6,
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}

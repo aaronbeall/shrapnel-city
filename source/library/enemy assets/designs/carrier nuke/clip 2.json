@@ -1,0 +1,24 @@
+{
+  "kind": "sprite",
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/designs/carrier nuke/shape 4",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "clipDepth": 2
+        },
+        {
+          "place": "enemy assets/designs/carrier nuke/shape 5",
+          "depth": 2,
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}

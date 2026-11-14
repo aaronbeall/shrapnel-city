@@ -1,0 +1,45 @@
+{
+  "kind": "sprite",
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/designs/walker/shape 2",
+          "depth": 1,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/walker/shape 3",
+          "depth": 2,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "bevel",
+              "shadow": "#00000040",
+              "highlight": "#ffffff40",
+              "blurX": 4,
+              "blurY": 4,
+              "angle": 0.785398,
+              "distance": 1.33,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "onTop": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/designs/walker/shape 4",
+          "depth": 3,
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}
