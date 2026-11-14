@@ -5,6 +5,8 @@ ActionScript runs unchanged: it is compiled to JavaScript and executed on a smal
 Flash-like runtime, so the hand-crafted pixel collision, line of sight, timeline state
 and blend-mode lighting behave as they did in Flash Player.
 
+The game was built between 2004 and 2012 and never finished. [HISTORY.md](HISTORY.md) has the full timeline, the evidence behind it and an estimate of the hours that went into it.
+
 ## Play
 
 Online: https://aaronbeall.github.io/shrapnel-city/. Every push to `main` is built and deployed by GitHub Actions (`.github/workflows/pages.yml`); pull requests are built too, so a broken change fails before it's merged.
