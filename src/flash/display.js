@@ -300,6 +300,13 @@ export class TextField extends DisplayObject {
     }
     b[3] = b[2] + nh;
   }
+  // Flash reports a TextField's _x/_y as the top-left of its box, not the
+  // matrix origin: authored fields keep their bounds offset (e.g. xmin 12.9),
+  // and scripts that center with `_x = -_width/2` rely on it being folded in.
+  get _x() { return this.m[4] + this.bounds[0]; }
+  set _x(v) { v = +v; if (!isFinite(v)) return; this.m[4] = v - this.bounds[0]; this.scripted = true; }
+  get _y() { return this.m[5] + this.bounds[2]; }
+  set _y(v) { v = +v; if (!isFinite(v)) return; this.m[5] = v - this.bounds[2]; this.scripted = true; }
   get textWidth() { return this.rt.renderer.measureText(this).w; }
   get textHeight() { return this.rt.renderer.measureText(this).h; }
   // TextField _width/_height resize the box, they do not scale the text
