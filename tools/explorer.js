@@ -354,6 +354,8 @@ function weaponCard(w, slot) {
 const ENEMIES = [
   'enemy gnat', 'enemy stinger', 'enemy stinger2', 'enemy stinger3', 'enemy scurge', 'enemy wolfgun', 'enemy double battery', 'enemy object fire barrel',
 ].map((n) => lib.idFor('enemy assets/' + n));
+// finished in the FLA but only placed on guide layers, so the original game never used them
+const UNUSED_ENEMIES = ['enemy tank', 'enemy drone', 'enemy missile launcher'].map((n) => lib.idFor('enemy assets/' + n));
 
 function aliveDeadCard(id, extra = {}) {
   const T = framesOf(id);
@@ -427,7 +429,9 @@ const TABS = {
     title: 'Enemies',
     build: () => [
       section('Enemies', 'frame 1 is the live enemy; the rest of the timeline is its destruction. Stats are the defaults in each frame 1 script', ENEMIES.map((id) => aliveDeadCard(id))),
-      section('Enemy parts', 'cores, turrets and muzzle flashes the enemies are built from', inFolder('enemy assets', ENEMIES).map((id) => genericCard(id))),
+      section('Unused enemies', 'finished in the FLA but only placed on guide layers, so not in any level yet', UNUSED_ENEMIES.map((id) => aliveDeadCard(id))),
+      section('New enemy designs', 'vector designs from original/art/graphics/enemies.fw.png, not wired up yet', inFolder('enemy assets/designs').map((id) => genericCard(id))),
+      section('Enemy parts', 'cores, turrets and muzzle flashes the enemies are built from', inFolder('enemy assets', [...ENEMIES, ...UNUSED_ENEMIES]).map((id) => genericCard(id))),
     ],
   },
   objects: {
