@@ -93,6 +93,17 @@ Instance properties:
 - **A new frame script or instance script:** add it in the timeline, or as an `.as` file in `as2/` that the script `#include`s.
 - **After any edit:** run `npm run build`.
 
+## Symbols recovered from the FLA
+
+Most of `source/` came from the compiled SWF. Three enemies were finished in the FLA but only placed on guide layers, so the SWF never contained them: the **enemy tank**, **enemy drone** and **enemy missile launcher**. They were converted straight from the FLA, with all their parts, by `tools/flash-source/fla2source.py`. Deprecated and obsolete library items (old exits, the old HUD, unused bitmaps and so on) were deliberately left out.
+
+Two things to know when reading these files:
+
+- Flash flattens **graphic** symbol instances into the timeline that uses them, so the SWF never had a standalone copy of a graphic symbol. The converter does the same. A recovered symbol that uses a graphic symbol therefore has that graphic's pieces placed directly on its own timeline.
+- The same flattening means some names that came from the SWF point at only the first piece of a flattened graphic. For example, `graphic assets/explosion` is really just the explosion's shockwave ring.
+
+To convert another symbol: `python3 tools/flash-source/fla2source.py <unzipped FLA folder> --only "<library name>" ...` (list every part the symbol uses). It only adds files and never overwrites an existing one. `--calibrate <symbol>` converts a symbol that already exists into a scratch folder, so you can compare it with the SWF version.
+
 ## Generated art
 
 - `level assets/background3/shape 1/bitmap 1.png` (the Bridge floor and walls) replaces the original placeholder art. `tools/art/assemble_bridge.py` builds it from parts in `tools/art/parts/` (wall-top, floor and chasm textures generated with OpenAI `gpt-image-2`, using only backgrounds 0-2 as style references; prompts are next to each part). Decor (vents, greebles, lights, floor paint, wall markings, railings and pipes) comes from AI-generated sprite sheets: `tools/art/gen_decor.sh` makes the sheets (prompts in `tools/art/parts/decor/`), `tools/art/cut_decor.py` cuts them into sprites, and the assembler places them, each fitted inside its wall or floor area and not overlapping. The parts are laid onto `level assets/level3`'s collision shape, so the art lines up with `level_mc` exactly. Re-run it (needs numpy, scipy and Pillow) after changing the level or a part.
