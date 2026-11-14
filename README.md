@@ -25,7 +25,9 @@ Ins / Shift+Ins and Del / Shift+Del to switch weapons, Esc menu, H help.
 
 ## Asset explorer
 
-Open `tools/explorer.html` (online: https://aaronbeall.github.io/shrapnel-city/tools/explorer.html) to browse every game asset drawn by the port's own renderer: all 48 weapons with their HUD icon, pickup and projectile (in flight and impact), the 8 enemies with stats read from their frame scripts, boxes, level gear, pickups and keys, the player ship, effects, the four level maps as the game dresses them, and the whole symbol library. Timelines play without running the game's ActionScript. Click any preview to open the inspector: play, step and scrub frames, jump to labels, zoom and pan, see bounds, the children on the current frame and the symbol's scripts. `#tab=enemies&inspect=<char id>` links straight to a symbol.
+Open `tools/explorer.html` (online: https://aaronbeall.github.io/shrapnel-city/tools/explorer.html) to browse every game asset drawn by the port's own renderer: all 48 weapons with their HUD icon, pickup and projectile (in flight and impact), the 8 enemies with stats read from their frame scripts (plus the 3 unused enemies recovered from the FLA and the new vector enemy designs), boxes, level gear, pickups and keys, the player ship, effects, the four level maps as the game dresses them, and the whole symbol library. Timelines play without running the game's ActionScript. Click any preview to open the inspector: play, step and scrub frames, jump to labels, zoom and pan, see bounds, the children on the current frame and the symbol's scripts. `#tab=enemies&inspect=<char id>` links straight to a symbol.
+
+`tools/gallery.html` (online: https://aaronbeall.github.io/shrapnel-city/tools/gallery.html) is a plain contact sheet: every library symbol, or those matching `?filter=<name>`, drawn side by side on one page with its id. It's for quickly checking extracted or converted art (`&frame=<n>` picks a frame, `&w=`/`&h=` set the cell size). Use the explorer to browse and inspect, the gallery to eyeball many symbols at once, e.g. [`?filter=enemy assets/designs/`](https://aaronbeall.github.io/shrapnel-city/tools/gallery.html?filter=enemy%20assets/designs/).
 
 ## Benchmark
 
@@ -57,7 +59,7 @@ The build output (`assets/swf.json`, `assets/symbols.json`, `assets/bitmaps/`, `
 | `tools/xflmap.py` | Mapped the FLA's library names and scripts onto the SWF for the original extraction |
 | `tools/as2js.mjs` | AS2 to JS compiler (acorn + astring) that keeps AVM1 scoping rules |
 | `tools/explorer.html` | Asset explorer: weapons, enemies, objects, items, player, effects, level maps and the full library, animated by the runtime, with a frame-by-frame inspector |
-| `tools/gallery.html` | Symbol contact sheet for checking extracted art |
+| `tools/gallery.html` | Symbol contact sheet for checking extracted art (`?filter=<name>`) |
 
 ## How the compiler keeps AS2 semantics
 
