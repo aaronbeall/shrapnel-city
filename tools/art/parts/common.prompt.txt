@@ -1,0 +1,1 @@
+The attached images are top-down levels from a 2D shooter game. Copy their art style exactly: the same light grey plated metal walls with fine panel lines, soft smooth bevels and subtle shading, the same dark grey floor, rust and red paint flecks, the same rendering technique and level of detail, the same top-down camera.

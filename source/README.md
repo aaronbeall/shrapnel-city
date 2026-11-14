@@ -92,3 +92,7 @@ Instance properties:
 - **A new symbol:** add a JSON file under `library/` and `place` it by name, or give it `"symbol": {"type": "movie clip", "linkage": "myThing"}` and `attachMovie("myThing", …)` it from code.
 - **A new frame script or instance script:** add it in the timeline, or as an `.as` file in `as2/` that the script `#include`s.
 - **After any edit:** run `npm run build`.
+
+## Generated art
+
+- `level assets/background3/shape 1/bitmap 1.png` (the Bridge floor and walls) replaces the original placeholder art. `tools/art/assemble_bridge.py` builds it from parts in `tools/art/parts/` (wall-top, floor and chasm textures generated with OpenAI `gpt-image-2`, using only backgrounds 0-2 as style references; prompts are next to each part). Decor (vents, greebles, lights, floor paint, wall markings, railings and pipes) comes from AI-generated sprite sheets: `tools/art/gen_decor.sh` makes the sheets (prompts in `tools/art/parts/decor/`), `tools/art/cut_decor.py` cuts them into sprites, and the assembler places them, each fitted inside its wall or floor area and not overlapping. The parts are laid onto `level assets/level3`'s collision shape, so the art lines up with `level_mc` exactly. Re-run it (needs numpy, scipy and Pillow) after changing the level or a part.
