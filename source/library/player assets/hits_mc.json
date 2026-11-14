@@ -1,0 +1,18 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "_blank MC", "depth": 1, "x": 0, "y": -15.5, "scale": 0.507797, "name": "hit1"},
+        {"place": "_blank MC", "depth": 3, "x": -17.45, "y": -1.95, "scale": 0.507797, "name": "hit2"},
+        {"place": "_blank MC", "depth": 5, "x": 17.45, "y": -1.95, "scale": 0.507797, "name": "hit3"},
+        {"place": "_blank MC", "depth": 7, "x": -14.5, "y": 9.35, "scale": 0.507797, "name": "hit5"},
+        {"place": "_blank MC", "depth": 9, "x": 14.5, "y": 9.3, "scale": 0.507797, "name": "hit6"},
+        {"place": "_blank MC", "depth": 11, "x": 0, "y": 16.8, "scale": 0.507797, "name": "hit4"}
+      ]
+    }
+  ]
+}

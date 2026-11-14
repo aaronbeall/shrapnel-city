@@ -1,0 +1,15 @@
+{
+  "kind": "shape",
+  "bounds": [0, 108, 0, 33],
+  "fills": [
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "interface/buttons/btn continue/shape 1/bitmap 1",
+      "m": [1, 0, 0, 1, 0, 0],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 0, "d": "M 108 33 L 0 33 L 0 0 L 108 0 L 108 33 Z"}]
+}

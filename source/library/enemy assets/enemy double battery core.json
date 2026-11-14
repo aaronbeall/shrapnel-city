@@ -1,0 +1,6 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [{"frame": 1, "changes": [{"place": "enemy assets/enemy double battery core/shape 1", "depth": 3, "x": 0, "y": 0}]}]
+}

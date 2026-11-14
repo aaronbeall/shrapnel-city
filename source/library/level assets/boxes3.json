@@ -1,0 +1,388 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "game objects/box", "depth": 1, "x": 118, "y": 400},
+        {
+          "place": "game objects/box",
+          "depth": 16,
+          "x": 138,
+          "y": 400,
+          "scale": 1.285706,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent(load){",
+            "    health = 25;",
+            "    powerupDrop = {",
+            "        type:\"secondary\",",
+            "        item:\"Carbon Bomb\",",
+            "        quantity:1",
+            "    }",
+            "}"
+          ]
+        },
+        {"place": "game objects/box", "depth": 31, "x": 158, "y": 400},
+        {"place": "game objects/box", "depth": 46, "x": 42, "y": 249.9},
+        {
+          "place": "game objects/box",
+          "depth": 61,
+          "x": 62,
+          "y": 250,
+          "scale": 1.285706,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent(load){",
+            "    health = 25;",
+            "    powerupDrop = {",
+            "        type:\"health\",",
+            "        item:\"health\",",
+            "        quantity:50",
+            "    }",
+            "}"
+          ]
+        },
+        {"place": "game objects/box", "depth": 76, "x": 82, "y": 249.9},
+        {"place": "game objects/box", "depth": 91, "x": 550, "y": 300},
+        {
+          "place": "game objects/box",
+          "depth": 106,
+          "x": 400,
+          "y": 288,
+          "scale": 1.779358,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent(load){",
+            "    health = 50;",
+            "    powerupDrop = {",
+            "        type:\"secondary\",",
+            "        item:\"Splinter Bomb\",",
+            "        quantity:3",
+            "    }",
+            "}"
+          ]
+        },
+        {"place": "game objects/box", "depth": 121, "x": 37, "y": 110},
+        {"place": "game objects/box", "depth": 136, "x": 86.3, "y": 39},
+        {"place": "game objects/box", "depth": 151, "x": 625, "y": 300},
+        {"place": "game objects/box", "depth": 166, "x": 700, "y": 300},
+        {"place": "game objects/box", "depth": 181, "x": 775, "y": 300},
+        {"place": "game objects/box", "depth": 196, "x": 850, "y": 300},
+        {
+          "place": "game objects/box",
+          "depth": 211,
+          "x": 248.95,
+          "y": 46,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"secondary\",",
+            "        item:\"Impact Mortar\",",
+            "        quantity:1",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 226,
+          "x": 223,
+          "y": 551.95,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"health\",",
+            "        item:\"health\",",
+            "        quantity:15",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 241,
+          "x": 273,
+          "y": 551.95,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"health\",",
+            "        item:\"health\",",
+            "        quantity:15",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 256,
+          "x": 273,
+          "y": 526.95,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 271,
+          "x": 223,
+          "y": 526.95,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 286,
+          "x": 248,
+          "y": 526.95,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 301,
+          "x": 248,
+          "y": 551.95,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"health\",",
+            "        item:\"health\",",
+            "        quantity:15",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 316,
+          "x": 1190,
+          "y": 272,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"health\",",
+            "        item:\"health\",",
+            "        probability:.5,",
+            "        quantity:10",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 331,
+          "x": 1251,
+          "y": 272,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        probability:.5,",
+            "        quantity:15",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 346,
+          "x": 1190,
+          "y": 352,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        probability:.5,",
+            "        quantity:15",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 361,
+          "x": 1251,
+          "y": 352,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"health\",",
+            "        item:\"health\",",
+            "        probability:.5,",
+            "        quantity:10",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 376,
+          "x": 1112,
+          "y": 312,
+          "scale": 1.272705,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"secondary\",",
+            "        item:\"Carbon Bomb\",",
+            "        quantity:1",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 391,
+          "x": 1178.45,
+          "y": 71.75,
+          "scale": 1.312057,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent(load){",
+            "    health = 50;",
+            "    powerupDrop = {",
+            "        type:\"health\",",
+            "        item:\"health\",",
+            "        quantity:25",
+            "    }",
+            "}"
+          ]
+        },
+        {"place": "game objects/box", "depth": 406, "x": 1157.75, "y": 53},
+        {"place": "game objects/box", "depth": 421, "x": 1198.75, "y": 53},
+        {"place": "game objects/box", "depth": 436, "x": 1198.75, "y": 91},
+        {"place": "game objects/box", "depth": 451, "x": 1157.75, "y": 91},
+        {"place": "game objects/box", "depth": 466, "x": 398.8, "y": 48},
+        {"place": "game objects/box", "depth": 481, "x": 398.8, "y": 556.95},
+        {"place": "game objects/box", "depth": 496, "x": 463.75, "y": 48},
+        {"place": "game objects/box", "depth": 511, "x": 635.75, "y": 48},
+        {"place": "game objects/box", "depth": 526, "x": 808.75, "y": 48},
+        {"place": "game objects/box", "depth": 541, "x": 972.75, "y": 48},
+        {"place": "game objects/box", "depth": 556, "x": 463.75, "y": 549},
+        {"place": "game objects/box", "depth": 571, "x": 635.75, "y": 549},
+        {"place": "game objects/box", "depth": 586, "x": 808.75, "y": 549},
+        {"place": "game objects/box", "depth": 601, "x": 972.75, "y": 549},
+        {"place": "game objects/box", "depth": 616, "x": 1276.95, "y": 170},
+        {"place": "game objects/box", "depth": 631, "x": 1296.95, "y": 150},
+        {"place": "game objects/box", "depth": 646, "x": 1316.95, "y": 130},
+        {"place": "game objects/box", "depth": 661, "x": 1336.95, "y": 110},
+        {"place": "game objects/box", "depth": 676, "x": 1250, "y": 425},
+        {"place": "game objects/box", "depth": 691, "x": 1150, "y": 425},
+        {"place": "game objects/box", "depth": 706, "x": 1150, "y": 200},
+        {"place": "game objects/box", "depth": 721, "x": 1250, "y": 200},
+        {"place": "game objects/box", "depth": 736, "x": 1412.95, "y": 311},
+        {"place": "game objects/box", "depth": 751, "x": 1550, "y": 550},
+        {"place": "game objects/box", "depth": 766, "x": 1450, "y": 550},
+        {"place": "game objects/box", "depth": 781, "x": 1550, "y": 450},
+        {"place": "game objects/box", "depth": 796, "x": 1500, "y": 550},
+        {"place": "game objects/box", "depth": 811, "x": 1500, "y": 500},
+        {"place": "game objects/box", "depth": 826, "x": 1550, "y": 500},
+        {
+          "place": "game objects/box",
+          "depth": 841,
+          "x": 1550,
+          "y": 375,
+          "scale": 1.272705,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"secondary\",",
+            "        item:\"Splinter Bomb\",",
+            "        quantity:3",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {"place": "game objects/box", "depth": 856, "x": 1500, "y": 155},
+        {"place": "game objects/box", "depth": 871, "x": 1445, "y": 100},
+        {"place": "game objects/box", "depth": 886, "x": 1500, "y": 45},
+        {"place": "game objects/box", "depth": 901, "x": 1555, "y": 100},
+        {
+          "place": "game objects/box computer",
+          "depth": 916,
+          "x": 1300.35,
+          "y": 36.1,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    function onDie(){",
+            "        makeShrapnel(this,\"frag_mc\",15);",
+            "        trigger(\"battery1down\");",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box computer",
+          "depth": 984,
+          "x": 1261.45,
+          "y": 550.75,
+          "scale": -1,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    function onDie(){",
+            "        makeShrapnel(this,\"frag_mc\",15);",
+            "        trigger(\"battery2down\");",
+            "    }",
+            "}",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "kind": "shape",
+  "bounds": [-5.5, 7.4, -1.6, 7],
+  "edgeBounds": [-5.5, 7.4, -1.6, 7],
+  "nonzero": false,
+  "fills": [{"type": "solid", "color": "#ffcc00"}, {"type": "solid", "color": "#ffcc00"}],
+  "lines": [
+    {"width": 1, "cap": 1, "ecap": 1, "join": 0, "noScale": false, "noClose": false, "color": "#666666"},
+    {"width": 1, "cap": 1, "ecap": 1, "join": 0, "noScale": false, "noClose": false, "color": "#666666"}
+  ],
+  "paths": [
+    {"line": 0, "d": "M -2.3 3.55 L 0.2 0.45 L 4.3 -0.2"},
+    {"line": 1, "d": "M 5 1.2 L 1.1 2.35"},
+    {"fill": 0, "d": "M -1.8 0.65 L -0.8 2.85 L -1.9 6.8 L -3.6 7 L -5.5 4.85 L -1.8 0.65 Z"},
+    {"fill": 1, "d": "M 3.9 0.2 L 2.85 -1.25 L 3.95 -1.6 L 7.4 -0.35 L 6.9 1.65 L 3.85 2.4 L 3.9 0.2 Z"}
+  ]
+}

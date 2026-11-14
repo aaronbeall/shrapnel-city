@@ -1,0 +1,77 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy wolfgun",
+          "depth": 1,
+          "x": 734.95,
+          "y": 137.15,
+          "matrix": [-0.965927, 0.25882, -0.25882, -0.965927],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent(load){",
+            "    //refireRate = 15;",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Plasma\",",
+            "        quantity:50",
+            "    }",
+            "}"
+          ]
+        },
+        {
+          "place": "enemy assets/enemy wolfgun",
+          "depth": 10,
+          "x": 372.95,
+          "y": 301,
+          "matrix": [0.965927, -0.25882, 0.25882, 0.965927],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    //refireRate = 15;",
+            "    powerupDrop = {",
+            "        type:\"health\",",
+            "        item:\"health\",",
+            "        quantity:50",
+            "    }",
+            "}"
+          ]
+        },
+        {"place": "enemy assets/enemy stinger", "depth": 19, "x": 718.25, "y": 498.85},
+        {"place": "enemy assets/enemy stinger", "depth": 29, "x": 93.95, "y": 37.55},
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 39,
+          "x": 48,
+          "y": 391.9,
+          "matrix": [-0.866028, 0.5, -0.499008, -0.864319]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 49,
+          "x": 303.95,
+          "y": 158.05,
+          "matrix": [0.866028, -0.5, 0.5, 0.866028]
+        },
+        {
+          "place": "enemy assets/enemy stinger",
+          "depth": 59,
+          "x": 426.95,
+          "y": 158.05,
+          "matrix": [0.866028, 0.5, -0.5, 0.866028]
+        },
+        {"place": "enemy assets/enemy stinger", "depth": 69, "x": 521.95, "y": 514.4},
+        {"place": "enemy assets/enemy stinger", "depth": 79, "x": 647.95, "y": 276},
+        {"place": "enemy assets/enemy stinger", "depth": 89, "x": 670.25, "y": 498.85},
+        {"place": "enemy assets/enemy object fire barrel", "depth": 99, "x": 467.5, "y": 319.3},
+        {"place": "enemy assets/enemy object fire barrel", "depth": 108, "x": 338.55, "y": 352.45},
+        {"place": "enemy assets/enemy object fire barrel", "depth": 117, "x": 268.5, "y": 254.5}
+      ]
+    }
+  ]
+}

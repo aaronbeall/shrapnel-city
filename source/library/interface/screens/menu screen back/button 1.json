@@ -1,0 +1,48 @@
+{
+  "kind": "button",
+  "records": [
+    {
+      "symbol": "_shared/text 8",
+      "depth": 1,
+      "states": ["up"],
+      "x": -40.9,
+      "y": 2,
+      "color": {},
+      "filters": [
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 15,
+          "blurY": 15,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        }
+      ]
+    },
+    {"symbol": "_shared/shape 10", "depth": 2, "states": ["up"], "x": 0, "y": 0, "color": {}},
+    {
+      "symbol": "_shared/text 11",
+      "depth": 1,
+      "states": ["over", "down"],
+      "x": -40.9,
+      "y": 2,
+      "color": {},
+      "filters": [
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 15,
+          "blurY": 15,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        }
+      ]
+    },
+    {"symbol": "_shared/shape 10", "depth": 2, "states": ["over", "down"], "x": 0, "y": 0, "color": {}},
+    {"symbol": "_shared/shape 12", "depth": 1, "states": ["hit"], "x": 0, "y": 0, "color": {}}
+  ]
+}

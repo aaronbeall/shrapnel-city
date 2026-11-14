@@ -1,0 +1,15 @@
+{
+  "kind": "shape",
+  "bounds": [0, 234, 0, 43],
+  "fills": [
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "_shared/shape 16/bitmap 1",
+      "m": [1, 0, 0, 1, 0, 0],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 0, "d": "M 234 43 L 0 43 L 0 0 L 234 0 L 234 43 Z"}]
+}

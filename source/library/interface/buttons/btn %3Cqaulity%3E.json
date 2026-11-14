@@ -1,0 +1,6 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "button"},
+  "frames": 1,
+  "timeline": [{"frame": 1, "changes": [{"place": "interface/buttons/btn <qaulity>/shape 1", "depth": 1, "x": 0, "y": 0}]}]
+}

@@ -1,0 +1,71 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 15,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/box.as\"",
+      "changes": [
+        {"place": "_circle", "depth": 1, "x": 0, "y": 0, "scale": 0.59758, "color": {"alpha": 0}},
+        {"place": "_shared/shape 254", "depth": 14, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 14},
+        {"place": "game objects/box/shape tween 1", "depth": 3, "x": 0, "y": 0},
+        {"place": "game objects/box/shape tween 2", "depth": 4, "x": 0, "y": 0},
+        {"place": "_shared/shape tween 44", "depth": 5, "x": 0.05, "y": 7.2, "scale": -1.356079},
+        {
+          "place": "_glow",
+          "depth": 6,
+          "x": 1.2,
+          "y": -1.95,
+          "scale": -2.297531,
+          "color": {"alpha": 0.5},
+          "ratio": 0.000015259021896696422
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 3, "ratio": 0.5555504692149233},
+        {"update": 4, "ratio": 0.5555504692149233},
+        {"update": 5, "ratio": 0.4375066758220798},
+        {"update": 6, "x": 1.2, "y": -1.9, "scale": -2.297562, "color": {"alpha": 0.22265625}}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"update": 3, "ratio": 0.8888990615701533},
+        {"update": 4, "ratio": 0.8888990615701533},
+        {"update": 5, "ratio": 0.7500114442664225},
+        {"update": 6, "color": {"alpha": 0.0546875}}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"remove": 3},
+        {"remove": 4},
+        {"place": "game objects/box/shape 1", "depth": 4, "x": 0, "y": 0},
+        {"update": 5, "ratio": 0.9375143053330282},
+        {"update": 6, "x": 1.2, "y": -1.95, "scale": -2.297531, "color": {"alpha": 0}}
+      ]
+    },
+    {"frame": 6, "changes": [{"remove": 6}, {"replace": "_shared/shape tween 47", "depth": 5, "ratio": 0}]},
+    {"frame": 7, "changes": [{"update": 5, "ratio": 0.2500038147554742}]},
+    {"frame": 8, "changes": [{"update": 5, "ratio": 0.5000076295109483}]},
+    {"frame": 9, "changes": [{"update": 5, "ratio": 0.7500114442664225}]},
+    {
+      "frame": 10,
+      "changes": [{"remove": 5}, {"place": "_shared/shape 48", "depth": 5, "x": 0.05, "y": 7.2, "scale": -1.356079}]
+    },
+    {"frame": 11, "changes": [{"remove": 5}]},
+    {"frame": 15, "script": ["makeCorpse(this);", "this.kill();"]}
+  ]
+}

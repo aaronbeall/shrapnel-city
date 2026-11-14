@@ -1,0 +1,23 @@
+{
+  "kind": "text field",
+  "bounds": [-2, 206, -2, 16.05],
+  "wordWrap": false,
+  "multiline": false,
+  "password": false,
+  "readOnly": true,
+  "font": "fonts/Consolas",
+  "size": 12,
+  "color": "#ffffff",
+  "autoSize": false,
+  "align": "left",
+  "leftMargin": 0,
+  "rightMargin": 0,
+  "indent": 0,
+  "leading": 3,
+  "noSelect": true,
+  "border": false,
+  "html": true,
+  "useOutlines": true,
+  "variable": "",
+  "text": "<p align=\"left\"><font face=\"Consolas\" size=\"12\" color=\"#ffffff\" letterSpacing=\"0.000000\" kerning=\"1\">00. MISSION NAME</font></p>"
+}

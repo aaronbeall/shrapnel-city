@@ -1,0 +1,12 @@
+{
+  "kind": "shape",
+  "bounds": [-9.6, 9.6, -9.6, 9.6],
+  "edgeBounds": [-7.5, 7.5, -7.5, 7.5],
+  "nonzero": false,
+  "fills": [{"type": "solid", "color": "#ffffff02"}],
+  "lines": [{"width": 3, "cap": 0, "ecap": 0, "join": 2, "noScale": false, "noClose": false, "miter": 12, "color": "#000000"}],
+  "paths": [
+    {"fill": 0, "d": "M 7.5 0 L 0 7.5 L -7.5 0 L 0 -7.5 L 7.5 0 Z"},
+    {"line": 0, "d": "M 7.5 0 L 0 7.5 L -7.5 0 L 0 -7.5 L 7.5 0 Z"}
+  ]
+}

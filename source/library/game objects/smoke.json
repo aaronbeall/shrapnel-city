@@ -1,0 +1,15 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "smoke"},
+  "frames": 4,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/smoke.as\"",
+      "changes": [{"place": "game objects/smoke/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 2, "changes": [{"replace": "game objects/smoke/shape 2", "depth": 1}]},
+    {"frame": 3, "changes": [{"replace": "game objects/smoke/shape 3", "depth": 1}]},
+    {"frame": 4, "changes": [{"replace": "game objects/smoke/shape 4", "depth": 1}]}
+  ]
+}

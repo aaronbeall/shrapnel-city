@@ -1,0 +1,31 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy object fire barrel",
+          "depth": 1,
+          "x": 611.95,
+          "y": 343.7,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    health = .1;",
+            "    blastRange = 200;",
+            "    damage = 200;",
+            "    frag = \"frag_mc\";",
+            "    fragCount = 15;",
+            "    ",
+            "    //_alpha = 0;",
+            "}",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}

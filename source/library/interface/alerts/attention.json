@@ -1,0 +1,33 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "attention"},
+  "frames": 22,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": ["function onEnterFrame(){", "    _x = target._x;", "    _y = target._y;", "}", "onEnterFrame();"],
+      "changes": [{"place": "interface/alerts/attention/shape 1", "depth": 1, "x": 0, "y": 0, "scale": 5.588348}]
+    },
+    {"frame": 2, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 5.193451}]},
+    {"frame": 3, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 4.605591}]},
+    {"frame": 4, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 3.766785}]},
+    {"frame": 5, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 2.942978}]},
+    {"frame": 6, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 2.372757}]},
+    {"frame": 7, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.988617}]},
+    {"frame": 8, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.715836}]},
+    {"frame": 9, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.514252}]},
+    {"frame": 10, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.361526}]},
+    {"frame": 11, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.244629}]},
+    {"frame": 12, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.154922}]},
+    {"frame": 13, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.086792}]},
+    {"frame": 14, "changes": [{"update": 1, "x": 0, "y": 0, "scale": 1.036133}]},
+    {"frame": 15, "changes": [{"update": 1, "x": 0, "y": 0}]},
+    {"frame": 16, "changes": [{"remove": 1}]},
+    {"frame": 17, "changes": [{"place": "interface/alerts/attention/shape 1", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 18, "changes": [{"remove": 1}]},
+    {"frame": 19, "changes": [{"place": "interface/alerts/attention/shape 1", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 20, "changes": [{"remove": 1}]},
+    {"frame": 21, "changes": [{"place": "interface/alerts/attention/shape 1", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 22, "script": "this.removeMovieClip();", "changes": [{"remove": 1}]}
+  ]
+}

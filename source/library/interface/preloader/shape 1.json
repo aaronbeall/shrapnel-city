@@ -1,0 +1,15 @@
+{
+  "kind": "shape",
+  "bounds": [-30.35, 30.05, 7.3, 11.05],
+  "fills": [
+    {
+      "type": "bitmap (unsmoothed)",
+      "bitmap": "_shared/bitmap 63",
+      "m": [1, 0, 0, 1, -8.65, 0.65],
+      "repeat": true,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 0, "d": "M 30.05 11.05 L -30.35 11.05 L -30.35 7.3 L 30.05 7.3 L 30.05 11.05 Z"}]
+}

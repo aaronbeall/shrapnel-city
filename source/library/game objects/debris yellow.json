@@ -1,0 +1,21 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 10,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": ["gotoAndStop(random(_totalframes) + 1);", ""],
+      "changes": [{"place": "game objects/debris yellow/shape 1", "depth": 4, "x": 0, "y": 0}]
+    },
+    {"frame": 2, "changes": [{"remove": 4}, {"place": "game objects/debris yellow/shape 2", "depth": 3, "x": 0, "y": 0}]},
+    {"frame": 3, "changes": [{"remove": 3}, {"place": "game objects/debris yellow/shape 3", "depth": 4, "x": 0, "y": 0}]},
+    {"frame": 4, "changes": [{"replace": "game objects/debris yellow/shape 4", "depth": 4}]},
+    {"frame": 5, "changes": [{"remove": 4}, {"place": "game objects/debris yellow/shape 5", "depth": 2, "x": 0, "y": 0}]},
+    {"frame": 6, "changes": [{"replace": "game objects/debris yellow/shape 6", "depth": 2}]},
+    {"frame": 7, "changes": [{"remove": 2}, {"place": "game objects/debris yellow/shape 7", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 8, "changes": [{"replace": "game objects/debris yellow/shape 8", "depth": 1}]},
+    {"frame": 9, "changes": [{"replace": "game objects/debris yellow/shape 9", "depth": 1}]},
+    {"frame": 10, "changes": [{"replace": "game objects/debris yellow/shape 10", "depth": 1}]}
+  ]
+}

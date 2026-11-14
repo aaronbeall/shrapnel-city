@@ -1,0 +1,142 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "game objects/box", "depth": 1, "x": 66, "y": 413},
+        {
+          "place": "game objects/box",
+          "depth": 16,
+          "x": 86,
+          "y": 413,
+          "scale": 1.285706,
+          "clipEvents": [1],
+          "script": ["onClipEvent(load){", "    health = 25;", "}"]
+        },
+        {"place": "game objects/box", "depth": 31, "x": 106, "y": 413},
+        {"place": "game objects/box", "depth": 46, "x": 69, "y": 195},
+        {
+          "place": "game objects/box",
+          "depth": 61,
+          "x": 89,
+          "y": 195.1,
+          "scale": 1.285706,
+          "clipEvents": [1],
+          "script": ["onClipEvent(load){", "    health = 25;", "}"]
+        },
+        {"place": "game objects/box", "depth": 76, "x": 109, "y": 195},
+        {"place": "game objects/box", "depth": 91, "x": 50, "y": 50},
+        {"place": "game objects/box", "depth": 106, "x": 100, "y": 50},
+        {
+          "place": "game objects/box",
+          "depth": 121,
+          "x": 175,
+          "y": 325,
+          "scale": 1.779358,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent(load){",
+            "    health = 50;",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:25",
+            "    }",
+            "}"
+          ]
+        },
+        {"place": "game objects/box", "depth": 136, "x": 169, "y": 420.95},
+        {"place": "game objects/box", "depth": 151, "x": 198, "y": 420.95},
+        {"place": "game objects/box", "depth": 166, "x": 214, "y": 554.95},
+        {"place": "game objects/box", "depth": 181, "x": 174, "y": 504.95},
+        {"place": "game objects/box", "depth": 196, "x": 254, "y": 504.95},
+        {"place": "game objects/box", "depth": 211, "x": 203, "y": 329},
+        {"place": "game objects/box", "depth": 226, "x": 324.5, "y": 73.95},
+        {"place": "game objects/box", "depth": 241, "x": 324.5, "y": 115.95},
+        {"place": "game objects/box", "depth": 256, "x": 324.5, "y": 157.95},
+        {"place": "game objects/box", "depth": 271, "x": 503, "y": 73.95},
+        {"place": "game objects/box", "depth": 286, "x": 503, "y": 115.95},
+        {"place": "game objects/box", "depth": 301, "x": 503, "y": 157.95},
+        {
+          "place": "game objects/box",
+          "depth": 316,
+          "x": 575,
+          "y": 89,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 331,
+          "x": 575,
+          "y": 225.5,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 346,
+          "x": 680,
+          "y": 89,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/box",
+          "depth": 361,
+          "x": 680,
+          "y": 225.5,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    powerupDrop = {",
+            "        type:\"primary\",",
+            "        item:\"Bolter\",",
+            "        quantity:15,",
+            "        probability:.5",
+            "    }",
+            "}",
+            ""
+          ]
+        },
+        {"place": "game objects/box", "depth": 376, "x": 400, "y": 550},
+        {"place": "game objects/box", "depth": 391, "x": 475, "y": 550},
+        {"place": "game objects/box", "depth": 406, "x": 550, "y": 550},
+        {"place": "game objects/box reactor", "depth": 421, "x": 584, "y": 160}
+      ]
+    }
+  ]
+}

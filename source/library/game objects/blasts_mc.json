@@ -1,0 +1,21 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "game objects/hit_mc",
+          "depth": 1,
+          "x": -133,
+          "y": 61,
+          "name": "hit_mc",
+          "clipEvents": [],
+          "script": ["/*onClipEvent(load){", "    _parent.hit_mc._visible = false;", "}*/"]
+        }
+      ]
+    }
+  ]
+}

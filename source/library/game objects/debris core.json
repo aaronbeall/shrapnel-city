@@ -1,0 +1,13 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 20,
+  "timeline": [
+    {"frame": 1, "label": "yellow", "changes": [{"place": "game objects/debris yellow", "depth": 1, "x": 0, "y": 0}]},
+    {
+      "frame": 10,
+      "label": "gray",
+      "changes": [{"remove": 1}, {"place": "game objects/debris gray", "depth": 1, "x": 0, "y": 0, "ratio": 0.0001373311970702678}]
+    }
+  ]
+}

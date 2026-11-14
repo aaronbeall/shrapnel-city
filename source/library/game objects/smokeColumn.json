@@ -1,0 +1,6 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "smokeColumn"},
+  "frames": 1,
+  "timeline": [{"frame": 1, "script": "#include \"as/object/smokeColumn.as\""}]
+}

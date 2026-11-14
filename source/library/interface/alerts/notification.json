@@ -1,0 +1,23 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "notification"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/ui/notification.as\"",
+      "changes": [
+        {
+          "place": "interface/alerts/notification back_mc",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "scale": [3.102707, 0.648651],
+          "color": {"alpha": 0.80078125},
+          "name": "back_mc"
+        },
+        {"place": "interface/alerts/notification/text field 1", "depth": 3, "x": -40, "y": -8, "name": "text_txt"}
+      ]
+    }
+  ]
+}

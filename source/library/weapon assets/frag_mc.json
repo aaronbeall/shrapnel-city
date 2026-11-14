@@ -1,0 +1,12 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectileBomb.as\"",
+      "changes": [{"place": "weapon assets/frag_mc/shape 1", "depth": 2, "x": 0, "y": 0}]
+    }
+  ]
+}

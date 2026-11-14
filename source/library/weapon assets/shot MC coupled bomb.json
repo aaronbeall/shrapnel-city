@@ -1,0 +1,153 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 30,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectileBomb.as\"",
+      "changes": [{"place": "_shared/shape 122", "depth": 5, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 5},
+        {"place": "weapon assets/shot MC coupled bomb/shape tween 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "_glow",
+          "depth": 2,
+          "x": 0.25,
+          "y": 0.7,
+          "scale": 2.074509,
+          "ratio": 0.000015259021896696422,
+          "blend": "add"
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "ratio": 0.2500038147554742},
+        {"update": 2, "x": 0.3, "y": 0.65, "scale": 2.073593, "color": {"alpha": 0.99609375}}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"replace": "weapon assets/shot MC coupled bomb/shape tween 2", "depth": 1, "ratio": 0},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 2.070908, "color": {"alpha": 0.984375}}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"update": 1, "ratio": 0.4375066758220798},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 2.066406, "color": {"alpha": 0.96875}}
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"update": 1, "ratio": 0.7500114442664225},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 2.060104, "color": {"alpha": 0.9453125}}
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"update": 1, "ratio": 0.9375143053330282},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 2.052002, "color": {"alpha": 0.9140625}}
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {"replace": "weapon assets/shot MC coupled bomb/shape tween 3", "depth": 1, "ratio": 0},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 2.042099, "color": {"alpha": 0.875}}
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {"update": 1, "ratio": 0.15971618219272143},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 2.030411, "color": {"alpha": 0.83203125}}
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [
+        {"update": 1, "ratio": 0.30556191348134587},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 2.016891, "color": {"alpha": 0.77734375}}
+      ]
+    },
+    {
+      "frame": 11,
+      "changes": [
+        {"update": 1, "ratio": 0.4375066758220798},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 2.001602, "color": {"alpha": 0.71875}}
+      ]
+    },
+    {
+      "frame": 12,
+      "changes": [
+        {"update": 1, "ratio": 0.5555504692149233},
+        {"update": 2, "x": 0.3, "y": 0.65, "scale": 1.984482, "color": {"alpha": 0.65234375}}
+      ]
+    },
+    {
+      "frame": 13,
+      "changes": [
+        {"update": 1, "ratio": 0.6597390707255665},
+        {"update": 2, "x": 0.3, "y": 0.65, "scale": 1.965591, "color": {"alpha": 0.58203125}}
+      ]
+    },
+    {
+      "frame": 14,
+      "changes": [
+        {"update": 1, "ratio": 0.7500114442664225},
+        {"update": 2, "x": 0.3, "y": 0.65, "scale": 1.944885, "color": {"alpha": 0.5}}
+      ]
+    },
+    {
+      "frame": 15,
+      "changes": [
+        {"update": 1, "ratio": 0.8263981078812848},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 1.922379, "color": {"alpha": 0.4140625}}
+      ]
+    },
+    {
+      "frame": 16,
+      "changes": [
+        {"update": 1, "ratio": 0.8888990615701533},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 1.898102, "color": {"alpha": 0.3203125}}
+      ]
+    },
+    {
+      "frame": 17,
+      "changes": [
+        {"update": 1, "ratio": 0.9375143053330282},
+        {"update": 2, "x": 0.3, "y": 0.7, "scale": 1.871979, "color": {"alpha": 0.22265625}}
+      ]
+    },
+    {
+      "frame": 18,
+      "changes": [
+        {"update": 1, "ratio": 0.9722285801480125},
+        {"update": 2, "x": 0.25, "y": 0.65, "scale": 1.844101, "color": {"alpha": 0.11328125}}
+      ]
+    },
+    {
+      "frame": 19,
+      "changes": [
+        {"update": 1, "ratio": 0.9930724040588998},
+        {"update": 2, "x": 0.25, "y": 0.7, "scale": 1.814392, "color": {"alpha": 0}}
+      ]
+    },
+    {
+      "frame": 20,
+      "script": ["this.maskMC.removeMovieClip();", "this.removeMovieClip();"],
+      "changes": [{"remove": 1}, {"remove": 2}, {"place": "_shared/shape 485", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 21, "changes": [{"remove": 1}]}
+  ]
+}

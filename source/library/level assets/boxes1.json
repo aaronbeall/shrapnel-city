@@ -1,0 +1,44 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "game objects/box", "depth": 1, "x": 59.9, "y": 119},
+        {"place": "game objects/box", "depth": 16, "x": 50, "y": 525},
+        {"place": "game objects/box", "depth": 31, "x": 100, "y": 550},
+        {"place": "game objects/box", "depth": 46, "x": 310.45, "y": 237.95},
+        {"place": "game objects/box", "depth": 61, "x": 300, "y": 341.95},
+        {"place": "game objects/box", "depth": 76, "x": 450, "y": 350},
+        {"place": "game objects/box", "depth": 91, "x": 438.45, "y": 235.95},
+        {"place": "game objects/box", "depth": 106, "x": 725, "y": 50},
+        {"place": "game objects/box", "depth": 121, "x": 750, "y": 50},
+        {"place": "game objects/box", "depth": 136, "x": 650, "y": 50},
+        {"place": "game objects/box", "depth": 151, "x": 700, "y": 325},
+        {"place": "game objects/box", "depth": 166, "x": 650, "y": 550},
+        {"place": "game objects/box", "depth": 181, "x": 750, "y": 550},
+        {"place": "game objects/box", "depth": 196, "x": 700, "y": 550},
+        {"place": "game objects/box", "depth": 211, "x": 650, "y": 525},
+        {"place": "game objects/box", "depth": 226, "x": 700, "y": 525},
+        {"place": "game objects/box", "depth": 241, "x": 750, "y": 525},
+        {"place": "game objects/box", "depth": 256, "x": 239.9, "y": 450},
+        {"place": "game objects/box", "depth": 271, "x": 369, "y": 100},
+        {"place": "game objects/box", "depth": 286, "x": 150, "y": 200},
+        {"place": "game objects/box", "depth": 301, "x": 200, "y": 80},
+        {"place": "game objects/box", "depth": 316, "x": 575, "y": 350},
+        {"place": "game objects/box", "depth": 331, "x": 725, "y": 75},
+        {"place": "game objects/box", "depth": 346, "x": 750, "y": 75},
+        {"place": "game objects/box", "depth": 361, "x": 575, "y": 550},
+        {"place": "game objects/box", "depth": 376, "x": 575, "y": 500},
+        {"place": "game objects/box", "depth": 391, "x": 525, "y": 550},
+        {"place": "game objects/box", "depth": 406, "x": 273, "y": 291.95},
+        {"place": "game objects/box", "depth": 421, "x": 472, "y": 291.95},
+        {"place": "game objects/box", "depth": 436, "x": 373, "y": 365.95},
+        {"place": "game objects/box", "depth": 451, "x": 650, "y": 75},
+        {"place": "game objects/box", "depth": 466, "x": 59.9, "y": 331}
+      ]
+    }
+  ]
+}

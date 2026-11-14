@@ -1,0 +1,35 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "spark"},
+  "frames": 10,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "_shared/shape tween 44", "depth": 1, "x": 0, "y": 0},
+        {"place": "_glow", "depth": 2, "x": -0.85, "y": 6.75, "scale": 1.694244, "color": {"alpha": 0.5}}
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"update": 1, "ratio": 0.4375066758220798},
+        {"update": 2, "x": -0.85, "y": 6.7, "scale": 1.694275, "color": {"alpha": 0.22265625}}
+      ]
+    },
+    {"frame": 3, "changes": [{"update": 1, "ratio": 0.7500114442664225}, {"update": 2, "color": {"alpha": 0.0546875}}]},
+    {
+      "frame": 4,
+      "changes": [
+        {"update": 1, "ratio": 0.9375143053330282},
+        {"update": 2, "x": -0.85, "y": 6.75, "scale": 1.694244, "color": {"alpha": 0}}
+      ]
+    },
+    {"frame": 5, "changes": [{"remove": 2}, {"replace": "_shared/shape tween 47", "depth": 1, "ratio": 0}]},
+    {"frame": 6, "changes": [{"update": 1, "ratio": 0.2500038147554742}]},
+    {"frame": 7, "changes": [{"update": 1, "ratio": 0.5000076295109483}]},
+    {"frame": 8, "changes": [{"update": 1, "ratio": 0.7500114442664225}]},
+    {"frame": 9, "changes": [{"remove": 1}, {"place": "_shared/shape 48", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 10, "script": ["_root.shots.remove(this);", "this.removeMovieClip();"], "changes": [{"remove": 1}]}
+  ]
+}

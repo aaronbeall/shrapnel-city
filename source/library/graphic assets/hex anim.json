@@ -1,0 +1,35 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 24,
+  "timeline": [
+    {"frame": 1, "script": "nextFrame();", "changes": [{"place": "_hex", "depth": 1, "x": 77.15, "y": 66.8}]},
+    {
+      "frame": 2,
+      "script": "#include \"as/frames/hex anim frame 2.as\"",
+      "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": [0.003235, 0.003738]}]
+    },
+    {"frame": 3, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": [0.706467, 0.706604]}]},
+    {"frame": 4, "changes": [{"update": 1, "x": 77.15, "y": 66.75, "scale": [0.882446, 0.882477]}]},
+    {"frame": 5, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": [0.927216, 0.927231]}]},
+    {"frame": 6, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.949997}]},
+    {"frame": 7, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.955002}]},
+    {"frame": 8, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.959991}]},
+    {"frame": 9, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.964981}]},
+    {"frame": 10, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.970001}]},
+    {"frame": 11, "changes": [{"update": 1, "x": 77.2, "y": 66.8, "scale": 0.975006}]},
+    {"frame": 12, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.979996}]},
+    {"frame": 13, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.984985}]},
+    {"frame": 14, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.990005}]},
+    {"frame": 15, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": 0.994995}]},
+    {
+      "frame": 16,
+      "script": ["//if(Math.random() < .5)", "    stop();"],
+      "changes": [{"update": 1, "x": 77.15, "y": 66.8}]
+    },
+    {"frame": 18, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": [0.003235, 0.003738]}]},
+    {"frame": 20, "changes": [{"update": 1, "x": 77.15, "y": 66.8}]},
+    {"frame": 22, "changes": [{"update": 1, "x": 77.15, "y": 66.8, "scale": [0.003235, 0.003738]}]},
+    {"frame": 24, "script": "stop();", "changes": [{"update": 1, "x": 77.15, "y": 66.8}]}
+  ]
+}

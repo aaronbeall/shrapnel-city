@@ -1,0 +1,93 @@
+{
+  "kind": "button",
+  "records": [
+    {
+      "symbol": "interface/screens/mission panel/button 1/text 1",
+      "depth": 1,
+      "states": ["up"],
+      "x": -43,
+      "y": 2,
+      "color": {},
+      "filters": [
+        {
+          "type": "dropShadow",
+          "color": "#000000",
+          "blurX": 1,
+          "blurY": 1,
+          "angle": 0.7853851318359375,
+          "distance": 1,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        },
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 12,
+          "blurY": 12,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        }
+      ]
+    },
+    {
+      "symbol": "interface/screens/mission panel/button 1/shape 1",
+      "depth": 2,
+      "states": ["up"],
+      "x": 0,
+      "y": 0,
+      "color": {}
+    },
+    {
+      "symbol": "interface/screens/mission panel/button 1/text 2",
+      "depth": 1,
+      "states": ["over", "down"],
+      "x": -43,
+      "y": 2,
+      "color": {},
+      "filters": [
+        {
+          "type": "dropShadow",
+          "color": "#000000",
+          "blurX": 1,
+          "blurY": 1,
+          "angle": 0.7853851318359375,
+          "distance": 1,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        },
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 12,
+          "blurY": 12,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 1
+        }
+      ]
+    },
+    {
+      "symbol": "interface/screens/mission panel/button 1/shape 1",
+      "depth": 2,
+      "states": ["over", "down"],
+      "x": 0,
+      "y": 0,
+      "color": {}
+    },
+    {
+      "symbol": "interface/screens/mission panel/button 1/shape 2",
+      "depth": 1,
+      "states": ["hit"],
+      "x": 0,
+      "y": 0,
+      "color": {}
+    }
+  ]
+}

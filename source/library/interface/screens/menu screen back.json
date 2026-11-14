@@ -1,0 +1,20 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "graphic"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "interface/screens/menu screen back/shape 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "interface/screens/menu screen back/button 1",
+          "depth": 2,
+          "x": 223,
+          "y": 12.25,
+          "script": ["on (release) {", "    hideDialog();", "}", ""]
+        }
+      ]
+    }
+  ]
+}
