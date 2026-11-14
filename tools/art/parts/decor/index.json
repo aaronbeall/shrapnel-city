@@ -1,0 +1,851 @@
+{
+ "floorpaint": [
+  {
+   "file": "floorpaint/00.png",
+   "w": 156,
+   "h": 156
+  },
+  {
+   "file": "floorpaint/01.png",
+   "w": 153,
+   "h": 159
+  },
+  {
+   "file": "floorpaint/02.png",
+   "w": 165,
+   "h": 161
+  },
+  {
+   "file": "floorpaint/03.png",
+   "w": 157,
+   "h": 160
+  },
+  {
+   "file": "floorpaint/04.png",
+   "w": 161,
+   "h": 161
+  },
+  {
+   "file": "floorpaint/05.png",
+   "w": 168,
+   "h": 117
+  },
+  {
+   "file": "floorpaint/06.png",
+   "w": 176,
+   "h": 174
+  },
+  {
+   "file": "floorpaint/07.png",
+   "w": 155,
+   "h": 157
+  },
+  {
+   "file": "floorpaint/08.png",
+   "w": 163,
+   "h": 124
+  },
+  {
+   "file": "floorpaint/09.png",
+   "w": 173,
+   "h": 123
+  },
+  {
+   "file": "floorpaint/10.png",
+   "w": 199,
+   "h": 122
+  },
+  {
+   "file": "floorpaint/11.png",
+   "w": 171,
+   "h": 116
+  },
+  {
+   "file": "floorpaint/12.png",
+   "w": 153,
+   "h": 155
+  },
+  {
+   "file": "floorpaint/13.png",
+   "w": 155,
+   "h": 158
+  },
+  {
+   "file": "floorpaint/14.png",
+   "w": 138,
+   "h": 143
+  },
+  {
+   "file": "floorpaint/15.png",
+   "w": 141,
+   "h": 141
+  },
+  {
+   "file": "floorpaint/16.png",
+   "w": 137,
+   "h": 142
+  },
+  {
+   "file": "floorpaint/17.png",
+   "w": 134,
+   "h": 138
+  },
+  {
+   "file": "floorpaint/18.png",
+   "w": 158,
+   "h": 157
+  },
+  {
+   "file": "floorpaint/19.png",
+   "w": 158,
+   "h": 158
+  },
+  {
+   "file": "floorpaint/20.png",
+   "w": 147,
+   "h": 155
+  },
+  {
+   "file": "floorpaint/21.png",
+   "w": 151,
+   "h": 155
+  },
+  {
+   "file": "floorpaint/22.png",
+   "w": 144,
+   "h": 148
+  },
+  {
+   "file": "floorpaint/23.png",
+   "w": 198,
+   "h": 82
+  }
+ ],
+ "greebles": [
+  {
+   "file": "greebles/00.png",
+   "w": 89,
+   "h": 158
+  },
+  {
+   "file": "greebles/01.png",
+   "w": 139,
+   "h": 135
+  },
+  {
+   "file": "greebles/02.png",
+   "w": 142,
+   "h": 134
+  },
+  {
+   "file": "greebles/03.png",
+   "w": 124,
+   "h": 123
+  },
+  {
+   "file": "greebles/04.png",
+   "w": 117,
+   "h": 118
+  },
+  {
+   "file": "greebles/05.png",
+   "w": 189,
+   "h": 108
+  },
+  {
+   "file": "greebles/06.png",
+   "w": 97,
+   "h": 203
+  },
+  {
+   "file": "greebles/07.png",
+   "w": 48,
+   "h": 195
+  },
+  {
+   "file": "greebles/08.png",
+   "w": 56,
+   "h": 166
+  },
+  {
+   "file": "greebles/09.png",
+   "w": 126,
+   "h": 124
+  },
+  {
+   "file": "greebles/10.png",
+   "w": 193,
+   "h": 114
+  },
+  {
+   "file": "greebles/11.png",
+   "w": 179,
+   "h": 88
+  },
+  {
+   "file": "greebles/12.png",
+   "w": 78,
+   "h": 151
+  },
+  {
+   "file": "greebles/13.png",
+   "w": 79,
+   "h": 143
+  },
+  {
+   "file": "greebles/14.png",
+   "w": 123,
+   "h": 124
+  },
+  {
+   "file": "greebles/15.png",
+   "w": 146,
+   "h": 116
+  },
+  {
+   "file": "greebles/16.png",
+   "w": 118,
+   "h": 120
+  },
+  {
+   "file": "greebles/17.png",
+   "w": 182,
+   "h": 78
+  },
+  {
+   "file": "greebles/18.png",
+   "w": 52,
+   "h": 155
+  },
+  {
+   "file": "greebles/19.png",
+   "w": 79,
+   "h": 147
+  },
+  {
+   "file": "greebles/20.png",
+   "w": 107,
+   "h": 142
+  },
+  {
+   "file": "greebles/21.png",
+   "w": 127,
+   "h": 127
+  },
+  {
+   "file": "greebles/22.png",
+   "w": 120,
+   "h": 124
+  },
+  {
+   "file": "greebles/23.png",
+   "w": 191,
+   "h": 78
+  }
+ ],
+ "greebles2": [
+  {
+   "file": "greebles2/00.png",
+   "w": 79,
+   "h": 183
+  },
+  {
+   "file": "greebles2/01.png",
+   "w": 71,
+   "h": 158
+  },
+  {
+   "file": "greebles2/02.png",
+   "w": 140,
+   "h": 138
+  },
+  {
+   "file": "greebles2/03.png",
+   "w": 141,
+   "h": 137
+  },
+  {
+   "file": "greebles2/04.png",
+   "w": 125,
+   "h": 133
+  },
+  {
+   "file": "greebles2/05.png",
+   "w": 213,
+   "h": 90
+  },
+  {
+   "file": "greebles2/06.png",
+   "w": 70,
+   "h": 145
+  },
+  {
+   "file": "greebles2/07.png",
+   "w": 130,
+   "h": 129
+  },
+  {
+   "file": "greebles2/08.png",
+   "w": 125,
+   "h": 115
+  },
+  {
+   "file": "greebles2/09.png",
+   "w": 113,
+   "h": 125
+  },
+  {
+   "file": "greebles2/10.png",
+   "w": 98,
+   "h": 101
+  },
+  {
+   "file": "greebles2/11.png",
+   "w": 168,
+   "h": 91
+  },
+  {
+   "file": "greebles2/12.png",
+   "w": 132,
+   "h": 127
+  },
+  {
+   "file": "greebles2/13.png",
+   "w": 96,
+   "h": 94
+  },
+  {
+   "file": "greebles2/14.png",
+   "w": 165,
+   "h": 90
+  },
+  {
+   "file": "greebles2/15.png",
+   "w": 78,
+   "h": 82
+  },
+  {
+   "file": "greebles2/16.png",
+   "w": 144,
+   "h": 81
+  },
+  {
+   "file": "greebles2/17.png",
+   "w": 176,
+   "h": 61
+  },
+  {
+   "file": "greebles2/18.png",
+   "w": 109,
+   "h": 152
+  },
+  {
+   "file": "greebles2/19.png",
+   "w": 87,
+   "h": 159
+  },
+  {
+   "file": "greebles2/20.png",
+   "w": 118,
+   "h": 122
+  },
+  {
+   "file": "greebles2/21.png",
+   "w": 118,
+   "h": 120
+  },
+  {
+   "file": "greebles2/22.png",
+   "w": 99,
+   "h": 83
+  },
+  {
+   "file": "greebles2/23.png",
+   "w": 127,
+   "h": 107
+  }
+ ],
+ "lights": [
+  {
+   "file": "lights/00.png",
+   "w": 151,
+   "h": 152
+  },
+  {
+   "file": "lights/01.png",
+   "w": 165,
+   "h": 145
+  },
+  {
+   "file": "lights/02.png",
+   "w": 133,
+   "h": 136
+  },
+  {
+   "file": "lights/03.png",
+   "w": 133,
+   "h": 134
+  },
+  {
+   "file": "lights/04.png",
+   "w": 162,
+   "h": 131
+  },
+  {
+   "file": "lights/05.png",
+   "w": 264,
+   "h": 69
+  },
+  {
+   "file": "lights/06.png",
+   "w": 115,
+   "h": 108
+  },
+  {
+   "file": "lights/07.png",
+   "w": 201,
+   "h": 91
+  },
+  {
+   "file": "lights/08.png",
+   "w": 83,
+   "h": 84
+  },
+  {
+   "file": "lights/09.png",
+   "w": 82,
+   "h": 84
+  },
+  {
+   "file": "lights/10.png",
+   "w": 82,
+   "h": 84
+  },
+  {
+   "file": "lights/11.png",
+   "w": 82,
+   "h": 84
+  },
+  {
+   "file": "lights/12.png",
+   "w": 112,
+   "h": 165
+  },
+  {
+   "file": "lights/13.png",
+   "w": 111,
+   "h": 165
+  },
+  {
+   "file": "lights/14.png",
+   "w": 110,
+   "h": 165
+  },
+  {
+   "file": "lights/15.png",
+   "w": 110,
+   "h": 165
+  },
+  {
+   "file": "lights/16.png",
+   "w": 191,
+   "h": 147
+  },
+  {
+   "file": "lights/17.png",
+   "w": 193,
+   "h": 147
+  },
+  {
+   "file": "lights/18.png",
+   "w": 86,
+   "h": 183
+  },
+  {
+   "file": "lights/19.png",
+   "w": 156,
+   "h": 156
+  },
+  {
+   "file": "lights/20.png",
+   "w": 145,
+   "h": 147
+  },
+  {
+   "file": "lights/21.png",
+   "w": 142,
+   "h": 143
+  },
+  {
+   "file": "lights/22.png",
+   "w": 137,
+   "h": 126
+  },
+  {
+   "file": "lights/23.png",
+   "w": 274,
+   "h": 105
+  }
+ ],
+ "rails": [
+  {
+   "file": "rails/00.png",
+   "w": 402,
+   "h": 42
+  },
+  {
+   "file": "rails/01.png",
+   "w": 386,
+   "h": 41
+  },
+  {
+   "file": "rails/02.png",
+   "w": 181,
+   "h": 41
+  },
+  {
+   "file": "rails/03.png",
+   "w": 226,
+   "h": 41
+  },
+  {
+   "file": "rails/04.png",
+   "w": 158,
+   "h": 88
+  },
+  {
+   "file": "rails/05.png",
+   "w": 86,
+   "h": 62
+  },
+  {
+   "file": "rails/06.png",
+   "w": 306,
+   "h": 45
+  },
+  {
+   "file": "rails/07.png",
+   "w": 431,
+   "h": 49
+  },
+  {
+   "file": "rails/08.png",
+   "w": 101,
+   "h": 109
+  },
+  {
+   "file": "rails/09.png",
+   "w": 419,
+   "h": 71
+  },
+  {
+   "file": "rails/10.png",
+   "w": 266,
+   "h": 53
+  },
+  {
+   "file": "rails/11.png",
+   "w": 274,
+   "h": 15
+  },
+  {
+   "file": "rails/12.png",
+   "w": 292,
+   "h": 67
+  },
+  {
+   "file": "rails/13.png",
+   "w": 221,
+   "h": 86
+  },
+  {
+   "file": "rails/14.png",
+   "w": 94,
+   "h": 58
+  },
+  {
+   "file": "rails/15.png",
+   "w": 58,
+   "h": 42
+  },
+  {
+   "file": "rails/16.png",
+   "w": 154,
+   "h": 40
+  },
+  {
+   "file": "rails/17.png",
+   "w": 447,
+   "h": 78
+  },
+  {
+   "file": "rails/18.png",
+   "w": 349,
+   "h": 65
+  },
+  {
+   "file": "rails/19.png",
+   "w": 348,
+   "h": 37
+  },
+  {
+   "file": "rails/20.png",
+   "w": 403,
+   "h": 77
+  },
+  {
+   "file": "rails/21.png",
+   "w": 494,
+   "h": 74
+  },
+  {
+   "file": "rails/22.png",
+   "w": 300,
+   "h": 68
+  }
+ ],
+ "vents": [
+  {
+   "file": "vents/00.png",
+   "w": 100,
+   "h": 165
+  },
+  {
+   "file": "vents/01.png",
+   "w": 113,
+   "h": 162
+  },
+  {
+   "file": "vents/02.png",
+   "w": 130,
+   "h": 135
+  },
+  {
+   "file": "vents/03.png",
+   "w": 128,
+   "h": 128
+  },
+  {
+   "file": "vents/04.png",
+   "w": 182,
+   "h": 93
+  },
+  {
+   "file": "vents/05.png",
+   "w": 194,
+   "h": 81
+  },
+  {
+   "file": "vents/06.png",
+   "w": 103,
+   "h": 162
+  },
+  {
+   "file": "vents/07.png",
+   "w": 125,
+   "h": 148
+  },
+  {
+   "file": "vents/08.png",
+   "w": 142,
+   "h": 150
+  },
+  {
+   "file": "vents/09.png",
+   "w": 143,
+   "h": 138
+  },
+  {
+   "file": "vents/10.png",
+   "w": 136,
+   "h": 134
+  },
+  {
+   "file": "vents/11.png",
+   "w": 193,
+   "h": 107
+  },
+  {
+   "file": "vents/12.png",
+   "w": 67,
+   "h": 176
+  },
+  {
+   "file": "vents/13.png",
+   "w": 68,
+   "h": 154
+  },
+  {
+   "file": "vents/14.png",
+   "w": 103,
+   "h": 110
+  },
+  {
+   "file": "vents/15.png",
+   "w": 186,
+   "h": 109
+  },
+  {
+   "file": "vents/16.png",
+   "w": 157,
+   "h": 89
+  },
+  {
+   "file": "vents/17.png",
+   "w": 167,
+   "h": 91
+  },
+  {
+   "file": "vents/18.png",
+   "w": 71,
+   "h": 157
+  },
+  {
+   "file": "vents/19.png",
+   "w": 149,
+   "h": 148
+  },
+  {
+   "file": "vents/20.png",
+   "w": 142,
+   "h": 142
+  },
+  {
+   "file": "vents/21.png",
+   "w": 136,
+   "h": 131
+  },
+  {
+   "file": "vents/22.png",
+   "w": 120,
+   "h": 120
+  },
+  {
+   "file": "vents/23.png",
+   "w": 138,
+   "h": 132
+  }
+ ],
+ "wallmarks": [
+  {
+   "file": "wallmarks/00.png",
+   "w": 102,
+   "h": 149
+  },
+  {
+   "file": "wallmarks/01.png",
+   "w": 151,
+   "h": 130
+  },
+  {
+   "file": "wallmarks/02.png",
+   "w": 136,
+   "h": 130
+  },
+  {
+   "file": "wallmarks/03.png",
+   "w": 193,
+   "h": 114
+  },
+  {
+   "file": "wallmarks/04.png",
+   "w": 159,
+   "h": 116
+  },
+  {
+   "file": "wallmarks/05.png",
+   "w": 179,
+   "h": 106
+  },
+  {
+   "file": "wallmarks/06.png",
+   "w": 148,
+   "h": 136
+  },
+  {
+   "file": "wallmarks/07.png",
+   "w": 185,
+   "h": 120
+  },
+  {
+   "file": "wallmarks/08.png",
+   "w": 182,
+   "h": 120
+  },
+  {
+   "file": "wallmarks/09.png",
+   "w": 145,
+   "h": 117
+  },
+  {
+   "file": "wallmarks/10.png",
+   "w": 148,
+   "h": 79
+  },
+  {
+   "file": "wallmarks/11.png",
+   "w": 186,
+   "h": 56
+  },
+  {
+   "file": "wallmarks/12.png",
+   "w": 139,
+   "h": 116
+  },
+  {
+   "file": "wallmarks/13.png",
+   "w": 123,
+   "h": 119
+  },
+  {
+   "file": "wallmarks/14.png",
+   "w": 75,
+   "h": 115
+  },
+  {
+   "file": "wallmarks/15.png",
+   "w": 173,
+   "h": 108
+  },
+  {
+   "file": "wallmarks/16.png",
+   "w": 148,
+   "h": 107
+  },
+  {
+   "file": "wallmarks/17.png",
+   "w": 189,
+   "h": 100
+  },
+  {
+   "file": "wallmarks/18.png",
+   "w": 159,
+   "h": 139
+  },
+  {
+   "file": "wallmarks/19.png",
+   "w": 89,
+   "h": 116
+  },
+  {
+   "file": "wallmarks/20.png",
+   "w": 175,
+   "h": 102
+  },
+  {
+   "file": "wallmarks/21.png",
+   "w": 75,
+   "h": 89
+  },
+  {
+   "file": "wallmarks/22.png",
+   "w": 200,
+   "h": 74
+  },
+  {
+   "file": "wallmarks/23.png",
+   "w": 193,
+   "h": 79
+  }
+ ]
+}

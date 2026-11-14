@@ -1,0 +1,12 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/level/pathNode.as\"",
+      "changes": [{"place": "game objects/node/shape 1", "depth": 1, "x": 0, "y": 0}]
+    }
+  ]
+}

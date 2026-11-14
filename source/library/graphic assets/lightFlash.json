@@ -1,0 +1,22 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "lightFlash"},
+  "frames": 11,
+  "timeline": [
+    {"frame": 1, "changes": [{"place": "_glow", "depth": 1, "x": 0, "y": 0, "scale": [0.56839, 2.870575], "blend": "add"}]},
+    {"frame": 2, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [6.466965, 0.712479]}]},
+    {"frame": 3, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [3.163696, 2.078491]}]},
+    {"frame": 4, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [3.08139, 2.75], "color": {"alpha": 0.765625}}]},
+    {"frame": 5, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [3.009995, 3.332474], "color": {"alpha": 0.5625}}]},
+    {"frame": 6, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [2.949554, 3.825836], "color": {"alpha": 0.39453125}}]},
+    {"frame": 7, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [2.899979, 4.23024], "color": {"alpha": 0.25390625}}]},
+    {"frame": 8, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [2.861359, 4.545532], "color": {"alpha": 0.14453125}}]},
+    {"frame": 9, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [2.833603, 4.771713], "color": {"alpha": 0.0625}}]},
+    {"frame": 10, "changes": [{"update": 1, "x": 0, "y": 0, "scale": [2.816803, 4.90889], "color": {"alpha": 0.015625}}]},
+    {
+      "frame": 11,
+      "script": "this.removeMovieClip();",
+      "changes": [{"update": 1, "x": 0, "y": 0, "scale": [2.810913, 4.95697], "color": {"alpha": 0}}]
+    }
+  ]
+}

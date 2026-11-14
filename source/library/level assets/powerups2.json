@@ -1,0 +1,126 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "game objects/powerup",
+          "depth": 1,
+          "x": 50.05,
+          "y": 550.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 36,
+          "x": 100.05,
+          "y": 550.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 71,
+          "x": 376.1,
+          "y": 256.85,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"secondary\";",
+            "    item = \"Shrapnel Bomb\";",
+            "    quantity = 1;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 106,
+          "x": 700.05,
+          "y": 297.05,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"secondary\";",
+            "    item = \"Carbon Bomb\";",
+            "    quantity = 1;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 141,
+          "x": 700.05,
+          "y": 327.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Plasma\";", "    quantity = 15;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 176,
+          "x": 325.05,
+          "y": 550.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 211,
+          "x": 442.05,
+          "y": 256.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 50;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 246,
+          "x": 89.05,
+          "y": 330.8,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 281,
+          "x": 89.05,
+          "y": 300.8,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"secondary\";",
+            "    item = \"Carbon Bomb\";",
+            "    quantity = 1;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 316,
+          "x": 89.05,
+          "y": 270.8,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 351,
+          "x": 436.05,
+          "y": 550.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 386,
+          "x": 513.05,
+          "y": 550.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 25;", "}"]
+        }
+      ]
+    }
+  ]
+}

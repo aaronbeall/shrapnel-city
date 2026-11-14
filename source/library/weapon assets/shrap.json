@@ -1,0 +1,172 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 45,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "weapon assets/shrap piece",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 254, 244, 0]},
+          "name": "shrap_mc"
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [{"update": 1, "color": {"multiply": [0.0546875, 0.0546875, 0.0546875, 1], "add": [239, 228, 218, 0]}}]
+    },
+    {
+      "frame": 3,
+      "changes": [{"update": 1, "color": {"multiply": [0.109375, 0.109375, 0.109375, 1], "add": [223, 203, 191, 0]}}]
+    },
+    {
+      "frame": 4,
+      "changes": [{"update": 1, "color": {"multiply": [0.16796875, 0.16796875, 0.16796875, 1], "add": [207, 177, 165, 0]}}]
+    },
+    {
+      "frame": 5,
+      "changes": [{"update": 1, "color": {"multiply": [0.22265625, 0.22265625, 0.22265625, 1], "add": [191, 152, 138, 0]}}]
+    },
+    {
+      "frame": 6,
+      "changes": [{"update": 1, "color": {"multiply": [0.27734375, 0.27734375, 0.27734375, 1], "add": [175, 126, 112, 0]}}]
+    },
+    {
+      "frame": 7,
+      "changes": [{"update": 1, "color": {"multiply": [0.33203125, 0.33203125, 0.33203125, 1], "add": [159, 101, 85, 0]}}]
+    },
+    {
+      "frame": 8,
+      "changes": [{"update": 1, "color": {"multiply": [0.390625, 0.390625, 0.390625, 1], "add": [143, 75, 59, 0]}}]
+    },
+    {
+      "frame": 9,
+      "changes": [{"update": 1, "color": {"multiply": [0.4453125, 0.4453125, 0.4453125, 1], "add": [127, 50, 32, 0]}}]
+    },
+    {"frame": 10, "changes": [{"update": 1, "color": {"multiply": [0.5, 0.5, 0.5, 1], "add": [111, 24, 6, 0]}}]},
+    {
+      "frame": 11,
+      "changes": [{"update": 1, "color": {"multiply": [0.515625, 0.515625, 0.515625, 1], "add": [108, 23, 6, 0]}}]
+    },
+    {
+      "frame": 12,
+      "changes": [{"update": 1, "color": {"multiply": [0.52734375, 0.52734375, 0.52734375, 1], "add": [105, 23, 6, 0]}}]
+    },
+    {
+      "frame": 13,
+      "changes": [{"update": 1, "color": {"multiply": [0.54296875, 0.54296875, 0.54296875, 1], "add": [101, 22, 5, 0]}}]
+    },
+    {
+      "frame": 14,
+      "changes": [{"update": 1, "color": {"multiply": [0.55859375, 0.55859375, 0.55859375, 1], "add": [98, 21, 5, 0]}}]
+    },
+    {
+      "frame": 15,
+      "changes": [{"update": 1, "color": {"multiply": [0.5703125, 0.5703125, 0.5703125, 1], "add": [95, 21, 5, 0]}}]
+    },
+    {
+      "frame": 16,
+      "changes": [{"update": 1, "color": {"multiply": [0.5859375, 0.5859375, 0.5859375, 1], "add": [92, 20, 5, 0]}}]
+    },
+    {
+      "frame": 17,
+      "changes": [{"update": 1, "color": {"multiply": [0.6015625, 0.6015625, 0.6015625, 1], "add": [89, 19, 5, 0]}}]
+    },
+    {
+      "frame": 18,
+      "changes": [{"update": 1, "color": {"multiply": [0.61328125, 0.61328125, 0.61328125, 1], "add": [86, 19, 5, 0]}}]
+    },
+    {
+      "frame": 19,
+      "changes": [{"update": 1, "color": {"multiply": [0.62890625, 0.62890625, 0.62890625, 1], "add": [82, 18, 4, 0]}}]
+    },
+    {
+      "frame": 20,
+      "changes": [{"update": 1, "color": {"multiply": [0.64453125, 0.64453125, 0.64453125, 1], "add": [79, 17, 4, 0]}}]
+    },
+    {"frame": 21, "changes": [{"update": 1, "color": {"multiply": [0.65625, 0.65625, 0.65625, 1], "add": [76, 16, 4, 0]}}]},
+    {
+      "frame": 22,
+      "changes": [{"update": 1, "color": {"multiply": [0.671875, 0.671875, 0.671875, 1], "add": [73, 16, 4, 0]}}]
+    },
+    {"frame": 23, "changes": [{"update": 1, "color": {"multiply": [0.6875, 0.6875, 0.6875, 1], "add": [70, 15, 4, 0]}}]},
+    {
+      "frame": 24,
+      "changes": [{"update": 1, "color": {"multiply": [0.69921875, 0.69921875, 0.69921875, 1], "add": [67, 14, 4, 0]}}]
+    },
+    {
+      "frame": 25,
+      "changes": [{"update": 1, "color": {"multiply": [0.71484375, 0.71484375, 0.71484375, 1], "add": [63, 14, 3, 0]}}]
+    },
+    {
+      "frame": 26,
+      "changes": [{"update": 1, "color": {"multiply": [0.73046875, 0.73046875, 0.73046875, 1], "add": [60, 13, 3, 0]}}]
+    },
+    {
+      "frame": 27,
+      "changes": [{"update": 1, "color": {"multiply": [0.7421875, 0.7421875, 0.7421875, 1], "add": [57, 12, 3, 0]}}]
+    },
+    {
+      "frame": 28,
+      "changes": [{"update": 1, "color": {"multiply": [0.7578125, 0.7578125, 0.7578125, 1], "add": [54, 12, 3, 0]}}]
+    },
+    {
+      "frame": 29,
+      "changes": [{"update": 1, "color": {"multiply": [0.76953125, 0.76953125, 0.76953125, 1], "add": [51, 11, 3, 0]}}]
+    },
+    {
+      "frame": 30,
+      "changes": [{"update": 1, "color": {"multiply": [0.78515625, 0.78515625, 0.78515625, 1], "add": [48, 10, 3, 0]}}]
+    },
+    {
+      "frame": 31,
+      "changes": [{"update": 1, "color": {"multiply": [0.80078125, 0.80078125, 0.80078125, 1], "add": [44, 10, 2, 0]}}]
+    },
+    {"frame": 32, "changes": [{"update": 1, "color": {"multiply": [0.8125, 0.8125, 0.8125, 1], "add": [41, 9, 2, 0]}}]},
+    {"frame": 33, "changes": [{"update": 1, "color": {"multiply": [0.828125, 0.828125, 0.828125, 1], "add": [38, 8, 2, 0]}}]},
+    {"frame": 34, "changes": [{"update": 1, "color": {"multiply": [0.84375, 0.84375, 0.84375, 1], "add": [35, 8, 2, 0]}}]},
+    {
+      "frame": 35,
+      "changes": [{"update": 1, "color": {"multiply": [0.85546875, 0.85546875, 0.85546875, 1], "add": [32, 7, 2, 0]}}]
+    },
+    {
+      "frame": 36,
+      "changes": [{"update": 1, "color": {"multiply": [0.87109375, 0.87109375, 0.87109375, 1], "add": [29, 6, 2, 0]}}]
+    },
+    {
+      "frame": 37,
+      "changes": [{"update": 1, "color": {"multiply": [0.88671875, 0.88671875, 0.88671875, 1], "add": [25, 5, 1, 0]}}]
+    },
+    {
+      "frame": 38,
+      "changes": [{"update": 1, "color": {"multiply": [0.8984375, 0.8984375, 0.8984375, 1], "add": [22, 5, 1, 0]}}]
+    },
+    {
+      "frame": 39,
+      "changes": [{"update": 1, "color": {"multiply": [0.9140625, 0.9140625, 0.9140625, 1], "add": [19, 4, 1, 0]}}]
+    },
+    {
+      "frame": 40,
+      "changes": [{"update": 1, "color": {"multiply": [0.9296875, 0.9296875, 0.9296875, 1], "add": [16, 3, 1, 0]}}]
+    },
+    {
+      "frame": 41,
+      "changes": [{"update": 1, "color": {"multiply": [0.94140625, 0.94140625, 0.94140625, 1], "add": [13, 3, 1, 0]}}]
+    },
+    {
+      "frame": 42,
+      "changes": [{"update": 1, "color": {"multiply": [0.95703125, 0.95703125, 0.95703125, 1], "add": [10, 2, 1, 0]}}]
+    },
+    {
+      "frame": 43,
+      "changes": [{"update": 1, "color": {"multiply": [0.97265625, 0.97265625, 0.97265625, 1], "add": [6, 1, 0, 0]}}]
+    },
+    {"frame": 44, "changes": [{"update": 1, "color": {"multiply": [0.984375, 0.984375, 0.984375, 1], "add": [3, 1, 0, 0]}}]},
+    {"frame": 45, "script": ["stop();", ""], "changes": [{"update": 1, "color": {}}]}
+  ]
+}

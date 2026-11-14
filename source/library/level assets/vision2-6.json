@@ -1,0 +1,6 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [{"frame": 1, "changes": [{"place": "_shared/shape 629", "depth": 1, "x": 0, "y": 0}]}]
+}

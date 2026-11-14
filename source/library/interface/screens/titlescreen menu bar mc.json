@@ -1,0 +1,109 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 20,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [{"place": "interface/screens/titlescreen menu bar mc/shape 1", "depth": 13, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 10,
+      "changes": [
+        {
+          "place": "_shared/shape 49",
+          "depth": 10,
+          "x": 535.75,
+          "y": 535.3,
+          "scale": [1.898865, 1.249313],
+          "color": {"alpha": 0.5}
+        },
+        {
+          "place": "_glow",
+          "depth": 11,
+          "x": 535.75,
+          "y": 535.3,
+          "scale": [5.471115, 3.599594],
+          "color": {"alpha": 0.5},
+          "ratio": 0.0001373311970702678
+        }
+      ]
+    },
+    {
+      "frame": 11,
+      "changes": [
+        {"remove": 10},
+        {
+          "place": "_shared/shape 50",
+          "depth": 6,
+          "x": 535.75,
+          "y": 535.3,
+          "scale": [1.898865, 1.249313],
+          "color": {"alpha": 0.5}
+        },
+        {"update": 11, "x": 535.75, "y": 535.3, "scale": [5.153839, 3.390854], "color": {"alpha": 0.2890625}}
+      ]
+    },
+    {
+      "frame": 12,
+      "changes": [
+        {"remove": 6},
+        {
+          "place": "_shared/shape 51",
+          "depth": 8,
+          "x": 535.75,
+          "y": 535.3,
+          "scale": [1.898865, 1.249313],
+          "color": {"alpha": 0.5}
+        },
+        {"update": 11, "color": {"alpha": 0.5}}
+      ]
+    },
+    {
+      "frame": 13,
+      "changes": [
+        {"remove": 8},
+        {
+          "place": "_shared/shape 52",
+          "depth": 9,
+          "x": 535.75,
+          "y": 535.3,
+          "scale": [1.898865, 1.249313],
+          "color": {"alpha": 0.5}
+        },
+        {"update": 11, "color": {"alpha": 0.2109375}}
+      ]
+    },
+    {"frame": 14, "changes": [{"replace": "_shared/shape 53", "depth": 9}, {"update": 11, "color": {"alpha": 0.5}}]},
+    {
+      "frame": 15,
+      "changes": [
+        {"remove": 9},
+        {
+          "place": "_shared/shape 54",
+          "depth": 7,
+          "x": 535.75,
+          "y": 535.3,
+          "scale": [1.898865, 1.249313],
+          "color": {"alpha": 0.5}
+        }
+      ]
+    },
+    {"frame": 16, "changes": [{"remove": 7}, {"update": 11, "color": {"alpha": 0.375}}]},
+    {"frame": 17, "changes": [{"update": 11, "color": {"alpha": 0.25}}]},
+    {"frame": 18, "changes": [{"update": 11, "color": {"alpha": 0.125}}]},
+    {"frame": 19, "changes": [{"update": 11, "color": {"alpha": 0}}]},
+    {
+      "frame": 20,
+      "script": [
+        "stop();",
+        "setTimeout(replay, 2000 + random(10000), this);",
+        "",
+        "function replay(mc){",
+        "    mc.play();",
+        "}"
+      ],
+      "changes": [{"remove": 11}]
+    }
+  ]
+}

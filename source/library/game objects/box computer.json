@@ -1,0 +1,372 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 20,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": [
+        "health = 50;",
+        "required = false;",
+        "debrisType = \"gray\";",
+        "debrisCount = 5;",
+        "",
+        "#include \"as/object/box.as\""
+      ],
+      "changes": [{"place": "_shared/shape 673", "depth": 34, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 34},
+        {"place": "graphic assets/explosion", "depth": 1, "x": 1.8, "y": 7.3},
+        {"place": "_shared/shape tween 239", "depth": 2, "x": 1.8, "y": 7.3},
+        {
+          "place": "_glow",
+          "depth": 3,
+          "x": 2.05,
+          "y": 8,
+          "scale": 2.870483,
+          "ratio": 0.000015259021896696422,
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}],
+          "blend": "add"
+        },
+        {"place": "_shared/shape tween 240", "depth": 5, "x": 1.8, "y": 7.3},
+        {"place": "game objects/box computer/shape tween 1", "depth": 6, "x": 0, "y": 0},
+        {"place": "game objects/box computer/shape tween 2", "depth": 7, "x": 0, "y": 0},
+        {"place": "game objects/box computer/shape tween 3", "depth": 8, "x": 0, "y": 0},
+        {"place": "game objects/box computer/shape 1", "depth": 39, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"remove": 39},
+        {"update": 1, "ratio": 0.11111619745174334},
+        {"update": 2, "ratio": 0.5555504692149233},
+        {
+          "update": 3,
+          "x": 2,
+          "y": 8,
+          "scale": 2.870483,
+          "color": {"alpha": 0.97265625},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 5, "ratio": 0.5555504692149233},
+        {"update": 6, "ratio": 0.2653086137178607},
+        {"update": 7, "ratio": 0.2653086137178607},
+        {"update": 8, "ratio": 0.2653086137178607},
+        {"place": "game objects/box computer/shape 2", "depth": 30, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"remove": 30},
+        {"update": 1, "ratio": 0.44446478980697335},
+        {"update": 2, "ratio": 0.8888990615701533},
+        {"update": 3, "color": {"alpha": 0.890625}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 5, "ratio": 0.8888990615701533},
+        {"update": 6, "ratio": 0.4898146028839551},
+        {"update": 7, "ratio": 0.4898146028839551},
+        {"update": 8, "ratio": 0.4898146028839551},
+        {"place": "game objects/box computer/shape 3", "depth": 34, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"remove": 34},
+        {"replace": "_shared/shape tween 241", "depth": 1, "ratio": 0},
+        {"replace": "_shared/shape tween 242", "depth": 2, "ratio": 0},
+        {"update": 3, "color": {"alpha": 0.75}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"replace": "_shared/shape tween 243", "depth": 5, "ratio": 0},
+        {"update": 6, "ratio": 0.67348744945449},
+        {"update": 7, "ratio": 0.67348744945449},
+        {"update": 8, "ratio": 0.67348744945449},
+        {"place": "game objects/box computer/shape 4", "depth": 53, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"update": 1, "ratio": 0.2653086137178607},
+        {"update": 2, "ratio": 0.2},
+        {"update": 3, "color": {"alpha": 0.5546875}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 5, "ratio": 0.5555504692149233},
+        {"update": 6, "ratio": 0.8163424124513619},
+        {"update": 7, "ratio": 0.8163424124513619},
+        {"update": 8, "ratio": 0.8163424124513619}
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"update": 1, "ratio": 0.4898146028839551},
+        {"update": 2, "ratio": 0.4},
+        {"update": 3, "color": {"alpha": 0.3046875}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 5, "ratio": 0.8888990615701533},
+        {"update": 6, "ratio": 0.9183794918745708},
+        {"update": 7, "ratio": 0.9183794918745708},
+        {"update": 8, "ratio": 0.9183794918745708},
+        {"place": "_shared/shape tween 44", "depth": 54, "x": 1.5, "y": -4.2, "scale": 1.606064},
+        {
+          "place": "_glow",
+          "depth": 55,
+          "x": 0.15,
+          "y": 6.65,
+          "scale": 2.721069,
+          "color": {"alpha": 0.5},
+          "ratio": 0.00009155413138017853
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {"remove": 5},
+        {"update": 1, "ratio": 0.67348744945449},
+        {"update": 2, "ratio": 0.6000152590218967},
+        {
+          "update": 3,
+          "x": 2.05,
+          "y": 8,
+          "scale": 2.870483,
+          "color": {"alpha": 0},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"place": "_shared/shape 244", "depth": 5, "x": 1.8, "y": 7.3},
+        {"update": 6, "ratio": 0.9796139467460135},
+        {"update": 7, "ratio": 0.9796139467460135},
+        {"update": 8, "ratio": 0.9796139467460135},
+        {"update": 54, "ratio": 0.4375066758220798},
+        {"update": 55, "x": 0.15, "y": 6.55, "scale": 2.721115, "color": {"alpha": 0.22265625}},
+        {
+          "place": "_shared/shape tween 44",
+          "depth": 57,
+          "x": -16,
+          "y": -4,
+          "matrix": [-0.556885, 0.257202, -0.257202, -0.556885]
+        },
+        {
+          "place": "_glow",
+          "depth": 58,
+          "x": -17.3,
+          "y": -7.95,
+          "matrix": [-0.943497, 0.43576, -0.43576, -0.943497],
+          "color": {"alpha": 0.5},
+          "ratio": 0.00010681315327687495
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {"remove": 3},
+        {"remove": 6},
+        {"remove": 7},
+        {"remove": 8},
+        {"update": 1, "ratio": 0.8163424124513619},
+        {"update": 2, "ratio": 0.8000152590218967},
+        {"replace": "game objects/box computer/shape 5", "depth": 5, "x": 0, "y": 0},
+        {"update": 54, "ratio": 0.7500114442664225},
+        {"update": 55, "color": {"alpha": 0.0546875}},
+        {"update": 57, "ratio": 0.4375066758220798},
+        {
+          "update": 58,
+          "x": -17.3,
+          "y": -7.9,
+          "matrix": [-0.943527, 0.43576, -0.43576, -0.943527],
+          "color": {"alpha": 0.22265625}
+        },
+        {
+          "place": "_shared/shape tween 44",
+          "depth": 60,
+          "x": -2.2,
+          "y": 20.95,
+          "matrix": [-0.471344, 0.392563, -0.392563, -0.471344]
+        },
+        {
+          "place": "_glow",
+          "depth": 61,
+          "x": -4.45,
+          "y": 17.4,
+          "matrix": [-0.798569, 0.6651, -0.6651, -0.798569],
+          "color": {"alpha": 0.5},
+          "ratio": 0.00012207217517357137
+        }
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [
+        {"update": 1, "ratio": 0.9183794918745708},
+        {"replace": "_shared/shape tween 245", "depth": 2, "ratio": 0},
+        {"update": 54, "ratio": 0.9375143053330282},
+        {"update": 55, "x": 0.15, "y": 6.65, "scale": 2.721069, "color": {"alpha": 0}},
+        {"update": 57, "ratio": 0.7500114442664225},
+        {"update": 58, "color": {"alpha": 0.0546875}},
+        {"update": 60, "ratio": 0.4375066758220798},
+        {"update": 61, "color": {"alpha": 0.22265625}}
+      ]
+    },
+    {
+      "frame": 11,
+      "changes": [
+        {"remove": 55},
+        {"update": 1, "ratio": 0.9796139467460135},
+        {"update": 2, "ratio": 0.2},
+        {"replace": "_shared/shape tween 47", "depth": 54, "ratio": 0},
+        {"update": 57, "ratio": 0.9375143053330282},
+        {"update": 58, "x": -17.3, "y": -7.95, "matrix": [-0.943497, 0.43576, -0.43576, -0.943497], "color": {"alpha": 0}},
+        {"update": 60, "ratio": 0.7500114442664225},
+        {"update": 61, "color": {"alpha": 0.0546875}},
+        {"place": "_shared/shape tween 44", "depth": 63, "x": 21.35, "y": 24, "matrix": [0, -0.475601, 0.475601, 0]},
+        {
+          "place": "_glow",
+          "depth": 64,
+          "x": 24.55,
+          "y": 24.4,
+          "matrix": [0, -0.805786, 0.805786, 0],
+          "color": {"alpha": 0.5},
+          "ratio": 0.00015259021896696422
+        }
+      ]
+    },
+    {
+      "frame": 12,
+      "changes": [
+        {"remove": 1},
+        {"remove": 57},
+        {"remove": 58},
+        {"place": "_shared/shape 246", "depth": 1, "x": 1.8, "y": 7.3},
+        {"update": 2, "ratio": 0.4},
+        {"update": 54, "ratio": 0.2500038147554742},
+        {
+          "place": "_shared/shape tween 47",
+          "depth": 55,
+          "x": -16,
+          "y": -4,
+          "matrix": [-0.556885, 0.257202, -0.257202, -0.556885]
+        },
+        {"update": 60, "ratio": 0.9375143053330282},
+        {"update": 61, "color": {"alpha": 0}},
+        {"update": 63, "ratio": 0.4375066758220798},
+        {"update": 64, "color": {"alpha": 0.22265625}}
+      ]
+    },
+    {
+      "frame": 13,
+      "changes": [
+        {"remove": 1},
+        {"remove": 60},
+        {"remove": 61},
+        {"update": 2, "ratio": 0.6000152590218967},
+        {"update": 54, "ratio": 0.5000076295109483},
+        {"update": 55, "ratio": 0.2500038147554742},
+        {
+          "place": "_shared/shape tween 47",
+          "depth": 56,
+          "x": -2.2,
+          "y": 20.95,
+          "matrix": [-0.471344, 0.392563, -0.392563, -0.471344]
+        },
+        {"update": 63, "ratio": 0.7500114442664225},
+        {"update": 64, "color": {"alpha": 0.0546875}}
+      ]
+    },
+    {
+      "frame": 14,
+      "changes": [
+        {"update": 2, "ratio": 0.8000152590218967},
+        {"update": 54, "ratio": 0.7500114442664225},
+        {"update": 55, "ratio": 0.5000076295109483},
+        {"update": 56, "ratio": 0.2500038147554742},
+        {"update": 63, "ratio": 0.9375143053330282},
+        {"update": 64, "color": {"alpha": 0}},
+        {
+          "place": "_shared/shape tween 44",
+          "depth": 66,
+          "x": 13.1,
+          "y": -8.1,
+          "matrix": [0.123093, -0.459396, 0.459396, 0.123093]
+        },
+        {
+          "place": "_glow",
+          "depth": 67,
+          "x": 16.1,
+          "y": -6.85,
+          "matrix": [0.208542, -0.778336, 0.778336, 0.208542],
+          "color": {"alpha": 0.5},
+          "ratio": 0.00019836728465705348
+        }
+      ]
+    },
+    {
+      "frame": 15,
+      "changes": [
+        {"remove": 2},
+        {"remove": 54},
+        {"remove": 63},
+        {"remove": 64},
+        {"place": "_shared/shape 247", "depth": 1, "x": 1.5, "y": 8.1, "scale": [0.675247, 0.727066]},
+        {"place": "_shared/shape 48", "depth": 54, "x": 1.5, "y": -4.2, "scale": 1.606064},
+        {"update": 55, "ratio": 0.7500114442664225},
+        {"update": 56, "ratio": 0.5000076295109483},
+        {"place": "_shared/shape tween 47", "depth": 57, "x": 21.35, "y": 24, "matrix": [0, -0.475601, 0.475601, 0]},
+        {"update": 66, "ratio": 0.4375066758220798},
+        {"update": 67, "color": {"alpha": 0.22265625}}
+      ]
+    },
+    {
+      "frame": 16,
+      "changes": [
+        {"remove": 55},
+        {"update": 54, "x": -16, "y": -4, "matrix": [-0.556885, 0.257202, -0.257202, -0.556885]},
+        {"update": 56, "ratio": 0.7500114442664225},
+        {"update": 57, "ratio": 0.2500038147554742},
+        {"update": 66, "ratio": 0.7500114442664225},
+        {"update": 67, "color": {"alpha": 0.0546875}}
+      ]
+    },
+    {
+      "frame": 17,
+      "changes": [
+        {"remove": 56},
+        {"update": 54, "x": -2.2, "y": 20.95, "matrix": [-0.471344, 0.392563, -0.392563, -0.471344]},
+        {"update": 57, "ratio": 0.5000076295109483},
+        {"update": 66, "ratio": 0.9375143053330282},
+        {"update": 67, "color": {"alpha": 0}}
+      ]
+    },
+    {
+      "frame": 18,
+      "changes": [
+        {"remove": 54},
+        {"remove": 66},
+        {"remove": 67},
+        {"update": 57, "ratio": 0.7500114442664225},
+        {
+          "place": "_shared/shape tween 47",
+          "depth": 58,
+          "x": 13.1,
+          "y": -8.1,
+          "matrix": [0.123093, -0.459396, 0.459396, 0.123093]
+        }
+      ]
+    },
+    {
+      "frame": 19,
+      "changes": [
+        {"remove": 57},
+        {"place": "_shared/shape 48", "depth": 54, "x": 21.35, "y": 24, "matrix": [0, -0.475601, 0.475601, 0]},
+        {"update": 58, "ratio": 0.2500038147554742}
+      ]
+    },
+    {
+      "frame": 20,
+      "script": ["makeCorpse(this);", "this.kill();"],
+      "changes": [{"remove": 54}, {"update": 58, "ratio": 0.5000076295109483}]
+    }
+  ]
+}

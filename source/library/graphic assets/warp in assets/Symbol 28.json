@@ -1,0 +1,13 @@
+{
+  "kind": "shape",
+  "symbol": {"type": "graphic"},
+  "bounds": [-11.8, 11.85, -6.3, 6.35],
+  "fills": [{"type": "solid", "color": "#00ffff"}],
+  "lines": [],
+  "paths": [
+    {
+      "fill": 0,
+      "d": "M -8.8 6.35 L -11.8 1.6 L -4 -4.1 L 6.85 -6.3 L 11.85 -2.7 Q 7.9 0.55 4.15 4.25 L -8.8 6.35 Z"
+    }
+  ]
+}

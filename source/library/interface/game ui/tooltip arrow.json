@@ -1,0 +1,13 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 20,
+  "timeline": [
+    {
+      "frame": 1,
+      "label": "top",
+      "changes": [{"place": "interface/game ui/tooltip arrow/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 10, "label": "bottom", "changes": [{"replace": "interface/game ui/tooltip arrow/shape 2", "depth": 1}]}
+  ]
+}

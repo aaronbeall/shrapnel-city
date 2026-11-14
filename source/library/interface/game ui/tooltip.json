@@ -1,0 +1,16 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/ui/tooltip.as\"",
+      "changes": [
+        {"place": "interface/game ui/tooltip back", "depth": 1, "x": 0, "y": 6, "name": "back_mc"},
+        {"place": "interface/game ui/tooltip arrow", "depth": 3, "x": 0, "y": -2, "name": "arrow_mc"},
+        {"place": "interface/game ui/tooltip/text field 1", "depth": 5, "x": -72, "y": -1, "name": "label_txt"}
+      ]
+    }
+  ]
+}

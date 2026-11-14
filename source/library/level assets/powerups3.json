@@ -1,0 +1,242 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "game objects/powerup",
+          "depth": 1,
+          "x": 150.05,
+          "y": 550.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 50;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 36,
+          "x": 265.7,
+          "y": 52.85,
+          "scale": [2.066162, 1.799988],
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"trigger\";", "    item = \"door1:close\";", "}", "", ""]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 71,
+          "x": 248.6,
+          "y": 541.7,
+          "scale": [3.440002, 2.347198],
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"trigger\";", "    item = \"door1:open\";", "}", "", ""]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 106,
+          "x": 974.55,
+          "y": 48.85,
+          "scale": [1.678741, 1.799988],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    function onPickup(){",
+            "        trigger('door2:open');",
+            "    }",
+            "}",
+            "",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 141,
+          "x": 974.55,
+          "y": 549.8,
+          "scale": [1.678741, 1.799988],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    function onPickup(){",
+            "        trigger('door3:open');",
+            "    }",
+            "}",
+            "",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 176,
+          "x": 1178.55,
+          "y": 500.8,
+          "scale": [1.440643, 1.799988],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    function onPickup(){",
+            "        trigger('door4:open');",
+            "    }",
+            "}",
+            "",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 211,
+          "x": 1381.95,
+          "y": 234.1,
+          "matrix": [0.707108, -0.707108, 0.707108, 0.707108],
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 50;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 246,
+          "x": 1361.95,
+          "y": 214.1,
+          "matrix": [0.707108, -0.707108, 0.707108, 0.707108],
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 35;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 281,
+          "x": 1401.95,
+          "y": 254.1,
+          "matrix": [0.707108, -0.707108, 0.707108, 0.707108],
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 35;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 316,
+          "x": 1199,
+          "y": 198.7,
+          "scale": 0.999969,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"secondary\";",
+            "    item = \"Carbon Bomb\";",
+            "    quantity = 1;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 351,
+          "x": 1199,
+          "y": 423.65,
+          "scale": 0.999969,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"secondary\";",
+            "    item = \"Shrapnel Bomb\";",
+            "    quantity = 1;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 386,
+          "x": 1050,
+          "y": 50,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"primary\";",
+            "    item = \"Banshee\";",
+            "    quantity = 100;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 421,
+          "x": 1050,
+          "y": 550,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"primary\";",
+            "    item = \"Banshee\";",
+            "    quantity = 100;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 456,
+          "x": 1150,
+          "y": 500,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 15;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 491,
+          "x": 1437.95,
+          "y": 437.65,
+          "scale": 0.999969,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 526,
+          "x": 154.25,
+          "y": 50.1,
+          "scale": [2.338379, 1.987183],
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"trigger\";", "    item = \"door1:open\";", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 561,
+          "x": 150.05,
+          "y": 520.05,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Plasma\";", "    quantity = 25;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 596,
+          "x": 1266.3,
+          "y": 97.9,
+          "matrix": [0.747849, -0.747833, 1.428024, 1.42804],
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    function onPickup(){",
+            "        trigger('door5:open');",
+            "    }",
+            "}",
+            "",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 631,
+          "x": 779.2,
+          "y": 299.7,
+          "scale": [2.338379, 5.949631],
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"trigger\";", "    item = \"bridge\";", "}", "", ""]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 666,
+          "x": 50.5,
+          "y": 550,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 25;", "}"]
+        }
+      ]
+    }
+  ]
+}

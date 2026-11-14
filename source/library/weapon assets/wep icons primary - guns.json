@@ -1,0 +1,33 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 23,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "stop()",
+      "changes": [{"place": "weapon assets/wep icons primary - guns/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 2, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 2", "depth": 1}]},
+    {"frame": 3, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 3", "depth": 1}]},
+    {"frame": 4, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 4", "depth": 1}]},
+    {"frame": 5, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 5", "depth": 1}]},
+    {"frame": 6, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 6", "depth": 1}]},
+    {"frame": 7, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 7", "depth": 1}]},
+    {"frame": 8, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 8", "depth": 1}]},
+    {"frame": 9, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 9", "depth": 1}]},
+    {"frame": 10, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 10", "depth": 1}]},
+    {"frame": 11, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 11", "depth": 1}]},
+    {"frame": 12, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 12", "depth": 1}]},
+    {"frame": 13, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 13", "depth": 1}]},
+    {"frame": 14, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 14", "depth": 1}]},
+    {"frame": 15, "changes": [{"remove": 1}]},
+    {"frame": 17, "changes": [{"place": "weapon assets/wep icons primary - guns/shape 15", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 18, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 16", "depth": 1}]},
+    {"frame": 19, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 17", "depth": 1}]},
+    {"frame": 20, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 18", "depth": 1}]},
+    {"frame": 21, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 19", "depth": 1}]},
+    {"frame": 22, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 20", "depth": 1}]},
+    {"frame": 23, "changes": [{"remove": 1}]}
+  ]
+}

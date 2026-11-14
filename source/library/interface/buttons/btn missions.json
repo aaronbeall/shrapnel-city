@@ -1,0 +1,44 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/ui/button.as\"",
+      "changes": [
+        {"place": "interface/buttons/btn missions/shape 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "interface/buttons/btn missions/text 1",
+          "depth": 2,
+          "x": 28.6,
+          "y": 3.25,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#000000",
+              "blurX": 2,
+              "blurY": 2,
+              "angle": 0.7853851318359375,
+              "distance": 1,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            },
+            {
+              "type": "glow",
+              "color": "#00ffff",
+              "blurX": 20,
+              "blurY": 20,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "kind": "shape",
+  "symbol": {"type": "graphic"},
+  "bounds": [0, 159, 0, 41],
+  "fills": [
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "interface/screens/mission panel wire1/bitmap 1",
+      "m": [1, 0, 0, 1, 0, 0],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 0, "d": "M 159 41 L 0 41 L 0 0 L 159 0 L 159 41 Z"}]
+}

@@ -1,0 +1,381 @@
+{
+  "version": 8,
+  "stage": {"width": 800, "height": 600},
+  "frameRate": 31,
+  "background": "#152b2b",
+  "frames": 41,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": [
+        "//_root._quality = \"BEST\";",
+        "_root.showMenu = false;",
+        "Stage.scaleMode = \"noScale\";",
+        "Stage.align = \"tl\";"
+      ],
+      "changes": [
+        {"place": "_main timeline/shape 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "interface/preloader",
+          "depth": 2,
+          "x": 398,
+          "y": 272,
+          "filters": [
+            {
+              "type": "glow",
+              "color": "#000000",
+              "blurX": 25,
+              "blurY": 25,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "label": "main",
+      "script": "#include \"as/functionsLevel.as\"",
+      "changes": [
+        {"remove": 2},
+        {
+          "place": "interface/screens/titlescreen",
+          "depth": 2,
+          "x": 0,
+          "y": 0,
+          "color": {"multiply": [1, 1, 1, 0], "add": [255, 255, 255, 0]},
+          "ratio": 0.000015259021896696422
+        }
+      ]
+    },
+    {"frame": 3, "changes": [{"update": 2, "color": {"multiply": [1, 1, 1, 0.0078125], "add": [253, 253, 253, 0]}}]},
+    {"frame": 4, "changes": [{"update": 2, "color": {"multiply": [1, 1, 1, 0.0234375], "add": [249, 249, 249, 0]}}]},
+    {
+      "frame": 5,
+      "changes": [{"remove": 1}, {"update": 2, "color": {"multiply": [1, 1, 1, 0.0546875], "add": [241, 241, 241, 0]}}]
+    },
+    {"frame": 6, "changes": [{"update": 2, "color": {"multiply": [1, 1, 1, 0.09375], "add": [231, 231, 231, 0]}}]},
+    {"frame": 7, "changes": [{"update": 2, "color": {"multiply": [1, 1, 1, 0.1484375], "add": [217, 217, 217, 0]}}]},
+    {"frame": 8, "changes": [{"update": 2, "color": {"multiply": [1, 1, 1, 0.21484375], "add": [201, 201, 201, 0]}}]},
+    {"frame": 9, "changes": [{"update": 2, "color": {"multiply": [1, 1, 1, 0.2890625], "add": [181, 181, 181, 0]}}]},
+    {"frame": 10, "changes": [{"update": 2, "color": {"multiply": [1, 1, 1, 0.37890625], "add": [158, 158, 158, 0]}}]},
+    {"frame": 11, "changes": [{"update": 2, "color": {"multiply": [1, 1, 1, 0.48046875], "add": [133, 133, 133, 0]}}]},
+    {
+      "frame": 12,
+      "changes": [
+        {"update": 2, "color": {"multiply": [1, 1, 1, 0.58984375], "add": [104, 104, 104, 0]}},
+        {
+          "place": "interface/screens/titlescreen header",
+          "depth": 23,
+          "x": -42,
+          "y": -109.95,
+          "ratio": 0.00016784924086366064,
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 45, "passes": 1}]
+        },
+        {
+          "place": "interface/screens/titlescreen menu bar mc",
+          "depth": 25,
+          "x": 0,
+          "y": -353.95,
+          "scale": [1.000977, 1],
+          "ratio": 0.00016784924086366064,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 45, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 13,
+      "changes": [
+        {"update": 2, "color": {"multiply": [1, 1, 1, 0.71484375], "add": [72, 72, 72, 0]}},
+        {
+          "update": 23,
+          "x": -16.35,
+          "y": -42.8,
+          "filters": [{"type": "blur", "blurX": 0.778533935546875, "blurY": 17.517013549804688, "passes": 1}]
+        },
+        {
+          "update": 25,
+          "x": 0,
+          "y": -193.45,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 24.594955444335938, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 14,
+      "changes": [
+        {"update": 2, "color": {"multiply": [1, 1, 1, 0.8515625], "add": [38, 38, 38, 0]}},
+        {
+          "update": 23,
+          "x": -7.5,
+          "y": -19.7,
+          "filters": [{"type": "blur", "blurX": 0.35833740234375, "blurY": 8.062591552734375, "passes": 1}]
+        },
+        {
+          "update": 25,
+          "x": 0,
+          "y": -122.15,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 15.53192138671875, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 15,
+      "changes": [
+        {"update": 2, "color": {}},
+        {
+          "update": 23,
+          "x": -4.4,
+          "y": -11.45,
+          "filters": [{"type": "blur", "blurX": 0.208404541015625, "blurY": 4.6891021728515625, "passes": 1}]
+        },
+        {
+          "update": 25,
+          "x": 0,
+          "y": -81.25,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 10.328521728515625, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 16,
+      "changes": [
+        {
+          "update": 23,
+          "x": -2.85,
+          "y": -7.4,
+          "filters": [{"type": "blur", "blurX": 0.134613037109375, "blurY": 3.0287933349609375, "passes": 1}]
+        },
+        {
+          "update": 25,
+          "x": 0,
+          "y": -54.35,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 6.9124603271484375, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 17,
+      "changes": [
+        {
+          "update": 23,
+          "x": -1.9,
+          "y": -5,
+          "filters": [{"type": "blur", "blurX": 0.090789794921875, "blurY": 2.0427703857421875, "passes": 1}]
+        },
+        {
+          "update": 25,
+          "x": 0,
+          "y": -35.6,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 4.52362060546875, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 18,
+      "changes": [
+        {
+          "update": 23,
+          "x": -1.3,
+          "y": -3.35,
+          "filters": [{"type": "blur", "blurX": 0.06085205078125, "blurY": 1.369171142578125, "passes": 1}]
+        },
+        {
+          "update": 25,
+          "x": 0,
+          "y": -22.05,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 2.8008270263671875, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 19,
+      "changes": [
+        {
+          "update": 23,
+          "x": -0.8,
+          "y": -2.1,
+          "filters": [{"type": "blur", "blurX": 0.037811279296875, "blurY": 0.8507537841796875, "passes": 1}]
+        },
+        {
+          "update": 25,
+          "x": 0,
+          "y": -12.15,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 1.5470123291015625, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 20,
+      "changes": [
+        {
+          "update": 23,
+          "x": -0.4,
+          "y": -1,
+          "filters": [{"type": "blur", "blurX": 0.018157958984375, "blurY": 0.4085540771484375, "passes": 1}]
+        },
+        {
+          "update": 25,
+          "x": 0,
+          "y": -5.05,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 0.63995361328125, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 21,
+      "changes": [
+        {"update": 23, "x": 0, "y": 0, "filters": [{"type": "blur", "blurX": 0, "blurY": 0, "passes": 1}]},
+        {
+          "update": 25,
+          "x": 0,
+          "y": 0,
+          "scale": [1.000977, 1],
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 0, "passes": 1}]
+        },
+        {
+          "place": "interface/buttons/btn play game",
+          "depth": 39,
+          "x": 22,
+          "y": 504,
+          "color": {"add": [155, 155, 155, 0]},
+          "ratio": 0.00030518043793392844,
+          "clipEvents": [2048],
+          "script": ["on (release) {", "    gotoAndStop(\"game\");", "}"]
+        }
+      ]
+    },
+    {"frame": 22, "changes": [{"update": 39, "x": 22, "y": 509.75, "color": {"add": [66, 66, 66, 0]}}]},
+    {
+      "frame": 23,
+      "changes": [
+        {"update": 39, "x": 22, "y": 511.7, "color": {"add": [36, 36, 36, 0]}},
+        {
+          "place": "interface/buttons/btn missions",
+          "depth": 43,
+          "x": 237,
+          "y": 511,
+          "color": {"add": [155, 155, 155, 0]},
+          "ratio": 0.0003356984817273213,
+          "name": "missions_btn",
+          "clipEvents": [2048],
+          "script": ["on (release) {", "    _root.missionPanel_mc.toggle();", "}", ""]
+        }
+      ]
+    },
+    {
+      "frame": 24,
+      "changes": [
+        {"update": 39, "x": 22, "y": 512.7, "color": {"add": [20, 20, 20, 0]}},
+        {"update": 43, "x": 237, "y": 516.75, "color": {"add": [66, 66, 66, 0]}}
+      ]
+    },
+    {
+      "frame": 25,
+      "changes": [
+        {"update": 39, "x": 22, "y": 513.35, "color": {"add": [10, 10, 10, 0]}},
+        {"update": 43, "x": 237, "y": 518.7, "color": {"add": [36, 36, 36, 0]}}
+      ]
+    },
+    {
+      "frame": 26,
+      "changes": [
+        {"update": 39, "x": 22, "y": 513.75, "color": {"add": [4, 4, 4, 0]}},
+        {"update": 43, "x": 237, "y": 519.7, "color": {"add": [20, 20, 20, 0]}}
+      ]
+    },
+    {
+      "frame": 27,
+      "changes": [
+        {"remove": 39},
+        {
+          "place": "interface/buttons/btn play game",
+          "depth": 39,
+          "x": 22,
+          "y": 514,
+          "ratio": 0.00039673456931410697,
+          "clipEvents": [2048],
+          "script": ["on (release) {", "    _root.gotoAndStop(\"game\");", "}"]
+        },
+        {"update": 43, "x": 237, "y": 520.35, "color": {"add": [10, 10, 10, 0]}}
+      ]
+    },
+    {"frame": 28, "changes": [{"update": 43, "x": 237, "y": 520.75, "color": {"add": [4, 4, 4, 0]}}]},
+    {
+      "frame": 29,
+      "script": "#include \"as/frames/main timeline frame 29.as\"",
+      "changes": [
+        {
+          "place": "interface/screens/mission panel",
+          "depth": 4,
+          "x": -1,
+          "y": 64,
+          "ratio": 0.0004272526131074998,
+          "name": "missionPanel_mc"
+        },
+        {"update": 43, "x": 237, "y": 521, "color": {}},
+        {
+          "place": "interface/buttons/btn continue",
+          "depth": 46,
+          "x": 418,
+          "y": 533,
+          "ratio": 0.0004272526131074998,
+          "name": "continue_btn",
+          "clipEvents": [2048],
+          "script": ["on (release) {", "    gotoLevel(_root.so.data.level);", "}"]
+        }
+      ]
+    },
+    {
+      "frame": 30,
+      "label": "game",
+      "script": ["#include \"as/core.as\"", "", "Key.removeListener(kb);"],
+      "changes": [
+        {"remove": 2},
+        {"remove": 4},
+        {"remove": 23},
+        {"remove": 25},
+        {"remove": 39},
+        {"remove": 43},
+        {"remove": 46},
+        {
+          "place": "screen_mc",
+          "depth": 1,
+          "x": 0.1,
+          "y": 0,
+          "scale": [1.000092, 1],
+          "ratio": 0.00044251163500419623,
+          "name": "screen_mc"
+        },
+        {
+          "place": "interface/game ui/HUD",
+          "depth": 3447,
+          "x": 0,
+          "y": 0,
+          "ratio": 0.00044251163500419623,
+          "name": "HUD_mc"
+        },
+        {
+          "place": "_main timeline/text field 1",
+          "depth": 3511,
+          "x": 2,
+          "y": 587,
+          "ratio": 0.00044251163500419623,
+          "name": "fps_txt"
+        }
+      ]
+    },
+    {"frame": 31, "changes": [{"update": 3511, "x": 2, "y": 586.75}]}
+  ]
+}

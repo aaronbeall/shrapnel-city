@@ -27,12 +27,13 @@ const symbols = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/symbols.json'
 // preprocessing
 function expandIncludes(src, seen = []) {
   return src.replace(/^[ \t]*#include\s+"([^"]+)"[^\n]*$/gm, (m, p) => {
-    const base = path.basename(p);
-    if (seen.includes(base)) throw new Error('recursive include ' + base);
-    const file = path.join(AS_DIR, base);
+    // "as/frames/x.as" -> as2/frames/x.as; the original "as/object/x.as" paths -> as2/x.as
+    let file = path.join(AS_DIR, p.replace(/^as\//, ''));
+    if (!fs.existsSync(file)) file = path.join(AS_DIR, path.basename(p));
+    if (seen.includes(file)) throw new Error('recursive include ' + p);
     if (!fs.existsSync(file)) throw new Error('missing include ' + p);
     const inc = fs.readFileSync(file, 'utf8').replace(/\r\n?/g, '\n');
-    return `/* #include "${p}" */\n` + expandIncludes(inc, [...seen, base]) + `\n/* end #include "${p}" */`;
+    return `/* #include "${p}" */\n` + expandIncludes(inc, [...seen, file]) + `\n/* end #include "${p}" */`;
   });
 }
 

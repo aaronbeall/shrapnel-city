@@ -1,0 +1,23 @@
+{
+  "kind": "text field",
+  "bounds": [24.45, 169.45, -2, 26.65],
+  "wordWrap": false,
+  "multiline": false,
+  "password": false,
+  "readOnly": true,
+  "font": "fonts/Digital Display Regular",
+  "size": 20,
+  "color": "#ffffff",
+  "autoSize": false,
+  "align": "center",
+  "leftMargin": 0,
+  "rightMargin": 0,
+  "indent": 0,
+  "leading": 1.95,
+  "noSelect": true,
+  "border": false,
+  "html": true,
+  "useOutlines": true,
+  "variable": "",
+  "text": "<p align=\"center\"><font face=\"Digital Display\" size=\"20\" color=\"#ffffff\" letterSpacing=\"0.000000\" kerning=\"1\">PLAY GAME</font></p>"
+}

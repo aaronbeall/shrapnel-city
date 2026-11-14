@@ -1,0 +1,11 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [{"place": "enemy assets/enemy stinger turret - oval body/shape 1", "depth": 2, "x": 0, "y": 0}]
+    }
+  ]
+}

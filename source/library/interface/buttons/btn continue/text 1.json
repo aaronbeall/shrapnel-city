@@ -1,0 +1,14 @@
+{
+  "kind": "static text",
+  "bounds": [46.85, 113.75, -1, 17.9],
+  "matrix": [1, 0, 0, 1, 46, 0],
+  "records": [
+    {
+      "font": "fonts/Digital Display Regular",
+      "color": "#ffffff",
+      "y": 17,
+      "size": 16,
+      "glyphs": [[50, 8.95], [37, 8.05], [51, 8.95], [53, 8.95], [45, 8.9], [37, 8.05]]
+    }
+  ]
+}

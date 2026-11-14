@@ -1,0 +1,251 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "menuScreen"},
+  "frames": 20,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "_box",
+          "depth": 1,
+          "x": 400,
+          "y": 300,
+          "scale": [16, 12],
+          "color": {"multiply": [0, 0, 0, 0]},
+          "clipEvents": [8192],
+          "script": ["on (rollOver) {", "    useHandCursor = false;", "}", "", ""]
+        },
+        {"place": "interface/screens/scanlines", "depth": 3, "x": 0, "y": 0, "color": {"alpha": 0}},
+        {
+          "place": "interface/screens/menu screen back",
+          "depth": 4,
+          "x": 243,
+          "y": -109.95,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 75, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"update": 1, "x": 400, "y": 300, "scale": [16, 11.999268], "color": {"multiply": [0, 0, 0, 0.1640625]}},
+        {"update": 3, "color": {"alpha": 0.25}},
+        {
+          "update": 4,
+          "x": 243,
+          "y": 83.1,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 24.886322021484375, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "color": {"multiply": [0, 0, 0, 0.32421875]}},
+        {"update": 3, "color": {"alpha": 0.5}},
+        {
+          "update": 4,
+          "x": 243,
+          "y": 131.4,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 12.351608276367188, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"update": 1, "color": {"multiply": [0, 0, 0, 0.48828125]}},
+        {"update": 3, "color": {"alpha": 0.75}},
+        {
+          "update": 4,
+          "x": 243,
+          "y": 150.4,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 7.427215576171875, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"update": 1, "x": 400, "y": 300, "scale": [16, 12], "color": {"multiply": [0, 0, 0, 0.6484375]}},
+        {"update": 3, "color": {}},
+        {
+          "update": 4,
+          "x": 243,
+          "y": 160.35,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 4.840850830078125, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {
+          "update": 4,
+          "x": 243,
+          "y": 166.45,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 3.252410888671875, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {
+          "update": 4,
+          "x": 243,
+          "y": 170.7,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 2.1572113037109375, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {
+          "update": 4,
+          "x": 243,
+          "y": 173.9,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 1.32293701171875, "passes": 1}]
+        },
+        {
+          "place": "interface/buttons/btn resume game",
+          "depth": 7,
+          "x": 290,
+          "y": 230,
+          "color": {"add": [155, 155, 155, 0]},
+          "ratio": 0.00010681315327687495
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {
+          "update": 4,
+          "x": 243,
+          "y": 176.6,
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 0.62713623046875, "passes": 1}]
+        },
+        {"update": 7, "x": 290, "y": 231.8, "color": {"add": [99, 99, 99, 0]}},
+        {
+          "place": "interface/buttons/btn restart level",
+          "depth": 10,
+          "x": 290,
+          "y": 269,
+          "color": {"add": [155, 155, 155, 0]},
+          "ratio": 0.00012207217517357137
+        }
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [
+        {"update": 4, "x": 243, "y": 179, "filters": [{"type": "blur", "blurX": 0, "blurY": 0, "passes": 1}]},
+        {"update": 7, "x": 290, "y": 233.2, "color": {"add": [56, 56, 56, 0]}},
+        {"update": 10, "x": 290, "y": 270.8, "color": {"add": [99, 99, 99, 0]}},
+        {
+          "place": "interface/buttons/btn help",
+          "depth": 13,
+          "x": 290,
+          "y": 308,
+          "color": {"add": [155, 155, 155, 0]},
+          "ratio": 0.0001373311970702678
+        }
+      ]
+    },
+    {
+      "frame": 11,
+      "changes": [
+        {"update": 7, "x": 290, "y": 234.2, "color": {"add": [25, 25, 25, 0]}},
+        {"update": 10, "x": 290, "y": 272.2, "color": {"add": [56, 56, 56, 0]}},
+        {"update": 13, "x": 290, "y": 309.8, "color": {"add": [99, 99, 99, 0]}},
+        {
+          "place": "interface/buttons/btn quit",
+          "depth": 16,
+          "x": 290,
+          "y": 347,
+          "color": {"add": [155, 155, 155, 0]},
+          "ratio": 0.00015259021896696422
+        }
+      ]
+    },
+    {
+      "frame": 12,
+      "changes": [
+        {"update": 7, "x": 290, "y": 234.8, "color": {"add": [6, 6, 6, 0]}},
+        {"update": 10, "x": 290, "y": 273.2, "color": {"add": [25, 25, 25, 0]}},
+        {"update": 13, "x": 290, "y": 311.2, "color": {"add": [56, 56, 56, 0]}},
+        {"update": 16, "x": 290, "y": 348.8, "color": {"add": [99, 99, 99, 0]}}
+      ]
+    },
+    {
+      "frame": 13,
+      "changes": [
+        {"remove": 7},
+        {
+          "place": "interface/buttons/btn resume game",
+          "depth": 7,
+          "x": 290,
+          "y": 235,
+          "ratio": 0.00018310826276035706,
+          "clipEvents": [2048],
+          "script": ["on (release) {", "    hideDialog();", "}", ""]
+        },
+        {"update": 10, "x": 290, "y": 273.8, "color": {"add": [6, 6, 6, 0]}},
+        {"update": 13, "x": 290, "y": 312.2, "color": {"add": [25, 25, 25, 0]}},
+        {"update": 16, "x": 290, "y": 350.2, "color": {"add": [56, 56, 56, 0]}}
+      ]
+    },
+    {
+      "frame": 14,
+      "changes": [
+        {"remove": 10},
+        {
+          "place": "interface/buttons/btn restart level",
+          "depth": 10,
+          "x": 290,
+          "y": 274,
+          "ratio": 0.00019836728465705348,
+          "clipEvents": [2048],
+          "script": ["on (release) {", "    retryLevel();", "    hideDialog();", "}", ""]
+        },
+        {"update": 13, "x": 290, "y": 312.8, "color": {"add": [6, 6, 6, 0]}},
+        {"update": 16, "x": 290, "y": 351.2, "color": {"add": [25, 25, 25, 0]}}
+      ]
+    },
+    {
+      "frame": 15,
+      "changes": [
+        {"remove": 13},
+        {
+          "place": "interface/buttons/btn help",
+          "depth": 13,
+          "x": 290,
+          "y": 313,
+          "ratio": 0.0002136263065537499,
+          "clipEvents": [2048],
+          "script": ["on (release) {", "    showDialog(\"helpScreen\", {skipFade:true});", "}", ""]
+        },
+        {"update": 16, "x": 290, "y": 351.8, "color": {"add": [6, 6, 6, 0]}}
+      ]
+    },
+    {
+      "frame": 16,
+      "changes": [
+        {"remove": 16},
+        {
+          "place": "interface/buttons/btn quit",
+          "depth": 16,
+          "x": 290,
+          "y": 352,
+          "ratio": 0.00022888532845044633,
+          "clipEvents": [2048],
+          "script": ["on (release) {", "    quit();", "}", ""]
+        }
+      ]
+    },
+    {"frame": 20, "script": ["stop();", ""]}
+  ]
+}

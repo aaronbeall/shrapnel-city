@@ -1,0 +1,19 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 30,
+  "timeline": [
+    {
+      "frame": 1,
+      "label": "hit",
+      "script": ["stop();", ""],
+      "changes": [{"place": "player assets/indicator_mc/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 10, "label": "powerup", "changes": [{"replace": "player assets/indicator_mc/shape 2", "depth": 1}]},
+    {"frame": 20, "label": "new", "changes": [{"remove": 1}]},
+    {
+      "frame": 21,
+      "changes": [{"place": "player assets/indicator anim - new", "depth": 1, "x": 0, "y": 0, "ratio": 0.00030518043793392844}]
+    }
+  ]
+}

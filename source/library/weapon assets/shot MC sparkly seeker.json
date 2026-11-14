@@ -1,0 +1,97 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 19,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": ["#include \"as/object/projectileSeeker.as\"", "cacheAsBitmap = false;"],
+      "changes": [
+        {"place": "weapon assets/star", "depth": 1, "x": -0.05, "y": 0, "name": "star_mc"},
+        {
+          "place": "_glow",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 0.714737,
+          "color": {"alpha": 0.5},
+          "filters": [{"type": "blur", "blurX": 12, "blurY": 12, "passes": 2}],
+          "blend": "add"
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 1},
+        {"place": "weapon assets/shot MC sparkly seeker/shape 1", "depth": 1, "x": 0, "y": 0, "clipDepth": 3},
+        {"place": "weapon assets/shot MC sparkly seeker/shape tween 1", "depth": 2, "x": 0, "y": 0},
+        {"update": 4, "x": 0, "y": 0, "scale": 3.51947, "filters": [{"type": "blur", "blurX": 57, "blurY": 57, "passes": 1}]}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 2, "ratio": 0.5000076295109483},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.413086,
+          "color": {"alpha": 0.28125},
+          "filters": [{"type": "blur", "blurX": 32.0625, "blurY": 32.0625, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"replace": "weapon assets/shot MC sparkly seeker/shape tween 2", "depth": 2, "ratio": 0},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.337143,
+          "color": {"alpha": 0.125},
+          "filters": [{"type": "blur", "blurX": 14.25, "blurY": 14.25, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"update": 2, "ratio": 0.5000076295109483},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.29155,
+          "color": {"alpha": 0.03125},
+          "filters": [{"type": "blur", "blurX": 3.5625, "blurY": 3.5625, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"replace": "weapon assets/shot MC sparkly seeker/shape tween 3", "depth": 2, "ratio": 0},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.276337,
+          "color": {"alpha": 0},
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 0, "passes": 1}]
+        }
+      ]
+    },
+    {"frame": 7, "changes": [{"remove": 4}, {"update": 2, "ratio": 0.2500038147554742}]},
+    {"frame": 8, "changes": [{"update": 2, "ratio": 0.5000076295109483}]},
+    {"frame": 9, "changes": [{"update": 2, "ratio": 0.7500114442664225}]},
+    {
+      "frame": 10,
+      "script": "this.removeMovieClip();",
+      "changes": [{"remove": 2}, {"place": "weapon assets/shot MC sparkly seeker/shape 2", "depth": 2, "x": 0, "y": 0}]
+    }
+  ]
+}

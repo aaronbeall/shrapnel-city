@@ -1,0 +1,134 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 14,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": ["if(_parent._parent != _screen){", "    stop();", "    _visible = false;", "}"],
+      "changes": [
+        {
+          "place": "graphic assets/heat trail",
+          "depth": 1,
+          "x": -0.05,
+          "y": -11.15,
+          "scale": [0.604874, 0.403824],
+          "color": {"alpha": 0.5},
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}],
+          "blend": "add"
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": -6.15,
+          "scale": [0.604874, 0.667206],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": 8.8,
+          "scale": [0.604874, 1.457367],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "label": "loop",
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": 33.8,
+          "scale": [0.604874, 2.774216],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": 29.65,
+          "scale": [0.604874, 2.556259],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": 25.7,
+          "scale": [0.831253, 2.348633],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": 28.65,
+          "scale": [0.46727, 2.501877],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": 18.65,
+          "scale": [0.64975, 1.97551],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": 24.3,
+          "scale": [0.64975, 2.272766],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [
+        {
+          "update": 1,
+          "x": -0.05,
+          "y": 15,
+          "scale": [0.64975, 1.77948],
+          "filters": [{"type": "blur", "blurX": 2, "blurY": 2, "passes": 1}]
+        }
+      ]
+    },
+    {"frame": 11, "script": ["gotoAndPlay('loop');", ""]},
+    {"frame": 14, "changes": [{"remove": 1}]}
+  ]
+}

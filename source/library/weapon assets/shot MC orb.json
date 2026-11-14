@@ -1,0 +1,126 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 9,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectileBomb.as\"",
+      "changes": [
+        {
+          "place": "_glow",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "scale": [1.043213, 1.187836],
+          "color": {"multiply": [0, 0, 0, 1], "add": [245, 72, 213, 0]},
+          "filters": [{"type": "blur", "blurX": 15, "blurY": 15, "passes": 2}]
+        },
+        {"place": "weapon assets/shot MC orb/shape 1", "depth": 3, "x": 0, "y": 0},
+        {
+          "place": "_glow",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 0.643753,
+          "color": {"alpha": 0.5},
+          "filters": [{"type": "blur", "blurX": 6, "blurY": 6, "passes": 2}],
+          "blend": "add"
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 1},
+        {"remove": 3},
+        {"place": "weapon assets/shot MC orb/shape tween 1", "depth": 1, "x": 0, "y": 0},
+        {"place": "weapon assets/shot MC orb/shape tween 2", "depth": 2, "x": 0, "y": 0},
+        {"place": "weapon assets/shot MC orb/shape tween 3", "depth": 3, "x": 0, "y": 0},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.51947,
+          "color": {},
+          "filters": [{"type": "blur", "blurX": 57, "blurY": 57, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "ratio": 0.5000076295109483},
+        {"update": 2, "ratio": 0.5555504692149233},
+        {"update": 3, "ratio": 0.3333333333333333},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.413086,
+          "color": {"alpha": 0.5625},
+          "filters": [{"type": "blur", "blurX": 32.0625, "blurY": 32.0625, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"remove": 1},
+        {"place": "weapon assets/shot MC orb/shape 2", "depth": 1, "x": 0, "y": 0},
+        {"update": 2, "ratio": 0.8888990615701533},
+        {"update": 3, "ratio": 0.6666819256885633},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.337143,
+          "color": {"alpha": 0.25},
+          "filters": [{"type": "blur", "blurX": 14.25, "blurY": 14.25, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"remove": 1},
+        {"remove": 3},
+        {"place": "weapon assets/shot MC orb/shape tween 4", "depth": 1, "x": 0, "y": 0},
+        {"replace": "weapon assets/shot MC orb/shape tween 5", "depth": 2, "ratio": 0},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.29155,
+          "color": {"alpha": 0.0625},
+          "filters": [{"type": "blur", "blurX": 3.5625, "blurY": 3.5625, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"update": 1, "ratio": 0.5555504692149233},
+        {"update": 2, "ratio": 0.3333333333333333},
+        {
+          "update": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 3.276337,
+          "color": {"alpha": 0},
+          "filters": [{"type": "blur", "blurX": 0, "blurY": 0, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [{"remove": 4}, {"update": 1, "ratio": 0.8888990615701533}, {"update": 2, "ratio": 0.6666819256885633}]
+    },
+    {
+      "frame": 8,
+      "script": "this.removeMovieClip();",
+      "changes": [{"remove": 1}, {"remove": 2}, {"place": "weapon assets/shot MC orb/shape 3", "depth": 2, "x": 0, "y": 0}]
+    },
+    {"frame": 9, "changes": [{"remove": 2}]}
+  ]
+}

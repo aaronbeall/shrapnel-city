@@ -1,0 +1,16 @@
+{
+  "kind": "shape",
+  "bounds": [-19, 19, -17.4, 19.6],
+  "fills": [
+    {"type": "clipped bitmap", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": true},
+    {
+      "type": "clipped bitmap",
+      "bitmap": "player assets/player MC/shape 1/bitmap 1",
+      "m": [1, 0, 0, 1, -19, -17.4],
+      "repeat": false,
+      "smooth": true
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 1, "d": "M -19 -17.4 L 19 -17.4 L 19 19.6 L -19 19.6 L -19 -17.4 Z"}]
+}

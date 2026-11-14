@@ -1,0 +1,16 @@
+{
+  "kind": "shape",
+  "bounds": [80, 481, 304.95, 588.95],
+  "fills": [
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "_shared/bitmap 249",
+      "m": [1, 0, 0, 1, 80, 304.95],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 1, "d": "M 481 588.95 L 80 588.95 L 80 304.95 L 481 304.95 L 481 588.95 Z"}]
+}

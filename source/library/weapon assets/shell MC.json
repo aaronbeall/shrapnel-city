@@ -1,0 +1,13 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 2,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectileBomb.as\"",
+      "changes": [{"place": "weapon assets/shell", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 2, "script": ["makeCorpse(this);", "this.removeMovieClip()"]}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [{"place": "enemy assets/enemy double battery turret body/shape 1", "depth": 5, "x": 0, "y": 0}]
+    }
+  ]
+}

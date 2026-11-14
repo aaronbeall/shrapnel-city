@@ -1,0 +1,16 @@
+{
+  "kind": "shape",
+  "bounds": [-20.55, 20.75, -24.4, 24.4],
+  "fills": [
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [0.75, 0, 0, 0.75, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "game objects/smoke/shape 1/bitmap 1",
+      "m": [0.7509041, 0, 0, 0.75076675, -20.55, -24.4],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 1, "d": "M 20.75 24.4 L -20.55 24.4 L -20.55 -24.4 L 20.75 -24.4 L 20.75 24.4 Z"}]
+}

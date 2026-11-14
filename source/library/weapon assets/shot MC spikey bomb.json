@@ -1,0 +1,78 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 15,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectileBomb.as\"",
+      "changes": [{"place": "_shared/shape 113", "depth": 7, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 7},
+        {
+          "place": "_glow",
+          "depth": 1,
+          "x": 0.25,
+          "y": 0.7,
+          "scale": 2.183441,
+          "ratio": 0.000015259021896696422,
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}],
+          "blend": "add"
+        },
+        {"place": "weapon assets/shot MC spikey bomb/shape tween 1", "depth": 3, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {
+          "update": 1,
+          "x": 0.3,
+          "y": 0.75,
+          "scale": 2.183441,
+          "color": {"alpha": 0.9375},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 3, "ratio": 0.5555504692149233}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"update": 1, "color": {"alpha": 0.75}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 3, "ratio": 0.8888990615701533}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"update": 1, "color": {"alpha": 0.4375}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"replace": "weapon assets/shot MC spikey bomb/shape tween 2", "depth": 3, "ratio": 0}
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {
+          "update": 1,
+          "x": 0.25,
+          "y": 0.7,
+          "scale": 2.183441,
+          "color": {"alpha": 0},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 3, "ratio": 0.5555504692149233}
+      ]
+    },
+    {"frame": 7, "changes": [{"remove": 1}, {"update": 3, "ratio": 0.8888990615701533}]},
+    {
+      "frame": 8,
+      "changes": [{"remove": 3}, {"place": "weapon assets/shot MC spikey bomb/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 9, "changes": [{"remove": 1}]},
+    {"frame": 15, "script": "this.removeMovieClip();"}
+  ]
+}

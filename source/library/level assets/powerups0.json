@@ -1,0 +1,165 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "game objects/powerup",
+          "depth": 1,
+          "x": 491.15,
+          "y": 389.25,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 15;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 36,
+          "x": 657.15,
+          "y": 237.25,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"secondary\";",
+            "    item = \"Carbon Bomb\";",
+            "    quantity = 1;",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 71,
+          "x": 308.15,
+          "y": 389.25,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 15;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 106,
+          "x": 691.4,
+          "y": 93.45,
+          "scale": 0.999969,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    type = \"primary\";",
+            "    item = \"Plasma\";",
+            "    quantity = 30;",
+            "    ",
+            "    alertMessage = \"You got a new weapon! Press <strong>INSERT</strong> and <strong>SHIFT+INSERT</strong> to change your primary weapon. Press <strong>DELETE</strong> and <strong>SHIFT+DELETE</strong> to change your secondary weapon.\";",
+            "    alertKillTrigger = {onRollOut:_parent.triggerNewWep_mc}",
+            "}"
+          ]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 141,
+          "x": 728.1,
+          "y": 493.85,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"health\";", "    item = \"health\";", "    quantity = 100;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 176,
+          "x": 491.15,
+          "y": 208.25,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 15;", "}"]
+        },
+        {
+          "place": "game objects/powerup",
+          "depth": 211,
+          "x": 308.15,
+          "y": 208.25,
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    type = \"primary\";", "    item = \"Bolter\";", "    quantity = 15;", "}"]
+        },
+        {
+          "place": "_circle",
+          "depth": 246,
+          "x": 691.4,
+          "y": 93.45,
+          "scale": 1.80481,
+          "color": {"alpha": 0},
+          "name": "triggerNewWep_mc",
+          "clipEvents": [],
+          "script": ["", ""]
+        },
+        {
+          "place": "game objects/message beacon",
+          "depth": 248,
+          "x": 400,
+          "y": 373.35,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    alertMessage = \"Welcome to basic training! Use the <strong>ARROW KEYS</strong> to move around and collect items.\";",
+            "    persistent = true;",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/message beacon",
+          "depth": 267,
+          "x": 213,
+          "y": 515.4,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    alertMessage = \"Now practice maneuvering. Use <strong>Z</strong> and <strong>X</strong> to strafe left and right through tight areas and dodge incoming fire.\";",
+            "    persistent = true;",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/message beacon",
+          "depth": 286,
+          "x": 217,
+          "y": 70.45,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    alertMessage = \"Let's shoot something! Press <strong>SPACE</strong> to blow up those yellow boxes.\";",
+            "    persistent = true;",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/message beacon",
+          "depth": 305,
+          "x": 691.4,
+          "y": 235.45,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    alertMessage = \"Here's a good example of where to use a bomb. Press <strong>CTRL</strong> to bounce a bomb into the room for instant destruction.\";",
+            "    persistent = true;",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "game objects/message beacon",
+          "depth": 324,
+          "x": 741.5,
+          "y": 395.4,
+          "clipEvents": [1],
+          "script": [
+            "onClipEvent (load) {",
+            "    alertMessage = \"To the exit, and you're ready!\";",
+            "    persistent = true;",
+            "}",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}

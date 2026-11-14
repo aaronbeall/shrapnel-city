@@ -1,0 +1,21 @@
+{
+  "kind": "shape",
+  "bounds": [509, 762, 103.65, 518],
+  "fills": [
+    {"type": "solid", "color": "#ffffff"},
+    {"type": "solid", "color": "#ffffff"},
+    {"type": "solid", "color": "#ffffff"},
+    {"type": "solid", "color": "#ffffff"},
+    {"type": "solid", "color": "#ffffff"},
+    {"type": "solid", "color": "#ffffff"}
+  ],
+  "lines": [],
+  "paths": [
+    {"fill": 0, "d": "M 762 216.65 L 509 216.65 L 509 179 L 762 179 L 762 216.65 Z"},
+    {"fill": 1, "d": "M 762 292 L 509 292 L 509 254.3 L 762 254.3 L 762 292 Z"},
+    {"fill": 2, "d": "M 762 367.3 L 509 367.3 L 509 329.65 L 762 329.65 L 762 367.3 Z"},
+    {"fill": 3, "d": "M 762 442.65 L 509 442.65 L 509 405 L 762 405 L 762 442.65 Z"},
+    {"fill": 4, "d": "M 762 518 L 509 518 L 509 480.3 L 762 480.3 L 762 518 Z"},
+    {"fill": 5, "d": "M 762 141.3 L 509 141.3 L 509 103.65 L 762 103.65 L 762 141.3 Z"}
+  ]
+}

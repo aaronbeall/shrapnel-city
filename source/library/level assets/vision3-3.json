@@ -1,0 +1,6 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [{"frame": 1, "changes": [{"place": "level assets/vision3-3/shape 1", "depth": 1, "x": 0, "y": 0}]}]
+}

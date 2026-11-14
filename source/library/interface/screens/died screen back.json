@@ -1,0 +1,16 @@
+{
+  "kind": "shape",
+  "symbol": {"type": "graphic"},
+  "bounds": [0, 310, 0, 199],
+  "fills": [
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "interface/screens/died screen back/bitmap 1",
+      "m": [1, 0, 0, 1, 0, 0],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 0, "d": "M 0 0 L 310 0 L 310 199 L 0 199 L 0 0 Z"}]
+}

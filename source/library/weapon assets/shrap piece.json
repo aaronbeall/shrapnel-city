@@ -1,0 +1,24 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 13,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": ["gotoAndStop(random(_totalframes) + 1);", "stop();"],
+      "changes": [{"place": "weapon assets/shrap piece/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 2, "changes": [{"replace": "weapon assets/shrap piece/shape 2", "depth": 1}]},
+    {"frame": 3, "changes": [{"replace": "weapon assets/shrap piece/shape 3", "depth": 1}]},
+    {"frame": 4, "changes": [{"remove": 1}, {"place": "weapon assets/shrap piece/shape 4", "depth": 5, "x": 0, "y": 0}]},
+    {"frame": 5, "changes": [{"remove": 5}, {"place": "weapon assets/shrap piece/shape 5", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 6, "changes": [{"replace": "weapon assets/shrap piece/shape 6", "depth": 1}]},
+    {"frame": 7, "changes": [{"replace": "weapon assets/shrap piece/shape 7", "depth": 1}]},
+    {"frame": 8, "changes": [{"replace": "weapon assets/shrap piece/shape 8", "depth": 1}]},
+    {"frame": 9, "changes": [{"replace": "weapon assets/shrap piece/shape 9", "depth": 1}]},
+    {"frame": 10, "changes": [{"replace": "weapon assets/shrap piece/shape 10", "depth": 1}]},
+    {"frame": 11, "changes": [{"replace": "weapon assets/shrap piece/shape 11", "depth": 1}]},
+    {"frame": 12, "changes": [{"replace": "weapon assets/shrap piece/shape 12", "depth": 1}]},
+    {"frame": 13, "changes": [{"replace": "weapon assets/shrap piece/shape 13", "depth": 1}]}
+  ]
+}

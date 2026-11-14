@@ -1,0 +1,48 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy wolfgun turret body",
+          "depth": 1,
+          "x": 0,
+          "y": -11.85,
+          "filters": [
+            {
+              "type": "bevel",
+              "shadow": "#000000",
+              "highlight": "#ffcc66",
+              "blurX": 1,
+              "blurY": 1,
+              "angle": 0.7853851318359375,
+              "distance": 3,
+              "strength": 0.75,
+              "inner": true,
+              "knockout": false,
+              "onTop": false,
+              "passes": 1
+            }
+          ]
+        },
+        {
+          "place": "_glow",
+          "depth": 9,
+          "x": 0,
+          "y": -39.6,
+          "scale": [1.615112, 2.544678],
+          "color": {"multiply": [0.578125, 0.55859375, 1, 1]},
+          "name": "flash_mc",
+          "filters": [{"type": "blur", "blurX": 29, "blurY": 29, "passes": 1}],
+          "blend": "add",
+          "clipEvents": [1],
+          "script": ["onClipEvent (load) {", "    _visible = false;", "}", ""]
+        },
+        {"place": "_blank MC", "depth": 11, "x": 0, "y": -40.8, "name": "muzzle_mc"}
+      ]
+    }
+  ]
+}

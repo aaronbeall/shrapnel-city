@@ -1,0 +1,174 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 18,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/frames/enemy wolfgun.as\"",
+      "changes": [
+        {"place": "enemy assets/enemy wolfgun core", "depth": 1, "x": 0, "y": 0, "name": "core_mc"},
+        {"place": "enemy assets/enemy wolfgun turret", "depth": 8, "x": 0, "y": 0, "name": "turret_mc"}
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 1},
+        {"remove": 8},
+        {"place": "enemy assets/enemy wolfgun/shape tween 1", "depth": 1, "x": 0, "y": 0},
+        {"place": "enemy assets/enemy wolfgun/shape tween 2", "depth": 2, "x": 0, "y": 0},
+        {"place": "_shared/shape 155", "depth": 3, "x": 0, "y": 0},
+        {"place": "enemy assets/enemy wolfgun/shape tween 3", "depth": 4, "x": 0, "y": 0},
+        {"place": "enemy assets/enemy wolfgun/shape tween 4", "depth": 5, "x": 0, "y": 0},
+        {
+          "place": "game objects/box reactor glow",
+          "depth": 6,
+          "x": 0.25,
+          "y": 0.7,
+          "scale": [1.277512, 0.942276],
+          "ratio": 0.000015259021896696422,
+          "blend": "add"
+        },
+        {"place": "enemy assets/enemy wolfgun/shape tween 5", "depth": 8, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "ratio": 0.11111619745174334},
+        {"update": 2, "ratio": 0.5555504692149233},
+        {"update": 4, "ratio": 0.11111619745174334},
+        {"update": 5, "ratio": 0.3600061036087587},
+        {"update": 6, "x": 0.25, "y": 0.7, "scale": [1.369675, 1.005798]},
+        {"update": 8, "ratio": 0.5555504692149233}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"update": 1, "ratio": 0.44446478980697335},
+        {"update": 2, "ratio": 0.8888990615701533},
+        {"update": 4, "ratio": 0.44446478980697335},
+        {"update": 5, "ratio": 0.640009155413138},
+        {"update": 6, "x": 0.2, "y": 0.7, "scale": [1.646149, 1.19635]},
+        {"update": 8, "ratio": 0.8888990615701533}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"remove": 2},
+        {"remove": 8},
+        {"replace": "enemy assets/enemy wolfgun/shape tween 6", "depth": 1, "ratio": 0},
+        {"place": "enemy assets/enemy wolfgun/shape 1", "depth": 2, "x": 0, "y": 0},
+        {"replace": "enemy assets/enemy wolfgun/shape tween 7", "depth": 4, "ratio": 0},
+        {"update": 5, "ratio": 0.8400244144350347},
+        {"update": 6, "x": 0.25, "y": 0.7, "scale": [2.106934, 1.513916]},
+        {"place": "_shared/shape 598", "depth": 8, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"update": 1, "ratio": 0.2653086137178607},
+        {"update": 4, "ratio": 0.4375066758220798},
+        {"update": 5, "ratio": 0.9600213626306554},
+        {"update": 6, "x": 0.3, "y": 0.7, "scale": [2.102814, 1.511124], "color": {"alpha": 0.9921875}}
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"update": 1, "ratio": 0.4898146028839551},
+        {"update": 4, "ratio": 0.7500114442664225},
+        {"replace": "enemy assets/enemy wolfgun/shape tween 8", "depth": 5, "ratio": 0},
+        {"update": 6, "x": 0.3, "y": 0.7, "scale": [2.090469, 1.502731], "color": {"alpha": 0.97265625}}
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {"update": 1, "ratio": 0.67348744945449},
+        {"update": 4, "ratio": 0.9375143053330282},
+        {"update": 5, "ratio": 0.166674296177615},
+        {"update": 6, "x": 0.3, "y": 0.75, "scale": [2.06987, 1.488785], "color": {"alpha": 0.9375}}
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {"remove": 4},
+        {"update": 1, "ratio": 0.8163424124513619},
+        {"place": "enemy assets/enemy wolfgun/shape 2", "depth": 4, "x": 0, "y": 0},
+        {"update": 5, "ratio": 0.3333333333333333},
+        {"update": 6, "x": 0.3, "y": 0.75, "scale": [2.041061, 1.469238], "color": {"alpha": 0.890625}}
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [
+        {"remove": 4},
+        {"update": 1, "ratio": 0.9183794918745708},
+        {"update": 5, "ratio": 0.5000076295109483},
+        {"update": 6, "x": 0.3, "y": 0.7, "scale": [2.003998, 1.444107], "color": {"alpha": 0.828125}}
+      ]
+    },
+    {
+      "frame": 11,
+      "changes": [
+        {"update": 1, "ratio": 0.9796139467460135},
+        {"update": 5, "ratio": 0.6666819256885633},
+        {"update": 6, "x": 0.3, "y": 0.7, "scale": [1.958694, 1.413376], "color": {"alpha": 0.75}}
+      ]
+    },
+    {
+      "frame": 12,
+      "changes": [
+        {"remove": 1},
+        {"place": "enemy assets/enemy wolfgun/shape 3", "depth": 1, "x": 0, "y": 0},
+        {"update": 5, "ratio": 0.8333409628442817},
+        {"update": 6, "x": 0.3, "y": 0.75, "scale": [1.905167, 1.37709], "color": {"alpha": 0.66015625}}
+      ]
+    },
+    {
+      "frame": 13,
+      "changes": [
+        {"remove": 1},
+        {"remove": 5},
+        {"place": "enemy assets/enemy wolfgun/shape tween 9", "depth": 4, "x": 0, "y": 0},
+        {"update": 6, "x": 0.25, "y": 0.7, "scale": [1.843369, 1.335205], "color": {"alpha": 0.5546875}}
+      ]
+    },
+    {
+      "frame": 14,
+      "changes": [
+        {"update": 4, "ratio": 0.2500038147554742},
+        {"update": 6, "x": 0.25, "y": 0.7, "scale": [1.773346, 1.287735], "color": {"alpha": 0.4375}}
+      ]
+    },
+    {
+      "frame": 15,
+      "changes": [
+        {"update": 4, "ratio": 0.5000076295109483},
+        {"update": 6, "x": 0.3, "y": 0.7, "scale": [1.695129, 1.23468], "color": {"alpha": 0.3046875}}
+      ]
+    },
+    {
+      "frame": 16,
+      "changes": [
+        {"update": 4, "ratio": 0.7500114442664225},
+        {"update": 6, "x": 0.3, "y": 0.7, "scale": [1.608627, 1.176041], "color": {"alpha": 0.16015625}}
+      ]
+    },
+    {
+      "frame": 17,
+      "changes": [
+        {"remove": 4},
+        {"place": "enemy assets/enemy wolfgun/shape 4", "depth": 4, "x": 0, "y": 0},
+        {"update": 6, "x": 0.25, "y": 0.7, "scale": [1.513916, 1.111816], "color": {"alpha": 0}}
+      ]
+    },
+    {"frame": 18, "script": ["makeCorpse(this);", "this.kill();"], "changes": [{"remove": 4}, {"remove": 6}]}
+  ]
+}

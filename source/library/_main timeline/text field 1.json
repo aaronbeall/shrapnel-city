@@ -1,0 +1,23 @@
+{
+  "kind": "text field",
+  "bounds": [-2, 40, -2, 13.25],
+  "wordWrap": false,
+  "multiline": false,
+  "password": false,
+  "readOnly": true,
+  "font": "fonts/Andale Mono",
+  "size": 10,
+  "color": "#ffffff",
+  "autoSize": false,
+  "align": "center",
+  "leftMargin": 0,
+  "rightMargin": 0,
+  "indent": 0,
+  "leading": 0,
+  "noSelect": true,
+  "border": false,
+  "html": false,
+  "useOutlines": true,
+  "variable": "",
+  "text": "00/00"
+}

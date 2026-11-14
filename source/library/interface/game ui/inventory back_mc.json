@@ -1,0 +1,7 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "scale9": [13, 156, 5.25, 15.75],
+  "frames": 1,
+  "timeline": [{"frame": 1, "changes": [{"place": "interface/game ui/inventory back_mc/shape 1", "depth": 1, "x": 0, "y": 0}]}]
+}

@@ -1,0 +1,16 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 6,
+  "timeline": [
+    {"frame": 1, "changes": [{"place": "interface/game ui/HUD health flash/shape tween 1", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 2, "changes": [{"update": 1, "ratio": 0.2500038147554742}]},
+    {"frame": 3, "changes": [{"update": 1, "ratio": 0.5000076295109483}]},
+    {"frame": 4, "changes": [{"update": 1, "ratio": 0.7500114442664225}]},
+    {
+      "frame": 5,
+      "changes": [{"remove": 1}, {"place": "interface/game ui/HUD health flash/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {"frame": 6, "script": "stop()", "changes": [{"remove": 1}]}
+  ]
+}

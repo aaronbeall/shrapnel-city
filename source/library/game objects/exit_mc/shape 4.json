@@ -1,0 +1,27 @@
+{
+  "kind": "shape",
+  "bounds": [13, 25, -40, -30],
+  "fills": [
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "_shared/bitmap 263",
+      "m": [1, 0, 0, 1, 19, -36],
+      "repeat": false,
+      "smooth": false
+    },
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "_shared/bitmap 263",
+      "m": [1, 0, 0, 1, 13, -40],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [
+    {"fill": 1, "d": "M 19 -36 L 25 -36 L 25 -30 L 19 -30 L 19 -36 Z"},
+    {"fill": 3, "d": "M 13 -40 L 19 -40 L 19 -34 L 13 -34 L 13 -40 Z"}
+  ]
+}

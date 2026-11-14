@@ -1,0 +1,79 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 15,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/enemyProjectile.as\"",
+      "changes": [
+        {"place": "weapon assets/mort fire", "depth": 1, "x": 0.25, "y": 19.35},
+        {"place": "_shared/shape 363", "depth": 5, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 1},
+        {"remove": 5},
+        {"place": "weapon assets/shot MC enemy missile/shape tween 1", "depth": 1, "x": 0, "y": 0},
+        {"place": "weapon assets/shot MC enemy missile/shape tween 2", "depth": 2, "x": 0, "y": 0},
+        {"place": "weapon assets/shot MC enemy missile/shape tween 3", "depth": 3, "x": 0, "y": 0},
+        {"place": "weapon assets/shot MC enemy missile/shape tween 4", "depth": 4, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "ratio": 0.5000076295109483},
+        {"update": 2, "ratio": 0.5000076295109483},
+        {"update": 3, "ratio": 0.5555504692149233},
+        {"update": 4, "ratio": 0.5555504692149233}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"remove": 1},
+        {"remove": 2},
+        {"place": "weapon assets/shot MC enemy missile/shape 1", "depth": 2, "x": 0, "y": 0},
+        {"update": 3, "ratio": 0.8888990615701533},
+        {"update": 4, "ratio": 0.8888990615701533}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"remove": 2},
+        {"remove": 3},
+        {"remove": 4},
+        {"place": "weapon assets/shot MC enemy missile/shape tween 5", "depth": 1, "x": 0, "y": 0},
+        {"place": "weapon assets/shot MC enemy missile/shape tween 6", "depth": 2, "x": 0, "y": 0}
+      ]
+    },
+    {"frame": 6, "changes": [{"update": 1, "ratio": 0.2}, {"update": 2, "ratio": 0.5555504692149233}]},
+    {"frame": 7, "changes": [{"update": 1, "ratio": 0.4}, {"update": 2, "ratio": 0.8888990615701533}]},
+    {
+      "frame": 8,
+      "changes": [
+        {"remove": 2},
+        {"update": 1, "ratio": 0.6000152590218967},
+        {"place": "_shared/shape 244", "depth": 2, "x": 0, "y": 0}
+      ]
+    },
+    {"frame": 9, "changes": [{"remove": 2}, {"update": 1, "ratio": 0.8000152590218967}]},
+    {
+      "frame": 10,
+      "changes": [{"replace": "weapon assets/shot MC enemy missile/shape tween 7", "depth": 1, "ratio": 0}]
+    },
+    {"frame": 11, "changes": [{"update": 1, "ratio": 0.2}]},
+    {"frame": 12, "changes": [{"update": 1, "ratio": 0.4}]},
+    {"frame": 13, "changes": [{"update": 1, "ratio": 0.6000152590218967}]},
+    {"frame": 14, "changes": [{"update": 1, "ratio": 0.8000152590218967}]},
+    {
+      "frame": 15,
+      "script": "this.removeMovieClip();",
+      "changes": [{"remove": 1}, {"place": "_shared/shape 247", "depth": 1, "x": 0, "y": 0}]
+    }
+  ]
+}

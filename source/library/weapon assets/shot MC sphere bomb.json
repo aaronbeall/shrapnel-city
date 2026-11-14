@@ -1,0 +1,189 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 21,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectileBomb.as\"",
+      "changes": [{"place": "_shared/shape 109", "depth": 1, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 1},
+        {"place": "weapon assets/shot MC sphere bomb/shape tween 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "_glow",
+          "depth": 2,
+          "x": 0.25,
+          "y": 0.7,
+          "scale": 3.314438,
+          "ratio": 0.000015259021896696422,
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}],
+          "blend": "add"
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "ratio": 0.2500038147554742},
+        {
+          "update": 2,
+          "x": 0.15,
+          "y": 0.75,
+          "scale": 3.311157,
+          "color": {"alpha": 0.984375},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"replace": "weapon assets/shot MC sphere bomb/shape tween 2", "depth": 1, "ratio": 0},
+        {
+          "update": 2,
+          "x": 0.15,
+          "y": 0.75,
+          "scale": 3.301193,
+          "color": {"alpha": 0.9375},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"update": 1, "ratio": 0.4375066758220798},
+        {
+          "update": 2,
+          "x": 0.15,
+          "y": 0.75,
+          "scale": 3.284653,
+          "color": {"alpha": 0.859375},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"update": 1, "ratio": 0.7500114442664225},
+        {
+          "update": 2,
+          "x": 0.15,
+          "y": 0.75,
+          "scale": 3.261429,
+          "color": {"alpha": 0.75},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"update": 1, "ratio": 0.9375143053330282},
+        {
+          "update": 2,
+          "x": 0.2,
+          "y": 0.75,
+          "scale": 3.231598,
+          "color": {"alpha": 0.609375},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {"replace": "weapon assets/shot MC sphere bomb/shape tween 3", "depth": 1, "ratio": 0},
+        {
+          "update": 2,
+          "x": 0.2,
+          "y": 0.7,
+          "scale": 3.19519,
+          "color": {"alpha": 0.4375},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"place": "_shared/shape 49", "depth": 13, "x": 0, "y": -0.35, "scale": 0.776535},
+        {"place": "_glow", "depth": 14, "x": 0, "y": -0.35, "scale": 2.237396, "ratio": 0.00010681315327687495}
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {"remove": 13},
+        {"update": 1, "ratio": 0.15971618219272143},
+        {
+          "update": 2,
+          "x": 0.2,
+          "y": 0.7,
+          "scale": 3.1521,
+          "color": {"alpha": 0.234375},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"place": "_shared/shape 50", "depth": 9, "x": 0, "y": -0.35, "scale": 0.776535},
+        {"update": 14, "x": 0, "y": -0.35, "scale": 2.107651, "color": {"alpha": 0.578125}}
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [
+        {"remove": 9},
+        {"update": 1, "ratio": 0.30556191348134587},
+        {
+          "update": 2,
+          "x": 0.25,
+          "y": 0.7,
+          "scale": 3.102386,
+          "color": {"alpha": 0},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"place": "_shared/shape 51", "depth": 11, "x": 0, "y": -0.35, "scale": 0.776535},
+        {"update": 14, "color": {}}
+      ]
+    },
+    {
+      "frame": 11,
+      "changes": [
+        {"remove": 2},
+        {"remove": 11},
+        {"update": 1, "ratio": 0.4375066758220798},
+        {"place": "_shared/shape 52", "depth": 10, "x": 0, "y": -0.35, "scale": 0.776535},
+        {"update": 14, "color": {"alpha": 0.421875}}
+      ]
+    },
+    {
+      "frame": 12,
+      "changes": [
+        {"update": 1, "ratio": 0.5555504692149233},
+        {"replace": "_shared/shape 53", "depth": 10},
+        {"update": 14, "color": {}}
+      ]
+    },
+    {
+      "frame": 13,
+      "changes": [
+        {"remove": 10},
+        {"update": 1, "ratio": 0.6597390707255665},
+        {"place": "_shared/shape 54", "depth": 8, "x": 0, "y": -0.35, "scale": 0.776535}
+      ]
+    },
+    {
+      "frame": 14,
+      "changes": [{"remove": 8}, {"update": 1, "ratio": 0.7500114442664225}, {"update": 14, "color": {"alpha": 0.75}}]
+    },
+    {"frame": 15, "changes": [{"update": 1, "ratio": 0.8263981078812848}, {"update": 14, "color": {"alpha": 0.5}}]},
+    {"frame": 16, "changes": [{"update": 1, "ratio": 0.8888990615701533}, {"update": 14, "color": {"alpha": 0.25}}]},
+    {"frame": 17, "changes": [{"update": 1, "ratio": 0.9375143053330282}, {"update": 14, "color": {"alpha": 0}}]},
+    {"frame": 18, "changes": [{"update": 1, "ratio": 0.9722285801480125}]},
+    {"frame": 19, "changes": [{"update": 1, "ratio": 0.9930724040588998}]},
+    {
+      "frame": 20,
+      "script": "this.removeMovieClip();",
+      "changes": [{"remove": 1}, {"remove": 14}, {"place": "_shared/shape 485", "depth": 1, "x": 0, "y": 0}]
+    }
+  ]
+}

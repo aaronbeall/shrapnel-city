@@ -1,0 +1,32 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/powerup.as\"",
+      "changes": [
+        {"place": "game objects/message beacon/shape 1", "depth": 15, "x": 0, "y": 0},
+        {
+          "place": "_glow",
+          "depth": 16,
+          "x": -7.85,
+          "y": -13.75,
+          "scale": 0.212234,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+        },
+        {
+          "place": "_glow",
+          "depth": 18,
+          "x": -7.85,
+          "y": -13.75,
+          "scale": 1.252014,
+          "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+          "filters": [{"type": "blur", "blurX": 25, "blurY": 25, "passes": 2}],
+          "blend": "add"
+        }
+      ]
+    }
+  ]
+}

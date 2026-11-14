@@ -1,0 +1,20 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "graphic"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "interface/screens/help screen back/shape 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "interface/buttons/btn close menu",
+          "depth": 2,
+          "x": 288.9,
+          "y": 4.85,
+          "script": ["on (keyPress \"<Escape>\") {", "    hideDialog();", "}", "on (release) {", "    hideDialog();", "}", ""]
+        }
+      ]
+    }
+  ]
+}

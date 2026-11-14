@@ -1,0 +1,62 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 10,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/object/projectile.as\"",
+      "changes": [{"place": "_shared/shape 104", "depth": 2, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"remove": 2},
+        {
+          "place": "_glow",
+          "depth": 1,
+          "x": 0.25,
+          "y": 0.7,
+          "scale": 2.064743,
+          "ratio": 0.000015259021896696422,
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}],
+          "blend": "add"
+        },
+        {"place": "weapon assets/shot MC/shape tween 1", "depth": 3, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {
+          "update": 1,
+          "x": 0.3,
+          "y": 0.7,
+          "scale": 2.064774,
+          "color": {"alpha": 0.75},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 3, "ratio": 0.7500114442664225}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {
+          "update": 1,
+          "x": 0.25,
+          "y": 0.7,
+          "scale": 2.064743,
+          "color": {"alpha": 0},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"replace": "weapon assets/shot MC/shape tween 2", "depth": 3, "ratio": 0}
+      ]
+    },
+    {"frame": 5, "changes": [{"remove": 1}, {"update": 3, "ratio": 0.4375066758220798}]},
+    {"frame": 6, "changes": [{"update": 3, "ratio": 0.7500114442664225}]},
+    {"frame": 7, "changes": [{"update": 3, "ratio": 0.9375143053330282}]},
+    {"frame": 8, "changes": [{"remove": 3}, {"place": "weapon assets/shot MC/shape 1", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 10, "script": "this.kill();"}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "kind": "shape",
+  "bounds": [-17, 25, -11, 13],
+  "fills": [
+    {"type": "clipped bitmap (unsmoothed)", "bitmap": null, "m": [1, 0, 0, 1, 0, 0], "repeat": false, "smooth": false},
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "weapon assets/wep icons primary - guns/shape 13/bitmap 1",
+      "m": [1, 0, 0, 1, -17, -11],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 1, "d": "M 25 13 L -17 13 L -17 -11 L 25 -11 L 25 13 Z"}]
+}

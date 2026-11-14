@@ -1,0 +1,39 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 70,
+  "timeline": [
+    {
+      "frame": 1,
+      "label": "yellowKey",
+      "script": "#include \"as/ui/hudInventoryItem.as\"",
+      "changes": [{"place": "interface/game ui/inventory item_mc/shape 1", "depth": 1, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 10,
+      "label": "blueKey",
+      "changes": [{"replace": "interface/game ui/inventory item_mc/shape 2", "depth": 1}]
+    },
+    {
+      "frame": 20,
+      "label": "redKey",
+      "changes": [{"replace": "interface/game ui/inventory item_mc/shape 3", "depth": 1}]
+    },
+    {
+      "frame": 30,
+      "label": "greenKey",
+      "changes": [{"replace": "interface/game ui/inventory item_mc/shape 4", "depth": 1}]
+    },
+    {
+      "frame": 40,
+      "label": "purpleKey",
+      "changes": [{"replace": "interface/game ui/inventory item_mc/shape 5", "depth": 1}]
+    },
+    {
+      "frame": 50,
+      "label": "aquaKey",
+      "changes": [{"replace": "interface/game ui/inventory item_mc/shape 6", "depth": 1}]
+    },
+    {"frame": 60, "changes": [{"remove": 1}]}
+  ]
+}

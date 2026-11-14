@@ -1,0 +1,15 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip", "linkage": "message"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": "#include \"as/ui/message.as\"",
+      "changes": [
+        {"place": "interface/alerts/message back_mc", "depth": 1, "x": 0, "y": 0, "name": "back_mc"},
+        {"place": "interface/alerts/message/text field 1", "depth": 3, "x": -123, "y": -6.95, "name": "text_txt"}
+      ]
+    }
+  ]
+}

@@ -2,6 +2,8 @@
   "name": "shrapnel-city",
   "version": "1.0.0",
   "scripts": {
+    "build": "node tools/flash-source/build.mjs && node tools/as2js.mjs",
+    "build:assets": "node tools/flash-source/build.mjs",
     "build:scripts": "node tools/as2js.mjs",
     "serve": "python3 -m http.server 8123"
   },
