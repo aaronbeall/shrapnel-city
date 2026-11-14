@@ -1,0 +1,38 @@
+{
+  "kind": "shape",
+  "bounds": [
+    -10,
+    10,
+    -16,
+    6
+  ],
+  "fills": [
+    {
+      "type": "solid",
+      "color": "#a17f1e"
+    },
+    {
+      "type": "solid",
+      "color": "#3e310b"
+    },
+    {
+      "type": "solid",
+      "color": "#e0bc5c"
+    }
+  ],
+  "lines": [],
+  "paths": [
+    {
+      "fill": 0,
+      "d": "M -3 5 L 3 5 L 4 -1 L 9 -15 L 2 -10 L -2 -10 L -9 -15 L -4 -1 L -3 5 Z"
+    },
+    {
+      "fill": 1,
+      "d": "M 2 -8 L 9 -15 L 7.25 -2.75 L 5 -1 L 3 5 L 2 -8 Z"
+    },
+    {
+      "fill": 2,
+      "d": "M -2 -8 L -9 -15 L -7.25 -2.75 L -5 -1 L -3 5 L -2 -8 Z"
+    }
+  ]
+}

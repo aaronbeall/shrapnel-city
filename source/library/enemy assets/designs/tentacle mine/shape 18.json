@@ -1,0 +1,27 @@
+{
+  "kind": "shape",
+  "bounds": [
+    -46,
+    -34.32,
+    5,
+    12.29
+  ],
+  "fills": [],
+  "lines": [
+    {
+      "width": 2,
+      "cap": 0,
+      "ecap": 0,
+      "join": 0,
+      "noScale": false,
+      "noClose": false,
+      "color": "#121212"
+    }
+  ],
+  "paths": [
+    {
+      "line": 0,
+      "d": "M -36.32 10.29 L -37 7 L -44 8"
+    }
+  ]
+}

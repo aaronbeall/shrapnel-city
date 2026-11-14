@@ -1,0 +1,32 @@
+{
+  "kind": "shape",
+  "bounds": [
+    -22,
+    -1,
+    1,
+    23
+  ],
+  "fills": [
+    {
+      "type": "clipped bitmap",
+      "bitmap": "enemy assets/designs/tentacle mine/bitmap 1",
+      "m": [
+        1,
+        0,
+        0,
+        1,
+        -22,
+        1
+      ],
+      "repeat": false,
+      "smooth": true
+    }
+  ],
+  "lines": [],
+  "paths": [
+    {
+      "fill": 0,
+      "d": "M -22 1 L -1 1 L -1 23 L -22 23 Z"
+    }
+  ]
+}
