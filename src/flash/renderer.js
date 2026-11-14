@@ -418,7 +418,9 @@ export class Renderer {
       sc.clearRect(x0, y0, w, h);
       sc.drawImage(src, x0, y0, w, h, x0, y0, w, h);
       sc.globalCompositeOperation = 'source-atop'; // source-in would clear the whole pooled canvas
-      sc.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${(c[3] / 255).toFixed(3)})`;
+      // opaque colour here: source-atop with a translucent fill would leave the content's own colours showing through;
+      // the filter colour's alpha is applied when the silhouette is drawn below
+      sc.fillStyle = `rgb(${c[0]},${c[1]},${c[2]})`;
       sc.fillRect(x0, y0, w, h);
       sc.globalCompositeOperation = 'source-over';
       oc.save();
@@ -427,7 +429,7 @@ export class Renderer {
       const strength = Math.max(0, f.strength === undefined ? 1 : f.strength);
       let s = strength;
       while (s > 0) {
-        oc.globalAlpha = Math.min(1, s);
+        oc.globalAlpha = Math.min(1, s) * c[3] / 255;
         oc.drawImage(sil, x0, y0, w, h, x0 + dx, y0 + dy, w, h);
         s -= 1;
       }

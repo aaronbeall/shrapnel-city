@@ -1,0 +1,29 @@
+{
+  "source": "original/art/graphics/enemies.fw.png",
+  "layer": "Layer 1",
+  "folder": "enemy assets/designs",
+  "note": "Element indices from --list. Not converted because they are already in the game: 26 gnat, 32 missile launcher, 51 tank, 54 drone.",
+  "designs": {
+    "plasma core": [2, 3, 4, 5, 7, 9, 11, 17, 25],
+    "tentacle mine": [0, 1, 6, 8, 10, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 56, 57, 58, 59, 60, 61, 62],
+    "dart": [27],
+    "beetle": [55],
+    "hauler": [53],
+    "crusher": [52],
+    "spider": [39],
+    "walker": [38],
+    "missile launcher blue": [30],
+    "missile launcher yellow": [28, 29],
+    "tank yellow": [50],
+    "tank blue": [37, 49],
+    "tank gatling": [40],
+    "tank pink": [48],
+    "tank twin": [47],
+    "tank twin angled": [45, 46],
+    "tank side gun": [41, 42],
+    "tank side gun yellow": [43, 44],
+    "carrier": [36],
+    "carrier nuke": [33],
+    "carrier launcher": [31, 34, 35]
+  }
+}

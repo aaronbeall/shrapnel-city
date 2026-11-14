@@ -470,6 +470,9 @@ export class MovieClip extends DisplayObject {
   stop() { this.playing = false; }
   _frameNum(f) {
     if (typeof f === 'string') {
+      // AVM1 "target:frame" syntax: an empty target (":open") means this clip
+      const colon = f.lastIndexOf(':');
+      if (colon === 0) f = f.slice(1);
       const lab = this.char && this.char.labels && this.char.labels[f];
       if (lab === undefined) {
         const n = parseInt(f, 10);

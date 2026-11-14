@@ -1,0 +1,57 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy missile launcher turret pod1",
+          "depth": 1,
+          "x": -571.1,
+          "y": 303.95,
+          "matrix": [0.99762, -0.000229, -0.000229, -0.99762],
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#00000040",
+              "blurX": 1,
+              "blurY": 1,
+              "angle": 0.785398,
+              "distance": 7,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/enemy missile launcher turret pod2",
+          "depth": 2,
+          "x": -571.1,
+          "y": 303.95,
+          "matrix": [0.99762, -0.000229, -0.000229, -0.99762],
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#00000040",
+              "blurX": 1,
+              "blurY": 1,
+              "angle": 0.785398,
+              "distance": 7,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        },
+        {"place": "enemy assets/enemy missile launcher turret/shape 1", "depth": 3, "x": 0, "y": 0},
+        {"place": "_blank MC", "depth": 4, "x": -13, "y": -10, "name": "muzzle_mc1"},
+        {"place": "_blank MC", "depth": 5, "x": 13, "y": -10, "name": "muzzle_mc2"}
+      ]
+    }
+  ]
+}

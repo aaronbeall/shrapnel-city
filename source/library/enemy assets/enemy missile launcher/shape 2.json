@@ -1,0 +1,15 @@
+{
+  "kind": "shape",
+  "bounds": [0, 15, 0, 7],
+  "fills": [
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "game objects/door/shape 1/bitmap 2",
+      "m": [1, 0, 0, 1, 0, 0],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 0, "d": "M 0 0 L 15 0 L 15 7 L 0 7 L 0 0 Z"}]
+}

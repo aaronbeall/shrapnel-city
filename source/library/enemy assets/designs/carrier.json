@@ -1,0 +1,52 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/designs/carrier/shape 1",
+          "depth": 1,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/carrier/shape 2",
+          "depth": 2,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/carrier/clip 1",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#00000026",
+              "blurX": 2,
+              "blurY": 2,
+              "angle": 0.785398,
+              "distance": 5.0,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/designs/carrier/shape 4",
+          "depth": 4,
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}

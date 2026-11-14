@@ -1,0 +1,17 @@
+{
+  "kind": "sprite",
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/designs/carrier launcher/shape 3",
+          "depth": 1,
+          "x": 0,
+          "y": 0
+        }
+      ]
+    }
+  ]
+}
