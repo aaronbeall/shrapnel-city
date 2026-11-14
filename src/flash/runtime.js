@@ -147,7 +147,7 @@ export class Runtime {
         else if (ev === 'keyDown' || ev === 'keyUp') {
           (clip.$clipEvents ||= {})[ev] = fn;
           this.keyClips.add(clip);
-        } else if (ev === 'enterFrame') (clip.$clipEvents ||= {}).enterFrame = fn;
+        } else if (ev === 'enterFrame' || ev === 'mouseDown' || ev === 'mouseUp' || ev === 'mouseMove') (clip.$clipEvents ||= {})[ev] = fn;
       } else if (ev.startsWith('key')) {
         this.keyPress.push({ clip, code: +ev.slice(3), fn, scope });
       } else {
@@ -302,6 +302,25 @@ export class Runtime {
       if (typeof l[ev] === 'function') {
         try { l[ev](); } catch (err) { console.error(err); }
       }
+    }
+    // In AS2 every movie clip on the stage with an onMouseDown/Up/Move method or an
+    // onClipEvent(mouseDown/Up/Move) handler hears the event, wherever the mouse is
+    // and whether or not the clip is visible (e.g. hudInventory's Shift+click hook).
+    const ce = 'mouse' + ev.slice(7); // onMouseUp -> mouseUp
+    const clips = [];
+    const walk = (node) => {
+      if (node instanceof MovieClip && !this.mouseListeners.includes(node) && (typeof node[ev] === 'function' || (node.$clipEvents && node.$clipEvents[ce]))) clips.push(node);
+      const kids = node.children;
+      if (kids) for (const k of kids) walk(k);
+    };
+    walk(this.root);
+    for (const c of clips) {
+      if (c.removed) continue;
+      if (typeof c[ev] === 'function') {
+        try { c[ev](); } catch (err) { console.error(err); }
+      }
+      const fn = c.$clipEvents && c.$clipEvents[ce];
+      if (fn) this.call(fn, c);
     }
     this.flush();
   }
