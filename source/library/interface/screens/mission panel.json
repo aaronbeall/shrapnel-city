@@ -18,7 +18,14 @@
           "blend": "overlay"
         },
         {"place": "interface/screens/mission panel/shape 1", "depth": 13, "x": 0, "y": -332.95},
-        {"place": "interface/screens/mission panel/button 1", "depth": 14, "x": 217, "y": 5.05, "name": "close_btn"}
+        {
+          "place": "interface/screens/mission panel/button 1",
+          "depth": 14,
+          "x": 217,
+          "y": 5.05,
+          "name": "close_btn",
+          "script": ["on (release) {", "    hide();", "}"]
+        }
       ]
     },
     {
