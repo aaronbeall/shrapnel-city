@@ -95,21 +95,14 @@ Instance properties:
 
 ## Symbols recovered from the FLA
 
-Most of `source/` came from the compiled SWF. Anything the SWF never contained was converted straight from the FLA with `tools/flash-source/fla2source.py`. That covers three groups:
-
-- Symbols that were only placed on guide layers: the **enemy tank**, **enemy drone** and **enemy missile launcher**, with all their parts.
-- Unused library symbols: `game objects/exit`, `exit (old)`, `box reactor (old)`, `graphic assets/ball`, `flame element`, `symbol - bolt`/`gun`, `player assets/crosshair`, `level assets/vision3-4` and `HUD [deprecated]`.
-- Library bitmaps that no compiled symbol used, such as `player assets/tankA` and `graphic assets/smoke & fire/smoke1` to `smoke4`.
-
-`graphic assets/explosion anim` is the full explosion animation, rebuilt from its flattened copy.
+Most of `source/` came from the compiled SWF. Three enemies were finished in the FLA but only placed on guide layers, so the SWF never contained them: the **enemy tank**, **enemy drone** and **enemy missile launcher**. They were converted straight from the FLA, with all their parts, by `tools/flash-source/fla2source.py`. Deprecated and obsolete library items (old exits, the old HUD, unused bitmaps and so on) were deliberately left out.
 
 Two things to know when reading these files:
 
 - Flash flattens **graphic** symbol instances into the timeline that uses them, so the SWF never had a standalone copy of a graphic symbol. The converter does the same. A recovered symbol that uses a graphic symbol therefore has that graphic's pieces placed directly on its own timeline.
-- The same flattening means some names that came from the SWF point at only the first piece of a flattened graphic. For example, `graphic assets/explosion` is really just the explosion's shockwave ring, and `game objects/exit doors` is only the doors' mask.
-- Not converted: static and dynamic text (only used in `exit (old)` and `HUD [deprecated]`), and shape tweens (only used in `box reactor (old)`, which shows each keyframe's shape without the in-between frames).
+- The same flattening means some names that came from the SWF point at only the first piece of a flattened graphic. For example, `graphic assets/explosion` is really just the explosion's shockwave ring.
 
-To re-run it: `python3 tools/flash-source/fla2source.py <unzipped FLA folder>`. It only adds files and never overwrites an existing one. `--calibrate <symbol>` converts a symbol that already exists into a scratch folder, so you can compare it with the SWF version.
+To convert another symbol: `python3 tools/flash-source/fla2source.py <unzipped FLA folder> --only "<library name>" ...` (list every part the symbol uses). It only adds files and never overwrites an existing one. `--calibrate <symbol>` converts a symbol that already exists into a scratch folder, so you can compare it with the SWF version.
 
 ## Generated art
 
