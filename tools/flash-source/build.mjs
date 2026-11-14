@@ -72,7 +72,8 @@ for (const [name, { file, ext }] of [...lib].sort((a, b) => id(a[0]) - id(b[0]))
     if (o.kind === 'sprite') {
       const t = decodeTimeline(o, id);
       chars[cid] = { frames: t.frames, labels: t.labels, scriptFrames: t.scriptFrames, type: 'sprite', frameCount: o.frames, ...(o.scale9 ? { scale9: o.scale9 } : {}) };
-      if (o.symbol) symbols[cid] = symbolEntry(name, o.symbol, Object.fromEntries(Object.entries(t.labels).map(([l, f]) => [l, f + 1])), t.scripts);
+      // anonymous clips (no library symbol) can still carry frame scripts, e.g. the mission list
+      if (o.symbol || Object.keys(t.scripts).length) symbols[cid] = symbolEntry(name, o.symbol || { type: 'movie clip' }, Object.fromEntries(Object.entries(t.labels).map(([l, f]) => [l, f + 1])), t.scripts);
       for (const [k, src] of Object.entries(t.instances)) instances[cid + ':' + k] = src;
     } else {
       chars[cid] = decodeChar(o, id);
