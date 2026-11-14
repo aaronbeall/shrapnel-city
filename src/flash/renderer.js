@@ -124,6 +124,7 @@ export class Renderer {
 
   drawContent(ctx, node, m, cx, clip) {
     if (node instanceof MovieClip) {
+      if (node.char && node.char.scale9 && this.drawScale9(ctx, node, m, cx, clip)) return;
       if (node.graphics) this.drawGraphics(ctx, node.graphics, m, cx);
       this.drawChildren(ctx, node.children, m, cx, clip);
     } else if (node instanceof Shape) {
@@ -166,6 +167,40 @@ export class Renderer {
       }
       this.drawNode(ctx, k, m, cx, clip);
     }
+  }
+
+  // 9-slice scaling (DefineScalingGrid): when a clip with a scale9 grid is
+  // scaled, its shapes are warped piecewise so the corner cells keep their
+  // size, the edge cells stretch along one axis and the centre fills the rest.
+  // The warped geometry is built in the parent's (scaled) units and drawn with
+  // the clip's translation only, so strokes keep their width like in Flash.
+  // Rotated, skewed or flipped clips fall back to plain scaling.
+  drawScale9(ctx, node, m, cx, clip) {
+    const nm = node.m;
+    if (nm[1] || nm[2] || nm[0] <= 0 || nm[3] <= 0) return false;
+    const sx = nm[0], sy = nm[3];
+    if (Math.abs(sx - 1) < 1e-6 && Math.abs(sy - 1) < 1e-6) return false;
+    const lb = node.localBounds();
+    if (!lb) return false;
+    const g = node.char.scale9;
+    const fx = scale9Axis(lb[0], lb[1], g[0], g[1], sx);
+    const fy = scale9Axis(lb[2], lb[3], g[2], g[3], sy);
+    // m = parent * node.m; draw with parent * translate(node) instead
+    const dm = mul(mul(m, invert(nm)), [1, 0, 0, 1, nm[4], nm[5]]);
+    if (node.graphics) this.drawGraphics(ctx, node.graphics, m, cx);
+    for (const k of node.children) {
+      const km = k.m;
+      if (!(k instanceof Shape) || km[0] !== 1 || km[1] || km[2] || km[3] !== 1 || k.clipDepth) {
+        this.drawNode(ctx, k, m, cx, clip); // only plain shapes are sliced
+        continue;
+      }
+      if (!k.__visible || k.maskOf) continue;
+      const key = sx + ',' + sy + ',' + lb.join(',') + ',' + km[4] + ',' + km[5];
+      let w = k.$scale9;
+      if (!w || w.key !== key) w = k.$scale9 = { key, ...warpShape(k.char, km[4], km[5], fx, fy, sx, sy) };
+      this.drawShape(ctx, w.fills, k.char.lines, w.paths, dm, cx);
+    }
+    return true;
   }
 
   // gather fill geometry of a subtree in device space (for masks)
@@ -853,6 +888,45 @@ export class Renderer {
     const b = node.localBounds();
     return !!b && lx >= b[0] && lx <= b[1] && ly >= b[2] && ly <= b[3];
   }
+}
+
+// piecewise map of one axis for 9-slice: source coords (clip space) to
+// scaled coords. Corner cells keep their size unless the scaled clip is too
+// small to fit them, then they shrink together.
+function scale9Axis(a0, a1, g0, g1, s) {
+  g0 = Math.max(a0, Math.min(a1, g0));
+  g1 = Math.max(g0, Math.min(a1, g1));
+  const fixed = (g0 - a0) + (a1 - g1);
+  const k = fixed > 0 ? Math.min(1, (s * (a1 - a0)) / fixed) : 1;
+  const A0 = s * a0, A1 = s * a1;
+  const G0 = A0 + (g0 - a0) * k, G1 = A1 - (a1 - g1) * k;
+  const span = g1 - g0;
+  return (v) => {
+    if (v <= g0) return A0 + (v - a0) * k;
+    if (v >= g1) return A1 - (a1 - v) * k;
+    return G0 + (G1 - G0) * ((v - g0) / span);
+  };
+}
+
+function warpShape(c, tx, ty, fx, fy, sx, sy) {
+  const paths = c.paths.map((p) => {
+    const d = p.d, out = new Path2D();
+    let i = 0;
+    const X = (v) => fx(v + tx), Y = (v) => fy(v + ty);
+    while (i < d.length) {
+      const op = d[i++];
+      if (op === 'M') { out.moveTo(X(d[i]), Y(d[i + 1])); i += 2; }
+      else if (op === 'L') { out.lineTo(X(d[i]), Y(d[i + 1])); i += 2; }
+      else if (op === 'Q') { out.quadraticCurveTo(X(d[i]), Y(d[i + 1]), X(d[i + 2]), Y(d[i + 3])); i += 4; }
+      else if (op === 'Z') out.closePath();
+    }
+    return { f: p.f, l: p.l, d: p.d, path: out };
+  });
+  // gradient and bitmap fills follow the plain scale (Flash stretches them
+  // across the whole shape); solid fills are shared unchanged
+  const S = [sx, 0, 0, sy, sx * tx, sy * ty];
+  const fills = c.fills.map((f) => (f && f.m ? { ...f, m: mul(S, f.m), $grad: undefined } : f));
+  return { paths, fills };
 }
 
 function mix(h, v) { return Math.imul(h ^ (v | 0), 16777619); }
