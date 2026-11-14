@@ -1,0 +1,14 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "graphic assets/symbol - gun/shape 1", "depth": 1, "x": 0, "y": 0},
+        {"place": "graphic assets/symbol - gun/shape 2", "depth": 2, "x": 0, "y": 0}
+      ]
+    }
+  ]
+}

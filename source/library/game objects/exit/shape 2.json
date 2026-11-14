@@ -1,0 +1,15 @@
+{
+  "kind": "shape",
+  "bounds": [0, 71, 0, 70],
+  "fills": [
+    {
+      "type": "clipped bitmap (unsmoothed)",
+      "bitmap": "game objects/exit_mc/shape 1/bitmap 2",
+      "m": [1, 0, 0, 1, 0, 0],
+      "repeat": false,
+      "smooth": false
+    }
+  ],
+  "lines": [],
+  "paths": [{"fill": 0, "d": "M 0 0 L 71 0 L 71 70 L 0 70 L 0 0 Z"}]
+}

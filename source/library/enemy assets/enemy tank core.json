@@ -1,0 +1,35 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "enemy assets/enemy tank core/shape 1", "depth": 1, "x": 0, "y": 0},
+        {
+          "place": "enemy assets/enemy tank base",
+          "depth": 2,
+          "x": 0.55,
+          "y": 1.8,
+          "filters": [
+            {
+              "type": "bevel",
+              "shadow": "#000000",
+              "highlight": "#d9a888",
+              "blurX": 1,
+              "blurY": 1,
+              "angle": 0.785398,
+              "distance": 3,
+              "strength": 0.5,
+              "inner": true,
+              "knockout": false,
+              "onTop": false,
+              "passes": 1
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

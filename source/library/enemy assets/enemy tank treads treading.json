@@ -1,0 +1,6 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "graphic"},
+  "frames": 1,
+  "timeline": [{"frame": 1, "changes": [{"place": "enemy assets/enemy tank treads treading/shape 1", "depth": 1, "x": 0, "y": 0}]}]
+}

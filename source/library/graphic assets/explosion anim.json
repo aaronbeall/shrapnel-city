@@ -1,0 +1,115 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "graphic"},
+  "frames": 13,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"remove": 2},
+        {"place": "graphic assets/explosion", "depth": 1, "x": 0, "y": 0},
+        {"place": "_shared/shape tween 239", "depth": 2, "x": 0, "y": 0},
+        {
+          "place": "_glow",
+          "depth": 3,
+          "x": 0.24,
+          "y": 0.73,
+          "scale": 2.870491,
+          "ratio": 1.5259021896696422e-05,
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}],
+          "blend": "add"
+        },
+        {"place": "_shared/shape tween 240", "depth": 4, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {"update": 1, "ratio": 0.11111619745174334},
+        {"update": 2, "ratio": 0.5555504692149233},
+        {
+          "update": 3,
+          "x": 0.16,
+          "y": 0.73,
+          "scale": 2.870491,
+          "color": {"alpha": 0.97265625},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"update": 4, "ratio": 0.5555504692149233}
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {"update": 1, "ratio": 0.44446478980697335},
+        {"update": 2, "ratio": 0.8888990615701533},
+        {"update": 3, "color": {"alpha": 0.890625}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 4, "ratio": 0.8888990615701533}
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {"replace": "_shared/shape tween 241", "depth": 1, "ratio": 0},
+        {"replace": "_shared/shape tween 242", "depth": 2, "ratio": 0},
+        {"update": 3, "color": {"alpha": 0.75}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"replace": "_shared/shape tween 243", "depth": 4, "ratio": 0}
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {"update": 1, "ratio": 0.2653086137178607},
+        {"update": 2, "ratio": 0.2},
+        {"update": 3, "color": {"alpha": 0.5546875}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 4, "ratio": 0.5555504692149233}
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {"update": 1, "ratio": 0.4898146028839551},
+        {"update": 2, "ratio": 0.4},
+        {"update": 3, "color": {"alpha": 0.3046875}, "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]},
+        {"update": 4, "ratio": 0.8888990615701533}
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {"remove": 4},
+        {"update": 1, "ratio": 0.67348744945449},
+        {"update": 2, "ratio": 0.6000152590218967},
+        {
+          "update": 3,
+          "x": 0.24,
+          "y": 0.73,
+          "scale": 2.870491,
+          "color": {"alpha": 0},
+          "filters": [{"type": "blur", "blurX": 34, "blurY": 34, "passes": 1}]
+        },
+        {"place": "_shared/shape 244", "depth": 4, "x": 0, "y": 0}
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {"remove": 3},
+        {"remove": 4},
+        {"update": 1, "ratio": 0.8163424124513619},
+        {"update": 2, "ratio": 0.8000152590218967}
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [{"update": 1, "ratio": 0.9183794918745708}, {"replace": "_shared/shape tween 245", "depth": 2, "ratio": 0}]
+    },
+    {"frame": 10, "changes": [{"update": 1, "ratio": 0.9796139467460135}, {"update": 2, "ratio": 0.2}]},
+    {
+      "frame": 11,
+      "changes": [{"remove": 1}, {"place": "_shared/shape 246", "depth": 1, "x": 0, "y": 0}, {"update": 2, "ratio": 0.4}]
+    },
+    {"frame": 12, "changes": [{"remove": 1}, {"update": 2, "ratio": 0.6000152590218967}]},
+    {"frame": 13, "script": "stop();", "changes": [{"update": 2, "ratio": 0.8000152590218967}]}
+  ]
+}
