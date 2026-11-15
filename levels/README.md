@@ -43,6 +43,10 @@ Every placement file is a list of instances, drawn in list order (later ones on 
 
 Triggers are names sent with `trigger("name")` to every clip that registered for them. A door with `"id": "door2"` listens for `door2:open` and `door2:close`. An area that sends a trigger when the player walks into it is a trigger pad: an invisible pickup with `"type": "trigger", "item": "door2:open"`, sized with `scale`. Boxes and enemies send one when destroyed with an `onDie` `$trigger` handler as above. A load script can also call `trigger()`.
 
+## Messages
+
+A pickup or message beacon with `alertMessage` shows that message while the player is over it. After the player leaves, it stays up for 4 seconds (`alertLinger` sets another time in seconds), and a different message replaces it straight away.
+
 ## Path nodes
 
 A node with no `connections` links itself, when the level starts, to every other node of the same colour that it has line of sight to (`as2/pathNode.as`). The colour (`color.add`) is the node's path group, and an enemy follows the group of the node nearest to it unless it sets `pathID`. To pin a node's links by hand, give it `"connections": [{"$ref": "a2"}, ...]` naming other nodes.
@@ -63,7 +67,7 @@ Press backtick (`` ` ``) in the game, or open the page with `?edit` (`?edit=3` f
 - **Art preview (A):** fills the collision map with the Bridge kit's floor, wall and chasm textures (`tools/art/parts`), with rough wall sides, bevels and chasm lips, and redraws it as you edit collision. It's a guide, not the bake.
 - **Select (V):** click to select, drag to move (Shift snaps to the grid), R rotates by 15°, Delete removes, Ctrl+D duplicates. The panel edits position, rotation, scale, name and the load variables (`props`) as JSON. Instances with a load `script` show it read-only.
 - **Place (P):** pick a symbol from the palette (everything already used in a level for that layer, plus the recovered enemies, plus a ready-made trigger pad), then click. New instances copy the variables of an existing one of the same symbol; doors get the next free `id`.
-- **Hidden things:** anything the game doesn't show (trigger pads, alpha-0 areas like Training's `triggerNewWep_mc`, enemies hidden at the start) is outlined and named when its layer is on, so it can be seen and selected.
+- **Hidden things:** anything the game doesn't show (trigger pads, alpha-0 areas, pickups with nothing to draw, enemies hidden at the start) is outlined and named when its layer is on, so it can be seen and selected.
 - **Triggers (T):** an overlay, independent of the layers: every sender is labelled on the map with what it sends, and dashed lines show which door each one opens (green) or closes (red). The **Triggers** list in the panel shows every door and sender in the level; click one to select it. A selected pickup, box or enemy has a field for the triggers it sends when picked up, destroyed or killed, and a trigger pad for the one it sends; both suggest the level's door triggers.
 - **Path nodes:** their own layer (Tab or click "Path nodes"). A new node joins the selected node's path group (or the level's first) and links itself by line of sight; these links show dashed, computed the same way as the game. A selected node's panel sets the group colour and lists its links, each with an **unlink** button. **Path links (N):** click a node, then another, to add the link (or remove it if they were linked). A node whose links you change keeps them pinned (solid); **Back to automatic** in the panel unpins them.
 - **Vision zones:** pick the Vision layer (Tab). Select moves, rotates and deletes zones and drags a polygon zone's corners; zones with curves get an **Edit corners** button that turns them into a polygon. Polygon (G) draws a zone, and Auto zone (Z) makes one from the spot you click, with the same rays the game uses.

@@ -22,16 +22,13 @@
     "x": 691.4,
     "y": 93.45,
     "scale": 0.999969,
-    "script": [
-      "onClipEvent (load) {",
-      "    type = \"primary\";",
-      "    item = \"Plasma\";",
-      "    quantity = 30;",
-      "    ",
-      "    alertMessage = \"You got a new weapon! Press <strong>INSERT</strong> and <strong>SHIFT+INSERT</strong> to change your primary weapon. Press <strong>DELETE</strong> and <strong>SHIFT+DELETE</strong> to change your secondary weapon.\";",
-      "    alertKillTrigger = {onRollOut:_parent.triggerNewWep_mc}",
-      "}"
-    ]
+    "props": {
+      "type": "primary",
+      "item": "Plasma",
+      "quantity": 30,
+      "alertMessage": "You got a new weapon! Press <strong>INSERT</strong> and <strong>SHIFT+INSERT</strong> to change your primary weapon. Press <strong>DELETE</strong> and <strong>SHIFT+DELETE</strong> to change your secondary weapon.",
+      "alertLinger": 8
+    }
   },
   {
     "symbol": "game objects/powerup",
@@ -51,7 +48,6 @@
     "y": 208.25,
     "props": {"type": "primary", "item": "Bolter", "quantity": 15}
   },
-  {"symbol": "_circle", "x": 691.4, "y": 93.45, "scale": 1.80481, "color": {"alpha": 0}, "name": "triggerNewWep_mc"},
   {
     "symbol": "game objects/message beacon",
     "x": 400,

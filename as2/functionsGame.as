@@ -108,8 +108,10 @@ _global.notify = function(targetMC, msg, duration){
 	_global.lastNotify = _screen.attachMovie("notification", "notify_mc" + d, d, init);
 }
 
-// show a message
+// show a message (a different message replaces one that's still lingering)
 _global.showMessage = function(msg, killTriggers){
+	if(_root.message_mc && _root.message_mc.text != msg)
+		_root.message_mc.hide();
 	if(!_root.message_mc){
 		var init = {
 			text:msg,
