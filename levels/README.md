@@ -6,7 +6,7 @@ The folder is named like the level's entry in the `levels` array in `as2/functio
 
 | File | What |
 | --- | --- |
-| `level.json` | Level settings. All optional: `"fadeIn": false` skips the fade-in when the level starts (the original Bridge has none) |
+| `level.json` | Level settings, all optional. None are defined yet: the minimum loadout, timer and art set will go here |
 | `collision.png` | The collision map, pixel for pixel what the game hit-tests: black is wall, `#999999` is impassable but can be shot over (chasms), white is open floor. Its size is the level's size |
 | `background.png` | The level art, the same size as the collision map |
 | `briefing.json` | The briefing screen, as `{"changes": [...]}` in the timeline format of [source/README.md](../source/README.md) |

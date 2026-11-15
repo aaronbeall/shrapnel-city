@@ -2,8 +2,7 @@
 // library symbols and screen_mc frames the game runs. Used by tools/flash-source/build.mjs.
 //
 // levels/NN_name/          named like the level's entry in the `levels` array in as2/functionsLevel.as
-//   level.json             level settings (all optional): "fadeIn": false skips the fade-in when
-//                          the level starts (the original Bridge has none)
+//   level.json             level settings (all optional; none are defined yet)
 //   collision.png          the collision map: black wall, #999999 impassable but shoot-over, white open
 //   background.png         the baked level art, same size as the collision map
 //   briefing.json          the briefing screen: {"changes": [timeline changes]}

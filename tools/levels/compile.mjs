@@ -182,7 +182,7 @@ export function composeScreen(screen, levels) {
   };
   for (const L of levels) {
     frame(L.index * 2 + 1, (L.briefing || []).map((c) => ({ ...c })));
-    const fade = (L.settings || {}).fadeIn === false ? [] : [{ place: 'graphic assets/fade in anim', depth: DEPTH.fade, x: 0, y: 0 }];
+    const fade = [{ place: 'graphic assets/fade in anim', depth: DEPTH.fade, x: 0, y: 0 }];
     frame(L.index * 2 + 2, [...gameChanges(L), ...fade], 'startLevel();');
   }
   const { levels: _, ...rest } = screen;
