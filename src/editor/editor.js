@@ -23,6 +23,7 @@ const VIEW_LAYERS = [
   { key: 'doors', label: 'Doors' },
   { key: 'features', label: 'Entrance, exit, player' },
   { key: 'paths', label: 'Path nodes' },
+  { key: 'triggers', label: 'Triggers', hot: 'T' },
   { key: 'preview', label: 'Art preview', hot: 'A' },
 ];
 // what each kind of placement does when it sends triggers
@@ -85,6 +86,7 @@ class Editor {
     this.tool = 'select';
     this.active = 'enemies'; // layer that select/place work on
     this.visible = Object.fromEntries(VIEW_LAYERS.map((l) => [l.key, l.key !== 'vision' && l.key !== 'preview']));
+    this.showTriggerList = true;
     this.mapVersion = 0;     // bumps when a collision map or the live level changes
     this.preview = null;     // {index, version, canvas} art preview
     this.colour = 'wall';
@@ -318,6 +320,7 @@ class Editor {
     if (k === 'o') { this.colour = 'open'; this.refreshPanel(); return; }
     if (k === '0') { this.fitView(); return; }
     if (k === 'a') { this.visible.preview = !this.visible.preview; this.refreshPanel(); return; }
+    if (k === 't') { this.visible.triggers = !this.visible.triggers; this.refreshPanel(); return; }
     if (e.key === ' ') { this.spaceDown = true; e.preventDefault(); }
   }
 
@@ -871,23 +874,44 @@ class Editor {
         }
       });
     }
-    // which triggers open and close which doors
-    if (this.visible.doors) {
-      const doors = new Map(this.list('doors').filter((d) => d.props && d.props.id).map((d) => [d.props.id, d]));
+    // triggers: who sends what (labels), lines to the doors they open (green) or close (red)
+    if (this.visible.triggers) {
+      const doors = new Map(this.list('doors').map((d, k) => [d.props && d.props.id, [d, k]]).filter(([id]) => id));
+      const labels = [];
       ctx.lineWidth = 1.5 * px;
-      ctx.setLineDash([6 * px, 4 * px]);
+      for (const [id, [d]] of doors) labels.push([d.x, d.y, id, '#9cf']);
       for (const l of ['powerups', 'boxes', 'enemies']) {
         if (!this.visible[l]) continue;
-        for (const e of this.list(l)) for (const n of sentTriggers(e)) {
-          const m = /^(.+):(open|close)$/.exec(n);
-          const d = m && doors.get(m[1]);
-          if (!d) continue;
-          ctx.strokeStyle = m[2] === 'open' ? 'rgba(120,255,140,0.9)' : 'rgba(255,120,120,0.9)';
-          ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(d.x, d.y); ctx.stroke();
-          ctx.beginPath(); ctx.arc(d.x, d.y, 4 * px, 0, Math.PI * 2); ctx.stroke();
-        }
+        this.list(l).forEach((e, k) => {
+          const sent = sentTriggers(e);
+          if (!sent.length) return;
+          // trigger pads are invisible in the game: outline them
+          if (e.props && e.props.type === 'trigger') {
+            const [x0, y0, x1, y1] = this.boundsOf(l, k);
+            ctx.strokeStyle = 'rgba(255,200,80,0.9)'; ctx.setLineDash([3 * px, 3 * px]);
+            ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+          }
+          ctx.setLineDash([6 * px, 4 * px]);
+          for (const n of sent) {
+            const m = /^(.+):(open|close)$/.exec(n);
+            const d = m && doors.get(m[1]);
+            if (!d) continue;
+            ctx.strokeStyle = m[2] === 'open' ? 'rgba(120,255,140,0.9)' : 'rgba(255,120,120,0.9)';
+            ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(d[0].x, d[0].y); ctx.stroke();
+          }
+          labels.push([e.x, e.y, '→ ' + sent.join(', '), '#fd6']);
+        });
       }
       ctx.setLineDash([]);
+      ctx.font = `${11 * px}px system-ui, sans-serif`;
+      ctx.textBaseline = 'middle';
+      for (const [x, y, t, col] of labels) {
+        const w = ctx.measureText(t).width;
+        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+        ctx.fillRect(x + 6 * px, y - 8 * px, w + 6 * px, 16 * px);
+        ctx.fillStyle = col;
+        ctx.fillText(t, x + 9 * px, y);
+      }
     }
     // path nodes and links: pinned links solid, automatic (line of sight) links dashed
     if (this.visible.paths) {
@@ -1067,6 +1091,7 @@ class Editor {
     if (this.sel && this.list(this.sel.layer)[this.sel.k]) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.propsPanel());
     else if (this.active === 'vision') p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones and their corners, Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
     // stats + settings
+    p.append(this.triggerPanel());
     p.append(this.statsPanel());
     p.append(el('details', {}, el('summary', {}, 'Level settings (level.json)'),
       el('textarea', { rows: 4, spellcheck: false, onchange: (e) => {
@@ -1200,6 +1225,28 @@ class Editor {
       el('div', { class: 'le-row' },
         el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
         el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
+  }
+
+  // every trigger in the level: doors and what they listen for, and everything that sends one
+  triggerPanel() {
+    const rows = [];
+    const pick = (layer, k) => () => { this.setTool('select'); this.sel = { layer, k }; this.active = layer; this.visible[layer] = true; this.visible.triggers = true; this.refreshPanel(); };
+    const where = (e) => `(${Math.round(e.x)}, ${Math.round(e.y)})`;
+    this.list('doors').forEach((d, k) => {
+      if (!d.props || !d.props.id) return;
+      rows.push(el('div', { class: 'le-trig', onclick: pick('doors', k), title: 'select this door' }, el('b', {}, d.props.id), ` ${d.symbol.split('/').pop()} ${where(d)} listens for ${d.props.id}:open / :close`));
+    });
+    const names = { powerups: 'pickup', boxes: 'box', enemies: 'enemy' };
+    for (const l of ['powerups', 'boxes', 'enemies']) this.list(l).forEach((e, k) => {
+      const sent = sentTriggers(e);
+      if (!sent.length) return;
+      const kind = e.props && e.props.type === 'trigger' ? 'trigger pad' : names[l] + ' ' + e.symbol.split('/').pop();
+      const how = e.props && e.props.type === 'trigger' ? 'walked over' : TRIGGER_EVENTS[l][1].replace('when ', '');
+      rows.push(el('div', { class: 'le-trig', onclick: pick(l, k), title: 'select it' + (e.script !== undefined ? ' (set by its script)' : '') }, `${kind} ${where(e)}, ${how}: `, el('b', {}, sent.join(', '))));
+    });
+    return el('details', { open: this.showTriggerList, ontoggle: (ev) => { this.showTriggerList = ev.target.open; } }, el('summary', {}, `Triggers (${rows.length})`),
+      el('div', { class: 'le-tip' }, 'Click one to select it and edit what it sends in the panel above. Add a trigger pad from the Pickups palette (P). T shows or hides them on the map.'),
+      ...rows);
   }
 
   statsPanel() {
@@ -1359,6 +1406,9 @@ const CSS = `
 #level-editor .le-pick { cursor: pointer; text-decoration: underline dotted #476; }
 #level-editor .le-palette button { font-size: 11px; }
 #level-editor .le-stats div { margin: 1px 0; }
+#level-editor .le-trig { cursor: pointer; padding: 1px 3px; border-radius: 3px; font-size: 11px; }
+#level-editor .le-trig:hover { background: #164; }
+#level-editor .le-trig b { color: #fd6; font-weight: normal; }
 #level-editor .le-save { font-weight: bold; }
 #level-editor .le-coords { position: absolute; left: 8px; bottom: 6px; color: #8aa; font: 11px ui-monospace, monospace; pointer-events: none; }
 #level-editor .le-status { position: absolute; left: 8px; top: 6px; right: 310px; color: #cfe; pointer-events: none; text-shadow: 0 1px 2px #000; }
