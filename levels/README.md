@@ -75,6 +75,6 @@ Press backtick (`` ` ``) in the game, or open the page with `?edit` (`?edit=3` f
 - **Undo/redo:** Ctrl+Z, Ctrl+Shift+Z.
 - **Balance:** enemy, box and pickup counts, health on the map and ammo per weapon, counting box and enemy drops at their probability.
 
-**Saving.** Run `npm run edit` and open http://localhost:8123/?edit: Save (Ctrl+S) writes only the changed files into `levels/<NN_name>/` and rebuilds. Anywhere else (for example the GitHub Pages site) Save downloads the changed files instead. After changing the collision map, re-bake the background art, which the editor reminds you about.
+**Saving.** Run `npm run edit` and open http://localhost:8123/?edit: Save (Ctrl+S) writes only the changed files into `levels/<NN_name>/` and rebuilds. Anywhere else (for example the GitHub Pages site) Save downloads the changed files instead. After changing the collision map, re-bake the background art, which the editor reminds you about. A badge at the top of the panel shows the server status, re-checked every few seconds: green when `npm run edit` is connected, pulsing yellow while it saves or builds, red if the last build failed, and hollow when there is no server (Save downloads).
 
 The editor recompiles levels in the browser with the same code as the build (`tools/levels/compile.mjs`). Load variables apply directly; instance scripts reuse the build's compiled code, so a changed `script` needs `npm run build`.

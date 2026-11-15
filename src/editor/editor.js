@@ -61,20 +61,25 @@ const ZONE_TOOLS = new Set(['select', 'poly', 'autozone']);
 
 let editor = null;
 
+// What the local editor server (npm run edit, tools/levels/serve.mjs) says about itself, or
+// null when there is none (a static server or the Pages site): then Save downloads instead.
+const serverStatus = () => fetch('__editor', { cache: 'no-store' }).then((r) => r.ok && r.json()).then((j) => (j && j.writable ? j : null)).catch(() => null);
+const SERVER_POLL_MS = 3000;
+
 export async function toggle(rt) {
   if (!editor) {
     const data = await fetch('assets/levels.json', { cache: 'no-store' }).then((r) => r.json());
-    const writable = await fetch('__editor', { cache: 'no-store' }).then((r) => r.ok && r.json()).then((j) => !!(j && j.writable)).catch(() => false);
-    editor = new Editor(rt, data, writable);
+    editor = new Editor(rt, data, await serverStatus());
     window.levelEditor = editor; // handy from the console
   }
   if (editor.isOpen) editor.close(); else await editor.open();
 }
 
 class Editor {
-  constructor(rt, data, writable) {
+  constructor(rt, data, server) {
     this.rt = rt;
-    this.writable = writable;
+    this.server = server;    // latest /__editor answer, null when offline
+    this.writable = !!server;
     this.applier = new LevelApplier(rt, data);
     this.levels = data.levels.map((L) => structuredClone(L));
     this.maps = {};          // level index -> CollisionMap
@@ -125,9 +130,47 @@ class Editor {
     this.loadLevel(idx);
     this.fitView();
     this.loop();
+    this.pollServer();
+  }
+
+  // ------------------------------------------------------------------ server status
+  // re-checked every few seconds while open, and before a save, so the badge notices
+  // npm run edit stopping or starting
+  async checkServer() {
+    const s = await serverStatus();
+    const was = this.writable;
+    this.server = s;
+    this.writable = !!s;
+    if (was !== this.writable) this.refreshSave();
+    this.renderServer();
+    return s;
+  }
+
+  pollServer() {
+    clearTimeout(this.pollTimer);
+    if (!this.isOpen) return;
+    this.checkServer().finally(() => { if (this.isOpen) this.pollTimer = setTimeout(() => this.pollServer(), SERVER_POLL_MS); });
+  }
+
+  renderServer() {
+    const b = this.serverEl;
+    if (!b) return;
+    const s = this.server, busy = this.saving || (s && s.building);
+    const state = !s ? 'offline' : busy ? 'busy' : s.lastBuild && !s.lastBuild.ok ? 'err' : 'ok';
+    const ago = s && s.lastBuild ? ` · last build ${s.lastBuild.ok ? 'ok' : 'FAILED'} ${new Date(s.lastBuild.at).toLocaleTimeString()}` : '';
+    b.className = 'le-server ' + state;
+    b.textContent = {
+      ok: 'Local server connected: Save writes to levels/',
+      busy: this.saving && !(s && s.building) ? 'Local server: saving…' : 'Local server: building…',
+      err: 'Local server connected, but the last build failed',
+      offline: 'No local server: Save downloads the files',
+    }[state];
+    b.title = (s ? 'npm run edit (tools/levels/serve.mjs) is running at ' + location.host + ago
+      : 'The editor server is not running here. Run npm run edit and open http://localhost:8123/?edit to save straight into levels/.') + ' Checked every few seconds.';
   }
 
   close() {
+    clearTimeout(this.pollTimer);
     if (this.needsReload) this.reload();
     this.isOpen = window.levelEditorOpen = false;
     this.root.style.display = 'none';
@@ -742,8 +785,11 @@ class Editor {
     const jobs = [];
     for (const [i, files] of Object.entries(this.dirty)) for (const f of files) jobs.push([+i, f]);
     if (!jobs.length) { this.status('Nothing to save.'); return; }
+    await this.checkServer();
     if (this.writable) {
       this.status('Saving…');
+      this.saving = true;
+      this.renderServer();
       try {
         for (const [i, f] of jobs) {
           const body = await this.fileContent(i, f);
@@ -756,6 +802,8 @@ class Editor {
         const b = await fetch('__build', { method: 'POST' }).then((r) => r.json());
         this.status(b.ok ? `Saved ${jobs.length} file${jobs.length > 1 ? 's' : ''} to levels/ and rebuilt.` + (this.stale ? ' The background art still needs a re-bake.' : '') : 'Saved, but the build failed: ' + b.log, !b.ok);
       } catch (e) { this.status('Save failed: ' + e.message, true); }
+      this.saving = false;
+      this.checkServer();
     } else {
       for (const [i, f] of jobs) {
         const body = await this.fileContent(i, f);
@@ -1054,6 +1102,7 @@ class Editor {
   refreshSave() {
     const n = Object.values(this.dirty).reduce((a, s) => a + s.size, 0);
     if (this.saveBtn) this.saveBtn.textContent = (this.writable ? 'Save' : 'Download') + (n ? ` (${n})` : '');
+    if (this.saveBtn) this.saveBtn.title = this.writable ? 'Write the changed files into levels/ (Ctrl+S)' : 'Download the changed files (Ctrl+S). Run npm run edit to save into levels/ directly.';
   }
 
   refreshPanel() {
@@ -1062,6 +1111,9 @@ class Editor {
     const L = this.L;
     // level
     const lvl = el('select', { onchange: (e) => this.loadLevel(+e.target.value) }, ...this.levels.map((x) => el('option', { value: x.index, selected: x.index === this.index }, x.folder)));
+    this.serverEl = el('div', { class: 'le-server' });
+    p.append(this.serverEl);
+    this.renderServer();
     p.append(el('div', { class: 'le-row' }, el('b', {}, 'Level '), lvl,
       el('button', { title: 'Restart the level from the edited data', onclick: () => this.reload() }, 'Restart'),
       el('button', { title: 'Back to the game (`)', onclick: () => this.close() }, 'Play ▸')));
@@ -1443,6 +1495,14 @@ const CSS = `
 #level-editor .le-trig:hover { background: #164; }
 #level-editor .le-trig b { color: #fd6; font-weight: normal; }
 #level-editor .le-save { font-weight: bold; }
+#level-editor .le-server { display: flex; align-items: center; gap: 6px; margin: 0 0 6px; font-size: 11px; color: #9ab; }
+#level-editor .le-server::before { content: ''; width: 8px; height: 8px; border-radius: 50%; flex: none; background: #667; }
+#level-editor .le-server.ok::before { background: #3c6; box-shadow: 0 0 4px #3c6; }
+#level-editor .le-server.busy::before { background: #fc3; animation: le-pulse 0.8s infinite alternate; }
+#level-editor .le-server.err { color: #f88; }
+#level-editor .le-server.err::before { background: #f55; }
+#level-editor .le-server.offline::before { background: transparent; border: 1px solid #889; }
+@keyframes le-pulse { to { opacity: 0.3; } }
 #level-editor .le-coords { position: absolute; left: 8px; bottom: 6px; color: #8aa; font: 11px ui-monospace, monospace; pointer-events: none; }
 #level-editor .le-status { position: absolute; left: 8px; top: 6px; right: 310px; color: #cfe; pointer-events: none; text-shadow: 0 1px 2px #000; }
 #level-editor .le-status.err { color: #f88; }

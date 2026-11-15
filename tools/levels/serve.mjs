@@ -16,7 +16,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const PORT = +(process.env.PORT || 8123);
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.css': 'text/css', '.svg': 'image/svg+xml', '.txt': 'text/plain', '.md': 'text/plain' };
 
-let building = null, again = false;
+let building = null, again = false, lastBuild = null; // lastBuild: {ok, at} of the latest finished build
 function build() {
   if (building) { again = true; return building; }
   building = new Promise((resolve) => {
@@ -27,6 +27,7 @@ function build() {
     p.on('close', (code) => {
       console.log(code ? 'build FAILED:\n' + out : 'rebuilt');
       building = null;
+      lastBuild = { ok: code === 0, at: Date.now() };
       if (again) { again = false; build(); }
       resolve({ ok: code === 0, log: out.slice(-2000) });
     });
@@ -37,7 +38,8 @@ function build() {
 const server = http.createServer(async (req, res) => {
   const url = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   const send = (code, body, type = 'application/json') => { res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' }); res.end(body); };
-  if (url === '/__editor') return send(200, JSON.stringify({ writable: true }));
+  // the editor polls this for its server status badge
+  if (url === '/__editor') return send(200, JSON.stringify({ writable: true, building: !!building, lastBuild }));
   if (req.method === 'PUT') {
     const m = /^\/levels\/(\d\d_[^/]+)\/([^/]+)$/.exec(url);
     if (!m || !FILES.includes(m[2]) || !fs.existsSync(path.join(ROOT, 'levels', m[1]))) return send(403, JSON.stringify({ error: 'not a level file: ' + url }));
