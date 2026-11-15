@@ -1,0 +1,47 @@
+[
+  {"symbol": "game objects/node", "x": 729.5, "y": 164.4, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 740.5, "y": 312, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 516.5, "y": 316, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 266.5, "y": 297, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 211.5, "y": 226.5, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 157.5, "y": 156.5, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 77.5, "y": 156.5, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 83.5, "y": 493.7, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 250.5, "y": 449.6, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 186.5, "y": 523.75, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 361.5, "y": 454.45, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 621.5, "y": 503.4, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {"symbol": "game objects/node", "x": 623.5, "y": 164.4, "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}},
+  {
+    "symbol": "game objects/node",
+    "x": 605.5,
+    "y": 540.3,
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+    "name": "a3",
+    "props": {"connections": [{"$ref": "a2"}, {"$ref": "a4"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 361.55,
+    "y": 540.3,
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+    "name": "a4",
+    "props": {"connections": [{"$ref": "a3"}, {"$ref": "a1"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 361.55,
+    "y": 416.3,
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+    "name": "a1",
+    "props": {"connections": [{"$ref": "a4"}, {"$ref": "a2"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 606.5,
+    "y": 416.75,
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+    "name": "a2",
+    "props": {"connections": [{"$ref": "a1"}, {"$ref": "a3"}]}
+  }
+]

@@ -14,8 +14,9 @@ The folder is named like the level's entry in the `levels` array in `as2/functio
 | `powerups.json` | Pickups and message beacons, placed inside `powerups_mc` |
 | `enemies.json` | Enemies, placed inside `enemies_mc` |
 | `doors.json` | Doors and gates, placed on `screen_mc` under the level |
-| `features.json` | Everything else on `screen_mc`: `vision_mc`, `entrance_mc`, `exit_mc`, path nodes |
-| `vision.json` | Vision zones, the clips inside `vision_mc` (see below) |
+| `features.json` | Everything else on `screen_mc`: `entrance_mc`, `exit_mc` |
+| `paths.json` | Path nodes, placed on `screen_mc` right after the features |
+| `vision.json` | Vision zones, the clips inside `vision_mc`, which the build places on `screen_mc` (see below) |
 | `decor.json` | Decor placements for the art bake. The game doesn't read it |
 
 A missing placement file means an empty list.
@@ -63,7 +64,7 @@ Press backtick (`` ` ``) in the game, or open the page with `?edit` (`?edit=3` f
 - **Select (V):** click to select, drag to move (Shift snaps to the grid), R rotates by 15°, Delete removes, Ctrl+D duplicates. The panel edits position, rotation, scale, name and the load variables (`props`) as JSON. Instances with a load `script` show it read-only.
 - **Place (P):** pick a symbol from the palette (everything already used in a level for that layer, plus the recovered enemies, plus a ready-made trigger pad), then click. New instances copy the variables of an existing one of the same symbol; doors get the next free `id`.
 - **Triggers:** a selected pickup, box or enemy has a field for the triggers it sends when picked up, destroyed or killed, and a trigger pad for the one it sends; both suggest the level's door triggers. Dashed lines show which door each one opens (green) or closes (red).
-- **Path nodes:** their own layer (Tab or click "Path nodes"), placed from its palette though they're saved in `features.json`. A new node joins the selected node's path group (or the level's first) and links itself by line of sight; these links show dashed, computed the same way as the game. A selected node's panel sets the group colour and lists its links, each with an **unlink** button. **Path links (N):** click a node, then another, to add the link (or remove it if they were linked). A node whose links you change keeps them pinned (solid); **Back to automatic** in the panel unpins them.
+- **Path nodes:** their own layer (Tab or click "Path nodes"). A new node joins the selected node's path group (or the level's first) and links itself by line of sight; these links show dashed, computed the same way as the game. A selected node's panel sets the group colour and lists its links, each with an **unlink** button. **Path links (N):** click a node, then another, to add the link (or remove it if they were linked). A node whose links you change keeps them pinned (solid); **Back to automatic** in the panel unpins them.
 - **Vision zones:** pick the Vision layer (Tab). Select moves, rotates and deletes zones and drags a polygon zone's corners; zones with curves get an **Edit corners** button that turns them into a polygon. Polygon (G) draws a zone, and Auto zone (Z) makes one from the spot you click, with the same rays the game uses.
 - **Collision:** Rectangle (B) snaps to the grid (Alt for free); Polygon (G) snaps each side to an angle step (Shift for free) and closes on the first corner or Enter; Pencil (D) and Eraser (E) paint single pixels or bigger brushes (`[` `]`); Fill (F) flood-fills. W, C and O pick wall, chasm or open floor. Everything is drawn aliased in exactly the three collision colours. Scroll to zoom (pixel grid from 1200%), drag with Space, the right or the middle button to pan, 0 to fit.
 - **Undo/redo:** Ctrl+Z, Ctrl+Shift+Z.
