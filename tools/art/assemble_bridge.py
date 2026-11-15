@@ -156,14 +156,44 @@ if os.path.exists(os.path.join(DECOR, 'index.json')):
         sp = sp.resize((max(2, int(w * s)), max(2, int(h * s))), Image.LANCZOS)
         return sp.rotate(np.degrees(-ang), resample=Image.BICUBIC, expand=True)
 
-    def place(sp, cx, cy, surface, cast=0.0, glow=0.0):
+    wear_rng = np.random.default_rng(7)  # its own stream, so wear never moves the placements
+
+    def worn(h, w):
+        # wear mask for painted markings, 1 = paint intact: big chipped-off blotches, scuffs
+        # and fine speckle, from blurred noise at three scales (like the original floors)
+        n = lambda s: (lambda z: (z - z.mean()) / (z.std() + 1e-6))(blur(wear_rng.random((h, w)), s))
+        chips = np.clip((n(5) + 0.5 * n(2) + 1.0) * 2.5, 0, 1)         # large holes, crisp edges
+        scuff = np.clip(1 - 0.3 * np.clip(n(12) + 0.3, 0, 2), 0.55, 1)   # broad faded areas
+        speck = np.clip((n(0.7) + 2.0) * 1.5, 0, 1)                    # pinholes
+        return chips * scuff * speck
+
+    def paint(sp, x0, y0, opacity=0.75):
+        # floor paint: soaked into the floor rather than pasted on. The floor's own light and
+        # grain show through (the paint takes the floor's shading), it is worn through in
+        # places, and laid at partial opacity, like the markings in backgrounds 0-2
+        rgba = np.array(sp, np.float32) / 255
+        h, w = rgba.shape[:2]
+        base = np.array(canvas, np.float32)[y0:y0 + h, x0:x0 + w] / 255
+        col = rgba[..., :3]
+        lum = col.mean(-1, keepdims=True)
+        col = lum + (col - lum) * 0.8                                   # a little desaturated
+        floor_l = base[..., :3].mean(-1, keepdims=True)
+        shade = floor_l / (blur(floor_l[..., 0], 6)[..., None] + 1e-3)  # the floor's grain and panel lines
+        col = np.clip(col * np.clip(shade, 0.6, 1.3) * 0.9, 0, 1)
+        a = (rgba[..., 3] * worn(h, w) * opacity)[..., None]
+        base[..., :3] = base[..., :3] * (1 - a) + col * a
+        region = Image.fromarray((np.clip(base, 0, 1) * 255 + 0.5).astype(np.uint8), 'RGBA')
+        canvas.paste(region, (x0, y0))
+
+    def place(sp, cx, cy, surface, cast=0.0, glow=0.0, painted=False):
         w, h = sp.size
         x0, y0 = int(cx - w / 2), int(cy - h / 2)
         if x0 < 0 or y0 < 0 or x0 + w > W or y0 + h > H: return False
         a = np.array(sp)[..., 3] > 40
         if not surface[y0:y0 + h, x0:x0 + w][a].all() or used[y0:y0 + h, x0:x0 + w][a].any(): return False
         used[y0:y0 + h, x0:x0 + w] |= ndi.binary_dilation(a, iterations=2)
-        canvas.alpha_composite(sp, (x0, y0))
+        if painted: paint(sp, x0, y0)
+        else: canvas.alpha_composite(sp, (x0, y0))
         if cast: shadow[y0:y0 + h, x0:x0 + w] += cast * a
         if glow:
             rgb_ = np.array(sp, np.float32)[..., :3] / 255
@@ -171,7 +201,7 @@ if os.path.exists(os.path.join(DECOR, 'index.json')):
             bloom[y0:y0 + h, x0:x0 + w] += glow * hot[..., None] * rgb_
         return True
 
-    def scatter(cat, count, surface, short, long_max, tries=4000, cast=0.0, glow=0.0, along=True, orient=None, min_aspect=0, unique=False):
+    def scatter(cat, count, surface, short, long_max, tries=4000, cast=0.0, glow=0.0, along=True, orient=None, min_aspect=0, unique=False, painted=False):
         lst = [sp for sp in sprites.get(cat) or [] if max(sp.size) >= min_aspect * min(sp.size)]
         if not lst: return 0
         pts = np.argwhere(surface)
@@ -184,7 +214,7 @@ if os.path.exists(os.path.join(DECOR, 'index.json')):
             if s_ < 5: continue
             k = rng.integers(len(lst))
             sp = fit(lst[k], s_, long_max, ang, upright=not along)
-            if place(sp, cx, cy, surface, cast, glow):
+            if place(sp, cx, cy, surface, cast, glow, painted):
                 n += 1
                 if unique: lst.pop(k)
                 if not lst: break
@@ -193,7 +223,7 @@ if os.path.exists(os.path.join(DECOR, 'index.json')):
     wall_w = lambda cy, cx: 2 * wdist[cy, cx] - 4          # sprite thickness to fit the wall here
     sprites['greebles'] = sprites.get('greebles', []) + sprites.get('greebles2', [])
     # floor paint first (it sits under everything else), then wall decor, big to small
-    print('floorpaint', scatter('floorpaint', 22, floor_ok, 40, 80, along=False, unique=True))
+    print('floorpaint', scatter('floorpaint', 22, floor_ok, 40, 80, along=False, unique=True, painted=True))
     cd_ = ndi.distance_transform_edt(~chasmb).astype(np.float32)
     ly, lx = np.gradient(blur(cd_, 3))
     q_lip = ndi.median_filter(np.round((np.arctan2(ly, lx) + np.pi / 2) / (np.pi / 4)).astype(int) % 4, 5)
