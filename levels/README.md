@@ -41,7 +41,7 @@ Every placement file is a list of instances, drawn in list order (later ones on 
 
 ## Triggers
 
-Triggers are names sent with `trigger("name")` to every clip that registered for them. A door with `"id": "door2"` listens for `door2:open` and `door2:close`. Three things send them: a trigger pad (a pickup with `"type": "trigger", "item": "door2:open"`, sent when the player walks over it), a `$trigger` handler as above, or a load script.
+Triggers are names sent with `trigger("name")` to every clip that registered for them. A door with `"id": "door2"` listens for `door2:open` and `door2:close`. An area that sends a trigger when the player walks into it is a trigger pad: an invisible pickup with `"type": "trigger", "item": "door2:open"`, sized with `scale`. Boxes and enemies send one when destroyed with an `onDie` `$trigger` handler as above. A load script can also call `trigger()`.
 
 ## Path nodes
 
