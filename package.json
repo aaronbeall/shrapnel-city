@@ -5,7 +5,8 @@
     "build": "node tools/flash-source/build.mjs && node tools/as2js.mjs",
     "build:assets": "node tools/flash-source/build.mjs",
     "build:scripts": "node tools/as2js.mjs",
-    "serve": "python3 -m http.server 8123"
+    "serve": "python3 -m http.server 8123",
+    "edit": "node tools/levels/serve.mjs"
   },
   "devDependencies": {
     "acorn": "^8.14.0",

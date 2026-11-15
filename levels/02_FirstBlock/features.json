@@ -21,7 +21,7 @@
     "y": 540.3,
     "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
     "name": "a3",
-    "script": ["onClipEvent (load) {", "    connections = [_parent.a2, _parent.a4]", "}", ""]
+    "props": {"connections": [{"$ref": "a2"}, {"$ref": "a4"}]}
   },
   {
     "symbol": "game objects/node",
@@ -29,7 +29,7 @@
     "y": 540.3,
     "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
     "name": "a4",
-    "script": ["onClipEvent (load) {", "    connections = [_parent.a3, _parent.a1]", "}", ""]
+    "props": {"connections": [{"$ref": "a3"}, {"$ref": "a1"}]}
   },
   {
     "symbol": "game objects/node",
@@ -37,7 +37,7 @@
     "y": 416.3,
     "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
     "name": "a1",
-    "script": ["onClipEvent (load) {", "    connections = [_parent.a4, _parent.a2]", "}", ""]
+    "props": {"connections": [{"$ref": "a4"}, {"$ref": "a2"}]}
   },
   {
     "symbol": "game objects/node",
@@ -45,6 +45,6 @@
     "y": 416.75,
     "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
     "name": "a2",
-    "script": ["onClipEvent (load) {", "    connections = [_parent.a1, _parent.a3]", "}", ""]
+    "props": {"connections": [{"$ref": "a1"}, {"$ref": "a3"}]}
   }
 ]

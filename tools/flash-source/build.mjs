@@ -1,5 +1,6 @@
 // Build the runtime data from the readable source:
-//   source/movie.json, source/library/**, levels/**  ->  assets/swf.json, assets/symbols.json, assets/bitmaps/
+//   source/movie.json, source/library/**, levels/**  ->  assets/swf.json, assets/symbols.json, assets/bitmaps/,
+//                                                         assets/levels.json (the level data, for the editor)
 //
 // The level folders in levels/ are compiled into library symbols and screen_mc frames by
 // tools/levels/levels.mjs before everything is decoded.
@@ -63,6 +64,7 @@ const chars = {};
 const symbols = {};
 const instances = {};
 const bitmaps = []; // [id, source file]
+let screenSource = null; // screen_mc.json before the levels are added
 
 function pngSize(file) {
   const b = fs.readFileSync(file);
@@ -81,7 +83,7 @@ for (const [name, { file, ext, obj }] of [...lib].sort((a, b) => id(a[0]) - id(b
   }
   let o;
   try { o = obj ?? JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { throw new Error(`${path.relative(ROOT, file)}: ${e.message}`); }
-  if (o.levels) o = composeScreen(o, levels.levels);
+  if (o.levels) { screenSource = o; o = composeScreen(o, levels.levels); }
   try {
     if (o.kind === 'sprite') {
       const t = decodeTimeline(o, id);
@@ -142,6 +144,8 @@ if (check) {
   fs.mkdirSync(ASSETS, { recursive: true });
   fs.writeFileSync(path.join(ASSETS, 'swf.json'), JSON.stringify(swf));
   fs.writeFileSync(path.join(ASSETS, 'symbols.json'), JSON.stringify(sym, null, 1));
+  // the editor (src/editor/) recompiles levels in the browser from this
+  fs.writeFileSync(path.join(ASSETS, 'levels.json'), JSON.stringify({ ids: Object.fromEntries(idOf), screen: screenSource, levels: levels.levels }));
   fs.rmSync(path.join(ASSETS, 'bitmaps'), { recursive: true, force: true });
   fs.mkdirSync(path.join(ASSETS, 'bitmaps'));
   for (const [cid, f] of bitmaps) fs.copyFileSync(f, path.join(ASSETS, 'bitmaps', cid + '.png'));
