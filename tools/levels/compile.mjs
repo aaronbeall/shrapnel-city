@@ -3,7 +3,7 @@
 // (tools/levels/levels.mjs) and the in-game editor (src/editor/) compile levels the same way.
 //
 // A level is {index, folder, settings, briefing, boxes, powerups, enemies, doors, features,
-// paths, vision, decor, size: {w, h}, backgroundSize: {w, h}}; see levels/README.md for the files.
+// pathNodes, vision, decor, size: {w, h}, backgroundSize: {w, h}}; see levels/README.md for the files.
 
 export const LAYERS = ['boxes', 'powerups', 'enemies'];
 
@@ -139,14 +139,14 @@ export function gameChanges(L) {
   if (doors.length > DEPTH.level - DEPTH.doors) throw new Error(`levels/${L.folder}: too many doors`);
   doors.forEach((d, k) => c.push(place(d, DEPTH.doors + k, `levels/${L.folder}/doors.json[${k}]`)));
   c.push({ place: `level assets/level${i}`, depth: DEPTH.level, x: 0, y: 0, name: 'level_mc' });
-  const paths = L.paths || [];
-  if (features.length + paths.length > DEPTH.boxes - DEPTH.features) throw new Error(`levels/${L.folder}: too many features and path nodes`);
+  const pathNodes = L.pathNodes || [];
+  if (features.length + pathNodes.length > DEPTH.boxes - DEPTH.features) throw new Error(`levels/${L.folder}: too many features and path nodes`);
   // vision_mc holds the vision zones (vision.json); the game looks for it by name. The
   // original levels placed it scaled 0.999939 across, and the zones' edges depend on it
   c.push({ place: `level assets/vision${i}`, depth: DEPTH.vision, x: 0, y: 0, scale: [0.999939, 1], name: 'vision_mc' });
   features.forEach((d, k) => c.push(place(d, DEPTH.features + k, `levels/${L.folder}/features.json[${k}]`)));
   // path nodes go right after the features: they find each other as siblings on screen_mc
-  paths.forEach((d, k) => c.push(place(d, DEPTH.features + features.length + k, `levels/${L.folder}/paths.json[${k}]`)));
+  pathNodes.forEach((d, k) => c.push(place(d, DEPTH.features + features.length + k, `levels/${L.folder}/pathNodes.json[${k}]`)));
   for (const layer of LAYERS) c.push({ place: `level assets/${layer}${i}`, depth: DEPTH[layer], x: 0, y: 0, name: layer + '_mc' });
   return c;
 }

@@ -15,7 +15,7 @@ The folder is named like the level's entry in the `levels` array in `as2/functio
 | `enemies.json` | Enemies, placed inside `enemies_mc` |
 | `doors.json` | Doors and gates, placed on `screen_mc` under the level |
 | `features.json` | Everything else on `screen_mc`: `entrance_mc`, `exit_mc` |
-| `paths.json` | Path nodes, placed on `screen_mc` right after the features |
+| `pathNodes.json` | Pathfinding nodes (`game objects/node`, `as2/pathNode.as`), placed on `screen_mc` right after the features |
 | `vision.json` | Vision zones, the clips inside `vision_mc`, which the build places on `screen_mc` (see below) |
 | `decor.json` | Decor placements for the art bake. The game doesn't read it |
 

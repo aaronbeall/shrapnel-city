@@ -81,7 +81,7 @@ export class LevelApplier {
     const collect = (list) => {
       for (const inst of list || []) if (inst.props) propsByText.set(decodeScript(propsScript(inst.props)), inst.props);
     };
-    for (const L of levels) for (const k of ['boxes', 'powerups', 'enemies', 'doors', 'features', 'paths']) collect(L[k]);
+    for (const L of levels) for (const k of ['boxes', 'powerups', 'enemies', 'doors', 'features', 'pathNodes']) collect(L[k]);
     for (const L of levels) {
       for (const [name, o] of levelSymbols(L)) {
         if (o.kind === 'sprite') this.setSprite(name, o, propsByText);

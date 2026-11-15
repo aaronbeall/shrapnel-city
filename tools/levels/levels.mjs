@@ -13,7 +13,7 @@
 //   doors.json             [instance, ...] doors and gates, placed on screen_mc under the level
 //   features.json          [instance, ...] everything else placed on screen_mc: entrance_mc,
 //                          exit_mc (the build adds vision_mc itself)
-//   paths.json             [instance, ...] path nodes, placed on screen_mc after the features
+//   pathNodes.json         [instance, ...] pathfinding nodes, placed on screen_mc after the features
 //   vision.json            [zone, ...] vision zones, the clips inside vision_mc
 //   decor.json             decor placements for the art bake (not read by the game)
 //
@@ -26,7 +26,7 @@ import { LAYERS, levelSymbols, composeScreen } from './compile.mjs';
 
 export { composeScreen };
 
-export const FILES = ['level.json', 'collision.png', 'background.png', 'briefing.json', ...LAYERS.map((l) => l + '.json'), 'doors.json', 'features.json', 'paths.json', 'vision.json', 'decor.json'];
+export const FILES = ['level.json', 'collision.png', 'background.png', 'briefing.json', ...LAYERS.map((l) => l + '.json'), 'doors.json', 'features.json', 'pathNodes.json', 'vision.json', 'decor.json'];
 
 function readJSON(f, dflt) {
   if (!fs.existsSync(f)) { if (dflt !== undefined) return dflt; throw new Error(`missing ${f}`); }
@@ -62,7 +62,7 @@ export function loadLevels(root) {
       briefing: readJSON(f('briefing.json'), { changes: [] }).changes,
       doors: readJSON(f('doors.json'), []),
       features: readJSON(f('features.json'), []),
-      paths: readJSON(f('paths.json'), []),
+      pathNodes: readJSON(f('pathNodes.json'), []),
       vision: readJSON(f('vision.json'), []),
       decor: readJSON(f('decor.json'), []),
       size: pngSize(f('collision.png')),
