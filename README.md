@@ -37,24 +37,26 @@ Open `index.html?bench` to run seven scripted heavy scenes (Heat Ray, Flamer, cl
 
 ## Editing the game
 
-Art, animation, timelines and the scripts attached to them live in `source/` (see [source/README.md](source/README.md)); game code lives in `as2/`. After changing either:
+Art, animation, timelines and the scripts attached to them live in `source/` (see [source/README.md](source/README.md)); each level's collision map, art and placements live in `levels/` (see [levels/README.md](levels/README.md)); game code lives in `as2/`. After changing any of them:
 
 ```sh
-npm run build        # source/ -> assets/, then as2/ + scripts -> src/generated/scripts.js
+npm run build        # source/ + levels/ -> assets/, then as2/ + scripts -> src/generated/scripts.js
 ```
 
-The build output (`assets/swf.json`, `assets/symbols.json`, `assets/bitmaps/`, `src/generated/`) is not committed: commit only `source/` and `as2/` changes, and the Pages workflow rebuilds and deploys on push.
+The build output (`assets/swf.json`, `assets/symbols.json`, `assets/bitmaps/`, `src/generated/`) is not committed: commit only `source/`, `levels/` and `as2/` changes, and the Pages workflow rebuilds and deploys on push.
 
 ## Layout
 
 | Path | What |
 | --- | --- |
 | `source/` | **The editable source for art and timelines**: the FLA as one readable file per library symbol, plus the main timeline. See [source/README.md](source/README.md) |
+| `levels/` | **One folder per level**: collision map, background art, briefing, and the placement lists for boxes, pickups, enemies, doors and other features. See [levels/README.md](levels/README.md) |
 | `as2/` | ActionScript 2 sources. `as2/*.as` are the original files; `as2/frames/` and `as2/shots/` hold the larger frame scripts and the 66 projectile templates moved out of the FLA, `#include`d from `source/` |
 | `assets/swf.json`, `assets/symbols.json`, `assets/bitmaps/` | What the runtime loads. Build output of `npm run build:assets`; not committed |
 | `original/` | The untouched v14 `shrapnel.fla` and `shrapnel.swf` (July 2012) that `source/` was converted from |
 | `src/generated/scripts.js` | Compiled game scripts. Build output of `npm run build:scripts`; not committed |
-| `tools/flash-source/` | `build.mjs` turns `source/` into `assets/`; `export.mjs` did the one-time conversion |
+| `tools/flash-source/` | `build.mjs` turns `source/` and `levels/` into `assets/`; `export.mjs` did the one-time conversion |
+| `tools/levels/` | `levels.mjs` compiles the level folders into library symbols and `screen_mc` frames |
 | `.github/workflows/pages.yml` | Builds on every push and pull request, and deploys `main` to GitHub Pages |
 | `src/flash/` | Runtime: display list and timeline, renderer (blend modes, glow/blur filters, masks), AS2 environment and builtins, BitmapData |
 | `tools/swf2json.py` | SWF parser used for the original extraction from `original/shrapnel.swf` |

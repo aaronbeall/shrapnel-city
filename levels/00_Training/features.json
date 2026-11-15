@@ -1,0 +1,12 @@
+[
+  {"symbol": "level assets/vision0", "x": 0, "y": 0, "scale": [0.999939, 1], "name": "vision_mc"},
+  {
+    "symbol": "game objects/entrance_mc",
+    "x": 400.05,
+    "y": 300.05,
+    "scale": [-0.999939, -1],
+    "name": "entrance_mc",
+    "props": {"speed": 3.2}
+  },
+  {"symbol": "game objects/exit_mc", "x": 619, "y": 489, "name": "exit_mc"}
+]

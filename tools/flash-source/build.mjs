@@ -1,5 +1,8 @@
 // Build the runtime data from the readable source:
-//   source/movie.json, source/library/**  ->  assets/swf.json, assets/symbols.json, assets/bitmaps/
+//   source/movie.json, source/library/**, levels/**  ->  assets/swf.json, assets/symbols.json, assets/bitmaps/
+//
+// The level folders in levels/ are compiled into library symbols and screen_mc frames by
+// tools/levels/levels.mjs before everything is decoded.
 //
 // Usage: node tools/flash-source/build.mjs           (write the assets)
 //        node tools/flash-source/build.mjs --check   (compare with an existing build in assets/, write nothing)
@@ -8,6 +11,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToName, decodeChar, decodeTimeline, decodeScript, hexToRgba } from './format.mjs';
+import { loadLevels, composeScreen } from '../levels/levels.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const SRC = path.join(ROOT, 'source');
@@ -32,6 +36,15 @@ for (const f of files) {
   if (lib.has(name)) throw new Error(`two files for "${name}"`);
   lib.set(name, { file: f, ext });
 }
+
+// --- add the levels --------------------------------------------------------------
+const levels = loadLevels(ROOT);
+const addGenerated = (name, entry) => {
+  if (lib.has(name)) throw new Error(`"${name}" comes from levels/ and must not also be in source/library`);
+  lib.set(name, entry);
+};
+for (const [name, obj] of levels.symbols) addGenerated(name, { file: path.join(ROOT, 'levels'), obj, ext: '.json' });
+for (const [name, file] of levels.bitmaps) addGenerated(name, { file, ext: '.png' });
 
 const ids = JSON.parse(fs.readFileSync(path.join(SRC, 'ids.json'), 'utf8'));
 const idOf = new Map();
@@ -59,7 +72,7 @@ function symbolEntry(name, s, labels, scripts) {
   return { labels, linkage: s.linkage ?? null, name, scripts, type: s.type };
 }
 
-for (const [name, { file, ext }] of [...lib].sort((a, b) => id(a[0]) - id(b[0]))) {
+for (const [name, { file, ext, obj }] of [...lib].sort((a, b) => id(a[0]) - id(b[0]))) {
   const cid = id(name);
   if (ext === '.png') {
     chars[cid] = { type: 'bitmap', src: `bitmaps/${cid}.png`, ...pngSize(file) };
@@ -67,7 +80,8 @@ for (const [name, { file, ext }] of [...lib].sort((a, b) => id(a[0]) - id(b[0]))
     continue;
   }
   let o;
-  try { o = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { throw new Error(`${path.relative(ROOT, file)}: ${e.message}`); }
+  try { o = obj ?? JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { throw new Error(`${path.relative(ROOT, file)}: ${e.message}`); }
+  if (o.levels) o = composeScreen(o, levels.levels);
   try {
     if (o.kind === 'sprite') {
       const t = decodeTimeline(o, id);

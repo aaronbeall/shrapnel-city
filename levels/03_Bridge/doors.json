@@ -1,0 +1,13 @@
+[
+  {"symbol": "game objects/door", "x": 187.95, "y": 50.4, "props": {"id": "door1"}},
+  {"symbol": "game objects/door", "x": 1009.9, "y": 50.4, "props": {"id": "door2"}},
+  {"symbol": "game objects/door", "x": 1009.9, "y": 550.35, "props": {"id": "door3"}},
+  {"symbol": "game objects/door", "x": 1211.9, "y": 501.15, "scale": [1, 0.857391], "props": {"id": "door4"}},
+  {
+    "symbol": "game objects/door",
+    "x": 1281.35,
+    "y": 81.75,
+    "matrix": [0.707108, -0.707092, 0.750122, 0.750137],
+    "props": {"id": "door5"}
+  }
+]

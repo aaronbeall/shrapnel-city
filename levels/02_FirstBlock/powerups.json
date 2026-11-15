@@ -1,0 +1,74 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 50.05,
+    "y": 550.05,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 100.05,
+    "y": 550.05,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 376.1,
+    "y": 256.85,
+    "props": {"type": "secondary", "item": "Shrapnel Bomb", "quantity": 1}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 700.05,
+    "y": 297.05,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 700.05,
+    "y": 327.05,
+    "props": {"type": "primary", "item": "Plasma", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 325.05,
+    "y": 550.05,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 442.05,
+    "y": 256.05,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 89.05,
+    "y": 330.8,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 89.05,
+    "y": 300.8,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 89.05,
+    "y": 270.8,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 436.05,
+    "y": 550.05,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 513.05,
+    "y": 550.05,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 25}
+  }
+]

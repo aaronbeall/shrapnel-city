@@ -2,9 +2,9 @@
 
     python3 tools/art/paint_bridge.py            # needs numpy, scipy, pillow
 
-Reads source/library/level assets/level3/shape 1.json (black = wall, #999999 =
-chasm the player can't cross but shots fly over, white = floor) and writes
-source/library/level assets/background3/shape 1/bitmap 1.png at 1600x600.
+Reads levels/03_Bridge/collision.png (black = wall, #999999 = chasm the player
+can't cross but shots fly over, white = floor) and writes
+levels/03_Bridge/background.png at 1600x600.
 
 It follows how the other levels' backgrounds were made: wall tops are flat light
 plates with fine panel lines, and the walls are extruded along z and rendered
@@ -14,62 +14,25 @@ with faint panel and circuit lines, dust patches, scratches, stencilled decals
 and soft lighting. The wall tops line up with the collision map pixel for pixel.
 Seeded, so re-running gives the same image.
 """
-import json
 import os
-import re
 import sys
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from scipy import ndimage as ndi
 
+sys.path.insert(0, os.path.dirname(__file__))
+from collision import coverage  # noqa: E402
+
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
-LEVEL = os.path.join(ROOT, 'source/library/level assets/level3/shape 1.json')
-OUT = os.path.join(ROOT, 'source/library/level assets/background3/shape 1/bitmap 1.png')
-W, H, SS = 1600, 600, 4
+LEVEL = os.path.join(ROOT, 'levels/03_Bridge/collision.png')
+OUT = os.path.join(ROOT, 'levels/03_Bridge/background.png')
+W, H = 1600, 600
 rng = np.random.default_rng(2012)
 
 
-# ---------------------------------------------------------------- masks
-def subpaths(d):
-    pts, out = [], []
-    for cmd, x, y in re.findall(r'([MLZ])\s*(?:(-?[\d.]+)\s+(-?[\d.]+))?', d):
-        if cmd == 'M':
-            if pts: out.append(pts)
-            pts = [(float(x), float(y))]
-        elif cmd == 'L':
-            pts.append((float(x), float(y)))
-        elif cmd == 'Z' and pts:
-            out.append(pts); pts = []
-    if pts: out.append(pts)
-    return out
-
-
-def raster(d):
-    """Even-odd fill of one path, supersampled, as a bool array (H*SS, W*SS)."""
-    acc = np.zeros((H * SS, W * SS), bool)
-    for pts in subpaths(d):
-        im = Image.new('1', (W * SS, H * SS), 0)
-        ImageDraw.Draw(im).polygon([(x * SS, y * SS) for x, y in pts], fill=1)
-        acc ^= np.array(im)
-    return acc
-
-
-shape = json.load(open(LEVEL))
-label = np.zeros((H * SS, W * SS), np.uint8)  # 0 floor, 1 wall, 2 chasm
-for p in shape['paths']:
-    if 'fill' not in p: continue
-    col = shape['fills'][p['fill']]['color'].lower()
-    if col == '#ffffff': continue
-    label[raster(p['d'])] = 1 if col == '#000000' else 2
-
-
-def down(m):
-    return m.reshape(H, SS, W, SS).mean(axis=(1, 3)).astype(np.float32)
-
-
-wall = down(label == 1)    # coverage 0..1, anti-aliased
-chasm = down(label == 2)
+# ---------------------------------------------------------------- collision map
+wall, chasm = coverage(LEVEL, W, H)
 wallb, chasmb = wall > 0.5, chasm > 0.5
 
 if len(sys.argv) > 1 and sys.argv[1] == '--layout':

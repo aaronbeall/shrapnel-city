@@ -1,0 +1,121 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 150.05,
+    "y": 550.05,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 265.7,
+    "y": 52.85,
+    "scale": [2.066162, 1.799988],
+    "props": {"type": "trigger", "item": "door1:close"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 248.6,
+    "y": 541.7,
+    "scale": [3.440002, 2.347198],
+    "props": {"type": "trigger", "item": "door1:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 974.55,
+    "y": 48.85,
+    "scale": [1.678741, 1.799988],
+    "script": ["onClipEvent (load) {", "    function onPickup(){", "        trigger('door2:open');", "    }", "}", "", ""]
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 974.55,
+    "y": 549.8,
+    "scale": [1.678741, 1.799988],
+    "script": ["onClipEvent (load) {", "    function onPickup(){", "        trigger('door3:open');", "    }", "}", "", ""]
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1178.55,
+    "y": 500.8,
+    "scale": [1.440643, 1.799988],
+    "script": ["onClipEvent (load) {", "    function onPickup(){", "        trigger('door4:open');", "    }", "}", "", ""]
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1381.95,
+    "y": 234.1,
+    "matrix": [0.707108, -0.707108, 0.707108, 0.707108],
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1361.95,
+    "y": 214.1,
+    "matrix": [0.707108, -0.707108, 0.707108, 0.707108],
+    "props": {"type": "primary", "item": "Bolter", "quantity": 35}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1401.95,
+    "y": 254.1,
+    "matrix": [0.707108, -0.707108, 0.707108, 0.707108],
+    "props": {"type": "primary", "item": "Bolter", "quantity": 35}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1199,
+    "y": 198.7,
+    "scale": 0.999969,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1199,
+    "y": 423.65,
+    "scale": 0.999969,
+    "props": {"type": "secondary", "item": "Shrapnel Bomb", "quantity": 1}
+  },
+  {"symbol": "game objects/powerup", "x": 1050, "y": 50, "props": {"type": "primary", "item": "Banshee", "quantity": 100}},
+  {
+    "symbol": "game objects/powerup",
+    "x": 1050,
+    "y": 550,
+    "props": {"type": "primary", "item": "Banshee", "quantity": 100}
+  },
+  {"symbol": "game objects/powerup", "x": 1150, "y": 500, "props": {"type": "health", "item": "health", "quantity": 15}},
+  {
+    "symbol": "game objects/powerup",
+    "x": 1437.95,
+    "y": 437.65,
+    "scale": 0.999969,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 154.25,
+    "y": 50.1,
+    "scale": [2.338379, 1.987183],
+    "props": {"type": "trigger", "item": "door1:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 150.05,
+    "y": 520.05,
+    "props": {"type": "primary", "item": "Plasma", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1266.3,
+    "y": 97.9,
+    "matrix": [0.747849, -0.747833, 1.428024, 1.42804],
+    "script": ["onClipEvent (load) {", "    function onPickup(){", "        trigger('door5:open');", "    }", "}", "", ""]
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 779.2,
+    "y": 299.7,
+    "scale": [2.338379, 5.949631],
+    "props": {"type": "trigger", "item": "bridge"}
+  },
+  {"symbol": "game objects/powerup", "x": 50.5, "y": 550, "props": {"type": "health", "item": "health", "quantity": 25}}
+]
