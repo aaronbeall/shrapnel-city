@@ -185,20 +185,12 @@ class Preview {
       this.advance(probe);
     }
     this.bounds = b || [-10, 10, -10, 10];
-    // how many ticks "play once" runs: the label range, else the longest timeline in it
-    const r = this.spec.range;
-    const fresh = this.make();
-    const clips = [];
-    if (fresh) collect(fresh, clips);
-    this.length = r ? r[1] - r[0] + 1 : Math.max(1, ...clips.map((c) => c._totalframes || 1));
-    this.played = 0;
   }
 
   // back to the first frame (or the held frame / range start)
   reset() {
     if (this.node === undefined) return;
     this.node = this.make();
-    this.played = 0;
   }
 
   advance(node = this.node) {
@@ -926,14 +918,12 @@ searchBox.addEventListener('input', (e) => {
 const bgSel = document.getElementById('bg');
 bgSel.value = state.bg;
 bgSel.addEventListener('change', () => { state.bg = bgSel.value; redrawAll(); });
-// Global playback for every preview: stop (all on frame 1), loop, or play through once and stop
-const playBtns = { stop: document.getElementById('pb-stop'), loop: document.getElementById('pb-loop'), once: document.getElementById('pb-once') };
+// Global playback for every preview: stop (all on frame 1) or play, looping
+const playBtns = { stop: document.getElementById('pb-stop'), loop: document.getElementById('pb-loop') };
 function setPlay(mode) {
   state.play = mode;
   for (const [k, b] of Object.entries(playBtns)) { b.classList.toggle('on', k === mode); b.setAttribute('aria-pressed', k === mode); }
-  // stop and play-once both start from frame 1
-  if (mode !== 'loop') for (const p of all) if (p !== ip) p.reset();
-  else for (const p of all) p.played = 0;
+  if (mode === 'stop') for (const p of all) if (p !== ip) p.reset();
   redrawAll();
 }
 for (const [k, b] of Object.entries(playBtns)) b.addEventListener('click', () => setPlay(k));
@@ -987,7 +977,6 @@ function inspect(spec) {
     if (!ip.paused) ip.node.play();
     rt.queue.length = 0;
   }
-  if (state.play === 'once') ip.loopMode = 'once';
   const id = spec.id, s = sym(id), node = ip.node;
   ui.title.textContent = spec.title || (lib.symbols.has(id) ? shortName(id) : charLabel(id));
   ui.sub.replaceChildren(kindTag(spec.kind || kindOf(id)), ` · ${lib.symbols.has(id) ? s.name : charLabel(id)} · char ${id}`);
@@ -1244,8 +1233,6 @@ function loop(now) {
       for (const p of all) {
         if (!p.visible || !p.node || p === ip) continue;
         if (dlg.open) continue;
-        if (state.play === 'once' && p.played >= p.length - 1) continue;
-        p.played++;
         p.tickN++;
         p.tick();
         if (p.tickN % (p.spec.every || 1) === 0) p.draw();
