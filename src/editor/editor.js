@@ -51,7 +51,7 @@ const DECOR_DIR = 'tools/art/parts/decor/';
 const DECOR_DEFAULTS = { floorpaint: { effect: 'paint' }, greebles: { effect: 'shadow', strength: 0.35 }, greebles2: { effect: 'shadow', strength: 0.35 }, vents: { effect: 'shadow', strength: 0.3 }, rails: { effect: 'shadow', strength: 0.25 }, lights: { effect: 'glow', strength: 0.9 } };
 const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as in Flash
 const TOOLS = [
-  { key: 'select', label: 'Select', hot: 'V', tip: 'click to select, drag to move (Shift snaps to the grid); R rotates, Delete removes, Ctrl+D duplicates' },
+  { key: 'select', label: 'Select', hot: 'V', tip: 'click something on the layer being edited to select it, drag to move (Shift snaps to the grid); R rotates, Delete removes, Ctrl+D duplicates' },
   { key: 'place', label: 'Place', hot: 'P', tip: 'pick a symbol below, then click to drop one' },
   { key: 'link', label: 'Path links', hot: 'N', tip: 'nodes link to every node of their colour they can see (dashed). Click a node, then another: that adds the link, or removes it if they were linked. Changed nodes keep their links pinned (solid)' },
   { key: 'rect', label: 'Rectangle', hot: 'B', tip: 'drag a box; snaps to the grid (hold Alt for free)' },
@@ -375,24 +375,24 @@ class Editor {
     return null;
   }
 
-  // decor first while it's the layer being edited; otherwise placements first, then any shown decor
+  // only the active layer can be clicked (pick it with Tab or its name in Layers)
   hit(x, y) {
-    if (this.active === 'decor') return this.hitDecor(x, y);
-    if (this.active === 'vision' && this.visible.vision) {
+    const a = this.active;
+    if (a === 'decor') return this.hitDecor(x, y);
+    if (a === 'vision') {
+      if (!this.visible.vision) return null;
       const zones = this.list('vision');
       for (let k = zones.length - 1; k >= 0; k--) if (this.inZone(zones[k], x, y)) return { layer: 'vision', k };
+      return null;
     }
-    const a = this.active;
-    const order = [a, ...PLACE_LAYERS.filter((l) => l !== a)].filter((l) => PLACE_LAYERS.includes(l));
-    for (const layer of order) {
-      const list = this.list(layer);
-      for (let k = list.length - 1; k >= 0; k--) {
-        if (!this.layerShown(layer, list[k])) continue;
-        const [x0, y0, x1, y1] = this.boundsOf(layer, k);
-        if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer, k };
-      }
+    if (!PLACE_LAYERS.includes(a)) return null;
+    const list = this.list(a);
+    for (let k = list.length - 1; k >= 0; k--) {
+      if (!this.layerShown(a, list[k])) continue;
+      const [x0, y0, x1, y1] = this.boundsOf(a, k);
+      if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer: a, k };
     }
-    return this.hitDecor(x, y);
+    return null;
   }
 
   // ------------------------------------------------------------------ coordinates
@@ -1253,7 +1253,7 @@ class Editor {
         el('span', { class: editable ? 'le-pick' : '', onclick: editable ? () => this.pickLayer(l.key) : null }, `${hot}  ${l.label}`),
         DATA_LAYERS.includes(l.key) ? el('small', {}, String(this.layerCount(l.key))) : ''));
     });
-    p.append(el('h4', {}, 'Layers ', el('small', {}, 'Tab picks the layer to edit')), active);
+    p.append(el('h4', {}, 'Layers ', el('small', {}, 'editing: ', el('b', { class: 'le-editing' }, (VIEW_LAYERS.find((l) => l.key === this.active) || { label: this.active }).label), ' · Tab or click a name to change')), active);
     // palette
     if (this.tool === 'place' && this.active === 'decor') p.append(this.decorPalette());
     else if (this.tool === 'place') {
@@ -1733,6 +1733,7 @@ const CSS = `
 #level-editor .le-decor-pal button { padding: 2px; height: 44px; background: #1b2b2b; }
 #level-editor .le-decor-pal img, #level-editor .le-decor-thumb { max-width: 100%; max-height: 100%; object-fit: contain; display: block; margin: auto; }
 #level-editor .le-decor-thumb { width: 48px; height: 48px; background: #1b2b2b; border-radius: 3px; }
+#level-editor .le-editing { color: #4fc; }
 #level-editor .le-danger { background: #7a2a2a; color: #fff; }
 #level-editor .le-artlog { max-height: 160px; overflow: auto; white-space: pre-wrap; font-size: 10px; background: #000a; padding: 4px; color: #fcc; }
 #level-editor .le-stats div { margin: 1px 0; }
