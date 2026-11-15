@@ -53,7 +53,7 @@ A node with no `connections` links itself, when the level starts, to every other
 
 ## Vision zones
 
-An enemy attacks when it and the player are in the same zone and it can see the player. An enemy that isn't in any zone, or has `autoVision`, makes its own zone from 90 rays when the level starts, so a level works without any zones. Each zone in `vision.json` is `{x, y, scale|matrix, color, d}` with `d` a path (`M`, `L`, `Q`, `Z`, absolute) in the zone's own coordinates, or `{x, y, color, points: [[x, y], ...]}` for a plain polygon. The colour only tells zones apart in the editor.
+An enemy attacks when it and the player are in the same zone and it can see the player. An enemy that isn't in any zone, or has `autoVision`, makes its own zone from 90 rays when the level starts, so a level works without any zones. Each zone in `vision.json` is `{x, y, scale|matrix, d}` with `d` a path (`M`, `L`, `Q`, `Z`, absolute) in the zone's own coordinates, or `{x, y, points: [[x, y], ...]}` for a plain polygon. Zones have no stored colour: the game only hit-tests their shapes, and the build draws zone k in its own hue (`zoneColour(k)` in `tools/levels/compile.mjs`) so every zone in a level looks different in the editor and explorer.
 
 ## Levels 00 to 03
 

@@ -79,9 +79,18 @@ export function bitmapSymbols(base, { w, h }) {
 }
 
 // --- vision zones -------------------------------------------------------------------
-// A zone is {x, y, scale|matrix, color, d} with d an SVG-style path (M/L/Q/Z, absolute) in
+// A zone is {x, y, scale|matrix, d} with d an SVG-style path (M/L/Q/Z, absolute) in
 // the zone's own coordinates, or {x, y, ..., points: [[x, y], ...]} for a plain polygon.
 // Each becomes a clip inside vision_mc, so the game sees the same structure as the original.
+// The game only hit-tests the shapes (vision_mc is hidden), so a zone's fill colour is not
+// data: zone k is drawn in zoneColour(k), a distinct hue per zone for telling them apart.
+export function zoneColour(k) {
+  // golden-angle hues: neighbours in the list are far apart, and no two zones share one
+  const h = (k * 137.508) % 360, l = k % 2 ? 0.42 : 0.55, a = 0.75 * Math.min(l, 1 - l);
+  const f = (n) => { const t = (n + h / 30) % 12; return Math.round(255 * (l - a * Math.max(-1, Math.min(t - 3, 9 - t, 1)))); };
+  return '#' + [f(0), f(8), f(4)].map((v) => v.toString(16).padStart(2, '0')).join('');
+}
+
 export function zonePath(z) {
   if (z.points) {
     if (!Array.isArray(z.points) || z.points.length < 3) throw new Error('a vision zone needs at least 3 points');
@@ -106,7 +115,7 @@ export function visionSymbols(L) {
     let d;
     try { d = zonePath(z); } catch (e) { throw new Error(`${where}: ${e.message}`); }
     const name = `${base}-${k + 1}`;
-    out.push([`${name}/shape 1`, { kind: 'shape', bounds: pathBounds(d), fills: [{ type: 'solid', color: z.color || '#ff0000' }], lines: [], paths: [{ fill: 0, d }] }]);
+    out.push([`${name}/shape 1`, { kind: 'shape', bounds: pathBounds(d), fills: [{ type: 'solid', color: zoneColour(k) }], lines: [], paths: [{ fill: 0, d }] }]);
     out.push([name, { kind: 'sprite', symbol: { type: 'movie clip' }, frames: 1, timeline: [{ frame: 1, changes: [{ place: `${name}/shape 1`, depth: 1, x: 0, y: 0 }] }] }]);
     const c = { place: name, depth: 2 * k + 1, x: z.x || 0, y: z.y || 0 };
     if (z.scale !== undefined) c.scale = z.scale;

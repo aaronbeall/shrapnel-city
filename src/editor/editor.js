@@ -7,7 +7,7 @@
 import { LevelApplier, restartLevel } from './apply.js';
 import { CollisionMap, COLOURS } from './collision.js';
 import { renderPreview } from './preview.js';
-import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath } from '../../tools/levels/compile.mjs';
+import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour } from '../../tools/levels/compile.mjs';
 import { pretty } from '../../tools/flash-source/format.mjs';
 import { mul } from '../flash/geom.js';
 
@@ -32,7 +32,6 @@ const TRIGGER_EVENTS = { powerups: ['onPickup', 'when picked up'], boxes: ['onDi
 const PRESETS = {
   powerups: [{ label: 'trigger pad', symbol: 'game objects/powerup', props: { type: 'trigger', item: '' } }],
 };
-const ZONE_COLOURS = ['#ff0000', '#990000', '#cc9966', '#cc6633', '#9999cc', '#9966ff', '#ccff33', '#cc6699', '#cc9933', '#cccc66', '#cc3366'];
 const AUTO_VISION_ANGLES = 90, LOS_SAMPLE_SIZE = 15; // as2/enemyTurret.as
 const NODE_LOS_SAMPLE = 10; // as2/pathNode.as
 // extra symbols offered in the place palette besides those already used in a level
@@ -675,9 +674,7 @@ class Editor {
     const cx = at ? at[0] : pts.reduce((a, p) => a + p[0], 0) / pts.length;
     const cy = at ? at[1] : pts.reduce((a, p) => a + p[1], 0) / pts.length;
     const zones = this.list('vision');
-    const used = new Set(zones.map((z) => z.color));
-    const color = ZONE_COLOURS.find((c) => !used.has(c)) || ZONE_COLOURS[zones.length % ZONE_COLOURS.length];
-    const z = { x: round2(cx), y: round2(cy), color, points: pts.map(([x, y]) => [round2(x - round2(cx)), round2(y - round2(cy))]) };
+    const z = { x: round2(cx), y: round2(cy), points: pts.map(([x, y]) => [round2(x - round2(cx)), round2(y - round2(cy))]) };
     this.change(['vision.json'], () => zones.push(z));
     this.sel = { layer: 'vision', k: zones.length - 1 };
     this.refreshPanel();
@@ -715,9 +712,9 @@ class Editor {
     this.change(['vision.json'], () => {
       z.points = flattenPath(z.d);
       delete z.d;
-      const { color, points, ...rest } = z;
+      const { points, ...rest } = z;
       for (const key of Object.keys(z)) delete z[key];
-      Object.assign(z, rest, { color, points });
+      Object.assign(z, rest, { points });
     });
   }
 
@@ -1242,7 +1239,7 @@ class Editor {
         num('rotation', t.rot, (v) => setTransform(z, v, t.sx, t.sy)),
         num('scale x', t.sx, (v) => setTransform(z, t.rot, v, t.sy)),
         num('scale y', t.sy, (v) => setTransform(z, t.rot, t.sx, v))),
-      el('div', { class: 'le-row' }, 'Colour ', el('input', { type: 'color', value: z.color || '#ff0000', title: 'only for telling zones apart', onchange: (ev) => this.change([file], () => { z.color = ev.target.value; }) })),
+      el('div', { class: 'le-row' }, el('span', { class: 'le-swatch on', style: `--c: ${zoneColour(k)}`, title: 'each zone gets its own colour automatically, only for telling zones apart (the game never uses it)' }), ' Colour is automatic, one per zone'),
       z.points
         ? el('div', { class: 'le-tip' }, `${z.points.length} corners: drag them with Select (Shift snaps to the grid).`)
         : el('div', { class: 'le-row' }, el('span', { class: 'le-tip' }, 'This zone has curves. '), el('button', { onclick: () => this.zoneToPolygon(k), title: 'turn the curves into straight segments so its corners can be dragged' }, 'Edit corners')),
