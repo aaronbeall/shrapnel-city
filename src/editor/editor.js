@@ -48,6 +48,8 @@ const NODE = 'game objects/node';
 // decor (decor.json) is baked into the background by tools/art/bake.py; sprites live here
 const DECOR_DIR = 'tools/art/parts/decor/';
 // how each decor category is drawn by the bake when placed by hand
+// the decor types the art pipeline places (tools/art/bake.py CATEGORIES)
+const DECOR_TYPES = ['floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights'];
 const DECOR_DEFAULTS = { floorpaint: { effect: 'paint' }, greebles: { effect: 'shadow', strength: 0.35 }, greebles2: { effect: 'shadow', strength: 0.35 }, vents: { effect: 'shadow', strength: 0.3 }, rails: { effect: 'shadow', strength: 0.25 }, lights: { effect: 'glow', strength: 0.9 } };
 const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as in Flash
 const TOOLS = [
@@ -1381,11 +1383,21 @@ class Editor {
         el('button', { onclick: () => this.change(['level.json'], () => { L.settings = { ...(L.settings || {}), art: { kit: 'bridge', seed: 1 + Math.floor(Math.random() * 9999) } }; }, { reload: false }) }, 'Generate this level\'s art'));
       return box;
     }
-    const setArt = (o) => this.change(['level.json'], () => { L.settings = { ...L.settings, art: { ...art, ...o } }; }, { reload: false });
+    const setArt = (o) => this.change(['level.json'], () => {
+      const a = { ...art, ...o };
+      for (const k of Object.keys(a)) if (a[k] === undefined) delete a[k];
+      L.settings = { ...L.settings, art: a };
+    }, { reload: false });
     const running = this.art || (this.server && this.server.art);
     const off = !this.writable || !!running;
     const btn = (label, step, tip) => el('button', { disabled: off, title: tip, onclick: () => this.runArt(step) }, label);
     const n = this.layerCount('decor');
+    if (!this.artOptions) {
+      this.artOptions = fetch('tools/art/options.json', { cache: 'no-store' }).then((r) => r.json())
+        .then((j) => { this.artOptions = j; this.refreshPanel(); }).catch((e) => { this.artOptions = {}; this.status('Art options: ' + e.message, true); });
+    }
+    const only = this.placeOnly ||= new Set(DECOR_TYPES);
+    const all = only.size === DECOR_TYPES.length;
     box.append(
       el('div', { class: 'le-row' }, 'Kit ', el('select', { title: 'the tile set: floor, wall and chasm textures and the decor sheets (tools/art/parts)', onchange: (ev) => setArt({ kit: ev.target.value }) },
         ...['bridge'].map((kit) => el('option', { value: kit, selected: art.kit === kit }, kit))),
@@ -1394,13 +1406,37 @@ class Editor {
       el('div', { class: 'le-row' },
         btn('Bake art', 'bake', 'Save, then redraw background.png from the collision map and decor.json as they are'),
         this.confirmPlace
-          ? el('button', { disabled: off, class: 'le-danger', title: 'decor.json is replaced; Undo cannot bring the old layout back (git can)', onclick: () => { this.confirmPlace = false; this.runArt('all'); } }, `Replace ${n} decor and bake?`)
-          : el('button', { disabled: off, title: 'Save, then lay out new decor from the seed (replacing decor.json, hand edits too) and bake', onclick: () => { this.confirmPlace = true; this.refreshPanel(); } }, 'Re-place decor + bake'),
+          ? el('button', { disabled: off, class: 'le-danger', title: 'decor.json is replaced; Undo cannot bring the old layout back (git can)', onclick: () => { this.confirmPlace = false; this.runArt('all'); } }, all ? `Replace all ${n} decor and bake?` : `Replace ${this.list('decor').filter((e) => only.has(decorType(e.sprite))).length} ${[...only].join(', ')} and bake?`)
+          : el('button', { disabled: off || !only.size, title: 'Save, then lay out new decor of the ticked types from the seed (replacing those in decor.json, hand edits too; the other types stay) and bake', onclick: () => { this.confirmPlace = true; this.refreshPanel(); } }, all ? 'Re-place decor + bake' : `Re-place ${only.size} type${only.size > 1 ? 's' : ''} + bake`),
         this.confirmPlace ? el('button', { onclick: () => { this.confirmPlace = false; this.refreshPanel(); } }, 'Cancel') : ''),
+      el('div', { class: 'le-row le-types', title: 'which decor types Re-place lays out again; the others keep their placements' }, 'Re-place: ',
+        ...DECOR_TYPES.map((t) => el('label', {}, el('input', { type: 'checkbox', checked: only.has(t), onchange: (ev) => { if (ev.target.checked) only.add(t); else only.delete(t); this.confirmPlace = false; this.refreshPanel(); } }), t))),
       el('div', { class: 'le-tip' }, running ? `Running ${running.step === 'all' ? 're-place + bake' : running.step} on ${running.level || L.folder}… (about 10 s)`
         : !this.writable ? 'Needs the local server (npm run edit).'
           : `Runs tools/art/bake.py on your machine, rebuilds, and reloads the editor with the new art. ${n} decor placements; show them with K.`));
     if (this.artLog) box.append(el('pre', { class: 'le-artlog' }, this.artLog));
+    // the bake's options (tools/art/options.json), saved in level.json art.<group>.<option>
+    if (this.artOptions && !(this.artOptions instanceof Promise)) {
+      for (const [group, spec] of Object.entries(this.artOptions)) {
+        const cur = art[group] || {};
+        const changed = Object.keys(cur).length;
+        const set = (key, v) => setArt({ [group]: (() => { const o = { ...cur }; if (v === spec.options[key].default) delete o[key]; else o[key] = v; return Object.keys(o).length ? o : undefined; })() });
+        const rows = Object.entries(spec.options).map(([key, o]) => {
+          const v = cur[key] ?? o.default;
+          const input = o.type === 'colour'
+            ? el('input', { type: 'color', value: v, onchange: (ev) => set(key, ev.target.value) })
+            : o.type === 'text'
+              ? el('input', { value: v, placeholder: 'none', onchange: (ev) => set(key, ev.target.value.trim()) })
+              : el('input', { type: 'number', min: o.min, max: o.max, step: o.step, value: v, onchange: (ev) => { const x = +ev.target.value; if (isFinite(x)) set(key, Math.min(o.max ?? x, Math.max(o.min ?? x, x))); } });
+          return el('label', { class: 'le-opt' + (key in cur ? ' set' : ''), title: (o.tip || '') + ` (default ${o.default === '' ? 'none' : o.default})` }, o.label, input);
+        });
+        box.append(el('details', { class: 'le-optgroup', open: !!(this.openOpts && this.openOpts.has(group)), ontoggle: (ev) => { (this.openOpts ||= new Set())[ev.target.open ? 'add' : 'delete'](group); } },
+          el('summary', {}, spec.label + (changed ? ` (${changed} changed)` : '')),
+          spec.tip ? el('div', { class: 'le-tip' }, spec.tip) : '', el('div', { class: 'le-opts' }, ...rows),
+          changed ? el('button', { onclick: () => setArt({ [group]: undefined }) }, 'Defaults') : ''));
+      }
+      box.append(el('div', { class: 'le-tip' }, 'Options take effect on the next Bake art.'));
+    }
     return box;
   }
 
@@ -1414,7 +1450,7 @@ class Editor {
     this.art = { step, level: L.folder, started: Date.now() };
     this.status(`Art: running ${step} on ${L.folder}…`);
     this.refreshPanel();
-    const r = await fetch('__art', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ level: L.folder, step }) })
+    const r = await fetch('__art', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ level: L.folder, step, only: step !== 'bake' && this.placeOnly && this.placeOnly.size < DECOR_TYPES.length ? [...this.placeOnly] : undefined }) })
       .then((x) => x.json()).catch((e) => ({ ok: false, log: e.message }));
     this.art = null;
     if (!r.ok) {
@@ -1570,6 +1606,11 @@ function decorBounds(e, size) {
   const w = size.w * s, h = size.h * s;
   const bw = Math.abs(w * Math.cos(a)) + Math.abs(h * Math.sin(a)), bh = Math.abs(w * Math.sin(a)) + Math.abs(h * Math.cos(a));
   return [e.x - bw / 2, e.y - bh / 2, e.x + bw / 2, e.y + bh / 2];
+}
+
+function decorType(sprite) {
+  const c = sprite.split('/')[0];
+  return c === 'greebles2' ? 'greebles' : c;
 }
 
 function decorColour(sprite) {
@@ -1734,6 +1775,13 @@ const CSS = `
 #level-editor .le-decor-pal img, #level-editor .le-decor-thumb { max-width: 100%; max-height: 100%; object-fit: contain; display: block; margin: auto; }
 #level-editor .le-decor-thumb { width: 48px; height: 48px; background: #1b2b2b; border-radius: 3px; }
 #level-editor .le-editing { color: #4fc; }
+#level-editor .le-types { flex-wrap: wrap; gap: 2px 8px; font-size: 11px; }
+#level-editor .le-optgroup { margin: 4px 0; }
+#level-editor .le-optgroup summary { font-size: 12px; color: #9cd; }
+#level-editor .le-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 8px; }
+#level-editor .le-opt { display: flex; flex-direction: column; font-size: 10px; color: #9ab; }
+#level-editor .le-opt.set { color: #fd6; }
+#level-editor .le-opt input { width: 100%; box-sizing: border-box; }
 #level-editor .le-danger { background: #7a2a2a; color: #fff; }
 #level-editor .le-artlog { max-height: 160px; overflow: auto; white-space: pre-wrap; font-size: 10px; background: #000a; padding: 4px; color: #fcc; }
 #level-editor .le-stats div { margin: 1px 0; }

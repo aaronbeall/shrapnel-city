@@ -2,7 +2,7 @@
 // in-game editor (?edit) save straight into levels/ and rebuild.
 //   npm run edit            then open http://localhost:8123/?edit
 //
-// The editor saves with PUT /levels/<NN_name>/<file>. POST /__art {level, step, seed} runs an
+// The editor saves with PUT /levels/<NN_name>/<file>. POST /__art {level, step, seed, only} runs an
 // art pipeline step (tools/art/bake.py: place decor, bake the background) and then the build. Only the level files listed in
 // tools/levels/levels.mjs, in existing level folders, can be written. After a save the
 // build runs, so a page reload picks the change up everywhere.
@@ -51,7 +51,7 @@ function run(cmd, args) {
     p.on('close', (code) => resolve({ code, out }));
   });
 }
-async function runArt({ level, step, seed }) {
+async function runArt({ level, step, seed, only }) {
   if (art) return { ok: false, log: `already running ${art.step} on ${art.level}` };
   if (!/^\d\d_[^/\\]+$/.test(level || '') || !fs.existsSync(path.join(ROOT, 'levels', level))) return { ok: false, log: 'no such level: ' + level };
   if (!['place', 'bake', 'all'].includes(step)) return { ok: false, log: 'unknown step: ' + step };
@@ -63,6 +63,7 @@ async function runArt({ level, step, seed }) {
     }
     const args = ['tools/art/bake.py', level, step];
     if (Number.isInteger(seed)) args.push('--seed', String(seed));
+    if (Array.isArray(only) && only.length && only.every((c) => /^[a-z0-9]+$/.test(c))) args.push('--only', only.join(','));
     const r = await run(PYTHON, args);
     console.log(`art ${step} ${level}: ${r.code ? 'FAILED' : 'ok'}\n${r.out.trim()}`);
     if (r.code) return { ok: false, log: r.out.slice(-3000) };

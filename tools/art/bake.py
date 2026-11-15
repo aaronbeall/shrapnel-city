@@ -62,30 +62,54 @@ def level_paths(folder):
     return d, art
 
 
+# ---------------------------------------------------------------- options
+OPTIONS = json.load(open(os.path.join(os.path.dirname(__file__), 'options.json')))
+
+
+def options(art):
+    """The art settings with every option filled in from tools/art/options.json."""
+    o = {}
+    for group, spec in OPTIONS.items():
+        given = art.get(group) or {}
+        o[group] = {k: given.get(k, v['default']) for k, v in spec['options'].items()}
+    return o
+
+
+def hex_rgb(h):
+    h = h.lstrip('#')
+    return np.array([int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)], np.float32)
+
+
 # ---------------------------------------------------------------- geometry
 class Geometry:
     """Everything derived from the collision map that both steps need."""
 
-    def __init__(self, path):
+    def __init__(self, path, opts):
         with Image.open(path) as im: self.W, self.H = W, H = im.size
         self.wall, self.chasm = coverage(path, W, H)
         self.wallb, self.chasmb = self.wall > 0.5, self.chasm > 0.5
         self.yy, self.xx = np.mgrid[0:H, 0:W].astype(np.float32)
-        # rounded art mask: convex corners softened, inside corners filleted
-        self.wr = np.clip((blur(self.wall, 3.2) - 0.5) * 3.0 + 0.5, 0, 1)
+        # rounded art mask: corners rounded by blurring, then a steep ramp so the edge
+        # stays crisp (aa px of anti-aliasing, like the originals)
+        e = opts['edges']
+        if e['round'] > 0:
+            k = np.sqrt(2 * np.pi) * e['round'] / max(0.3, e['aa'])
+            self.wr = np.clip((blur(self.wall, e['round']) - 0.5) * k + 0.5, 0, 1)
+        else:
+            self.wr = self.wall.astype(np.float32)
         self.wrb = self.wr > 0.5
-        # wall sides, extruded toward the map centre
-        CX, CY, K, MAXOFF = W / 2, H / 2, 0.02, 9.0
-        vx = np.clip(K * (self.xx - CX), -MAXOFF, MAXOFF)
-        vy = np.clip(K * (self.yy - CY), -MAXOFF, MAXOFF)
-        side = np.zeros((H, W), np.float32); st = np.ones((H, W), np.float32)
-        for i in range(24, 0, -1):
-            t = i / 24
-            s = ndi.map_coordinates(self.wr, [self.yy + t * vy, self.xx + t * vx], order=1, mode='nearest')
-            st[s > 0.5] = t; side = np.maximum(side, s)
-        self.side_raw = side
-        self.side = blur(side * (1 - self.wr), 0.6)
-        self.st = st
+        # wall sides: copies of the walls scaled down step by step toward the camera point
+        sd = opts['sides']
+        self.cx, self.cy = W * sd['cx'], H * sd['cy']
+        self.steps = []          # (sample coordinates, mask) per copy, nearest first
+        side = np.zeros((H, W), np.float32)
+        for i in range(1, int(sd['steps']) + 1):
+            f = 1 + sd['scale'] * i  # sample the wall at c + f (p - c): the wall shrunk by 1/f
+            coords = [self.cy + f * (self.yy - self.cy), self.cx + f * (self.xx - self.cx)]
+            m = ndi.map_coordinates(self.wr, coords, order=1, mode='constant')
+            self.steps.append((coords, m))
+            side = np.maximum(side, m)
+        self.side = side * (1 - self.wr)
         # distance into the wall art and each wall's direction (0 horiz, 1 diag, 2 vert, 3 other diag)
         self.dist = ndi.distance_transform_edt(self.wrb).astype(np.float32)
         ny, nx = np.gradient(blur(self.dist, 4))
@@ -117,7 +141,7 @@ def tiled(g, t, scale, angle=0.0, off=(0.0, 0.0)):
     return np.stack([ndi.map_coordinates(t[..., c], [v % h, u % w], order=1, mode='grid-wrap') for c in range(3)], -1)
 
 
-def base_art(g, seed):
+def base_art(g, seed, opts):
     """Floor, chasms and walls, before decor."""
     W, H, xx, yy = g.W, g.H, g.xx, g.yy
     rng = np.random.default_rng(seed)
@@ -134,30 +158,45 @@ def base_art(g, seed):
     ch = tiled(g, chasm_t, 0.45, off=(37, 11))
     ch = ch * (0.9 - 0.5 * np.clip(inside / 70, 0, 1))[..., None]
     img = img * (1 - g.chasm[..., None]) + ch * g.chasm[..., None]
-    lip = (ndi.distance_transform_edt(~g.chasmb) <= 5) & ~g.chasmb & ~g.wallb
-    stripe = ((xx + yy) % 14 < 7)
-    lipf = blur(lip, 0.5)
-    hz = np.where(stripe[..., None], np.array([0.72, 0.56, 0.11]), np.array([0.09, 0.09, 0.09]))
-    img = img * (1 - 0.75 * lipf[..., None]) + hz * 0.75 * lipf[..., None]
-    # wall sides and ambient occlusion
+    # hazard stripes on the floor around chasms
+    hzo = opts['hazard']
+    if hzo['width'] > 0 and hzo['opacity'] > 0:
+        lip = (ndi.distance_transform_edt(~g.chasmb) <= hzo['width']) & ~g.chasmb & ~g.wallb
+        lipf = blur(lip, 0.4) * hzo['opacity']
+        a = np.radians(hzo['angle'])
+        if hzo.get('texture'):
+            hz = tiled(g, load(os.path.splitext(hzo['texture'])[0]), 1.0, a)
+        else:
+            u = xx * np.cos(a) + yy * np.sin(a)
+            stripe = (u % hzo['period']) < hzo['period'] / 2
+            hz = np.where(stripe[..., None], hex_rgb(hzo['colourA']), hex_rgb(hzo['colourB']))
+        img = img * (1 - lipf[..., None]) + hz * lipf[..., None]
+    # ambient occlusion where the walls meet the floor
     wr, side = g.wr, g.side
     ao = blur(np.maximum(side, wr), 5)
     img *= (1 - 0.5 * ao * (1 - wr) * (1 - side))[..., None]
-    scol = 0.025 + 0.05 * (1 - g.st) ** 3
-    img = img * (1 - side[..., None]) + scol[..., None] * side[..., None]
     # wall tops: the plate texture, run along each wall's direction
     top = np.zeros_like(img)
     for k in range(4):
         tk = tiled(g, wall_t, 0.33, k * np.pi / 4, off=(k * 131.0, k * 57.0))
         top += tk * (g.q == k)[..., None]
     top = top / top[g.wrb].mean() * 0.74
-    # soft bevel lit from the top-left
-    hgt = np.clip(g.dist / 7.0, 0, 1); hgt = blur(hgt * hgt * (3 - 2 * hgt), 1.2)
+    # bevel lit from the top-left, over a narrow band so the edge stays crisp
+    hgt = np.clip(g.dist / 5.0, 0, 1); hgt = blur(hgt * hgt * (3 - 2 * hgt), 0.7)
     gy, gx = np.gradient(hgt)
     nz = 0.18
     lam = (-gx * -0.55 - gy * -0.6 + nz * 0.58) / np.sqrt(gx * gx + gy * gy + nz * nz)
     top *= (0.70 + 0.42 * lam)[..., None]
-    top *= (1 - 0.18 * np.clip(1 - g.dist / 1.5, 0, 1))[..., None]   # crisp dark edge line
+    top *= (1 - 0.22 * np.clip(1 - g.dist / 1.2, 0, 1))[..., None]   # crisp dark edge line
+    # wall sides: darkened copies of the wall art, each scaled down a little more toward
+    # the camera point, deepest first, so the sides keep the plates' texture
+    sd = opts['sides']
+    for i in range(len(g.steps) - 1, -1, -1):
+        coords, m = g.steps[i]
+        copy = np.stack([ndi.map_coordinates(top[..., c], coords, order=1, mode='nearest') for c in range(3)], -1)
+        copy *= sd['darken'] * sd['fade'] ** i
+        m = m[..., None]
+        img = img * (1 - m) + copy * m
     return img * (1 - wr[..., None]) + top * wr[..., None]
 
 
@@ -191,7 +230,17 @@ PASSES = [
 ]
 
 
-def place_decor(g, seed):
+CATEGORIES = ('floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights')
+
+
+def category(sprite_path):
+    c = sprite_path.split('/')[0]
+    return 'greebles' if c == 'greebles2' else c
+
+
+def place_decor(g, seed, only=None, keep=()):
+    """New decor placements. With `only` (a set of categories) just those are placed, after
+    `keep` (the existing placements of the other categories, which they avoid)."""
     index = json.load(open(os.path.join(DECOR, 'index.json')))
     cats = {c: [it['file'] for it in items] for c, items in index.items()}
     cats['greebles'] = cats.get('greebles', []) + cats.get('greebles2', [])
@@ -205,10 +254,25 @@ def place_decor(g, seed):
     surfaces['lip'] = (cd <= 16) & (cd >= 8) & ~g.wallb
     ly, lx = np.gradient(blur(cd, 3))
     orients = {'lip': ndi.median_filter(np.round((np.arctan2(ly, lx) + np.pi / 2) / (np.pi / 4)).astype(int) % 4, 5)}
+    # one rail style per continuous chasm edge: each straight run of the lip band
+    edge_ids = np.zeros((H, W), np.int32)
+    for k in range(4):
+        lab, n = ndi.label(surfaces['lip'] & (orients['lip'] == k))
+        edge_ids[lab > 0] = lab[lab > 0] + k * 100000
+    edge_pick = {}
     used = np.zeros((H, W), bool)
-    out = []
+    out = list(keep)
+    for e in keep:  # what stays takes up its space
+        try: sp = sprite(e['sprite'])
+        except OSError: continue
+        a = np.array(xform(sp, float(e.get('scale', 1)), float(e.get('rotation', 0))))[..., 3] > 40
+        sh, sw = a.shape
+        x0, y0 = int(e['x'] - sw / 2), int(e['y'] - sh / 2)
+        sx0, sy0, sx1, sy1 = max(0, -x0), max(0, -y0), min(sw, W - x0), min(sh, H - y0)
+        if sx1 > sx0 and sy1 > sy0: used[y0 + sy0:y0 + sy1, x0 + sx0:x0 + sx1] |= a[sy0:sy1, sx0:sx1]
 
     for cat, count, surf, short, long_max, o in PASSES:
+        if only is not None and cat not in only: continue
         surface = surfaces[surf]
         files = [f for f in cats.get(cat, []) if max(sprite(f).size) >= o.get('min_aspect', 0) * min(sprite(f).size)]
         pts = np.argwhere(surface)
@@ -223,6 +287,8 @@ def place_decor(g, seed):
             if isinstance(short, tuple): s_ = min(s_, short[2])
             if s_ < 5: continue
             k = int(rng.integers(len(files)))
+            if surf == 'lip' and edge_ids[cy, cx]:  # the edge's rail, picked by its first one
+                k = edge_pick.setdefault(int(edge_ids[cy, cx]), k)
             sp = sprite(files[k])
             w, h = sp.size
             turn = 90 if h > w and along else 0
@@ -259,9 +325,9 @@ def worn(h, w, seed):
     return chips * scuff * speck
 
 
-def bake(g, decor, seed):
+def bake(g, decor, seed, opts):
     W, H = g.W, g.H
-    img = np.clip(base_art(g, seed), 0, 1)
+    img = np.clip(base_art(g, seed, opts), 0, 1)
     shadow = np.zeros((H, W), np.float32)
     bloom = np.zeros((H, W, 3), np.float32)
     for i, e in enumerate(decor):
@@ -296,6 +362,8 @@ def bake(g, decor, seed):
     img *= (1 - 0.5 * blur(np.clip(ndi.shift(shadow, (2, 2), order=0), 0, 1), 1.5))[..., None]
     img += np.stack([blur(bloom[..., c], 5) for c in range(3)], -1) * 1.5
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
+    sh = opts['edges']['sharpen']
+    if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
 
 
@@ -311,18 +379,27 @@ def main():
     ap.add_argument('level', help='level folder, e.g. 03_Bridge')
     ap.add_argument('step', choices=['place', 'bake', 'all'])
     ap.add_argument('--seed', type=int, help='seed for decor placement (default: level.json art.seed)')
+    ap.add_argument('--only', help='place only these decor types, comma separated (' + ', '.join(CATEGORIES) + '); the others in decor.json are kept')
     args = ap.parse_args()
     d, art = level_paths(args.level)
+    opts = options(art)
     seed = int(art.get('seed', 2012))
-    g = Geometry(os.path.join(d, 'collision.png'))
+    g = Geometry(os.path.join(d, 'collision.png'), opts)
     decor_path = os.path.join(d, 'decor.json')
     if args.step in ('place', 'all'):
-        decor = place_decor(g, args.seed if args.seed is not None else seed)
+        only, keep = None, []
+        if args.only:
+            only = {c.strip() for c in args.only.split(',') if c.strip()}
+            bad = only - set(CATEGORIES)
+            if bad: sys.exit(f'unknown decor types: {", ".join(sorted(bad))}; known: {", ".join(CATEGORIES)}')
+            old = json.load(open(decor_path)) if os.path.exists(decor_path) else []
+            keep = [e for e in old if category(e['sprite']) not in only]
+        decor = place_decor(g, args.seed if args.seed is not None else seed, only, keep)
         write_decor(decor_path, decor)
         print(f'wrote levels/{args.level}/decor.json ({len(decor)} placements)')
     if args.step in ('bake', 'all'):
         decor = json.load(open(decor_path)) if os.path.exists(decor_path) else []
-        out = bake(g, decor, seed)
+        out = bake(g, decor, seed, opts)
         Image.fromarray(out, 'RGB').convert('RGBA').save(os.path.join(d, 'background.png'), optimize=True)
         print(f'wrote levels/{args.level}/background.png ({len(decor)} decor placements)')
 
