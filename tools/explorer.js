@@ -5,6 +5,8 @@
 import { Runtime } from '../src/flash/runtime.js';
 import { MovieClip, SimpleButton, TextField } from '../src/flash/display.js';
 import { mul } from '../src/flash/geom.js';
+import { decodeTimeline } from './flash-source/format.mjs';
+import { container } from './levels/compile.mjs';
 
 const params = new URLSearchParams(location.search);
 const rt = new Runtime(document.createElement('canvas'), { base: '../assets/' });
@@ -478,38 +480,20 @@ for (const [id, s] of lib.symbols) {
 for (const g of Object.values(groups)) g.sort((a, b) => sym(a).name.localeCompare(sym(b).name, undefined, { numeric: true }));
 const inFolder = (f, skip = []) => (groups[f] || []).filter((id) => !skip.includes(id));
 
-// A level's game frame on screen_mc, whole (as startLevel() leaves it) or one layer of it.
-// Timeline depths come from tools/levels/levels.mjs: background 3, doors 10-199, collision map 200,
-// features 210-999 (vision zones, entrance, exit, path nodes), boxes 1000, powerups 1001, enemies 1002.
-const NODE = lib.idFor('game objects/node');
+// A level's game frame on screen_mc, as startLevel() leaves it (the Levels tab).
+// Timeline depths come from tools/levels/compile.mjs: background 3, doors 10-199, collision map 200, vision 210,
+// features and path nodes 211-999, boxes 1000, powerups 1001, enemies 1002.
 const LEVEL_LAYERS = {
-  game: { title: 'As played', file: null, show: (k, d) => ['background_mc', 'boxes_mc', 'enemies_mc', 'powerups_mc', 'entrance_mc', 'exit_mc'].includes(k.__name) || (d >= 10 && d < 200) },
-  background: { title: 'Background', file: 'background.png', show: (k) => k.__name === 'background_mc' },
-  collision: { title: 'Collision map', file: 'collision.png', show: (k) => k.__name === 'level_mc' },
-  vision: { title: 'Vision zones', file: 'vision.json', show: (k) => k.__name === 'vision_mc' },
-  boxes: { title: 'Boxes', file: 'boxes.json', show: (k) => k.__name === 'boxes_mc' },
-  powerups: { title: 'Pickups', file: 'powerups.json', show: (k) => k.__name === 'powerups_mc' },
-  enemies: { title: 'Enemies', file: 'enemies.json', show: (k) => k.__name === 'enemies_mc' },
-  doors: { title: 'Doors', file: 'doors.json', show: (k, d) => d >= 10 && d < 200 },
-  // features.json holds vision_mc and path nodes too, unless the level has its own vision.json / pathNodes.json
-  features: { title: 'Features', file: 'features.json', show: (k, d, own) => d >= 210 && d < 1000 && !(own.vision && k.__name === 'vision_mc') && !(own.paths && k.charId === NODE) },
-  paths: { title: 'Path nodes', file: 'pathNodes.json', show: (k) => k.charId === NODE },
+  game: { title: 'As played', show: (k, d) => ['background_mc', 'boxes_mc', 'enemies_mc', 'powerups_mc', 'entrance_mc', 'exit_mc'].includes(k.__name) || (d >= 10 && d < 200) },
 };
-// which layer a level file draws as
-const LAYER_OF_FILE = Object.fromEntries(Object.entries(LEVEL_LAYERS).filter(([, v]) => v.file).map(([k, v]) => [v.file, k]));
-LAYER_OF_FILE['paths.json'] = 'paths';
-LAYER_OF_FILE['features.json'] = 'features';
 function levelSpec(L, layer = 'game') {
   const Ly = LEVEL_LAYERS[layer];
-  const folder = fileIndex.levels[levels.indexOf(L)];
-  const has = (f) => fileIndex.files.some(([p]) => p === `levels/${folder}/${f}`);
-  const own = { vision: has('vision.json'), paths: has('pathNodes.json') || has('paths.json') };
   return {
     id: SCREEN, hold: L.frame, every: 4, maxScale: 1, title: layer === 'game' ? L.name : `${L.name} · ${Ly.title.toLowerCase()}`, bgColor: layer === 'game' ? '#626A67' : null, level: layer === 'game',
     setup: (n) => {
       // the whole level can also show the collision map and vision zones (Levels tab toggles)
       for (const k of n.children) {
-        k.__visible = Ly.show(k, k._depth + 16384, own)
+        k.__visible = Ly.show(k, k._depth + 16384)
           || (layer === 'game' && ((k.__name === 'level_mc' && state.collision) || (k.__name === 'vision_mc' && state.vision)));
       }
       // boxes and enemies stop on frame 1 until destroyed; the exit waits closed
@@ -560,6 +544,38 @@ const levelOfPath = (p) => {
   return m ? levels[+m[1]] : null;
 };
 
+// Level files that the build places straight onto screen_mc (doors, features, path nodes,
+// decor, the briefing) have no symbol of their own; give each a clip of just its contents,
+// compiled the way the build does, so it can be drawn and inspected on its own.
+const levelData = await fetch('../assets/levels.json').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+const pieceIds = new Map(); // file path -> char id
+let nextPieceId = Math.max(...lib.chars.keys()) + 1;
+function levelPiece(path) {
+  if (pieceIds.has(path)) return pieceIds.get(path);
+  let cid = null;
+  const m = /^levels\/([^/]+)\/(doors|features|pathNodes|decor|briefing)\.json$/.exec(path);
+  const L = m && levelData && levelData.levels.find((x) => x.folder === m[1]);
+  if (L) {
+    try {
+      const list = L[m[2]] || [];
+      const o = m[2] === 'briefing'
+        ? { kind: 'sprite', frames: 1, timeline: [{ frame: 1, changes: list }] }
+        : container(list, path);
+      const t = decodeTimeline(o, (n) => { const v = levelData.ids[n] ?? lib.idFor(n); if (v === undefined) throw new Error(`unknown symbol "${n}"`); return v; });
+      if (o.timeline[0].changes.length) {
+        cid = nextPieceId++;
+        const c = { id: cid, type: 'sprite', frames: t.frames, labels: t.labels, scriptFrames: t.scriptFrames, frameCount: 1 };
+        lib.chars.set(cid, c);
+        lib.prepare(c);
+        for (const [k, text] of Object.entries(t.instances)) lib.instanceScripts[cid + ':' + k] = text;
+        fileOf.set(cid, path);
+      }
+    } catch (err) { console.warn(path, err); }
+  }
+  pieceIds.set(path, cid);
+  return cid;
+}
+
 // Files view options, kept in the URL: frame=<n|mid|last> holds every preview on that frame,
 // size=s|m|l sets the cell size, ids=<char ids> lists exactly those characters.
 const SIZES = { s: [130, 100], m: [200, 160], l: [300, 240] };
@@ -574,6 +590,7 @@ function frameHold(id) {
 const FILE_CAP = 400;
 
 function fileCard(f) {
+  if ((f.id === null || f.id === undefined) && f.path.startsWith('levels/')) f = { ...f, id: levelPiece(f.path) };
   const c = f.id !== null && f.id !== undefined ? lib.get(f.id) : null;
   const name = displayName(f.name);
   const dir = f.path.replace(/\/[^/]*$/, '');
@@ -586,7 +603,7 @@ function fileCard(f) {
   if (c && RENDERABLE.has(c.type) && f.id !== 0) {
     const s = lib.symbols.get(f.id);
     // a level file builds a generated clip; call it what the file is
-    kind = L ? (f.name.endsWith('.png') ? 'bitmap' : 'level') : kindOf(f.id);
+    kind = L ? (f.name.endsWith('.png') ? 'bitmap' : f.name === 'briefing.json' ? 'briefing' : 'level') : kindOf(f.id);
     stats.char = f.id;
     if (c.frames && c.frames.length > 1) stats.frames = c.frames.length;
     if (s && s.linkage) stats.linkage = s.linkage;
@@ -598,16 +615,6 @@ function fileCard(f) {
     if (c) { stats.char = f.id; stats.size = `${c.w}×${c.h}`; }
     stages = [el('figure', { class: 'stage' }, el('img', { class: 'thumb', src: fileUrl(f.path), alt: name, loading: 'lazy', style: `max-width:${cellSize()[0]}px;max-height:${cellSize()[1]}px` }))];
     open = () => window.open(fileUrl(f.path), '_blank');
-  } else if (L && LAYER_OF_FILE[f.name] && !(f.name.endsWith('.png') && c)) {
-    const spec = { ...levelSpec(L, LAYER_OF_FILE[f.name]), file: f.path, kind: 'level' };
-    kind = 'level';
-    stages = [stage(spec, 160, 100)];
-    open = () => inspect(spec);
-  } else if (L && f.name === 'briefing.json') {
-    const spec = { id: SCREEN, hold: L.frame - 1, static: true, maxScale: 1, title: `${L.name} briefing`, file: f.path, kind: 'briefing', boundsOf: () => rt.stageRect || [0, 550, 0, 400] };
-    kind = 'briefing';
-    stages = [stage(spec, 160, 100)];
-    open = () => inspect(spec);
   } else {
     kind = f.id === 0 ? 'timeline' : c && c.type === 'font' ? 'font' : 'data';
     if (kind === 'font') stats.char = f.id;
@@ -1066,7 +1073,7 @@ function buildStrip(id, T) {
       cells.append(cell);
       if (f === 1 || f % (cw < 10 ? 10 : 5) === 0) nums.append(el('span', { style: `left:${(f - 1) * cw}px` }, f));
     }
-    ui.strip.append(spans.length ? labels : null, cells, nums);
+    ui.strip.append(...(spans.length ? [labels] : []), cells, nums);
     ui.strip.style.setProperty('--w', T * cw + 'px');
     const pick = (e) => {
       const r = cells.getBoundingClientRect();
