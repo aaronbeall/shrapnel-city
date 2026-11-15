@@ -122,6 +122,21 @@ const swf = {
 };
 const sym = { symbols, instances };
 
+// --- file index for the asset explorer: every source file and the character it builds --
+const fileIndex = [['source/movie.json', 0], ['source/ids.json', null]];
+for (const f of files) {
+  const rel = path.relative(path.join(SRC, 'library'), f).split(path.sep).join('/');
+  fileIndex.push([`source/library/${rel}`, idOf.get(pathToName(rel.slice(0, -path.extname(rel).length)))]);
+}
+const LEVEL_FILE_SYMBOL = { collision: 'level', background: 'background', boxes: 'boxes', powerups: 'powerups', enemies: 'enemies' };
+for (const L of levels.levels) {
+  for (const f of fs.readdirSync(path.join(ROOT, 'levels', L.folder)).filter((n) => /\.(json|png)$/.test(n)).sort()) {
+    const base = f.replace(/\.\w+$/, '');
+    fileIndex.push([`levels/${L.folder}/${f}`, LEVEL_FILE_SYMBOL[base] ? idOf.get(`level assets/${LEVEL_FILE_SYMBOL[base]}${L.index}`) ?? null : null]);
+  }
+}
+fileIndex.sort((a, b) => (a[0] < b[0] ? -1 : 1));
+
 // --- write or compare ------------------------------------------------------------
 if (check) {
   const diffs = [];
@@ -147,6 +162,7 @@ if (check) {
   fs.writeFileSync(path.join(ASSETS, 'symbols.json'), JSON.stringify(sym, null, 1));
   // the editor (src/editor/) recompiles levels in the browser from this
   fs.writeFileSync(path.join(ASSETS, 'levels.json'), JSON.stringify({ ids: Object.fromEntries(idOf), screen: screenSource, levels: levels.levels }));
+  fs.writeFileSync(path.join(ASSETS, 'files.json'), JSON.stringify({ files: fileIndex, levels: levels.levels.map((L) => L.folder) }));
   fs.rmSync(path.join(ASSETS, 'bitmaps'), { recursive: true, force: true });
   fs.mkdirSync(path.join(ASSETS, 'bitmaps'));
   for (const [cid, f] of bitmaps) fs.copyFileSync(f, path.join(ASSETS, 'bitmaps', cid + '.png'));

@@ -73,10 +73,56 @@
   summary { cursor: pointer; color: var(--muted); }
   summary.cur { color: var(--accent); }
   .muted { color: var(--muted); }
+  .kicon { display: inline-flex; width: 14px; height: 14px; vertical-align: -2px; flex: none; }
+  .kicon svg { width: 100%; height: 100%; }
+  .kind { white-space: nowrap; }
+  h3 .kicon { margin-right: 2px; }
+  dialog#help { width: min(680px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 16px 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--ink); }
+  #help h3 { margin: 0 0 4px; font-size: 16px; }
+  #help h4 { margin: 16px 0 6px; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--warm); }
+  #help .hclose { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: var(--muted); font-size: 20px; cursor: pointer; }
+  dl.kinds { display: grid; grid-template-columns: 150px 1fr; gap: 6px 12px; margin: 0; max-width: none; font-size: 12px; }
+  dl.kinds dt { color: var(--ink); font-weight: 600; white-space: nowrap; }
+  #help-btn { font-weight: 700; width: 30px; padding: 5px 0; }
+  @media (max-width: 520px) { dl.kinds { grid-template-columns: 1fr; } dl.kinds dd { margin-bottom: 6px; } }
+  #i-file .path { font-family: ui-monospace, monospace; font-size: 11px; overflow-wrap: anywhere; }
+  #i-file a, .pieces, .crumbs a, .tree a { color: var(--accent); text-decoration: none; }
+  #i-file a:hover, .pieces:hover, .crumbs a:hover, .tree a:hover { text-decoration: underline; }
+  img.thumb { display: block; max-width: 100%; max-height: 100px; border-radius: 4px; background: #0b1717; image-rendering: pixelated; }
+  #i-file img.thumb { max-height: 240px; }
+
+  .fs { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 16px; align-items: start; padding-top: 12px; }
+  .fs aside { position: sticky; top: 60px; max-height: calc(100vh - 76px); overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 8px 6px; }
+  .tree { font-size: 12px; }
+  .tree details > :not(summary), .tree details > .leaf { margin-left: 14px; }
+  .tree summary, .tree .leaf { padding: 1px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tree .leaf { padding-left: 16px; }
+  .tree small { color: var(--muted); }
+  .tree a.cur { color: #032; background: var(--accent); border-radius: 3px; padding: 0 4px; font-weight: 600; }
+  .crumbs { font-size: 14px; margin: 0 0 12px; overflow-wrap: anywhere; }
+  .crumbs a:last-child { color: var(--warm); }
+  .folders { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  a.folder { display: flex; flex-direction: column; min-width: 140px; max-width: 220px; padding: 8px 10px; color: var(--ink); text-decoration: none;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  a.folder:hover { border-color: var(--accent); }
+  a.folder b { font-weight: 600; overflow-wrap: anywhere; }
+  a.folder small { color: var(--muted); }
+  .card.file h3 { font-size: 12px; overflow-wrap: anywhere; }
+  .card.file dl { grid-template-columns: auto 1fr; }
+  .pieces { display: block; font-size: 11px; margin: 4px 2px 0; }
+  .fbar { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; margin-bottom: 8px; color: var(--muted); font-size: 12px; }
+  .fbar input, .fbar select { background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; font: inherit; }
+  section h2 a.hlink { color: var(--accent); text-decoration: none; }
+  .fcontent .clear { margin-left: 10px; font-size: 12px; color: var(--accent); }
+  button.more { margin-top: 14px; background: var(--panel); color: var(--accent); border: 1px solid var(--line); border-radius: 6px; padding: 6px 14px; font: inherit; cursor: pointer; }
+  .fcontent h2 { font-size: 13px; color: var(--warm); margin: 0 0 10px; }
+  .fcontent h2 small { margin-left: 10px; color: var(--muted); font-weight: 400; }
   @media (max-width: 760px) {
     .ins { grid-template-columns: 1fr; overflow: auto; }
     .ins .right { border-left: 0; border-top: 1px solid var(--line); }
     .tools { margin-left: 0; }
+    .fs { grid-template-columns: 1fr; }
+    .fs aside { position: static; max-height: 40vh; }
   }
 </style>
 </head>
@@ -92,13 +138,19 @@
       <option value="checker">Checker</option>
       <option value="light">Light</option>
     </select>
-    <label title="Levels tab: the level_mc collision map the game draws into a BitmapData and then removes"><input id="collision" type="checkbox"> collision map</label>
-    <label title="Levels tab: enemy line-of-sight zones (hidden in game)"><input id="vision" type="checkbox"> vision zones</label>
     <button id="pause">Pause all</button>
+    <button id="help-btn" title="What the kinds mean" aria-label="Help">?</button>
   </div>
 </header>
 <div id="status">loading…</div>
 <main id="main"></main>
+
+<dialog id="help">
+  <button class="hclose" aria-label="Close">×</button>
+  <h3>Kinds</h3>
+  <p class="muted">Every file in source/ and levels/ is one of these. A library symbol has a name other symbols place it by; pieces only exist inside the symbol whose folder holds them.</p>
+  <div class="hbody"></div>
+</dialog>
 
 <dialog id="inspector">
   <button id="i-close" aria-label="Close">×</button>
@@ -124,6 +176,8 @@
     <div class="right">
       <h4>Symbol</h4>
       <div id="i-info"></div>
+      <h4 id="i-file-h">Source file</h4>
+      <div id="i-file"></div>
       <h4>Children this frame</h4>
       <ul id="i-kids"></ul>
       <h4>Scripts</h4>
