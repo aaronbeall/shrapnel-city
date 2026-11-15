@@ -43,11 +43,13 @@ const EXTRA = {
   features: ['game objects/node', 'game objects/entrance_mc', 'game objects/exit_mc'],
 };
 const NODE = 'game objects/node';
+// path nodes are stored in features.json but edited as their own layer
+const dataLayer = (l) => (l === 'paths' ? 'features' : l);
 const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as in Flash
 const TOOLS = [
   { key: 'select', label: 'Select', hot: 'V', tip: 'click to select, drag to move (Shift snaps to the grid); R rotates, Delete removes, Ctrl+D duplicates' },
   { key: 'place', label: 'Place', hot: 'P', tip: 'pick a symbol below, then click to drop one' },
-  { key: 'link', label: 'Path links', hot: 'N', tip: 'nodes link to every node of their colour they can see (dashed). Click a node, then another, to pin links by hand instead' },
+  { key: 'link', label: 'Path links', hot: 'N', tip: 'nodes link to every node of their colour they can see (dashed). Click a node, then another: that adds the link, or removes it if they were linked. Changed nodes keep their links pinned (solid)' },
   { key: 'rect', label: 'Rectangle', hot: 'B', tip: 'drag a box; snaps to the grid (hold Alt for free)' },
   { key: 'poly', label: 'Polygon', hot: 'G', tip: 'click corners, angles snap (hold Shift for free); click the first corner or Enter to close, Esc cancels. On the vision layer it draws a zone' },
   { key: 'autozone', label: 'Auto zone', hot: 'Z', tip: 'click a spot to make a vision zone of what can be seen from there, the way the game does for an enemy outside every zone' },
@@ -257,7 +259,16 @@ class Editor {
       const zones = this.list('vision');
       for (let k = zones.length - 1; k >= 0; k--) if (this.inZone(zones[k], x, y)) return { layer: 'vision', k };
     }
-    const order = [this.active, ...PLACE_LAYERS.filter((l) => l !== this.active)].filter((l) => PLACE_LAYERS.includes(l));
+    if (this.active === 'paths' && this.visible.paths) {
+      const f = this.list('features');
+      for (let k = f.length - 1; k >= 0; k--) {
+        if (!this.isNode(f[k])) continue;
+        const [x0, y0, x1, y1] = this.boundsOf('features', k);
+        if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer: 'features', k };
+      }
+    }
+    const a = dataLayer(this.active);
+    const order = [a, ...PLACE_LAYERS.filter((l) => l !== a)].filter((l) => PLACE_LAYERS.includes(l));
     for (const layer of order) {
       const list = this.list(layer);
       for (let k = list.length - 1; k >= 0; k--) {
@@ -297,7 +308,7 @@ class Editor {
     if (mod) return;
     if (e.key === 'Tab') {
       e.preventDefault();
-      const order = [...PLACE_LAYERS, 'vision', 'collision'];
+      const order = [...PLACE_LAYERS, 'paths', 'vision', 'collision'];
       this.pickLayer(order[(order.indexOf(this.active) + (e.shiftKey ? order.length - 1 : 1)) % order.length]);
       return;
     }
@@ -325,8 +336,8 @@ class Editor {
     this.linkFrom = null;
     if (t === 'autozone' || (t === 'poly' && this.active === 'vision')) this.active = 'vision';
     else if (DRAW_TOOLS.has(t)) this.active = 'collision';
-    else if (this.active === 'collision' || (this.active === 'vision' && !ZONE_TOOLS.has(t))) this.active = t === 'link' ? 'features' : 'enemies';
-    if (t === 'link') { this.active = 'features'; this.visible.paths = true; }
+    else if (this.active === 'collision' || (this.active === 'vision' && !ZONE_TOOLS.has(t))) this.active = t === 'link' ? 'paths' : 'enemies';
+    if (t === 'link') { this.active = 'paths'; this.visible.paths = true; }
     if (this.active === 'vision') this.visible.vision = true;
     this.refreshPanel();
   }
@@ -338,6 +349,9 @@ class Editor {
     else if (key === 'vision' && !ZONE_TOOLS.has(this.tool)) this.tool = 'select';
     else if (key !== 'collision' && key !== 'vision' && (DRAW_TOOLS.has(this.tool) || this.tool === 'autozone')) this.tool = 'select';
     if (key === 'vision') this.visible.vision = true;
+    if (key === 'paths') this.visible.paths = true;
+    if (key === 'paths') this.placeSymbol = NODE; // the only thing to place there
+    else if (this.placeSymbol === NODE) this.placeSymbol = null;
     this.poly = null;
     this.refreshPanel();
   }
@@ -357,7 +371,7 @@ class Editor {
       const h = this.hit(x, y);
       this.sel = h;
       if (h) {
-        this.active = h.layer;
+        this.active = h.layer === 'features' && this.isNode(this.list('features')[h.k]) ? 'paths' : h.layer;
         const ent = this.list(h.layer)[h.k];
         this.drag = { kind: 'move', x, y, ex: ent.x, ey: ent.y, before: this.snapshot(), moved: false };
       }
@@ -502,7 +516,7 @@ class Editor {
   }
 
   placeAt(x, y) {
-    const layer = this.active;
+    const layer = dataLayer(this.active);
     const preset = typeof this.placeSymbol === 'object' ? this.placeSymbol : null;
     const sym = preset ? preset.symbol : this.placeSymbol;
     const ent = { symbol: sym, x: round2(x), y: round2(y), ...(preset ? { props: structuredClone(preset.props) } : this.defaultFor(sym)) };
@@ -1039,21 +1053,26 @@ class Editor {
     // layers
     const active = el('div', { class: 'le-layers' });
     VIEW_LAYERS.forEach((l, i) => {
-      const editable = DATA_LAYERS.includes(l.key) || l.key === 'collision';
+      const editable = DATA_LAYERS.includes(l.key) || l.key === 'collision' || l.key === 'paths';
       const hot = l.hot || String(i + 1);
       active.append(el('div', { class: 'le-layer' + (this.active === l.key ? ' on' : '') },
         el('input', { type: 'checkbox', checked: this.visible[l.key], title: `show/hide (${hot})`, onchange: (e) => { this.visible[l.key] = e.target.checked; } }),
         el('span', { class: editable ? 'le-pick' : '', onclick: editable ? () => this.pickLayer(l.key) : null }, `${hot}  ${l.label}`),
-        DATA_LAYERS.includes(l.key) ? el('small', {}, String((L[l.key] || []).length)) : ''));
+        DATA_LAYERS.includes(l.key) || l.key === 'paths' ? el('small', {}, String(this.layerCount(l.key))) : ''));
     });
     p.append(el('h4', {}, 'Layers ', el('small', {}, 'Tab picks the layer to edit')), active);
     // palette
     if (this.tool === 'place') {
-      const layer = PLACE_LAYERS.includes(this.active) ? this.active : 'enemies';
+      const layer = PLACE_LAYERS.includes(this.active) || this.active === 'paths' ? this.active : 'enemies';
       const syms = new Set();
-      for (const x of this.levels) for (const e of x[layer] || []) syms.add(e.symbol);
-      for (const s of EXTRA[layer] || []) if (this.applier.ids[s] !== undefined) syms.add(s);
-      p.append(el('h4', {}, 'Place: ' + layer), el('div', { class: 'le-palette' }, ...[...syms].sort().map((s) => el('button', {
+      if (layer === 'paths') syms.add(NODE);
+      else {
+        for (const x of this.levels) for (const e of x[layer] || []) syms.add(e.symbol);
+        for (const s of EXTRA[layer] || []) if (this.applier.ids[s] !== undefined) syms.add(s);
+        // nodes have their own layer, and vision_mc is part of every level already
+        if (layer === 'features') for (const s of [...syms]) if (s === NODE || /^level assets\/vision\d+$/.test(s)) syms.delete(s);
+      }
+      p.append(el('h4', {}, 'Place: ' + (VIEW_LAYERS.find((l) => l.key === layer) || { label: layer }).label.toLowerCase()), el('div', { class: 'le-palette' }, ...[...syms].sort().map((s) => el('button', {
         class: this.placeSymbol === s ? 'on' : '', onclick: () => { this.placeSymbol = s; this.active = layer; this.refreshPanel(); },
       }, s.split('/').pop())), ...(PRESETS[layer] || []).map((pr) => el('button', {
         class: this.placeSymbol === pr ? 'on' : '', title: 'a ' + pr.symbol.split('/').pop() + ' set up as a ' + pr.label,
@@ -1113,6 +1132,13 @@ class Editor {
     return box;
   }
 
+  layerCount(key) {
+    const f = this.L.features || [];
+    if (key === 'paths') return f.filter((e) => this.isNode(e)).length;
+    if (key === 'features') return f.filter((e) => !this.isNode(e) && e.name !== 'vision_mc').length;
+    return (this.L[key] || []).length;
+  }
+
   nodeRows(k) {
     const e = this.list('features')[k];
     const pinned = e.props && e.props.connections !== undefined;
@@ -1124,8 +1150,21 @@ class Editor {
         this.change(['features.json'], () => { e.color = { multiply: [0, 0, 0, 1], add: [1, 3, 5].map((i) => parseInt(v.slice(i, i + 2), 16)).concat(0) }; });
       } })),
       pinned
-        ? el('div', { class: 'le-row' }, `Links pinned by hand (${[].concat(e.props.connections).length}). `, el('button', { onclick: () => this.unpinLinks(k), title: 'remove the pinned links, so the node links to every node of its colour it can see' }, 'Back to automatic'))
-        : el('div', { class: 'le-tip' }, `Links itself to the ${(this.autoLinks().get(k) || []).length} nodes of its colour it can see (dashed). Use Path links (N) to pin links by hand.`));
+        ? el('div', { class: 'le-row' }, 'Links pinned by hand (solid). ', el('button', { onclick: () => this.unpinLinks(k), title: 'remove the pinned links, so the node links to every node of its colour it can see' }, 'Back to automatic'))
+        : el('div', { class: 'le-tip' }, 'Links itself to the nodes of its colour it can see (dashed).'),
+      el('div', { class: 'le-links' }, ...this.linksOf(k).map((j) => {
+        const t = this.list('features')[j];
+        return el('div', { class: 'le-row' }, `→ ${t.name || 'node #' + (j + 1)} (${Math.round(t.x)}, ${Math.round(t.y)})`,
+          el('button', { title: 'remove this link (from both nodes)', onclick: () => { this.toggleLink(k, j); this.refreshPanel(); } }, '× unlink'));
+      })),
+      el('div', { class: 'le-tip' }, 'To add a link, use Path links (N): click this node, then another.'));
+  }
+
+  // feature indices a node links to: its pinned links, or the ones it makes by line of sight
+  linksOf(k) {
+    const f = this.list('features'), e = f[k];
+    if (e.props && Array.isArray(e.props.connections)) return e.props.connections.filter(isRef).map((c) => f.findIndex((o) => o.name === c.$ref)).filter((j) => j >= 0);
+    return this.autoLinks().get(k) || [];
   }
 
   // the triggers a placement sends, as editable fields
