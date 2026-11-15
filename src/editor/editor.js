@@ -365,15 +365,19 @@ class Editor {
     return this.visible[layer];
   }
 
-  hit(x, y) {
-    if (this.active === 'decor' && this.visible.decor) {
-      const list = this.list('decor');
-      for (let k = list.length - 1; k >= 0; k--) {
-        const [x0, y0, x1, y1] = this.boundsOf('decor', k);
-        if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer: 'decor', k };
-      }
-      return null;
+  hitDecor(x, y) {
+    if (!this.visible.decor) return null;
+    const list = this.list('decor');
+    for (let k = list.length - 1; k >= 0; k--) {
+      const [x0, y0, x1, y1] = this.boundsOf('decor', k);
+      if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer: 'decor', k };
     }
+    return null;
+  }
+
+  // decor first while it's the layer being edited; otherwise placements first, then any shown decor
+  hit(x, y) {
+    if (this.active === 'decor') return this.hitDecor(x, y);
     if (this.active === 'vision' && this.visible.vision) {
       const zones = this.list('vision');
       for (let k = zones.length - 1; k >= 0; k--) if (this.inZone(zones[k], x, y)) return { layer: 'vision', k };
@@ -388,7 +392,7 @@ class Editor {
         if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer, k };
       }
     }
-    return null;
+    return this.hitDecor(x, y);
   }
 
   // ------------------------------------------------------------------ coordinates
