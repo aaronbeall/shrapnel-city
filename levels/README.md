@@ -15,6 +15,7 @@ The folder is named like the level's entry in the `levels` array in `as2/functio
 | `enemies.json` | Enemies, placed inside `enemies_mc` |
 | `doors.json` | Doors and gates, placed on `screen_mc` under the level |
 | `features.json` | Everything else on `screen_mc`: `vision_mc`, `entrance_mc`, `exit_mc`, path nodes |
+| `vision.json` | Vision zones, the clips inside `vision_mc` (see below) |
 | `decor.json` | Decor placements for the art bake. The game doesn't read it |
 
 A missing placement file means an empty list.
@@ -34,7 +35,20 @@ Every placement file is a list of instances, drawn in list order (later ones on 
 - `symbol` is a library name from `source/library`.
 - `x`, `y`, `scale`, `matrix` (for rotation), `name`, `color`, `filters` and `blend` work as in the timeline format.
 - `props` are the instance's variables, set when it loads (they become its `onClipEvent (load)` script). Values are numbers, strings, `true`/`false`, lists and objects, and `{"$ref": "a2"}` for the sibling clip named `a2` (path nodes list their linked nodes this way: `"connections": [{"$ref": "a2"}, {"$ref": "a4"}]`).
-- `script` is used instead of `props` when the load code is more than plain variables, such as a door trigger's `onPickup` function. It's kept as written.
+- `{"$trigger": "door2:open"}` (or a list of names) is a function that sends those triggers, for a pickup's `onPickup` or a box's or enemy's `onDie`: `"props": {"onPickup": {"$trigger": "door2:open"}}`.
+- `script` is used instead of `props` when the load code is more than plain variables, such as the Bridge's battery computers, whose `onDie` also throws shrapnel. It's kept as written.
+
+## Triggers
+
+Triggers are names sent with `trigger("name")` to every clip that registered for them. A door with `"id": "door2"` listens for `door2:open` and `door2:close`. Three things send them: a trigger pad (a pickup with `"type": "trigger", "item": "door2:open"`, sent when the player walks over it), a `$trigger` handler as above, or a load script.
+
+## Path nodes
+
+A node with no `connections` links itself, when the level starts, to every other node of the same colour that it has line of sight to (`as2/pathNode.as`). The colour (`color.add`) is the node's path group, and an enemy follows the group of the node nearest to it unless it sets `pathID`. To pin a node's links by hand, give it `"connections": [{"$ref": "a2"}, ...]` naming other nodes.
+
+## Vision zones
+
+An enemy attacks when it and the player are in the same zone and it can see the player. An enemy that isn't in any zone, or has `autoVision`, makes its own zone from 90 rays when the level starts, so a level works without any zones. Each zone in `vision.json` is `{x, y, scale|matrix, color, d}` with `d` a path (`M`, `L`, `Q`, `Z`, absolute) in the zone's own coordinates, or `{x, y, color, points: [[x, y], ...]}` for a plain polygon. The colour only tells zones apart in the editor.
 
 ## Levels 00 to 03
 
@@ -44,10 +58,13 @@ These came out of the original `screen_mc` and `level assets/*` symbols unchange
 
 Press backtick (`` ` ``) in the game, or open the page with `?edit` (`?edit=3` for the Bridge). The game pauses and the editor shows the level as it starts, drawn by the game itself, with a panel on the right. Backtick again (or **Play**) goes back to the game, restarted from the edited level.
 
-- **Layers:** number keys 1 to 9 show and hide background art, collision, vision zones, enemies, boxes, pickups, doors, entrance/exit/player and path nodes. Tab picks the layer that Select and Place work on.
+- **Layers:** number keys 1 to 9 show and hide background art, collision, vision zones, enemies, boxes, pickups, doors, entrance/exit/player and path nodes. Tab picks the layer that the tools work on.
+- **Art preview (A):** fills the collision map with the Bridge kit's floor, wall and chasm textures (`tools/art/parts`), with rough wall sides, bevels and chasm lips, and redraws it as you edit collision. It's a guide, not the bake.
 - **Select (V):** click to select, drag to move (Shift snaps to the grid), R rotates by 15°, Delete removes, Ctrl+D duplicates. The panel edits position, rotation, scale, name and the load variables (`props`) as JSON. Instances with a load `script` show it read-only.
-- **Place (P):** pick a symbol from the palette (everything already used in a level for that layer, plus the recovered enemies), then click. New instances copy the variables of an existing one of the same symbol; doors get the next free `id`.
-- **Path links (N):** click a path node, then another, to link or unlink them.
+- **Place (P):** pick a symbol from the palette (everything already used in a level for that layer, plus the recovered enemies, plus a ready-made trigger pad), then click. New instances copy the variables of an existing one of the same symbol; doors get the next free `id`.
+- **Triggers:** a selected pickup, box or enemy has a field for the triggers it sends when picked up, destroyed or killed, and a trigger pad for the one it sends; both suggest the level's door triggers. Dashed lines show which door each one opens (green) or closes (red).
+- **Path nodes:** a new node joins the selected node's path group (or the level's first) and links itself by line of sight; these links show dashed, computed the same way as the game. The panel sets the group colour. **Path links (N):** click a node, then another, to pin links by hand (solid); **Back to automatic** in the panel removes them.
+- **Vision zones:** pick the Vision layer (Tab). Select moves, rotates and deletes zones and drags a polygon zone's corners; zones with curves get an **Edit corners** button that turns them into a polygon. Polygon (G) draws a zone, and Auto zone (Z) makes one from the spot you click, with the same rays the game uses.
 - **Collision:** Rectangle (B) snaps to the grid (Alt for free); Polygon (G) snaps each side to an angle step (Shift for free) and closes on the first corner or Enter; Pencil (D) and Eraser (E) paint single pixels or bigger brushes (`[` `]`); Fill (F) flood-fills. W, C and O pick wall, chasm or open floor. Everything is drawn aliased in exactly the three collision colours. Scroll to zoom (pixel grid from 1200%), drag with Space, the right or the middle button to pan, 0 to fit.
 - **Undo/redo:** Ctrl+Z, Ctrl+Shift+Z.
 - **Balance:** enemy, box and pickup counts, health on the map and ammo per weapon, counting box and enemy drops at their probability.

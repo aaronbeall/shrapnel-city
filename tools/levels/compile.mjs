@@ -3,7 +3,7 @@
 // (tools/levels/levels.mjs) and the in-game editor (src/editor/) compile levels the same way.
 //
 // A level is {index, folder, settings, briefing, boxes, powerups, enemies, doors, features,
-// decor, size: {w, h}, backgroundSize: {w, h}}; see levels/README.md for the files.
+// vision, decor, size: {w, h}, backgroundSize: {w, h}}; see levels/README.md for the files.
 
 export const LAYERS = ['boxes', 'powerups', 'enemies'];
 
@@ -11,7 +11,9 @@ export const LAYERS = ['boxes', 'powerups', 'enemies'];
 export const DEPTH = { background: 3, doors: 10, level: 200, features: 210, boxes: 1000, powerups: 1001, enemies: 1002, fade: 3281 };
 
 // --- AS2 literals -------------------------------------------------------------------
-// {"$ref": "a2"} is a reference to the sibling clip named a2 (_parent.a2), e.g. path node links
+// {"$ref": "a2"} is a reference to the sibling clip named a2 (_parent.a2), e.g. path node links.
+// {"$trigger": "door2:open"} (or a list of names) is a function that sends those triggers,
+// e.g. "onPickup": {"$trigger": "door2:open"} on a pickup or "onDie" on a box or enemy.
 export function asLiteral(v) {
   if (typeof v === 'string') return JSON.stringify(v);
   if (typeof v === 'number' || typeof v === 'boolean') {
@@ -24,6 +26,7 @@ export function asLiteral(v) {
       if (!/^[A-Za-z_]\w*$/.test(v.$ref)) throw new Error('props: bad $ref ' + JSON.stringify(v.$ref));
       return '_parent.' + v.$ref;
     }
+    if (isTrigger(v)) return 'function () { ' + triggerNames(v).map((n) => `trigger(${JSON.stringify(n)}); `).join('') + '}';
     return '{' + Object.entries(v).map(([k, x]) => {
       if (!/^[A-Za-z_]\w*$/.test(k)) throw new Error('props: bad key ' + JSON.stringify(k));
       return k + ':' + asLiteral(x);
@@ -33,6 +36,13 @@ export function asLiteral(v) {
 }
 
 export const isRef = (v) => v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 1 && typeof v.$ref === 'string';
+
+export const isTrigger = (v) => v && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 1 && '$trigger' in v;
+export function triggerNames(v) {
+  const n = [].concat(v.$trigger);
+  if (!n.length || n.some((x) => typeof x !== 'string' || !x)) throw new Error('props: $trigger needs a trigger name or a list of them');
+  return n;
+}
 
 export function propsScript(props) {
   return ['onClipEvent (load) {', ...Object.entries(props).map(([k, v]) => {
@@ -68,6 +78,45 @@ export function bitmapSymbols(base, { w, h }) {
   ];
 }
 
+// --- vision zones -------------------------------------------------------------------
+// A zone is {x, y, scale|matrix, color, d} with d an SVG-style path (M/L/Q/Z, absolute) in
+// the zone's own coordinates, or {x, y, ..., points: [[x, y], ...]} for a plain polygon.
+// Each becomes a clip inside vision_mc, so the game sees the same structure as the original.
+export function zonePath(z) {
+  if (z.points) {
+    if (!Array.isArray(z.points) || z.points.length < 3) throw new Error('a vision zone needs at least 3 points');
+    return 'M ' + z.points.map(([x, y]) => `${num(x)} ${num(y)}`).join(' L ') + ' Z';
+  }
+  if (typeof z.d !== 'string') throw new Error('a vision zone needs "d" or "points"');
+  return z.d;
+}
+const num = (v) => { if (!isFinite(v)) throw new Error('vision: numbers must be finite'); return String(Math.round(v * 100) / 100); };
+
+function pathBounds(d) {
+  const n = d.match(/-?[\d.]+(e-?\d+)?/g).map(Number);
+  const xs = n.filter((_, i) => i % 2 === 0), ys = n.filter((_, i) => i % 2 === 1);
+  return [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+}
+
+export function visionSymbols(L) {
+  const i = L.index, base = `level assets/vision${i}`;
+  const out = [], changes = [];
+  (L.vision || []).forEach((z, k) => {
+    const where = `levels/${L.folder}/vision.json[${k}]`;
+    let d;
+    try { d = zonePath(z); } catch (e) { throw new Error(`${where}: ${e.message}`); }
+    const name = `${base}-${k + 1}`;
+    out.push([`${name}/shape 1`, { kind: 'shape', bounds: pathBounds(d), fills: [{ type: 'solid', color: z.color || '#ff0000' }], lines: [], paths: [{ fill: 0, d }] }]);
+    out.push([name, { kind: 'sprite', symbol: { type: 'movie clip' }, frames: 1, timeline: [{ frame: 1, changes: [{ place: `${name}/shape 1`, depth: 1, x: 0, y: 0 }] }] }]);
+    const c = { place: name, depth: 2 * k + 1, x: z.x || 0, y: z.y || 0 };
+    if (z.scale !== undefined) c.scale = z.scale;
+    if (z.matrix !== undefined) c.matrix = z.matrix;
+    changes.push(c);
+  });
+  out.push([base, { kind: 'sprite', symbol: { type: 'movie clip' }, frames: 1, timeline: changes.length ? [{ frame: 1, changes }] : [] }]);
+  return out;
+}
+
 export function container(list, where) {
   return { kind: 'sprite', symbol: { type: 'movie clip' }, frames: 1, timeline: [{ frame: 1, changes: list.map((inst, k) => place(inst, k + 1, `${where}[${k}]`)) }] };
 }
@@ -79,6 +128,7 @@ export function levelSymbols(L) {
   const i = L.index;
   const out = [...bitmapSymbols(`level assets/level${i}`, L.size), ...bitmapSymbols(`level assets/background${i}`, L.backgroundSize || L.size)];
   for (const layer of LAYERS) out.push([`level assets/${layer}${i}`, container(L[layer] || [], `levels/${L.folder}/${layer}.json`)]);
+  out.push(...visionSymbols(L));
   return out;
 }
 

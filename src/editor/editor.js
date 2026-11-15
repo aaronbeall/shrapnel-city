@@ -6,11 +6,13 @@
 // page is served by `npm run edit`, and downloads the files otherwise.
 import { LevelApplier, restartLevel } from './apply.js';
 import { CollisionMap, COLOURS } from './collision.js';
-import { DEPTH, LAYERS, isRef } from '../../tools/levels/compile.mjs';
+import { renderPreview } from './preview.js';
+import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath } from '../../tools/levels/compile.mjs';
 import { pretty } from '../../tools/flash-source/format.mjs';
 import { mul } from '../flash/geom.js';
 
 const PLACE_LAYERS = ['enemies', 'boxes', 'powerups', 'doors', 'features'];
+const DATA_LAYERS = [...PLACE_LAYERS, 'vision'];
 const VIEW_LAYERS = [
   { key: 'art', label: 'Background art' },
   { key: 'collision', label: 'Collision' },
@@ -21,7 +23,17 @@ const VIEW_LAYERS = [
   { key: 'doors', label: 'Doors' },
   { key: 'features', label: 'Entrance, exit, player' },
   { key: 'paths', label: 'Path nodes' },
+  { key: 'preview', label: 'Art preview', hot: 'A' },
 ];
+// what each kind of placement does when it sends triggers
+const TRIGGER_EVENTS = { powerups: ['onPickup', 'when picked up'], boxes: ['onDie', 'when destroyed'], enemies: ['onDie', 'when killed'] };
+// ready-made placements offered in the palette beside the symbols
+const PRESETS = {
+  powerups: [{ label: 'trigger pad', symbol: 'game objects/powerup', props: { type: 'trigger', item: '' } }],
+};
+const ZONE_COLOURS = ['#ff0000', '#990000', '#cc9966', '#cc6633', '#9999cc', '#9966ff', '#ccff33', '#cc6699', '#cc9933', '#cccc66', '#cc3366'];
+const AUTO_VISION_ANGLES = 90, LOS_SAMPLE_SIZE = 15; // as2/enemyTurret.as
+const NODE_LOS_SAMPLE = 10; // as2/pathNode.as
 // extra symbols offered in the place palette besides those already used in a level
 const EXTRA = {
   enemies: ['enemy assets/enemy tank', 'enemy assets/enemy drone', 'enemy assets/enemy missile launcher'],
@@ -35,14 +47,16 @@ const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as
 const TOOLS = [
   { key: 'select', label: 'Select', hot: 'V', tip: 'click to select, drag to move (Shift snaps to the grid); R rotates, Delete removes, Ctrl+D duplicates' },
   { key: 'place', label: 'Place', hot: 'P', tip: 'pick a symbol below, then click to drop one' },
-  { key: 'link', label: 'Path links', hot: 'N', tip: 'click a path node, then another to link or unlink them' },
+  { key: 'link', label: 'Path links', hot: 'N', tip: 'nodes link to every node of their colour they can see (dashed). Click a node, then another, to pin links by hand instead' },
   { key: 'rect', label: 'Rectangle', hot: 'B', tip: 'drag a box; snaps to the grid (hold Alt for free)' },
-  { key: 'poly', label: 'Polygon', hot: 'G', tip: 'click corners, angles snap (hold Shift for free); click the first corner or Enter to close, Esc cancels' },
+  { key: 'poly', label: 'Polygon', hot: 'G', tip: 'click corners, angles snap (hold Shift for free); click the first corner or Enter to close, Esc cancels. On the vision layer it draws a zone' },
+  { key: 'autozone', label: 'Auto zone', hot: 'Z', tip: 'click a spot to make a vision zone of what can be seen from there, the way the game does for an enemy outside every zone' },
   { key: 'pencil', label: 'Pencil', hot: 'D', tip: 'paint pixels; [ and ] change the size' },
   { key: 'eraser', label: 'Eraser', hot: 'E', tip: 'paint open floor; [ and ] change the size' },
   { key: 'fill', label: 'Fill', hot: 'F', tip: 'flood-fill one colour region' },
 ];
 const DRAW_TOOLS = new Set(['rect', 'poly', 'pencil', 'eraser', 'fill']);
+const ZONE_TOOLS = new Set(['select', 'poly', 'autozone']);
 
 let editor = null;
 
@@ -69,7 +83,9 @@ class Editor {
     this.index = 0;
     this.tool = 'select';
     this.active = 'enemies'; // layer that select/place work on
-    this.visible = Object.fromEntries(VIEW_LAYERS.map((l) => [l.key, l.key !== 'vision']));
+    this.visible = Object.fromEntries(VIEW_LAYERS.map((l) => [l.key, l.key !== 'vision' && l.key !== 'preview']));
+    this.mapVersion = 0;     // bumps when a collision map or the live level changes
+    this.preview = null;     // {index, version, canvas} art preview
     this.colour = 'wall';
     this.brush = 1;
     this.grid = 16;
@@ -155,7 +171,7 @@ class Editor {
     this.refreshSave();
   }
 
-  snapshot() { return JSON.stringify({ ...Object.fromEntries(PLACE_LAYERS.map((l) => [l, this.L[l] || []])), settings: this.L.settings }); }
+  snapshot() { return JSON.stringify({ ...Object.fromEntries(DATA_LAYERS.map((l) => [l, this.L[l] || []])), settings: this.L.settings }); }
 
   // run a data change with undo, then rebuild the level
   change(files, fn, { reload = true } = {}) {
@@ -172,7 +188,7 @@ class Editor {
 
   restoreData(json) {
     const o = JSON.parse(json);
-    for (const k of PLACE_LAYERS) this.L[k] = o[k];
+    for (const k of DATA_LAYERS) this.L[k] = o[k];
     this.L.settings = o.settings;
   }
 
@@ -200,6 +216,7 @@ class Editor {
     this.markDirty('collision.png');
     this.stale = true;
     this.needsReload = true;
+    this.mapVersion++;
     this.refreshPanel();
   }
 
@@ -211,6 +228,7 @@ class Editor {
     if (LAYERS.includes(layer)) c = s[layer + '_mc'] && s[layer + '_mc'].byDepth.get(T(k + 1));
     else if (layer === 'doors') c = s.byDepth.get(T(DEPTH.doors + k));
     else if (layer === 'features') c = s.byDepth.get(T(DEPTH.features + k));
+    else if (layer === 'vision') c = s.vision_mc && s.vision_mc.byDepth.get(T(2 * k + 1));
     return c && !c.removed ? c : null;
   }
 
@@ -229,12 +247,17 @@ class Editor {
 
   isNode(e) { return e && e.symbol === NODE; }
   layerShown(layer, e) {
+    if (layer === 'vision') return this.visible.vision && this.active === 'vision';
     if (layer === 'features') return this.isNode(e) ? this.visible.paths : (e.name === 'vision_mc' ? false : this.visible.features);
     return this.visible[layer];
   }
 
   hit(x, y) {
-    const order = [this.active, ...PLACE_LAYERS.filter((l) => l !== this.active)];
+    if (this.active === 'vision' && this.visible.vision) {
+      const zones = this.list('vision');
+      for (let k = zones.length - 1; k >= 0; k--) if (this.inZone(zones[k], x, y)) return { layer: 'vision', k };
+    }
+    const order = [this.active, ...PLACE_LAYERS.filter((l) => l !== this.active)].filter((l) => PLACE_LAYERS.includes(l));
     for (const layer of order) {
       const list = this.list(layer);
       for (let k = list.length - 1; k >= 0; k--) {
@@ -274,11 +297,8 @@ class Editor {
     if (mod) return;
     if (e.key === 'Tab') {
       e.preventDefault();
-      const order = [...PLACE_LAYERS, 'collision'];
-      this.active = order[(order.indexOf(this.active) + (e.shiftKey ? order.length - 1 : 1)) % order.length];
-      if (this.active === 'collision' && !DRAW_TOOLS.has(this.tool)) this.tool = 'pencil';
-      if (this.active !== 'collision' && DRAW_TOOLS.has(this.tool)) this.tool = 'select';
-      this.refreshPanel();
+      const order = [...PLACE_LAYERS, 'vision', 'collision'];
+      this.pickLayer(order[(order.indexOf(this.active) + (e.shiftKey ? order.length - 1 : 1)) % order.length]);
       return;
     }
     if (/^[1-9]$/.test(e.key)) { const l = VIEW_LAYERS[+e.key - 1]; if (l) { this.visible[l.key] = !this.visible[l.key]; this.refreshPanel(); } return; }
@@ -295,6 +315,7 @@ class Editor {
     if (k === 'c') { this.colour = 'chasm'; this.refreshPanel(); return; }
     if (k === 'o') { this.colour = 'open'; this.refreshPanel(); return; }
     if (k === '0') { this.fitView(); return; }
+    if (k === 'a') { this.visible.preview = !this.visible.preview; this.refreshPanel(); return; }
     if (e.key === ' ') { this.spaceDown = true; e.preventDefault(); }
   }
 
@@ -302,9 +323,22 @@ class Editor {
     this.tool = t;
     this.poly = null;
     this.linkFrom = null;
-    if (DRAW_TOOLS.has(t)) this.active = 'collision';
-    else if (this.active === 'collision') this.active = t === 'link' ? 'features' : 'enemies';
+    if (t === 'autozone' || (t === 'poly' && this.active === 'vision')) this.active = 'vision';
+    else if (DRAW_TOOLS.has(t)) this.active = 'collision';
+    else if (this.active === 'collision' || (this.active === 'vision' && !ZONE_TOOLS.has(t))) this.active = t === 'link' ? 'features' : 'enemies';
     if (t === 'link') { this.active = 'features'; this.visible.paths = true; }
+    if (this.active === 'vision') this.visible.vision = true;
+    this.refreshPanel();
+  }
+
+  // make a layer the one tools work on, switching to a tool that works there
+  pickLayer(key) {
+    this.active = key;
+    if (key === 'collision' && !DRAW_TOOLS.has(this.tool)) this.tool = 'pencil';
+    else if (key === 'vision' && !ZONE_TOOLS.has(this.tool)) this.tool = 'select';
+    else if (key !== 'collision' && key !== 'vision' && (DRAW_TOOLS.has(this.tool) || this.tool === 'autozone')) this.tool = 'select';
+    if (key === 'vision') this.visible.vision = true;
+    this.poly = null;
     this.refreshPanel();
   }
 
@@ -318,6 +352,8 @@ class Editor {
     }
     const t = this.tool;
     if (t === 'select') {
+      const v = this.vertexAt(sx, sy);
+      if (v) { this.drag = { kind: 'vertex', k: v.k, i: v.i, before: this.snapshot(), moved: false }; return; }
       const h = this.hit(x, y);
       this.sel = h;
       if (h) {
@@ -336,6 +372,8 @@ class Editor {
       if (this.linkFrom == null || this.linkFrom === h.k) { this.linkFrom = h.k; this.sel = h; this.refreshPanel(); return; }
       this.toggleLink(this.linkFrom, h.k);
       this.linkFrom = h.k;
+    } else if (t === 'autozone') {
+      this.autoZone(x, y);
     } else if (t === 'rect') {
       const [px, py] = this.snap(x, y, e.altKey);
       this.drag = { kind: 'rect', x0: px, y0: py, x1: px, y1: py };
@@ -377,6 +415,14 @@ class Editor {
       d.moved = true;
       const c = this.clipFor(this.sel.layer, this.sel.k);
       if (c) { c._x = ent.x; c._y = ent.y; }
+    } else if (d.kind === 'vertex') {
+      const z = this.list('vision')[d.k];
+      let [wx, wy] = e.shiftKey ? this.snap(x, y, false) : [x, y];
+      const [a, b, c, dd, tx, ty] = zoneMatrix(z);
+      const det = a * dd - b * c || 1;
+      const lx = (dd * (wx - tx) - c * (wy - ty)) / det, ly = (-b * (wx - tx) + a * (wy - ty)) / det;
+      z.points[d.i] = [round2(lx), round2(ly)];
+      d.moved = true;
     } else if (d.kind === 'rect') { [d.x1, d.y1] = this.snap(x, y, e.altKey); }
     else if (d.kind === 'paint') {
       this.map.line(d.lx, d.ly, x, y, this.brush, d.colour, d.box);
@@ -389,7 +435,12 @@ class Editor {
     const d = this.drag;
     this.drag = null;
     if (!d) return;
-    if (d.kind === 'move' && d.moved) {
+    if (d.kind === 'vertex' && d.moved) {
+      this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files: ['vision.json'] });
+      this.markDirty('vision.json');
+      this.reload();
+      this.refreshPanel();
+    } else if (d.kind === 'move' && d.moved) {
       const file = this.sel.layer + '.json';
       this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files: [file] });
       this.markDirty(file);
@@ -426,6 +477,7 @@ class Editor {
     const p = this.poly;
     this.poly = null;
     if (!p || p.length < 3) return;
+    if (this.active === 'vision') { this.addZone(p); return; }
     const u = this.map.polygon(p, this.colour);
     if (u) { this.pushUndo({ type: 'pixels', level: this.index, ...u }); this.collisionChanged(); }
   }
@@ -451,8 +503,13 @@ class Editor {
 
   placeAt(x, y) {
     const layer = this.active;
-    const sym = this.placeSymbol;
-    const ent = { symbol: sym, x: round2(x), y: round2(y), ...this.defaultFor(sym) };
+    const preset = typeof this.placeSymbol === 'object' ? this.placeSymbol : null;
+    const sym = preset ? preset.symbol : this.placeSymbol;
+    const ent = { symbol: sym, x: round2(x), y: round2(y), ...(preset ? { props: structuredClone(preset.props) } : this.defaultFor(sym)) };
+    if (preset && ent.props.type === 'trigger' && !ent.props.item) {
+      const door = this.list('doors').find((d) => d.props && d.props.id);
+      ent.props.item = door ? door.props.id + ':open' : 'myTrigger';
+    }
     if (layer === 'doors' && ent.props && 'id' in ent.props) {
       let n = 1;
       const ids = new Set(this.list('doors').map((d) => d.props && d.props.id));
@@ -460,11 +517,14 @@ class Editor {
       ent.props.id = 'door' + n;
     }
     if (sym === NODE) {
-      const from = this.sel && this.isNode(this.list('features')[this.sel.k]) ? this.list('features')[this.sel.k] : null;
-      if (from && from.color) ent.color = structuredClone(from.color);
-      const prefix = from && from.name ? from.name.replace(/\d+$/, '') : 'n';
-      ent.name = this.uniqueName(prefix);
-      ent.props = { connections: [] };
+      // a new node joins the selected node's path group (its colour), or the level's first one,
+      // and links itself by line of sight when the level starts (no "connections")
+      const nodes = this.list('features').filter((n) => this.isNode(n));
+      const sel = this.sel && this.sel.layer === 'features' && this.isNode(this.list('features')[this.sel.k]) ? this.list('features')[this.sel.k] : null;
+      const from = sel || nodes[0];
+      ent.color = from && from.color ? structuredClone(from.color) : { multiply: [0, 0, 0, 1], add: [255, 0, 0, 0] };
+      delete ent.props;
+      delete ent.name;
     }
     if (sym.endsWith('entrance_mc')) ent.name = 'entrance_mc';
     if (sym.endsWith('exit_mc')) ent.name = 'exit_mc';
@@ -478,7 +538,7 @@ class Editor {
     const { layer, k } = this.sel;
     const ent = structuredClone(this.list(layer)[k]);
     ent.x = round2(ent.x + (this.grid || 16)); ent.y = round2(ent.y + (this.grid || 16));
-    if (ent.name && ent.symbol === NODE) { ent.name = this.uniqueName(ent.name.replace(/\d+$/, '')); ent.props = { connections: [] }; }
+    if (layer === 'features' && ent.symbol === NODE) { delete ent.name; delete ent.props; } // the copy links itself by line of sight
     else if (ent.name) delete ent.name;
     if (layer === 'doors' && ent.props && ent.props.id) {
       let n = 1;
@@ -516,14 +576,17 @@ class Editor {
     const list = this.list('features');
     const A = list[a], B = list[b];
     const nameOf = (e) => e.name || (e.name = this.uniqueName('n'));
+    const auto = this.autoLinks();
     this.change(['features.json'], () => {
       const na = nameOf(A), nb = nameOf(B);
-      const links = (e) => {
+      // pinning a node's links starts from the ones it would make by itself
+      const links = (e, k) => {
         if (e.script) { this.status('This node has a script, so its links can\'t be edited here.', true); return null; }
         e.props ||= {};
-        return (e.props.connections ||= []);
+        if (!Array.isArray(e.props.connections)) e.props.connections = (auto.get(k) || []).map((j) => ({ $ref: nameOf(list[j]) }));
+        return e.props.connections;
       };
-      const la = links(A), lb = links(B);
+      const la = links(A, a), lb = links(B, b);
       if (!la || !lb) return;
       const has = la.some((c) => isRef(c) && c.$ref === nb);
       if (has) {
@@ -534,6 +597,125 @@ class Editor {
         if (!lb.some((c) => isRef(c) && c.$ref === na)) lb.push({ $ref: na });
       }
     });
+  }
+
+  unpinLinks(k) {
+    const e = this.list('features')[k];
+    this.change(['features.json'], () => {
+      if (e.props) delete e.props.connections;
+      if (e.props && !Object.keys(e.props).length) delete e.props;
+    });
+  }
+
+  // ------------------------------------------------------------------ path nodes
+  // is (x, y) a wall for line of sight? Like wallHitTest: only pure black, and off the map
+  isWall(x, y) {
+    const m = this.map;
+    x = Math.floor(x); y = Math.floor(y);
+    if (x < 0 || y < 0 || x >= m.w || y >= m.h) return true;
+    const d = m.data.data, i = (y * m.w + x) * 4;
+    return d[i] === 0 && d[i + 1] === 0 && d[i + 2] === 0;
+  }
+
+  // as2/functionsGame.as lineOfSight
+  lineOfSight(a, b, rate) {
+    let x = a.x, y = a.y;
+    const xv = x - b.x, yv = y - b.y;
+    let s = Math.floor(Math.hypot(xv, yv) / rate);
+    const xs = xv / s, ys = yv / s;
+    while (s-- > 0) {
+      if (this.isWall(x, y)) return false;
+      x -= xs; y -= ys;
+    }
+    return true;
+  }
+
+  // links each node without "connections" makes when the level starts (as2/pathNode.as):
+  // every other node of its colour in line of sight. Map of feature index -> [feature index]
+  autoLinks() {
+    const feats = this.list('features');
+    const nodes = feats.map((e, k) => [e, k]).filter(([e]) => this.isNode(e));
+    const key = this.index + ':' + this.mapVersion + ':' + JSON.stringify(nodes.map(([e]) => [e.x, e.y, e.color, e.props && Array.isArray(e.props.connections), !!e.script]));
+    if (this._auto && this._auto.key === key) return this._auto.links;
+    const links = new Map();
+    for (const [e, k] of nodes) {
+      if ((e.props && e.props.connections !== undefined) || e.script) continue;
+      const g = nodeGroup(e);
+      links.set(k, nodes.filter(([o, j]) => j !== k && nodeGroup(o) === g && this.lineOfSight(e, o, NODE_LOS_SAMPLE)).map(([, j]) => j));
+    }
+    this._auto = { key, links };
+    return links;
+  }
+
+  // ------------------------------------------------------------------ vision zones
+  inZone(z, x, y) {
+    const [a, b, c, d, tx, ty] = zoneMatrix(z);
+    const det = a * d - b * c;
+    if (!det) return false;
+    const lx = (d * (x - tx) - c * (y - ty)) / det, ly = (-b * (x - tx) + a * (y - ty)) / det;
+    try { return this.hitCtx.isPointInPath(zonePath2D(z), lx, ly); } catch { return false; }
+  }
+
+  addZone(pts, at) {
+    const cx = at ? at[0] : pts.reduce((a, p) => a + p[0], 0) / pts.length;
+    const cy = at ? at[1] : pts.reduce((a, p) => a + p[1], 0) / pts.length;
+    const zones = this.list('vision');
+    const used = new Set(zones.map((z) => z.color));
+    const color = ZONE_COLOURS.find((c) => !used.has(c)) || ZONE_COLOURS[zones.length % ZONE_COLOURS.length];
+    const z = { x: round2(cx), y: round2(cy), color, points: pts.map(([x, y]) => [round2(x - round2(cx)), round2(y - round2(cy))]) };
+    this.change(['vision.json'], () => zones.push(z));
+    this.sel = { layer: 'vision', k: zones.length - 1 };
+    this.refreshPanel();
+  }
+
+  // as2/enemyTurret.as makeVision: rays every 4 degrees until they hit a wall
+  autoZone(x, y) {
+    if (this.isWall(x, y)) { this.status('Click on open floor to make a zone from there.', true); return; }
+    const pts = [];
+    for (let i = AUTO_VISION_ANGLES - 1; i >= 0; i--) {
+      const a = (i / AUTO_VISION_ANGLES) * 2 * Math.PI;
+      const vx = Math.cos(a) * LOS_SAMPLE_SIZE, vy = Math.sin(a) * LOS_SAMPLE_SIZE;
+      let px = x, py = y;
+      do { px += vx; py += vy; } while (!this.isWall(px, py));
+      pts.push([px, py]);
+    }
+    this.addZone(pts, [x, y]);
+  }
+
+  // a zone's corner under the mouse, for dragging
+  vertexAt(sx, sy) {
+    if (!this.sel || this.sel.layer !== 'vision') return null;
+    const z = this.list('vision')[this.sel.k];
+    if (!z || !z.points) return null;
+    const M = zoneMatrix(z), v = this.view;
+    for (let i = z.points.length - 1; i >= 0; i--) {
+      const [x, y] = apply(M, z.points[i]);
+      if (Math.hypot(x * v.z + v.ox - sx, y * v.z + v.oy - sy) < 7) return { k: this.sel.k, i };
+    }
+    return null;
+  }
+
+  zoneToPolygon(k) {
+    const z = this.list('vision')[k];
+    this.change(['vision.json'], () => {
+      z.points = flattenPath(z.d);
+      delete z.d;
+      const { color, points, ...rest } = z;
+      for (const key of Object.keys(z)) delete z[key];
+      Object.assign(z, rest, { color, points });
+    });
+  }
+
+  // ------------------------------------------------------------------ triggers
+  // trigger names the level uses: door ids, trigger pads, sent and received triggers
+  knownTriggers() {
+    const out = new Set();
+    for (const d of this.list('doors')) if (d.props && d.props.id) { out.add(d.props.id + ':open'); out.add(d.props.id + ':close'); }
+    for (const l of PLACE_LAYERS) for (const e of this.list(l)) {
+      for (const n of sentTriggers(e)) out.add(n);
+      for (const m of [].concat(e.script || []).join('\n').matchAll(/registerTrigger\(\s*this\s*,\s*["']([^"']+)["']/g)) out.add(m[1]);
+    }
+    return [...out].sort();
   }
 
   // ------------------------------------------------------------------ save
@@ -601,13 +783,15 @@ class Editor {
     ctx.setTransform(...M);
     ctx.fillStyle = '#152B2B';
     ctx.fillRect(0, 0, w, h);
+    const preview = this.visible.preview && this.artPreview();
+    if (preview) { ctx.imageSmoothingEnabled = false; ctx.drawImage(preview, 0, 0); }
 
     // the game scene, with layers hidden as asked
     const s = this.screen;
     if (s) {
       const hide = [];
       const set = (c, vis) => { if (c && c.__visible !== vis) { hide.push([c, c.__visible]); c.__visible = vis; } };
-      set(s.backgroundContainer_mc, this.visible.art);
+      set(s.backgroundContainer_mc, this.visible.art && !preview);
       for (const l of LAYERS) set(s[l + '_mc'], this.visible[l]);
       for (let k = 0; k < (this.L.doors || []).length; k++) set(s.byDepth.get(T(DEPTH.doors + k)), this.visible.doors);
       (this.L.features || []).forEach((e, k) => {
@@ -667,10 +851,45 @@ class Editor {
     ctx.strokeStyle = 'rgba(120,255,255,0.5)';
     ctx.lineWidth = px;
     ctx.strokeRect(0, 0, w, h);
-    // path nodes and links
+    // vision zone outlines and corners while editing them
+    if (this.visible.vision && this.active === 'vision') {
+      this.list('vision').forEach((z, k) => {
+        const sel = this.sel && this.sel.layer === 'vision' && this.sel.k === k;
+        ctx.save();
+        ctx.transform(...zoneMatrix(z));
+        ctx.strokeStyle = sel ? '#ffee44' : 'rgba(255,255,255,0.45)';
+        ctx.lineWidth = (sel ? 2 : 1) * px / Math.max(1e-6, Math.sqrt(Math.abs(det(zoneMatrix(z)))));
+        try { ctx.stroke(zonePath2D(z)); } catch { /* bad path */ }
+        ctx.restore();
+        if (sel && z.points) {
+          ctx.fillStyle = '#ffee44';
+          for (const p of z.points) { const [x, y] = apply(zoneMatrix(z), p); ctx.fillRect(x - 3 * px, y - 3 * px, 6 * px, 6 * px); }
+        }
+      });
+    }
+    // which triggers open and close which doors
+    if (this.visible.doors) {
+      const doors = new Map(this.list('doors').filter((d) => d.props && d.props.id).map((d) => [d.props.id, d]));
+      ctx.lineWidth = 1.5 * px;
+      ctx.setLineDash([6 * px, 4 * px]);
+      for (const l of ['powerups', 'boxes', 'enemies']) {
+        if (!this.visible[l]) continue;
+        for (const e of this.list(l)) for (const n of sentTriggers(e)) {
+          const m = /^(.+):(open|close)$/.exec(n);
+          const d = m && doors.get(m[1]);
+          if (!d) continue;
+          ctx.strokeStyle = m[2] === 'open' ? 'rgba(120,255,140,0.9)' : 'rgba(255,120,120,0.9)';
+          ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(d.x, d.y); ctx.stroke();
+          ctx.beginPath(); ctx.arc(d.x, d.y, 4 * px, 0, Math.PI * 2); ctx.stroke();
+        }
+      }
+      ctx.setLineDash([]);
+    }
+    // path nodes and links: pinned links solid, automatic (line of sight) links dashed
     if (this.visible.paths) {
       const feats = this.L.features || [];
       const byName = new Map(feats.filter((e) => e.name).map((e) => [e.name, e]));
+      const auto = this.autoLinks();
       feats.forEach((e, k) => {
         if (!this.isNode(e)) return;
         const col = nodeColour(e);
@@ -679,6 +898,10 @@ class Editor {
           const t = isRef(c) && byName.get(c.$ref);
           if (t) { ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(t.x, t.y); ctx.stroke(); }
         }
+        ctx.lineWidth = 1.5 * px;
+        ctx.setLineDash([5 * px, 4 * px]);
+        for (const j of auto.get(k) || []) { const t = feats[j]; ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(t.x, t.y); ctx.stroke(); }
+        ctx.setLineDash([]);
         ctx.fillStyle = col;
         ctx.beginPath(); ctx.arc(e.x, e.y, 5 * px, 0, Math.PI * 2); ctx.fill();
         if (this.linkFrom === k) { ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(e.x, e.y, 9 * px, 0, Math.PI * 2); ctx.stroke(); }
@@ -731,12 +954,26 @@ class Editor {
 
   hint(t) { this._hint = t; }
 
+  // the art preview canvas for this level, rebuilt in the background after collision edits
+  artPreview() {
+    const p = this.preview, want = this.index + ':' + this.mapVersion;
+    if ((!p || p.key !== want) && !this.previewBusy) {
+      this.previewBusy = true;
+      const map = this.map;
+      setTimeout(() => renderPreview(map).then((canvas) => { this.preview = { key: want, canvas }; })
+        .catch((e) => { this.status('Art preview: ' + e.message, true); this.visible.preview = false; })
+        .finally(() => { this.previewBusy = false; }), p ? 150 : 0);
+    }
+    return p && p.key.split(':')[0] === String(this.index) ? p.canvas : null;
+  }
+
   // ------------------------------------------------------------------ DOM
   buildDom() {
     const root = this.root = el('div', { id: 'level-editor', style: 'display:none' });
     const css = el('style', {}, CSS);
     this.canvas = el('canvas', { class: 'le-view' });
     this.ctx = this.canvas.getContext('2d');
+    this.hitCtx = document.createElement('canvas').getContext('2d');
     this.panel = el('div', { class: 'le-panel' });
     this.coords = el('div', { class: 'le-coords' });
     this.statusEl = el('div', { class: 'le-status' });
@@ -802,16 +1039,12 @@ class Editor {
     // layers
     const active = el('div', { class: 'le-layers' });
     VIEW_LAYERS.forEach((l, i) => {
-      const editable = PLACE_LAYERS.includes(l.key) || l.key === 'collision';
+      const editable = DATA_LAYERS.includes(l.key) || l.key === 'collision';
+      const hot = l.hot || String(i + 1);
       active.append(el('div', { class: 'le-layer' + (this.active === l.key ? ' on' : '') },
-        el('input', { type: 'checkbox', checked: this.visible[l.key], title: `show/hide (${i + 1})`, onchange: (e) => { this.visible[l.key] = e.target.checked; } }),
-        el('span', { class: editable ? 'le-pick' : '', onclick: editable ? () => {
-          this.active = l.key;
-          if (l.key === 'collision' && !DRAW_TOOLS.has(this.tool)) this.tool = 'pencil';
-          if (l.key !== 'collision' && DRAW_TOOLS.has(this.tool)) this.tool = 'select';
-          this.refreshPanel();
-        } : null }, `${i + 1}  ${l.label}`),
-        PLACE_LAYERS.includes(l.key) ? el('small', {}, String((L[l.key] || []).length)) : ''));
+        el('input', { type: 'checkbox', checked: this.visible[l.key], title: `show/hide (${hot})`, onchange: (e) => { this.visible[l.key] = e.target.checked; } }),
+        el('span', { class: editable ? 'le-pick' : '', onclick: editable ? () => this.pickLayer(l.key) : null }, `${hot}  ${l.label}`),
+        DATA_LAYERS.includes(l.key) ? el('small', {}, String((L[l.key] || []).length)) : ''));
     });
     p.append(el('h4', {}, 'Layers ', el('small', {}, 'Tab picks the layer to edit')), active);
     // palette
@@ -822,10 +1055,14 @@ class Editor {
       for (const s of EXTRA[layer] || []) if (this.applier.ids[s] !== undefined) syms.add(s);
       p.append(el('h4', {}, 'Place: ' + layer), el('div', { class: 'le-palette' }, ...[...syms].sort().map((s) => el('button', {
         class: this.placeSymbol === s ? 'on' : '', onclick: () => { this.placeSymbol = s; this.active = layer; this.refreshPanel(); },
-      }, s.split('/').pop()))));
+      }, s.split('/').pop())), ...(PRESETS[layer] || []).map((pr) => el('button', {
+        class: this.placeSymbol === pr ? 'on' : '', title: 'a ' + pr.symbol.split('/').pop() + ' set up as a ' + pr.label,
+        onclick: () => { this.placeSymbol = pr; this.active = layer; this.refreshPanel(); },
+      }, pr.label))));
     }
     // properties
-    if (this.sel && this.list(this.sel.layer)[this.sel.k]) p.append(this.propsPanel());
+    if (this.sel && this.list(this.sel.layer)[this.sel.k]) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.propsPanel());
+    else if (this.active === 'vision') p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones and their corners, Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
     // stats + settings
     p.append(this.statsPanel());
     p.append(el('details', {}, el('summary', {}, 'Level settings (level.json)'),
@@ -855,6 +1092,8 @@ class Editor {
         num('scale x', t.sx, (v) => setTransform(e, t.rot, v, t.sy)),
         num('scale y', t.sy, (v) => setTransform(e, t.rot, t.sx, v))),
       el('div', { class: 'le-row' }, el('label', {}, 'name ', el('input', { value: e.name || '', onchange: (ev) => this.change([file], () => { if (ev.target.value) e.name = ev.target.value; else delete e.name; }) }))));
+    if (this.isNode(e)) box.append(this.nodeRows(k));
+    box.append(...this.triggerRows(layer, e));
     if (e.script !== undefined) {
       box.append(el('div', { class: 'le-tip' }, 'This instance runs code when it loads, so it keeps its script (edit it in ' + file + '):'),
         el('pre', {}, [].concat(e.script).join('\n')));
@@ -872,6 +1111,75 @@ class Editor {
       el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
       el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
     return box;
+  }
+
+  nodeRows(k) {
+    const e = this.list('features')[k];
+    const pinned = e.props && e.props.connections !== undefined;
+    const add = (e.color && e.color.add) || [0, 0, 0];
+    const hex = '#' + add.slice(0, 3).map((v) => (v | 0).toString(16).padStart(2, '0')).join('');
+    return el('div', {},
+      el('div', { class: 'le-row' }, 'Path group ', el('input', { type: 'color', value: hex, title: 'nodes only link to nodes of the same colour; an enemy follows the group of the node nearest to it', onchange: (ev) => {
+        const v = ev.target.value;
+        this.change(['features.json'], () => { e.color = { multiply: [0, 0, 0, 1], add: [1, 3, 5].map((i) => parseInt(v.slice(i, i + 2), 16)).concat(0) }; });
+      } })),
+      pinned
+        ? el('div', { class: 'le-row' }, `Links pinned by hand (${[].concat(e.props.connections).length}). `, el('button', { onclick: () => this.unpinLinks(k), title: 'remove the pinned links, so the node links to every node of its colour it can see' }, 'Back to automatic'))
+        : el('div', { class: 'le-tip' }, `Links itself to the ${(this.autoLinks().get(k) || []).length} nodes of its colour it can see (dashed). Use Path links (N) to pin links by hand.`));
+  }
+
+  // the triggers a placement sends, as editable fields
+  triggerRows(layer, e) {
+    const rows = [];
+    const file = layer + '.json';
+    const list = 'le-triggers';
+    const input = (value, set, title) => el('input', { list, value, title, placeholder: 'nothing', style: 'flex: 1', onchange: (ev) => {
+      const names = ev.target.value.split(',').map((t) => t.trim()).filter(Boolean);
+      this.change([file], () => set(names));
+    } });
+    rows.push(el('datalist', { id: list }, ...this.knownTriggers().map((n) => el('option', { value: n }))));
+    if (layer === 'doors' && e.props && e.props.id) {
+      const id = e.props.id;
+      const from = PLACE_LAYERS.flatMap((l) => this.list(l)).filter((o) => sentTriggers(o).some((n) => n === id + ':open' || n === id + ':close')).length;
+      rows.push(el('div', { class: 'le-tip' }, `Opens on "${id}:open" and closes on "${id}:close"; ${from || 'nothing'} in this level sends ${from === 1 ? 'one' : 'them'}. Set a pickup, trigger pad, box or enemy to send one.`));
+    }
+    if (e.script !== undefined) return rows;
+    if (layer === 'powerups' && e.props && e.props.type === 'trigger') {
+      rows.push(el('div', { class: 'le-row' }, 'Trigger pad sends ', input(e.props.item || '', (n) => { e.props.item = n[0] || ''; }, 'sent when the player walks over it')));
+    }
+    const ev = TRIGGER_EVENTS[layer];
+    if (ev) {
+      const [key, when] = ev;
+      const cur = e.props && e.props[key];
+      if (cur === undefined || isTrigger(cur)) {
+        rows.push(el('div', { class: 'le-row' }, `${when[0].toUpperCase() + when.slice(1)}, send `, input(cur ? triggerNames(cur).join(', ') : '', (n) => {
+          if (n.length) { e.props ||= {}; e.props[key] = { $trigger: n.length === 1 ? n[0] : n }; } else if (e.props) { delete e.props[key]; if (!Object.keys(e.props).length) delete e.props; }
+        }, 'trigger names, separated by commas; a door listens for "<id>:open" and "<id>:close"')));
+      }
+    }
+    return rows;
+  }
+
+  zonePanel() {
+    const { k } = this.sel;
+    const z = this.list('vision')[k];
+    const t = transformOf(z);
+    const file = 'vision.json';
+    const num = (label, val, set) => el('label', {}, label + ' ', el('input', { type: 'number', step: 'any', value: round2(val), onchange: (ev) => { const v = +ev.target.value; if (isFinite(v)) this.change([file], () => set(v)); } }));
+    return el('div', { class: 'le-props' },
+      el('h4', {}, 'Vision zone', el('small', {}, ` #${k + 1}`)),
+      el('div', { class: 'le-row' }, num('x', z.x, (v) => { z.x = v; }), num('y', z.y, (v) => { z.y = v; })),
+      el('div', { class: 'le-row' },
+        num('rotation', t.rot, (v) => setTransform(z, v, t.sx, t.sy)),
+        num('scale x', t.sx, (v) => setTransform(z, t.rot, v, t.sy)),
+        num('scale y', t.sy, (v) => setTransform(z, t.rot, t.sx, v))),
+      el('div', { class: 'le-row' }, 'Colour ', el('input', { type: 'color', value: z.color || '#ff0000', title: 'only for telling zones apart', onchange: (ev) => this.change([file], () => { z.color = ev.target.value; }) })),
+      z.points
+        ? el('div', { class: 'le-tip' }, `${z.points.length} corners: drag them with Select (Shift snaps to the grid).`)
+        : el('div', { class: 'le-row' }, el('span', { class: 'le-tip' }, 'This zone has curves. '), el('button', { onclick: () => this.zoneToPolygon(k), title: 'turn the curves into straight segments so its corners can be dragged' }, 'Edit corners')),
+      el('div', { class: 'le-row' },
+        el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
+        el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
   }
 
   statsPanel() {
@@ -925,6 +1233,70 @@ function setTransform(e, rot, sx, sy) {
   for (const k of Object.keys(e)) delete e[k];
   for (const k of order) if (k in copy) e[k] = copy[k];
   for (const [k, v] of Object.entries(copy)) if (!order.includes(k)) e[k] = v;
+}
+
+// the path group a node belongs to: new Color(node).getRGB(), i.e. its colour offsets
+function nodeGroup(e) {
+  const a = (e.color && e.color.add) || [0, 0, 0];
+  return ((a[0] & 255) << 16) | ((a[1] & 255) << 8) | (a[2] & 255);
+}
+
+// triggers a placement sends: a trigger pad's item and {"$trigger": ...} handlers, plus
+// trigger('...') calls in a load script
+function sentTriggers(e) {
+  const out = [];
+  if (e.props) {
+    if (e.props.type === 'trigger' && e.props.item) out.push(e.props.item);
+    for (const v of Object.values(e.props)) if (isTrigger(v)) { try { out.push(...triggerNames(v)); } catch { /* bad */ } }
+  }
+  for (const m of [].concat(e.script || []).join('\n').matchAll(/[^.\w]trigger\(\s*["']([^"']+)["']/g)) out.push(m[1]);
+  return out;
+}
+
+function zoneMatrix(z) {
+  let a = 1, b = 0, c = 0, d = 1;
+  if (z.matrix) [a, b, c, d] = z.matrix;
+  else if (Array.isArray(z.scale)) [a, d] = z.scale;
+  else if (typeof z.scale === 'number') a = d = z.scale;
+  return [a, b, c, d, z.x || 0, z.y || 0];
+}
+const det = (m) => m[0] * m[3] - m[1] * m[2];
+const apply = (m, [x, y]) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]];
+
+const paths = new Map();
+function zonePath2D(z) {
+  const d = zonePath(z);
+  let p = paths.get(d);
+  if (!p) { p = new Path2D(d); if (paths.size > 500) paths.clear(); paths.set(d, p); }
+  return p;
+}
+
+// M/L/Q/Z path -> polygon corners, curves cut into short straight pieces
+function flattenPath(d) {
+  const t = d.trim().split(/\s+/);
+  const pts = [];
+  let i = 0, cmd = 'M', last = [0, 0];
+  const n = () => +t[i++];
+  while (i < t.length) {
+    if (/^[A-Za-z]$/.test(t[i])) { cmd = t[i++].toUpperCase(); if (cmd === 'Z') continue; }
+    if (cmd === 'M' || cmd === 'L') { last = [n(), n()]; pts.push(last); }
+    else if (cmd === 'Q') {
+      const c = [n(), n()], e = [n(), n()];
+      for (let s = 1; s <= 6; s++) {
+        const u = s / 6, a = (1 - u) * (1 - u), b = 2 * u * (1 - u), cc = u * u;
+        pts.push([a * last[0] + b * c[0] + cc * e[0], a * last[1] + b * c[1] + cc * e[1]]);
+      }
+      last = e;
+    } else i++;
+  }
+  // drop the repeated closing corner and points on top of each other
+  const out = [];
+  for (const p of pts.map(([x, y]) => [round2(x), round2(y)])) {
+    const q = out[out.length - 1];
+    if (!q || q[0] !== p[0] || q[1] !== p[1]) out.push(p);
+  }
+  if (out.length > 1 && out[0][0] === out[out.length - 1][0] && out[0][1] === out[out.length - 1][1]) out.pop();
+  return out;
 }
 
 function nodeColour(e) {

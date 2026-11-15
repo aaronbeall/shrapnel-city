@@ -3,13 +3,14 @@
 // compiler as the build (tools/levels/compile.mjs) and the same source decoder
 // (tools/flash-source/format.mjs).
 import { decodeChar, decodeTimeline, decodeScript } from '../../tools/flash-source/format.mjs';
-import { levelSymbols, composeScreen, propsScript, isRef } from '../../tools/levels/compile.mjs';
+import { levelSymbols, composeScreen, propsScript, isRef, isTrigger, triggerNames } from '../../tools/levels/compile.mjs';
 
 export class LevelApplier {
   constructor(rt, data) {
     this.rt = rt;
     this.ids = data.ids;
     this.screen = data.screen;
+    this.nextId = Math.max(0, ...Object.values(this.ids)) + 1;
     // compiled instance handlers from the build, by source text, so instances whose
     // script didn't change keep working after they move to another depth
     this.compiled = new Map();
@@ -21,7 +22,9 @@ export class LevelApplier {
 
   id(name) {
     if (name === null) return 65535;
-    const v = this.ids[name];
+    let v = this.ids[name];
+    // a symbol the editor's data adds, such as a new vision zone, gets the next free id
+    if (v === undefined && /^level assets\/vision\d+-\d+(\/shape 1)?$/.test(name)) v = this.ids[name] = this.nextId++;
     if (v === undefined) throw new Error(`unknown symbol "${name}"`);
     return v;
   }
@@ -31,9 +34,10 @@ export class LevelApplier {
     if (this.compiled.has(text)) return this.compiled.get(text);
     const props = propsByText.get(text);
     if (props) {
+      const G = this.rt.env.G;
       return {
         'clip:load': ($c) => {
-          for (const [k, v] of Object.entries(props)) $c[k] = materialize(v, $c);
+          for (const [k, v] of Object.entries(props)) $c[k] = materialize(v, $c, G);
         },
       };
     }
@@ -90,10 +94,11 @@ export class LevelApplier {
   }
 }
 
-function materialize(v, clip) {
-  if (Array.isArray(v)) return v.map((x) => materialize(x, clip));
+function materialize(v, clip, G) {
+  if (Array.isArray(v)) return v.map((x) => materialize(x, clip, G));
   if (isRef(v)) return clip._parent ? clip._parent[v.$ref] : undefined;
-  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, materialize(x, clip)]));
+  if (isTrigger(v)) { const names = triggerNames(v); return function () { for (const n of names) G.trigger.call(clip, n); }; }
+  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, materialize(x, clip, G)]));
   return v;
 }
 
