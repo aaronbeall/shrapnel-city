@@ -249,6 +249,14 @@ class Editor {
     return [e.x - 8, e.y - 8, e.x + 8, e.y + 8];
   }
 
+  // is this placement invisible in the game?
+  isHidden(layer, e, k) {
+    if (e.props && e.props.type === 'trigger') return true;
+    if (e.color && e.color.alpha === 0) return true;
+    const c = this.clipFor(layer, k);
+    return !!c && (!c.__visible || c._alpha <= 0);
+  }
+
   isNode(e) { return e && e.symbol === NODE; }
   layerShown(layer, e) {
     if (layer === 'vision') return this.visible.vision && this.active === 'vision';
@@ -874,23 +882,38 @@ class Editor {
         }
       });
     }
+    // things the game doesn't show (trigger pads, alpha-0 areas, hidden clips): outlined and named
+    {
+      const labels = [];
+      ctx.lineWidth = 1 * px;
+      ctx.setLineDash([3 * px, 3 * px]);
+      ctx.strokeStyle = 'rgba(255,200,80,0.9)';
+      for (const l of PLACE_LAYERS) {
+        if (l === 'paths') continue; // drawn as nodes below
+        this.list(l).forEach((e, k) => {
+          if (!this.layerShown(l, e) || !this.isHidden(l, e, k)) return;
+          const [x0, y0, x1, y1] = this.boundsOf(l, k);
+          ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+          labels.push([x0, y0, hiddenLabel(e)]);
+        });
+      }
+      ctx.setLineDash([]);
+      ctx.font = `${10 * px}px system-ui, sans-serif`;
+      ctx.textBaseline = 'bottom';
+      ctx.fillStyle = 'rgba(255,200,80,0.95)';
+      for (const [x, y, t] of labels) ctx.fillText(t, x, y - 2 * px);
+    }
     // triggers: who sends what (labels), lines to the doors they open (green) or close (red)
     if (this.visible.triggers) {
       const doors = new Map(this.list('doors').map((d, k) => [d.props && d.props.id, [d, k]]).filter(([id]) => id));
       const labels = [];
       ctx.lineWidth = 1.5 * px;
       for (const [id, [d]] of doors) labels.push([d.x, d.y, id, '#9cf']);
+      // independent of the layers: every trigger in the level shows while this is on
       for (const l of ['powerups', 'boxes', 'enemies']) {
-        if (!this.visible[l]) continue;
-        this.list(l).forEach((e, k) => {
+        this.list(l).forEach((e) => {
           const sent = sentTriggers(e);
           if (!sent.length) return;
-          // trigger pads are invisible in the game: outline them
-          if (e.props && e.props.type === 'trigger') {
-            const [x0, y0, x1, y1] = this.boundsOf(l, k);
-            ctx.strokeStyle = 'rgba(255,200,80,0.9)'; ctx.setLineDash([3 * px, 3 * px]);
-            ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
-          }
           ctx.setLineDash([6 * px, 4 * px]);
           for (const n of sent) {
             const m = /^(.+):(open|close)$/.exec(n);
@@ -1319,6 +1342,11 @@ function sentTriggers(e) {
   }
   for (const m of [].concat(e.script || []).join('\n').matchAll(/[^.\w]trigger\(\s*["']([^"']+)["']/g)) out.push(m[1]);
   return out;
+}
+
+function hiddenLabel(e) {
+  if (e.props && e.props.type === 'trigger') return 'trigger pad';
+  return e.name || e.symbol.split('/').pop();
 }
 
 function zoneMatrix(z) {
