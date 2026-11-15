@@ -1078,7 +1078,8 @@ class Editor {
     if (this.tool === 'place') {
       const layer = PLACE_LAYERS.includes(this.active) ? this.active : 'enemies';
       const syms = new Set();
-      for (const x of this.levels) for (const e of x[layer] || []) syms.add(e.symbol);
+      // shared helper shapes (_circle, _box) are used as invisible areas, not placed on their own
+      for (const x of this.levels) for (const e of x[layer] || []) if (!e.symbol.startsWith('_')) syms.add(e.symbol);
       for (const s of EXTRA[layer] || []) if (this.applier.ids[s] !== undefined) syms.add(s);
       p.append(el('h4', {}, 'Place: ' + (VIEW_LAYERS.find((l) => l.key === layer) || { label: layer }).label.toLowerCase()), el('div', { class: 'le-palette' }, ...[...syms].sort().map((s) => el('button', {
         class: this.placeSymbol === s ? 'on' : '', onclick: () => { this.placeSymbol = s; this.active = layer; this.refreshPanel(); },
