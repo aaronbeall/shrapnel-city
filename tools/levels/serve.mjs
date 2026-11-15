@@ -2,7 +2,8 @@
 // in-game editor (?edit) save straight into levels/ and rebuild.
 //   npm run edit            then open http://localhost:8123/?edit
 //
-// The editor saves with PUT /levels/<NN_name>/<file>. Only the level files listed in
+// The editor saves with PUT /levels/<NN_name>/<file>. POST /__art {level, step, seed} runs an
+// art pipeline step (tools/art/bake.py: place decor, bake the background) and then the build. Only the level files listed in
 // tools/levels/levels.mjs, in existing level folders, can be written. After a save the
 // build runs, so a page reload picks the change up everywhere.
 import http from 'node:http';
@@ -35,11 +36,46 @@ function build() {
   return building;
 }
 
+// The art pipeline is Python. Windows installs it as `python` (python3 there is a Store stub);
+// PYTHON overrides.
+const PYTHON = process.env.PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
+let art = null; // the running art step: {level, step, started}
+function run(cmd, args) {
+  return new Promise((resolve) => {
+    let out = '';
+    let p;
+    try { p = spawn(cmd, args, { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] }); } catch (e) { resolve({ code: -1, out: e.message }); return; }
+    p.stdout.on('data', (d) => { out += d; });
+    p.stderr.on('data', (d) => { out += d; });
+    p.on('error', (e) => resolve({ code: -1, out: out + e.message }));
+    p.on('close', (code) => resolve({ code, out }));
+  });
+}
+async function runArt({ level, step, seed }) {
+  if (art) return { ok: false, log: `already running ${art.step} on ${art.level}` };
+  if (!/^\d\d_[^/\\]+$/.test(level || '') || !fs.existsSync(path.join(ROOT, 'levels', level))) return { ok: false, log: 'no such level: ' + level };
+  if (!['place', 'bake', 'all'].includes(step)) return { ok: false, log: 'unknown step: ' + step };
+  art = { level, step, started: Date.now() };
+  try {
+    const deps = await run(PYTHON, ['-c', 'import numpy, scipy, PIL']);
+    if (deps.code !== 0) {
+      return { ok: false, missing: true, log: deps.code === -1 ? `Python not found (tried "${PYTHON}"; set PYTHON to override).` : `The art pipeline needs numpy, scipy and Pillow:\n  ${PYTHON} -m pip install numpy scipy pillow\n\n${deps.out}` };
+    }
+    const args = ['tools/art/bake.py', level, step];
+    if (Number.isInteger(seed)) args.push('--seed', String(seed));
+    const r = await run(PYTHON, args);
+    console.log(`art ${step} ${level}: ${r.code ? 'FAILED' : 'ok'}\n${r.out.trim()}`);
+    if (r.code) return { ok: false, log: r.out.slice(-3000) };
+    const b = step === 'place' ? { ok: true, log: '' } : await build(); // decor.json alone changes no built asset
+    return { ok: b.ok, log: (r.out + (b.ok ? '' : '\nbuild failed:\n' + b.log)).slice(-3000) };
+  } finally { art = null; }
+}
+
 const server = http.createServer(async (req, res) => {
   const url = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   const send = (code, body, type = 'application/json') => { res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' }); res.end(body); };
   // the editor polls this for its server status badge
-  if (url === '/__editor') return send(200, JSON.stringify({ writable: true, building: !!building, lastBuild }));
+  if (url === '/__editor') return send(200, JSON.stringify({ writable: true, building: !!building, lastBuild, art }));
   if (req.method === 'PUT') {
     const m = /^\/levels\/(\d\d_[^/]+)\/([^/]+)$/.exec(url);
     if (!m || !FILES.includes(m[2]) || !fs.existsSync(path.join(ROOT, 'levels', m[1]))) return send(403, JSON.stringify({ error: 'not a level file: ' + url }));
@@ -54,6 +90,13 @@ const server = http.createServer(async (req, res) => {
     return send(200, JSON.stringify({ saved: `levels/${m[1]}/${m[2]}` }));
   }
   if (req.method === 'POST' && url === '/__build') return send(200, JSON.stringify(await build()));
+  if (req.method === 'POST' && url === '/__art') {
+    const chunks = [];
+    for await (const c of req) chunks.push(c);
+    let opts;
+    try { opts = JSON.parse(Buffer.concat(chunks).toString('utf8') || '{}'); } catch (e) { return send(400, JSON.stringify({ ok: false, log: e.message })); }
+    return send(200, JSON.stringify(await runArt(opts)));
+  }
   if (req.method !== 'GET' && req.method !== 'HEAD') return send(405, '{}');
   let f = path.join(ROOT, url);
   if (!f.startsWith(ROOT)) return send(403, '{}');

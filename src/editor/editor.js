@@ -12,7 +12,7 @@ import { pretty } from '../../tools/flash-source/format.mjs';
 import { mul } from '../flash/geom.js';
 
 const PLACE_LAYERS = ['enemies', 'boxes', 'powerups', 'doors', 'features', 'pathNodes'];
-const DATA_LAYERS = [...PLACE_LAYERS, 'vision'];
+const DATA_LAYERS = [...PLACE_LAYERS, 'vision', 'decor'];
 const VIEW_LAYERS = [
   { key: 'art', label: 'Background art' },
   { key: 'collision', label: 'Collision' },
@@ -23,6 +23,7 @@ const VIEW_LAYERS = [
   { key: 'doors', label: 'Doors' },
   { key: 'features', label: 'Entrance, exit, player' },
   { key: 'pathNodes', label: 'Path nodes' },
+  { key: 'decor', label: 'Decor (art bake)', hot: 'K' },
   { key: 'triggers', label: 'Triggers', hot: 'T' },
   { key: 'preview', label: 'Art preview', hot: 'A' },
 ];
@@ -44,6 +45,10 @@ const EXTRA = {
   pathNodes: ['game objects/node'],
 };
 const NODE = 'game objects/node';
+// decor (decor.json) is baked into the background by tools/art/bake.py; sprites live here
+const DECOR_DIR = 'tools/art/parts/decor/';
+// how each decor category is drawn by the bake when placed by hand
+const DECOR_DEFAULTS = { floorpaint: { effect: 'paint' }, greebles: { effect: 'shadow', strength: 0.35 }, greebles2: { effect: 'shadow', strength: 0.35 }, vents: { effect: 'shadow', strength: 0.3 }, rails: { effect: 'shadow', strength: 0.25 }, lights: { effect: 'glow', strength: 0.9 } };
 const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as in Flash
 const TOOLS = [
   { key: 'select', label: 'Select', hot: 'V', tip: 'click to select, drag to move (Shift snaps to the grid); R rotates, Delete removes, Ctrl+D duplicates' },
@@ -89,7 +94,10 @@ class Editor {
     this.index = 0;
     this.tool = 'select';
     this.active = 'enemies'; // layer that select/place work on
-    this.visible = Object.fromEntries(VIEW_LAYERS.map((l) => [l.key, l.key !== 'vision' && l.key !== 'preview']));
+    this.visible = Object.fromEntries(VIEW_LAYERS.map((l) => [l.key, !['vision', 'preview', 'decor'].includes(l.key)]));
+    this.decorIndex = null;  // tools/art/parts/decor/index.json: {category: [{file, w, h}]}
+    this.decorImages = new Map();
+    this.art = null;         // the art pipeline step running: {step, started}
     this.showTriggerList = true;
     this.mapVersion = 0;     // bumps when a collision map or the live level changes
     this.preview = null;     // {index, version, canvas} art preview
@@ -129,8 +137,22 @@ class Editor {
     this.root.style.display = '';
     this.loadLevel(idx);
     this.fitView();
+    this.resume();
     this.loop();
     this.pollServer();
+  }
+
+  // after an art bake reloads the page: the same view, layers and tool as before
+  resume() {
+    let r = null;
+    try { r = JSON.parse(sessionStorage.getItem('levelEditorResume')); sessionStorage.removeItem('levelEditorResume'); } catch { /* none */ }
+    if (!r || r.index !== this.index) return;
+    if (r.view) this.view = r.view;
+    if (r.visible) Object.assign(this.visible, r.visible);
+    if (r.active) this.active = r.active;
+    if (r.tool) this.tool = r.tool;
+    this.refreshPanel();
+    if (r.msg) this.status(r.msg);
   }
 
   // ------------------------------------------------------------------ server status
@@ -142,6 +164,8 @@ class Editor {
     this.server = s;
     this.writable = !!s;
     if (was !== this.writable) this.refreshSave();
+    const artNow = JSON.stringify(s && s.art);
+    if (artNow !== this.lastArt && this.isOpen && !this.art) { this.lastArt = artNow; this.refreshPanel(); } else this.lastArt = artNow;
     this.renderServer();
     return s;
   }
@@ -196,6 +220,8 @@ class Editor {
   loadLevel(i) {
     this.index = i;
     this.sel = null;
+    this.confirmPlace = false;
+    this.artLog = '';
     this.poly = null;
     this.reload();
     this.refreshPanel();
@@ -280,6 +306,7 @@ class Editor {
 
   boundsOf(layer, k) {
     const e = this.list(layer)[k];
+    if (layer === 'decor') return decorBounds(e, this.decorSize(e.sprite));
     const c = this.clipFor(layer, k);
     if (c) {
       const b = c.getBounds(this.screen);
@@ -293,10 +320,43 @@ class Editor {
 
   // is this placement invisible in the game?
   isHidden(layer, e, k) {
+    if (layer === 'decor') return false;
     if (e.props && e.props.type === 'trigger') return true;
     if (e.color && e.color.alpha === 0) return true;
     const c = this.clipFor(layer, k);
     return !!c && (!c.__visible || c._alpha <= 0 || !drawsSomething(c));
+  }
+
+  // ------------------------------------------------------------------ decor sprites
+  // tools/art/parts/decor/index.json, fetched the first time the Decor layer is shown
+  loadDecorIndex() {
+    if (this.decorIndex || this.decorIndexLoading) return;
+    this.decorIndexLoading = fetch(DECOR_DIR + 'index.json', { cache: 'no-store' }).then((r) => r.json())
+      .then((j) => { this.decorIndex = j; })
+      .catch((e) => { this.decorIndex = {}; this.status('Decor sprites: ' + e.message, true); })
+      .finally(() => { this.decorIndexLoading = null; if (this.isOpen) this.refreshPanel(); });
+  }
+
+  decorSize(sprite) {
+    const [cat] = sprite.split('/');
+    const f = this.decorIndex && (this.decorIndex[cat] || []).find((s) => s.file === sprite);
+    if (f) return f;
+    const img = this.decorImage(sprite);
+    return img ? { w: img.naturalWidth, h: img.naturalHeight } : { w: 32, h: 32 };
+  }
+
+  // the sprite's image once it has loaded, else null (it starts loading)
+  decorImage(sprite) {
+    let img = this.decorImages.get(sprite);
+    if (!img) { img = new Image(); img.src = DECOR_DIR + sprite; this.decorImages.set(sprite, img); }
+    return img.complete && img.naturalWidth ? img : null;
+  }
+
+  // the size a sprite's category usually has (median over every level), so a new one fits in
+  decorScale(sprite) {
+    const cat = sprite.split('/')[0];
+    const scales = this.levels.flatMap((L) => (L.decor || []).filter((e) => e.sprite.split('/')[0] === cat).map((e) => e.scale)).sort((a, b) => a - b);
+    return scales.length ? scales[scales.length >> 1] : 0.3;
   }
 
   isNode(e) { return e && e.symbol === NODE; }
@@ -306,6 +366,14 @@ class Editor {
   }
 
   hit(x, y) {
+    if (this.active === 'decor' && this.visible.decor) {
+      const list = this.list('decor');
+      for (let k = list.length - 1; k >= 0; k--) {
+        const [x0, y0, x1, y1] = this.boundsOf('decor', k);
+        if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer: 'decor', k };
+      }
+      return null;
+    }
     if (this.active === 'vision' && this.visible.vision) {
       const zones = this.list('vision');
       for (let k = zones.length - 1; k >= 0; k--) if (this.inZone(zones[k], x, y)) return { layer: 'vision', k };
@@ -351,7 +419,7 @@ class Editor {
     if (mod) return;
     if (e.key === 'Tab') {
       e.preventDefault();
-      const order = [...PLACE_LAYERS, 'vision', 'collision'];
+      const order = [...PLACE_LAYERS, 'vision', 'decor', 'collision'];
       this.pickLayer(order[(order.indexOf(this.active) + (e.shiftKey ? order.length - 1 : 1)) % order.length]);
       return;
     }
@@ -371,6 +439,7 @@ class Editor {
     if (k === '0') { this.fitView(); return; }
     if (k === 'a') { this.visible.preview = !this.visible.preview; this.refreshPanel(); return; }
     if (k === 't') { this.visible.triggers = !this.visible.triggers; this.refreshPanel(); return; }
+    if (k === 'k') { this.visible.decor = !this.visible.decor; this.refreshPanel(); return; }
     if (e.key === ' ') { this.spaceDown = true; e.preventDefault(); }
   }
 
@@ -380,7 +449,7 @@ class Editor {
     this.linkFrom = null;
     if (t === 'autozone' || (t === 'poly' && this.active === 'vision')) this.active = 'vision';
     else if (DRAW_TOOLS.has(t)) this.active = 'collision';
-    else if (this.active === 'collision' || (this.active === 'vision' && !ZONE_TOOLS.has(t))) this.active = t === 'link' ? 'pathNodes' : 'enemies';
+    else if (this.active === 'collision' || (this.active === 'vision' && !ZONE_TOOLS.has(t)) || (this.active === 'decor' && t !== 'select' && t !== 'place')) this.active = t === 'link' ? 'pathNodes' : 'enemies';
     if (t === 'link') { this.active = 'pathNodes'; this.visible.pathNodes = true; }
     if (this.active === 'vision') this.visible.vision = true;
     this.refreshPanel();
@@ -394,6 +463,7 @@ class Editor {
     else if (key !== 'collision' && key !== 'vision' && (DRAW_TOOLS.has(this.tool) || this.tool === 'autozone')) this.tool = 'select';
     if (key === 'vision') this.visible.vision = true;
     if (key === 'pathNodes') this.visible.pathNodes = true;
+    if (key === 'decor') { this.visible.decor = true; this.loadDecorIndex(); if (this.tool !== 'select' && this.tool !== 'place') this.tool = 'select'; }
     if (key === 'pathNodes') this.placeSymbol = NODE; // the only thing to place there
     else if (this.placeSymbol === NODE) this.placeSymbol = null;
     this.poly = null;
@@ -561,6 +631,15 @@ class Editor {
 
   placeAt(x, y) {
     const layer = this.active;
+    if (layer === 'decor') {
+      const sprite = this.placeSymbol;
+      const cat = sprite.split('/')[0];
+      const ent = { sprite, x: Math.round(x), y: Math.round(y), scale: this.decorScale(sprite), rotation: 0, ...(DECOR_DEFAULTS[cat] || {}) };
+      this.change(['decor.json'], () => this.list('decor').push(ent), { reload: false });
+      this.sel = { layer, k: this.list(layer).length - 1 };
+      this.refreshPanel();
+      return;
+    }
     const preset = typeof this.placeSymbol === 'object' ? this.placeSymbol : null;
     const sym = preset ? preset.symbol : this.placeSymbol;
     const ent = { symbol: sym, x: round2(x), y: round2(y), ...(preset ? { props: structuredClone(preset.props) } : this.defaultFor(sym)) };
@@ -604,7 +683,7 @@ class Editor {
       while (ids.has('door' + n)) n++;
       ent.props.id = 'door' + n;
     }
-    this.change([layer + '.json'], () => this.list(layer).push(ent));
+    this.change([layer + '.json'], () => this.list(layer).push(ent), { reload: layer !== 'decor' });
     this.sel = { layer, k: this.list(layer).length - 1 };
     this.refreshPanel();
   }
@@ -616,13 +695,14 @@ class Editor {
       this.list(layer).splice(k, 1);
       // drop links to a deleted node
       if (ent.name && layer === 'pathNodes') for (const e of this.list('pathNodes')) if (e.props && Array.isArray(e.props.connections)) e.props.connections = e.props.connections.filter((c) => !(isRef(c) && c.$ref === ent.name));
-    });
+    }, { reload: layer !== 'decor' });
     this.sel = null;
     this.refreshPanel();
   }
 
   rotateSel(deg) {
     const { layer, k } = this.sel;
+    if (layer === 'decor') { this.change(['decor.json'], () => { const e = this.list('decor')[k]; e.rotation = round2((((e.rotation || 0) - deg) % 360 + 360) % 360); }, { reload: false }); return; }
     this.change([layer + '.json'], () => {
       const e = this.list(layer)[k];
       const t = transformOf(e);
@@ -778,6 +858,7 @@ class Editor {
     const L = this.levels[i];
     if (file === 'collision.png') return this.maps[i].toBlob();
     if (file === 'level.json') return pretty(L.settings) + '\n';
+    if (file === 'decor.json') return decorJSON(L.decor || []);
     return pretty(L[file.replace('.json', '')] || []) + '\n';
   }
 
@@ -800,7 +881,7 @@ class Editor {
         this.refreshSave();
         this.status(`Saved ${jobs.map(([i, f]) => this.levels[i].folder + '/' + f).join(', ')}. Rebuilding…`);
         const b = await fetch('__build', { method: 'POST' }).then((r) => r.json());
-        this.status(b.ok ? `Saved ${jobs.length} file${jobs.length > 1 ? 's' : ''} to levels/ and rebuilt.` + (this.stale ? ' The background art still needs a re-bake.' : '') : 'Saved, but the build failed: ' + b.log, !b.ok);
+        this.status(b.ok ? `Saved ${jobs.length} file${jobs.length > 1 ? 's' : ''} to levels/ and rebuilt.` + (this.stale ? ' The background art still needs Bake art.' : '') : 'Saved, but the build failed: ' + b.log, !b.ok);
       } catch (e) { this.status('Save failed: ' + e.message, true); }
       this.saving = false;
       this.checkServer();
@@ -889,6 +970,22 @@ class Editor {
       ctx.globalAlpha = 1;
     }
     const px = 1 / v.z; // one screen pixel in world units
+    // decor: the background shows the last bake; the sprites drawn over it show decor.json now
+    if (this.visible.decor) {
+      this.loadDecorIndex();
+      const on = this.active === 'decor';
+      ctx.imageSmoothingEnabled = true;
+      this.list('decor').forEach((e) => {
+        const { w: sw, h: sh } = this.decorSize(e.sprite), s = e.scale || 1, w = sw * s, h = sh * s;
+        const img = this.decorSprites !== false && this.decorImage(e.sprite);
+        ctx.save();
+        ctx.translate(e.x, e.y);
+        ctx.rotate(-(e.rotation || 0) * Math.PI / 180);
+        if (img) { ctx.globalAlpha = e.effect === 'paint' ? 0.6 : 0.9; ctx.drawImage(img, -w / 2, -h / 2, w, h); ctx.globalAlpha = 1; }
+        if (on) { ctx.strokeStyle = decorColour(e.sprite); ctx.lineWidth = px; ctx.strokeRect(-w / 2, -h / 2, w, h); }
+        ctx.restore();
+      });
+    }
     // grid
     if (this.snapGrid && this.grid && this.grid * v.z >= 6 && (DRAW_TOOLS.has(this.tool) || this.drag)) {
       ctx.strokeStyle = 'rgba(255,255,255,0.08)';
@@ -1040,6 +1137,13 @@ class Editor {
     }
     if (this.tool === 'place' && this.placeSymbol) {
       const [x, y] = this.snap(m.x, m.y, m.alt);
+      const img = this.active === 'decor' && typeof this.placeSymbol === 'string' && this.decorImage(this.placeSymbol);
+      if (img) {
+        const s = this.decorScale(this.placeSymbol);
+        ctx.globalAlpha = 0.6;
+        ctx.drawImage(img, x - img.naturalWidth * s / 2, y - img.naturalHeight * s / 2, img.naturalWidth * s, img.naturalHeight * s);
+        ctx.globalAlpha = 1;
+      }
       ctx.strokeStyle = '#7f7'; ctx.lineWidth = px;
       ctx.beginPath(); ctx.moveTo(x - 6 * px, y); ctx.lineTo(x + 6 * px, y); ctx.moveTo(x, y - 6 * px); ctx.lineTo(x, y + 6 * px); ctx.stroke();
     }
@@ -1133,7 +1237,7 @@ class Editor {
         el('select', { onchange: (e) => { this.grid = +e.target.value; } }, ...[4, 8, 16, 32, 64].map((g) => el('option', { value: g, selected: g === this.grid }, g + ' px'))),
         ' Angles ',
         el('select', { onchange: (e) => { this.snapAngle = +e.target.value; } }, ...[0, 5, 15, 22.5, 45, 90].map((a) => el('option', { value: a, selected: a === this.snapAngle }, a ? a + '°' : 'free')))));
-      if (this.stale) p.append(el('div', { class: 'le-warn' }, 'The collision map changed, so the background art no longer matches it. Re-bake the art after saving (tools/art).'));
+      if (this.stale) p.append(el('div', { class: 'le-warn' }, 'The collision map changed, so the background art no longer matches it. ' + (L.settings && L.settings.art ? 'Press Bake art (Art pipeline, below) to redraw it.' : 'This level keeps its original art; see Art pipeline below.')));
     }
     // layers
     const active = el('div', { class: 'le-layers' });
@@ -1147,7 +1251,8 @@ class Editor {
     });
     p.append(el('h4', {}, 'Layers ', el('small', {}, 'Tab picks the layer to edit')), active);
     // palette
-    if (this.tool === 'place') {
+    if (this.tool === 'place' && this.active === 'decor') p.append(this.decorPalette());
+    else if (this.tool === 'place') {
       const layer = PLACE_LAYERS.includes(this.active) ? this.active : 'enemies';
       const syms = new Set();
       // shared helper shapes (_circle, _box) are used as invisible areas, not placed on their own
@@ -1161,9 +1266,11 @@ class Editor {
       }, pr.label))));
     }
     // properties
-    if (this.sel && this.list(this.sel.layer)[this.sel.k]) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.propsPanel());
+    if (this.sel && this.list(this.sel.layer)[this.sel.k]) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.sel.layer === 'decor' ? this.decorPanel() : this.propsPanel());
+    else if (this.active === 'decor') p.append(el('div', { class: 'le-tip' }, 'Decor (decor.json) is what the art bake paints into background.png: floor paint, wall greebles, vents, rails, lights. The game never reads it. Select (V) moves one, Place (P) adds one, R turns it, Delete removes it; then Bake art below to see it for real.'));
     else if (this.active === 'vision') p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones and their corners, Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
     // stats + settings
+    p.append(this.artPanel());
     p.append(this.triggerPanel());
     p.append(this.statsPanel());
     p.append(el('details', {}, el('summary', {}, 'Level settings (level.json)'),
@@ -1212,6 +1319,113 @@ class Editor {
       el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
       el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
     return box;
+  }
+
+  // sprites to place on the Decor layer, one category at a time
+  decorPalette() {
+    const idx = this.decorIndex;
+    if (!idx) { this.loadDecorIndex(); return el('div', { class: 'le-tip' }, 'Loading the decor sprites…'); }
+    const cats = Object.keys(idx).sort();
+    if (!cats.includes(this.decorCat)) this.decorCat = (typeof this.placeSymbol === 'string' && cats.find((c) => this.placeSymbol.startsWith(c + '/'))) || cats[0];
+    const sprites = idx[this.decorCat] || [];
+    return el('div', {},
+      el('h4', {}, 'Place: decor ', el('select', { onchange: (e) => { this.decorCat = e.target.value; this.refreshPanel(); } },
+        ...cats.map((c) => el('option', { value: c, selected: c === this.decorCat }, `${c} (${idx[c].length})`)))),
+      el('div', { class: 'le-decor-pal' }, ...sprites.map((s) => el('button', {
+        class: this.placeSymbol === s.file ? 'on' : '', title: `${s.file} (${s.w} × ${s.h})`,
+        onclick: () => { this.placeSymbol = s.file; this.refreshPanel(); },
+      }, el('img', { src: DECOR_DIR + s.file, loading: 'lazy' })))),
+      el('div', { class: 'le-tip' }, 'New ones take the median size of their category and its bake effect (paint for floor paint, a drop shadow for wall parts, a glow for lights).'));
+  }
+
+  decorPanel() {
+    const { k } = this.sel;
+    const e = this.list('decor')[k];
+    const file = 'decor.json';
+    const edit = (fn) => this.change([file], fn, { reload: false });
+    const num = (label, val, set, attrs = {}) => el('label', {}, label + ' ', el('input', { type: 'number', step: 'any', ...attrs, value: val, onchange: (ev) => { const v = +ev.target.value; if (isFinite(v)) edit(() => set(v)); } }));
+    const cat = e.sprite.split('/')[0];
+    const others = (this.decorIndex && this.decorIndex[cat]) || [];
+    return el('div', { class: 'le-props' },
+      el('h4', {}, e.sprite, el('small', {}, ` decor #${k + 1}`)),
+      el('div', { class: 'le-row' }, el('img', { class: 'le-decor-thumb', src: DECOR_DIR + e.sprite }),
+        others.length ? el('select', { title: 'swap for another sprite of this category', onchange: (ev) => edit(() => { e.sprite = ev.target.value; }) },
+          ...others.map((s) => el('option', { value: s.file, selected: s.file === e.sprite }, s.file.split('/').pop()))) : ''),
+      el('div', { class: 'le-row' }, num('x', e.x, (v) => { e.x = round2(v); }), num('y', e.y, (v) => { e.y = round2(v); })),
+      el('div', { class: 'le-row' },
+        num('scale', e.scale ?? 1, (v) => { e.scale = Math.max(0.01, round2(v * 1e4) / 1e4); }, { step: 0.01, min: 0.01 }),
+        num('rotation', e.rotation || 0, (v) => { e.rotation = round2(((v % 360) + 360) % 360); }, { title: 'degrees, counter-clockwise' })),
+      el('div', { class: 'le-row' }, 'Bake effect ',
+        el('select', { title: 'paint: soaks into the floor, worn; shadow: casts a drop shadow; glow: its bright coloured parts bloom', onchange: (ev) => edit(() => {
+          const v = ev.target.value;
+          if (v) e.effect = v; else delete e.effect;
+          if (v === 'shadow' || v === 'glow') e.strength ??= (DECOR_DEFAULTS[cat] && DECOR_DEFAULTS[cat].strength) || (v === 'glow' ? 0.9 : 0.3);
+          else delete e.strength;
+        }) }, ...['', 'paint', 'shadow', 'glow'].map((v) => el('option', { value: v, selected: (e.effect || '') === v }, v || 'none'))),
+        e.effect === 'shadow' || e.effect === 'glow' ? num('strength', e.strength ?? 0, (v) => { e.strength = round2(v); }, { step: 0.05, min: 0 }) : ''),
+      el('div', { class: 'le-row' },
+        el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
+        el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
+  }
+
+  // the art pipeline (tools/art/bake.py), run by the local server: place decor, bake background.png
+  artPanel() {
+    const L = this.L, art = L.settings && L.settings.art;
+    const box = el('details', { open: this.showArt !== false, ontoggle: (ev) => { this.showArt = ev.target.open; } }, el('summary', {}, 'Art pipeline'));
+    if (!art) {
+      box.append(el('div', { class: 'le-tip' }, 'This level keeps its original background from the Flash file. To generate its art from the collision map instead, give it art settings; Bake art then replaces background.png (git has the old one).'),
+        el('button', { onclick: () => this.change(['level.json'], () => { L.settings = { ...(L.settings || {}), art: { kit: 'bridge', seed: 1 + Math.floor(Math.random() * 9999) } }; }, { reload: false }) }, 'Generate this level\'s art'));
+      return box;
+    }
+    const setArt = (o) => this.change(['level.json'], () => { L.settings = { ...L.settings, art: { ...art, ...o } }; }, { reload: false });
+    const running = this.art || (this.server && this.server.art);
+    const off = !this.writable || !!running;
+    const btn = (label, step, tip) => el('button', { disabled: off, title: tip, onclick: () => this.runArt(step) }, label);
+    const n = this.layerCount('decor');
+    box.append(
+      el('div', { class: 'le-row' }, 'Kit ', el('select', { title: 'the tile set: floor, wall and chasm textures and the decor sheets (tools/art/parts)', onchange: (ev) => setArt({ kit: ev.target.value }) },
+        ...['bridge'].map((kit) => el('option', { value: kit, selected: art.kit === kit }, kit))),
+        ' Seed ', el('input', { type: 'number', step: 1, value: art.seed, style: 'width: 6em', title: 'picks the decor layout and the floor grain', onchange: (ev) => { const v = Math.round(+ev.target.value); if (isFinite(v)) setArt({ seed: v }); } }),
+        el('button', { title: 'a new random seed (then Re-place decor to use it)', onclick: () => setArt({ seed: 1 + Math.floor(Math.random() * 9999) }) }, '🎲')),
+      el('div', { class: 'le-row' },
+        btn('Bake art', 'bake', 'Save, then redraw background.png from the collision map and decor.json as they are'),
+        this.confirmPlace
+          ? el('button', { disabled: off, class: 'le-danger', title: 'decor.json is replaced; Undo cannot bring the old layout back (git can)', onclick: () => { this.confirmPlace = false; this.runArt('all'); } }, `Replace ${n} decor and bake?`)
+          : el('button', { disabled: off, title: 'Save, then lay out new decor from the seed (replacing decor.json, hand edits too) and bake', onclick: () => { this.confirmPlace = true; this.refreshPanel(); } }, 'Re-place decor + bake'),
+        this.confirmPlace ? el('button', { onclick: () => { this.confirmPlace = false; this.refreshPanel(); } }, 'Cancel') : ''),
+      el('div', { class: 'le-tip' }, running ? `Running ${running.step === 'all' ? 're-place + bake' : running.step} on ${running.level || L.folder}… (about 10 s)`
+        : !this.writable ? 'Needs the local server (npm run edit).'
+          : `Runs tools/art/bake.py on your machine, rebuilds, and reloads the editor with the new art. ${n} decor placements; show them with K.`));
+    if (this.artLog) box.append(el('pre', { class: 'le-artlog' }, this.artLog));
+    return box;
+  }
+
+  async runArt(step) {
+    const L = this.L;
+    this.artLog = '';
+    if (Object.keys(this.dirty).length) {
+      await this.save(); // the bake reads collision.png, decor.json and level.json from disk
+      if (Object.keys(this.dirty).length) return;
+    }
+    this.art = { step, level: L.folder, started: Date.now() };
+    this.status(`Art: running ${step} on ${L.folder}…`);
+    this.refreshPanel();
+    const r = await fetch('__art', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ level: L.folder, step }) })
+      .then((x) => x.json()).catch((e) => ({ ok: false, log: e.message }));
+    this.art = null;
+    if (!r.ok) {
+      this.artLog = r.log || 'failed';
+      this.status(r.missing ? 'The art pipeline needs Python packages; see Art pipeline.' : `Art ${step} failed; see Art pipeline.`, true);
+      this.refreshPanel();
+      return;
+    }
+    // reload the page so the new background.png and decor.json come in, back where we were
+    try {
+      sessionStorage.setItem('levelEditorResume', JSON.stringify({ index: this.index, view: this.view, visible: this.visible, active: this.active, tool: this.tool, msg: `Art ${step === 'all' ? 're-placed and baked' : 'baked'} for ${L.folder}.` }));
+    } catch { /* private window: we come back to the fitted view */ }
+    const u = new URL(location.href);
+    u.searchParams.set('edit', this.index);
+    location.replace(u.toString());
   }
 
   layerCount(key) {
@@ -1345,6 +1559,27 @@ class Editor {
 
 // ---------------------------------------------------------------------------- helpers
 function round2(v) { return Math.round(v * 100) / 100; }
+
+// box around a decor placement: its sprite scaled, turned (degrees counter-clockwise) and centred on x, y
+function decorBounds(e, size) {
+  const s = e.scale || 1, a = (e.rotation || 0) * Math.PI / 180;
+  const w = size.w * s, h = size.h * s;
+  const bw = Math.abs(w * Math.cos(a)) + Math.abs(h * Math.sin(a)), bh = Math.abs(w * Math.sin(a)) + Math.abs(h * Math.cos(a));
+  return [e.x - bw / 2, e.y - bh / 2, e.x + bw / 2, e.y + bh / 2];
+}
+
+function decorColour(sprite) {
+  let h = 0;
+  for (const c of sprite.split('/')[0]) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return `hsl(${h}, 90%, 65%)`;
+}
+
+// decor.json: one placement per line, exactly as tools/art/bake.py writes it
+function decorJSON(list) {
+  if (!list.length) return '[]\n';
+  const one = (e) => '{' + Object.entries(e).map(([k, v]) => `${JSON.stringify(k)}: ${JSON.stringify(v)}`).join(', ') + '}';
+  return '[\n' + list.map((e) => '  ' + one(e)).join(',\n') + '\n]\n';
+}
 
 function transformOf(e) {
   let a = 1, b = 0, c = 0, d = 1;
@@ -1490,6 +1725,12 @@ const CSS = `
 #level-editor .le-layer span { flex: 1; }
 #level-editor .le-pick { cursor: pointer; text-decoration: underline dotted #476; }
 #level-editor .le-palette button { font-size: 11px; }
+#level-editor .le-decor-pal { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 3px; max-height: 220px; overflow-y: auto; }
+#level-editor .le-decor-pal button { padding: 2px; height: 44px; background: #1b2b2b; }
+#level-editor .le-decor-pal img, #level-editor .le-decor-thumb { max-width: 100%; max-height: 100%; object-fit: contain; display: block; margin: auto; }
+#level-editor .le-decor-thumb { width: 48px; height: 48px; background: #1b2b2b; border-radius: 3px; }
+#level-editor .le-danger { background: #7a2a2a; color: #fff; }
+#level-editor .le-artlog { max-height: 160px; overflow: auto; white-space: pre-wrap; font-size: 10px; background: #000a; padding: 4px; color: #fcc; }
 #level-editor .le-stats div { margin: 1px 0; }
 #level-editor .le-trig { cursor: pointer; padding: 1px 3px; border-radius: 3px; font-size: 11px; }
 #level-editor .le-trig:hover { background: #164; }
