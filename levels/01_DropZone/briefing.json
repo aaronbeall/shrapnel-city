@@ -1,0 +1,160 @@
+{
+  "changes": [
+    {"place": "interface/mask wipe", "depth": 3281, "x": 0, "y": 0, "ratio": 0.000030518043793392844, "clipDepth": 3425},
+    {"place": "screen_mc/shape 2", "depth": 3369, "x": 0, "y": 0},
+    {"place": "screen_mc/text 8", "depth": 3370, "x": 90, "y": 164, "scale": [1.000061, 1.000305]},
+    {
+      "place": "screen_mc/text 9",
+      "depth": 3371,
+      "x": 606,
+      "y": 219.8,
+      "scale": [1.000061, 1.000305],
+      "filters": [
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 15,
+          "blurY": 15,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 2
+        }
+      ]
+    },
+    {
+      "place": "screen_mc/text 10",
+      "depth": 3372,
+      "x": 591,
+      "y": 315.2,
+      "scale": [1.000061, 1.000305],
+      "filters": [
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 15,
+          "blurY": 15,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 2
+        }
+      ]
+    },
+    {
+      "place": "enemy assets/enemy stinger core - circle",
+      "depth": 3373,
+      "x": 634.75,
+      "y": 255,
+      "scale": [1.000061, 1.000305],
+      "ratio": 0.000030518043793392844,
+      "name": "core_mc"
+    },
+    {
+      "place": "enemy assets/enemy stinger turret - oval",
+      "depth": 3377,
+      "x": 634.75,
+      "y": 255,
+      "scale": [0.995041, 1.002441],
+      "ratio": 0.000030518043793392844,
+      "name": "turret_mc"
+    },
+    {"place": "screen_mc/text 11", "depth": 3384, "x": 606, "y": 266.8, "scale": [1.000061, 1.000305]},
+    {
+      "place": "enemy assets/enemy wolfgun core",
+      "depth": 3385,
+      "x": 637.3,
+      "y": 375,
+      "scale": [1.000061, 1.000305],
+      "ratio": 0.000030518043793392844,
+      "name": "core_mc"
+    },
+    {
+      "place": "enemy assets/enemy wolfgun turret",
+      "depth": 3392,
+      "x": 637.3,
+      "y": 375,
+      "scale": [1.000061, 1.000305],
+      "ratio": 0.000030518043793392844,
+      "name": "turret_mc"
+    },
+    {"place": "screen_mc/text 12", "depth": 3404, "x": 606, "y": 406.25, "scale": [1.000061, 1.000305]},
+    {
+      "place": "screen_mc/text 13",
+      "depth": 3405,
+      "x": 87.05,
+      "y": 81.8,
+      "scale": [1.000061, 1.000305],
+      "filters": [
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 15,
+          "blurY": 15,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 2
+        }
+      ]
+    },
+    {
+      "place": "screen_mc/text 14",
+      "depth": 3406,
+      "x": 89.05,
+      "y": 75.8,
+      "scale": [1.000061, 1.000305],
+      "filters": [
+        {
+          "type": "glow",
+          "color": "#00ffff",
+          "blurX": 15,
+          "blurY": 15,
+          "strength": 1,
+          "inner": false,
+          "knockout": false,
+          "passes": 2
+        }
+      ]
+    },
+    {"place": "screen_mc/shape 3", "depth": 3407, "x": 0, "y": -40},
+    {
+      "place": "interface/buttons/btn play mission",
+      "depth": 3408,
+      "x": 548,
+      "y": 544,
+      "ratio": 0.000030518043793392844,
+      "clipEvents": [2048, 131072, 131072],
+      "script": [
+        "on (release) {",
+        "    continueLevel();",
+        "}",
+        "on (keyPress \"<Space>\") {",
+        "    continueLevel();",
+        "}",
+        "",
+        "on (keyPress \"<Enter>\") {",
+        "    continueLevel();",
+        "}",
+        ""
+      ]
+    },
+    {
+      "place": "interface/buttons/btn back to main menu",
+      "depth": 3412,
+      "x": 65,
+      "y": 3.05,
+      "ratio": 0.000030518043793392844,
+      "script": ["on (release) {", "    quit();", "}", "", "on (keyPress \"<Escape>\") {", "    quit();", "}", ""]
+    },
+    {
+      "place": "interface/screens/briefing monitor scanlines anim",
+      "depth": 3416,
+      "x": 0,
+      "y": 0,
+      "color": {"alpha": 0.1484375},
+      "ratio": 0.000030518043793392844,
+      "blend": "overlay"
+    }
+  ]
+}

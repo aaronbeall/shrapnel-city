@@ -1,0 +1,8 @@
+[
+  {
+    "symbol": "enemy assets/enemy object fire barrel",
+    "x": 611.95,
+    "y": 343.7,
+    "props": {"health": 0.1, "blastRange": 200, "damage": 200, "frag": "frag_mc", "fragCount": 15}
+  }
+]

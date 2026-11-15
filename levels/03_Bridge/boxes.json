@@ -1,0 +1,183 @@
+[
+  {"symbol": "game objects/box", "x": 118, "y": 400},
+  {
+    "symbol": "game objects/box",
+    "x": 138,
+    "y": 400,
+    "scale": 1.285706,
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {"symbol": "game objects/box", "x": 158, "y": 400},
+  {"symbol": "game objects/box", "x": 42, "y": 249.9},
+  {
+    "symbol": "game objects/box",
+    "x": 62,
+    "y": 250,
+    "scale": 1.285706,
+    "props": {"health": 25, "powerupDrop": {"type": "health", "item": "health", "quantity": 50}}
+  },
+  {"symbol": "game objects/box", "x": 82, "y": 249.9},
+  {"symbol": "game objects/box", "x": 550, "y": 300},
+  {
+    "symbol": "game objects/box",
+    "x": 400,
+    "y": 288,
+    "scale": 1.779358,
+    "props": {"health": 50, "powerupDrop": {"type": "secondary", "item": "Splinter Bomb", "quantity": 3}}
+  },
+  {"symbol": "game objects/box", "x": 37, "y": 110},
+  {"symbol": "game objects/box", "x": 86.3, "y": 39},
+  {"symbol": "game objects/box", "x": 625, "y": 300},
+  {"symbol": "game objects/box", "x": 700, "y": 300},
+  {"symbol": "game objects/box", "x": 775, "y": 300},
+  {"symbol": "game objects/box", "x": 850, "y": 300},
+  {
+    "symbol": "game objects/box",
+    "x": 248.95,
+    "y": 46,
+    "props": {"powerupDrop": {"type": "secondary", "item": "Impact Mortar", "quantity": 1}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 223,
+    "y": 551.95,
+    "props": {"powerupDrop": {"type": "health", "item": "health", "quantity": 15}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 273,
+    "y": 551.95,
+    "props": {"powerupDrop": {"type": "health", "item": "health", "quantity": 15}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 273,
+    "y": 526.95,
+    "props": {"powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 15}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 223,
+    "y": 526.95,
+    "props": {"powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 15}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 248,
+    "y": 526.95,
+    "props": {"powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 15}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 248,
+    "y": 551.95,
+    "props": {"powerupDrop": {"type": "health", "item": "health", "quantity": 15}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 1190,
+    "y": 272,
+    "props": {"powerupDrop": {"type": "health", "item": "health", "probability": 0.5, "quantity": 10}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 1251,
+    "y": 272,
+    "props": {"powerupDrop": {"type": "primary", "item": "Bolter", "probability": 0.5, "quantity": 15}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 1190,
+    "y": 352,
+    "props": {"powerupDrop": {"type": "primary", "item": "Bolter", "probability": 0.5, "quantity": 15}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 1251,
+    "y": 352,
+    "props": {"powerupDrop": {"type": "health", "item": "health", "probability": 0.5, "quantity": 10}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 1112,
+    "y": 312,
+    "scale": 1.272705,
+    "props": {"powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {
+    "symbol": "game objects/box",
+    "x": 1178.45,
+    "y": 71.75,
+    "scale": 1.312057,
+    "props": {"health": 50, "powerupDrop": {"type": "health", "item": "health", "quantity": 25}}
+  },
+  {"symbol": "game objects/box", "x": 1157.75, "y": 53},
+  {"symbol": "game objects/box", "x": 1198.75, "y": 53},
+  {"symbol": "game objects/box", "x": 1198.75, "y": 91},
+  {"symbol": "game objects/box", "x": 1157.75, "y": 91},
+  {"symbol": "game objects/box", "x": 398.8, "y": 48},
+  {"symbol": "game objects/box", "x": 398.8, "y": 556.95},
+  {"symbol": "game objects/box", "x": 463.75, "y": 48},
+  {"symbol": "game objects/box", "x": 635.75, "y": 48},
+  {"symbol": "game objects/box", "x": 808.75, "y": 48},
+  {"symbol": "game objects/box", "x": 972.75, "y": 48},
+  {"symbol": "game objects/box", "x": 463.75, "y": 549},
+  {"symbol": "game objects/box", "x": 635.75, "y": 549},
+  {"symbol": "game objects/box", "x": 808.75, "y": 549},
+  {"symbol": "game objects/box", "x": 972.75, "y": 549},
+  {"symbol": "game objects/box", "x": 1276.95, "y": 170},
+  {"symbol": "game objects/box", "x": 1296.95, "y": 150},
+  {"symbol": "game objects/box", "x": 1316.95, "y": 130},
+  {"symbol": "game objects/box", "x": 1336.95, "y": 110},
+  {"symbol": "game objects/box", "x": 1250, "y": 425},
+  {"symbol": "game objects/box", "x": 1150, "y": 425},
+  {"symbol": "game objects/box", "x": 1150, "y": 200},
+  {"symbol": "game objects/box", "x": 1250, "y": 200},
+  {"symbol": "game objects/box", "x": 1412.95, "y": 311},
+  {"symbol": "game objects/box", "x": 1550, "y": 550},
+  {"symbol": "game objects/box", "x": 1450, "y": 550},
+  {"symbol": "game objects/box", "x": 1550, "y": 450},
+  {"symbol": "game objects/box", "x": 1500, "y": 550},
+  {"symbol": "game objects/box", "x": 1500, "y": 500},
+  {"symbol": "game objects/box", "x": 1550, "y": 500},
+  {
+    "symbol": "game objects/box",
+    "x": 1550,
+    "y": 375,
+    "scale": 1.272705,
+    "props": {"powerupDrop": {"type": "secondary", "item": "Splinter Bomb", "quantity": 3}}
+  },
+  {"symbol": "game objects/box", "x": 1500, "y": 155},
+  {"symbol": "game objects/box", "x": 1445, "y": 100},
+  {"symbol": "game objects/box", "x": 1500, "y": 45},
+  {"symbol": "game objects/box", "x": 1555, "y": 100},
+  {
+    "symbol": "game objects/box computer",
+    "x": 1300.35,
+    "y": 36.1,
+    "script": [
+      "onClipEvent (load) {",
+      "    function onDie(){",
+      "        makeShrapnel(this,\"frag_mc\",15);",
+      "        trigger(\"battery1down\");",
+      "    }",
+      "}",
+      ""
+    ]
+  },
+  {
+    "symbol": "game objects/box computer",
+    "x": 1261.45,
+    "y": 550.75,
+    "scale": -1,
+    "script": [
+      "onClipEvent (load) {",
+      "    function onDie(){",
+      "        makeShrapnel(this,\"frag_mc\",15);",
+      "        trigger(\"battery2down\");",
+      "    }",
+      "}",
+      ""
+    ]
+  }
+]

@@ -16,6 +16,8 @@ This folder is the editable source for the game's art, animation and timelines: 
 | `library/_main timeline/…` | Pieces drawn directly on the main timeline |
 | `ids.json` | The character id of every symbol. The compiled scripts refer to these, so existing ids never change; a new file gets the next free id automatically |
 
+The levels aren't here: `screen_mc.json` holds only the clips that stay on screen for the whole game (the player, the projectile templates and so on) and has `"levels": "levels/"`, and the build adds each level's briefing and game frames and its `level assets/level<N>`, `background<N>`, `boxes<N>`, `powerups<N>` and `enemies<N>` symbols from [levels/](../levels/README.md).
+
 Symbols refer to each other by these names. Characters that aren't portable in file names are written as `%XX`, e.g. `btn %3C%3F%3E.json` is the button `btn <?>`.
 
 ## Symbol files
@@ -106,4 +108,4 @@ To convert another symbol: `python3 tools/flash-source/fla2source.py <unzipped F
 
 ## Generated art
 
-- `level assets/background3/shape 1/bitmap 1.png` (the Bridge floor and walls) replaces the original placeholder art. `tools/art/assemble_bridge.py` builds it from parts in `tools/art/parts/` (wall-top, floor and chasm textures generated with OpenAI `gpt-image-2`, using only backgrounds 0-2 as style references; prompts are next to each part). Decor (vents, greebles, lights, floor paint, wall markings, railings and pipes) comes from AI-generated sprite sheets: `tools/art/gen_decor.sh` makes the sheets (prompts in `tools/art/parts/decor/`), `tools/art/cut_decor.py` cuts them into sprites, and the assembler places them, each fitted inside its wall or floor area and not overlapping. The parts are laid onto `level assets/level3`'s collision shape, so the art lines up with `level_mc` exactly. Re-run it (needs numpy, scipy and Pillow) after changing the level or a part.
+- `levels/03_Bridge/background.png` (the Bridge floor and walls) replaces the original placeholder art. `tools/art/assemble_bridge.py` builds it from parts in `tools/art/parts/` (wall-top, floor and chasm textures generated with OpenAI `gpt-image-2`, using only backgrounds 0-2 as style references; prompts are next to each part). Decor (vents, greebles, lights, floor paint, wall markings, railings and pipes) comes from AI-generated sprite sheets: `tools/art/gen_decor.sh` makes the sheets (prompts in `tools/art/parts/decor/`), `tools/art/cut_decor.py` cuts them into sprites, and the assembler places them, each fitted inside its wall or floor area and not overlapping. The parts are laid onto the Bridge's collision map, `levels/03_Bridge/collision.png`, so the art lines up with `level_mc` exactly. Re-run it (needs numpy, scipy and Pillow) after changing the level or a part.

@@ -1,0 +1,97 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 491.15,
+    "y": 389.25,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 657.15,
+    "y": 237.25,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 308.15,
+    "y": 389.25,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 691.4,
+    "y": 93.45,
+    "scale": 0.999969,
+    "script": [
+      "onClipEvent (load) {",
+      "    type = \"primary\";",
+      "    item = \"Plasma\";",
+      "    quantity = 30;",
+      "    ",
+      "    alertMessage = \"You got a new weapon! Press <strong>INSERT</strong> and <strong>SHIFT+INSERT</strong> to change your primary weapon. Press <strong>DELETE</strong> and <strong>SHIFT+DELETE</strong> to change your secondary weapon.\";",
+      "    alertKillTrigger = {onRollOut:_parent.triggerNewWep_mc}",
+      "}"
+    ]
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 728.1,
+    "y": 493.85,
+    "props": {"type": "health", "item": "health", "quantity": 100}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 491.15,
+    "y": 208.25,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 308.15,
+    "y": 208.25,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 15}
+  },
+  {"symbol": "_circle", "x": 691.4, "y": 93.45, "scale": 1.80481, "color": {"alpha": 0}, "name": "triggerNewWep_mc"},
+  {
+    "symbol": "game objects/message beacon",
+    "x": 400,
+    "y": 373.35,
+    "props": {
+      "alertMessage": "Welcome to basic training! Use the <strong>ARROW KEYS</strong> to move around and collect items.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 213,
+    "y": 515.4,
+    "props": {
+      "alertMessage": "Now practice maneuvering. Use <strong>Z</strong> and <strong>X</strong> to strafe left and right through tight areas and dodge incoming fire.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 217,
+    "y": 70.45,
+    "props": {
+      "alertMessage": "Let's shoot something! Press <strong>SPACE</strong> to blow up those yellow boxes.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 691.4,
+    "y": 235.45,
+    "props": {
+      "alertMessage": "Here's a good example of where to use a bomb. Press <strong>CTRL</strong> to bounce a bomb into the room for instant destruction.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 741.5,
+    "y": 395.4,
+    "props": {"alertMessage": "To the exit, and you're ready!", "persistent": true}
+  }
+]

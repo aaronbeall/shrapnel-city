@@ -5,7 +5,8 @@ collision shape.
 
 Parts in tools/art/parts/ were generated with OpenAI gpt-image-2 using only the
 original levels (backgrounds 0-2) as style references; the prompts sit next to
-them. This script lays them onto level3's collision shape so the walls you see
+them. This script lays them onto the Bridge's collision map
+(levels/03_Bridge/collision.png) so the walls you see
 are the walls you hit:
 
 - floor and chasm textures are tiled; the wall-top texture is tiled along each
@@ -17,52 +18,26 @@ are the walls you hit:
 """
 import json
 import os
-import re
+import sys
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image
 from scipy import ndimage as ndi
+
+sys.path.insert(0, os.path.dirname(__file__))
+from collision import coverage  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 PARTS = os.path.join(os.path.dirname(__file__), 'parts')
-LEVEL = os.path.join(ROOT, 'source/library/level assets/level3/shape 1.json')
-OUT = os.path.join(ROOT, 'source/library/level assets/background3/shape 1/bitmap 1.png')
-W, H, SS = 1600, 600, 4
+LEVEL = os.path.join(ROOT, 'levels/03_Bridge/collision.png')
+OUT = os.path.join(ROOT, 'levels/03_Bridge/background.png')
+W, H = 1600, 600
 rng = np.random.default_rng(2012)
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
 
 
-# ---------------------------------------------------------------- collision shape
-def subpaths(d):
-    pts, out = [], []
-    for cmd, x, y in re.findall(r'([MLZ])\s*(?:(-?[\d.]+)\s+(-?[\d.]+))?', d):
-        if cmd == 'M':
-            if pts: out.append(pts)
-            pts = [(float(x), float(y))]
-        elif cmd == 'L': pts.append((float(x), float(y)))
-        elif cmd == 'Z' and pts: out.append(pts); pts = []
-    if pts: out.append(pts)
-    return out
-
-
-def raster(d):
-    acc = np.zeros((H * SS, W * SS), bool)
-    for pts in subpaths(d):
-        im = Image.new('1', (W * SS, H * SS), 0)
-        ImageDraw.Draw(im).polygon([(x * SS, y * SS) for x, y in pts], fill=1)
-        acc ^= np.array(im)
-    return acc
-
-
-shape = json.load(open(LEVEL))
-label = np.zeros((H * SS, W * SS), np.uint8)
-for p in shape['paths']:
-    if 'fill' not in p: continue
-    col = shape['fills'][p['fill']]['color'].lower()
-    if col == '#ffffff': continue
-    label[raster(p['d'])] = 1 if col == '#000000' else 2
-down = lambda m: m.reshape(H, SS, W, SS).mean(axis=(1, 3)).astype(np.float32)
-wall, chasm = down(label == 1), down(label == 2)
+# ---------------------------------------------------------------- collision map
+wall, chasm = coverage(LEVEL, W, H)
 wallb, chasmb = wall > 0.5, chasm > 0.5
 
 

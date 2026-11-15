@@ -1,0 +1,86 @@
+[
+  {
+    "symbol": "enemy assets/enemy wolfgun",
+    "x": 75.5,
+    "y": 103.45,
+    "props": {"powerupDrop": {"type": "primary", "item": "Plasma", "quantity": 10}}
+  },
+  {
+    "symbol": "enemy assets/enemy stinger",
+    "x": 343.95,
+    "y": 295.4,
+    "matrix": [-0.785873, -0.615799, 0.615799, -0.785873]
+  },
+  {"symbol": "enemy assets/enemy stinger", "x": 343.95, "y": 219.45, "matrix": [0.866028, -0.5, 0.5, 0.866028]},
+  {
+    "symbol": "enemy assets/enemy stinger",
+    "x": 479.95,
+    "y": 295.4,
+    "matrix": [-0.615707, 0.785965, -0.785965, -0.615707]
+  },
+  {"symbol": "enemy assets/enemy stinger", "x": 479.95, "y": 219.45, "matrix": [0.866028, 0.5, -0.5, 0.866028]},
+  {
+    "symbol": "enemy assets/enemy stinger2",
+    "x": 317,
+    "y": 40.5,
+    "matrix": [0.000031, 1, -1, 0.000031],
+    "script": [
+      "onClipEvent (load) {",
+      "    /*powerupDrop = {",
+      "        type:\"primary\",",
+      "        item:\"Banshee\",",
+      "        quantity:50,",
+      "        probability:.5",
+      "    }*/",
+      "}"
+    ]
+  },
+  {"symbol": "enemy assets/enemy stinger", "x": 225.5, "y": 328.45, "matrix": [0.965927, -0.25882, 0.25882, 0.965927]},
+  {
+    "symbol": "enemy assets/enemy stinger",
+    "x": 225.5,
+    "y": 428.45,
+    "matrix": [-0.994064, 0.105591, -0.105591, -0.994064]
+  },
+  {"symbol": "enemy assets/enemy stinger", "x": 750.5, "y": 165.4, "matrix": [0, -1, 1, 0]},
+  {"symbol": "enemy assets/enemy scurge", "x": 252, "y": 51.45},
+  {"symbol": "enemy assets/enemy scurge", "x": 168, "y": 51.45},
+  {"symbol": "enemy assets/enemy scurge", "x": 168, "y": 292.95},
+  {"symbol": "enemy assets/enemy scurge", "x": 175.5, "y": 553.45},
+  {"symbol": "enemy assets/enemy scurge", "x": 250.5, "y": 553.45},
+  {"symbol": "enemy assets/enemy scurge", "x": 214, "y": 503.45},
+  {"symbol": "enemy assets/enemy scurge", "x": 602.95, "y": 228.45, "props": {"refireRate": 25}},
+  {"symbol": "enemy assets/enemy scurge", "x": 629.95, "y": 228.45, "props": {"refireRate": 25}},
+  {"symbol": "enemy assets/enemy scurge", "x": 656.95, "y": 228.45, "props": {"refireRate": 25}},
+  {"symbol": "enemy assets/enemy scurge", "x": 602.95, "y": 88.45, "props": {"refireRate": 25}},
+  {"symbol": "enemy assets/enemy scurge", "x": 629.95, "y": 88.45, "props": {"refireRate": 25}},
+  {"symbol": "enemy assets/enemy scurge", "x": 656.95, "y": 88.45, "props": {"refireRate": 25}},
+  {
+    "symbol": "enemy assets/enemy wolfgun",
+    "x": 710.5,
+    "y": 418.45,
+    "matrix": [-0.146301, -1.190582, 1.190582, -0.146301],
+    "props": {"health": 200}
+  },
+  {"symbol": "enemy assets/enemy scurge", "x": 362.95, "y": 392.4},
+  {"symbol": "enemy assets/enemy scurge", "x": 613.95, "y": 390.9},
+  {"symbol": "enemy assets/enemy scurge", "x": 551.2, "y": 390.9},
+  {"symbol": "enemy assets/enemy scurge", "x": 488.45, "y": 390.9},
+  {"symbol": "enemy assets/enemy scurge", "x": 425.7, "y": 390.9},
+  {
+    "symbol": "enemy assets/enemy stinger2",
+    "x": 655,
+    "y": 535.3,
+    "matrix": [0.087418, -0.995865, 0.995865, 0.087418],
+    "script": [
+      "onClipEvent (load) {",
+      "    /*powerupDrop = {",
+      "        type:\"primary\",",
+      "        item:\"Banshee\",",
+      "        quantity:50,",
+      "        probability:.5",
+      "    }*/",
+      "}"
+    ]
+  }
+]

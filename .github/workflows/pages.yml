@@ -1,4 +1,4 @@
-# Builds the game from source/ and as2/ and publishes it to GitHub Pages.
+# Builds the game from source/, levels/ and as2/ and publishes it to GitHub Pages.
 # Pull requests build too, so a broken source change fails before it's merged.
 name: Build and deploy
 

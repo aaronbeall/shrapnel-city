@@ -1,0 +1,27 @@
+[
+  {
+    "symbol": "enemy assets/enemy wolfgun",
+    "x": 734.95,
+    "y": 137.15,
+    "matrix": [-0.965927, 0.25882, -0.25882, -0.965927],
+    "props": {"powerupDrop": {"type": "primary", "item": "Plasma", "quantity": 50}}
+  },
+  {
+    "symbol": "enemy assets/enemy wolfgun",
+    "x": 372.95,
+    "y": 301,
+    "matrix": [0.965927, -0.25882, 0.25882, 0.965927],
+    "props": {"powerupDrop": {"type": "health", "item": "health", "quantity": 50}}
+  },
+  {"symbol": "enemy assets/enemy stinger", "x": 718.25, "y": 498.85},
+  {"symbol": "enemy assets/enemy stinger", "x": 93.95, "y": 37.55},
+  {"symbol": "enemy assets/enemy stinger", "x": 48, "y": 391.9, "matrix": [-0.866028, 0.5, -0.499008, -0.864319]},
+  {"symbol": "enemy assets/enemy stinger", "x": 303.95, "y": 158.05, "matrix": [0.866028, -0.5, 0.5, 0.866028]},
+  {"symbol": "enemy assets/enemy stinger", "x": 426.95, "y": 158.05, "matrix": [0.866028, 0.5, -0.5, 0.866028]},
+  {"symbol": "enemy assets/enemy stinger", "x": 521.95, "y": 514.4},
+  {"symbol": "enemy assets/enemy stinger", "x": 647.95, "y": 276},
+  {"symbol": "enemy assets/enemy stinger", "x": 670.25, "y": 498.85},
+  {"symbol": "enemy assets/enemy object fire barrel", "x": 467.5, "y": 319.3},
+  {"symbol": "enemy assets/enemy object fire barrel", "x": 338.55, "y": 352.45},
+  {"symbol": "enemy assets/enemy object fire barrel", "x": 268.5, "y": 254.5}
+]
