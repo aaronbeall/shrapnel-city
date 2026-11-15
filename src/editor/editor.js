@@ -254,7 +254,7 @@ class Editor {
     if (e.props && e.props.type === 'trigger') return true;
     if (e.color && e.color.alpha === 0) return true;
     const c = this.clipFor(layer, k);
-    return !!c && (!c.__visible || c._alpha <= 0);
+    return !!c && (!c.__visible || c._alpha <= 0 || !drawsSomething(c));
   }
 
   isNode(e) { return e && e.symbol === NODE; }
@@ -894,7 +894,7 @@ class Editor {
           if (!this.layerShown(l, e) || !this.isHidden(l, e, k)) return;
           const [x0, y0, x1, y1] = this.boundsOf(l, k);
           ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
-          labels.push([x0, y0, hiddenLabel(e)]);
+          labels.push([x0, y0, hiddenLabel(e, l)]);
         });
       }
       ctx.setLineDash([]);
@@ -1344,9 +1344,16 @@ function sentTriggers(e) {
   return out;
 }
 
-function hiddenLabel(e) {
+function hiddenLabel(e, layer) {
   if (e.props && e.props.type === 'trigger') return 'trigger pad';
-  return e.name || e.symbol.split('/').pop();
+  if (e.name) return e.name;
+  return layer === 'powerups' ? 'pickup area' : e.symbol.split('/').pop();
+}
+
+// does a clip show anything? (an empty frame, like a pickup on its blank first frame, doesn't)
+function drawsSomething(c) {
+  if (!c.children) return true; // a shape, bitmap or text
+  return c.children.some((x) => !x.removed && x.__visible && (x._alpha > 0) && drawsSomething(x));
 }
 
 function zoneMatrix(z) {
