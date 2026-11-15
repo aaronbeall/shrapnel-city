@@ -930,7 +930,9 @@ let ip = null; // inspector preview
 const ui = {
   canvas: document.getElementById('i-canvas'), title: document.getElementById('i-title'), sub: document.getElementById('i-sub'),
   play: document.getElementById('i-play'), prev: document.getElementById('i-prev'), next: document.getElementById('i-next'),
-  slider: document.getElementById('i-frame'), frame: document.getElementById('i-frameno'), labels: document.getElementById('i-labels'),
+  first: document.getElementById('i-first'), last: document.getElementById('i-last'), frame: document.getElementById('i-frameno'),
+  curLabel: document.getElementById('i-curlabel'), note: document.getElementById('i-tlnote'), strip: document.getElementById('i-strip'),
+  loop: document.getElementById('i-loop'), speed: document.getElementById('i-speed'),
   zoom: document.getElementById('i-zoom'), boundsBox: document.getElementById('i-bounds'), info: document.getElementById('i-info'),
   kids: document.getElementById('i-kids'), file: document.getElementById('i-file'), fileHead: document.getElementById('i-file-h'), script: document.getElementById('i-script'), close: document.getElementById('i-close'),
 };
@@ -939,18 +941,24 @@ function inspect(spec) {
   if (ip) { ip.node = null; all.splice(all.indexOf(ip), 1); }
   ip = new Preview({ ...spec, every: 1, static: false, range: undefined, maxScale: 8 });
   ip.canvas = ui.canvas;
-  ip.paused = spec.hold !== undefined;
+  // level maps and briefings are one frame of screen_mc: hold that frame, let its clips animate
+  ip.lock = spec.id === SCREEN && spec.hold !== undefined;
+  ip.paused = spec.hold !== undefined && !ip.lock;
   ip.build();
   if (!ip.node) return;
   ip.visible = true;
-  if (spec.range) { ip.node.gotoAndStop(spec.range[0]); ip.paused = false; ip.node.play(); rt.queue.length = 0; }
+  ip.loopMode = 'all';
+  if (spec.range) {
+    ip.node.gotoAndStop(spec.range[0]);
+    const lab = labelsOf(spec.id).find(([, f]) => f === spec.range[0]);
+    if (lab) ip.loopMode = 'label:' + lab[0];
+    ip.paused = false; ip.node.play(); rt.queue.length = 0;
+  }
   const id = spec.id, s = sym(id), node = ip.node;
   ui.title.textContent = spec.title || (lib.symbols.has(id) ? shortName(id) : charLabel(id));
   ui.sub.replaceChildren(kindTag(spec.kind || kindOf(id)), ` · ${lib.symbols.has(id) ? s.name : charLabel(id)} · char ${id}`);
   const T = node._totalframes || 1;
-  ui.slider.max = T;
-  ui.labels.replaceChildren(...labelsOf(id).map(([n, f]) => el('button', { onclick: () => { goto(f); } }, `${n} @${f}`)));
-  ui.labels.hidden = !ui.labels.children.length;
+  buildStrip(id, T);
   const info = {
     'linkage': s.linkage, type: s.type, frames: T, bounds: ip.bounds.map((v) => v.toFixed(1)).join(', '),
     'color transform': spec.cx ? spec.cx.map((v) => +(+v).toFixed(2)).join(' ') : null,
@@ -1016,19 +1024,90 @@ function showSourceFile(p) {
 }
 
 function goto(f) {
-  if (!ip || !ip.node) return;
-  ip.node.gotoAndStop(f);
+  if (!ip || !ip.node || ip.lock) return;
+  ip.node.gotoAndStop(Math.max(1, Math.min(ip.node._totalframes || 1, f)));
   rt.queue.length = 0;
   ip.paused = true;
   refreshInspector();
 }
 
+// ---- timeline strip: one cell per frame, label flags above, keyframes and scripts marked
+// label spans: [name, first, last]
+function labelSpans(id, T) {
+  const labs = labelsOf(id);
+  return labs.map(([n, f], i) => [n, f, i + 1 < labs.length ? labs[i + 1][1] - 1 : T]);
+}
+function buildStrip(id, T) {
+  const c = lib.get(id);
+  const spans = ip.lock ? [] : labelSpans(id, T);
+  const scriptFrames = new Set((c && c.scriptFrames || []).map((f) => f + 1));
+  const frames = (c && c.frames) || [];
+  const cw = T > 400 ? 6 : T > 150 ? 9 : 14;
+  ui.strip.style.setProperty('--cw', cw + 'px');
+  ui.strip.replaceChildren();
+  ui.strip.hidden = ip.lock;
+  ui.loop.hidden = ip.lock;
+  for (const b of [ui.first, ui.prev, ui.next, ui.last]) b.disabled = ip.lock;
+  if (ip.lock) {
+    ui.note.textContent = `frame ${ip.spec.hold} of screen_mc, held: play animates the clips on it`;
+  } else {
+    ui.note.textContent = T === 1 ? 'single frame' : '';
+    const labels = el('div', { class: 'srow labels' });
+    for (const [n, a, b] of spans) {
+      labels.append(el('button', { class: 'flag', style: `left:${(a - 1) * cw}px;width:${(b - a + 1) * cw}px`, title: `${n}: frames ${a}–${b}. Click to loop it`,
+        onclick: () => { ip.loopMode = 'label:' + n; ui.loop.value = ip.loopMode; goto(a); } }, n));
+    }
+    const cells = el('div', { class: 'srow cells' });
+    const nums = el('div', { class: 'srow nums' });
+    for (let f = 1; f <= T; f++) {
+      const ops = frames[f - 1] || [];
+      const key = ops.some((o) => o.op !== 'move' && o.op !== 'update' && !(o.op === 'place' && o.move && !o.id));
+      const cell = el('span', { class: 'cell' + (key ? ' key' : ops.length ? ' tw' : '') + (scriptFrames.has(f) ? ' sc' : '') + (spans.some(([, a]) => a === f) ? ' lb' : ''), 'data-f': f });
+      cells.append(cell);
+      if (f === 1 || f % (cw < 10 ? 10 : 5) === 0) nums.append(el('span', { style: `left:${(f - 1) * cw}px` }, f));
+    }
+    ui.strip.append(spans.length ? labels : null, cells, nums);
+    ui.strip.style.setProperty('--w', T * cw + 'px');
+    const pick = (e) => {
+      const r = cells.getBoundingClientRect();
+      goto(Math.floor((e.clientX - r.left) / cw) + 1);
+    };
+    cells.addEventListener('pointerdown', (e) => { pick(e); cells.setPointerCapture(e.pointerId); cells.$drag = true; });
+    cells.addEventListener('pointermove', (e) => { if (cells.$drag) pick(e); });
+    cells.addEventListener('pointerup', () => { cells.$drag = false; });
+  }
+  ui.loop.replaceChildren(el('option', { value: 'all' }, 'loop whole timeline'), el('option', { value: 'once' }, 'play once'),
+    ...spans.map(([n, a, b]) => el('option', { value: 'label:' + n }, `loop “${n}” (${a}–${b})`)));
+  ui.loop.value = ip.loopMode;
+  ui.loop.disabled = T === 1;
+}
+// keep playback inside the chosen label
+function applyLoop() {
+  if (!ip || !ip.node || ip.lock) return;
+  const T = ip.node._totalframes || 1;
+  const m = /^label:(.*)$/.exec(ip.loopMode);
+  const span = m && labelSpans(ip.spec.id, T).find(([n]) => n === m[1]);
+  ip.spec.range = span ? [span[1], span[2]] : undefined;
+  const f = ip.node._currentframe;
+  if (span && (f < span[1] || f > span[2])) { ip.node.gotoAndStop(span[1]); if (!ip.paused) ip.node.play(); rt.queue.length = 0; }
+}
+
 function refreshInspector() {
   if (!ip || !ip.node) return;
-  const node = ip.node, f = node._currentframe || 1;
-  ui.slider.value = f;
-  ui.frame.textContent = `${f} / ${node._totalframes || 1}`;
+  const node = ip.node, f = node._currentframe || 1, T = node._totalframes || 1;
+  ui.frame.textContent = ip.lock ? '' : `frame ${f} / ${T}`;
+  const span = ip.lock ? null : labelSpans(ip.spec.id, T).filter(([, a]) => a <= f).pop();
+  ui.curLabel.textContent = span ? `“${span[0]}”` : '';
+  ui.curLabel.hidden = !span;
   ui.play.textContent = ip.paused ? '▶' : '❚❚';
+  ui.play.title = (ip.paused ? 'Play' : 'Pause') + ' (space)';
+  for (const c of ui.strip.querySelectorAll('.cell.cur')) c.classList.remove('cur');
+  const cur = ui.strip.querySelector(`.cell[data-f="${f}"]`);
+  if (cur) {
+    cur.classList.add('cur');
+    const sl = ui.strip.scrollLeft, x = cur.offsetLeft;
+    if (x < sl || x > sl + ui.strip.clientWidth - 20) ui.strip.scrollLeft = x - ui.strip.clientWidth / 2;
+  }
   const kids = node.children || [];
   ui.kids.replaceChildren(...kids.map((k) => {
     const kname = k.__name && !/^instance\d+$/.test(k.__name) ? k.__name : '';
@@ -1049,14 +1128,23 @@ function refreshInspector() {
 }
 
 ui.play.addEventListener('click', () => {
-  if (!ip) return;
+  if (!ip || !ip.node) return;
   ip.paused = !ip.paused;
-  if (ip.node.play) { if (ip.paused) ip.node.stop(); else ip.node.play(); }
+  if (!ip.lock && ip.node.play) {
+    // play once from the end starts over
+    if (!ip.paused && ip.loopMode === 'once' && ip.node._currentframe >= ip.node._totalframes) ip.node.gotoAndStop(1);
+    if (ip.paused) ip.node.stop(); else ip.node.play();
+    applyLoop();
+    rt.queue.length = 0;
+  }
   refreshInspector();
 });
-ui.prev.addEventListener('click', () => ip && goto(Math.max(1, ip.node._currentframe - 1)));
-ui.next.addEventListener('click', () => ip && goto(Math.min(ip.node._totalframes, ip.node._currentframe + 1)));
-ui.slider.addEventListener('input', () => goto(+ui.slider.value));
+const span0 = () => { const m = /^label:(.*)$/.exec(ip.loopMode); return m && labelSpans(ip.spec.id, ip.node._totalframes || 1).find(([n]) => n === m[1]); };
+ui.first.addEventListener('click', () => { if (ip) { const s0 = span0(); goto(s0 ? s0[1] : 1); } });
+ui.last.addEventListener('click', () => { if (ip) { const s0 = span0(); goto(s0 ? s0[2] : ip.node._totalframes); } });
+ui.prev.addEventListener('click', () => ip && goto(ip.node._currentframe - 1));
+ui.next.addEventListener('click', () => ip && goto(ip.node._currentframe + 1));
+ui.loop.addEventListener('change', () => { if (ip) { ip.loopMode = ui.loop.value; applyLoop(); refreshInspector(); } });
 ui.zoom.addEventListener('input', () => { if (ip) { ip.zoom = +ui.zoom.value ? Math.pow(2, +ui.zoom.value - 3) : 0; ip.draw(); } });
 ui.boundsBox.addEventListener('change', () => ip && ip.draw());
 ui.close.addEventListener('click', () => dlg.close());
@@ -1074,8 +1162,11 @@ ui.canvas.addEventListener('pointerup', () => { drag = null; });
 window.addEventListener('keydown', (e) => {
   if (!dlg.open || !ip) return;
   if (e.key === ' ') { e.preventDefault(); ui.play.click(); }
+  if (e.target.closest && e.target.closest('select, input')) return;
   if (e.key === 'ArrowLeft') ui.prev.click();
   if (e.key === 'ArrowRight') ui.next.click();
+  if (e.key === 'Home') ui.first.click();
+  if (e.key === 'End') ui.last.click();
 });
 
 // ---------------------------------------------------------------- routing
@@ -1124,10 +1215,14 @@ function loop(now) {
         if (p.tickN % (p.spec.every || 1) === 0) p.draw();
       }
     }
-    if (ip && dlg.open && ip.node) {
+    if (ip && dlg.open && ip.node && !ip.paused) {
+      ip.acc = (ip.acc || 0) + (+ui.speed.value || 1);
       const f = ip.node._currentframe;
-      ip.tick();
-      if (ip.node._currentframe !== f) refreshInspector(); else ip.draw();
+      for (; ip.acc >= 1; ip.acc--) {
+        if (!ip.lock && ip.loopMode === 'once' && ip.node._currentframe >= ip.node._totalframes) { ip.paused = true; ip.node.stop(); break; }
+        ip.tick();
+      }
+      if (ip.node._currentframe !== f || ip.paused) refreshInspector(); else ip.draw();
     }
   }
   requestAnimationFrame(loop);

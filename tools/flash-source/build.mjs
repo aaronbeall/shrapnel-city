@@ -128,7 +128,7 @@ for (const f of files) {
   const rel = path.relative(path.join(SRC, 'library'), f).split(path.sep).join('/');
   fileIndex.push([`source/library/${rel}`, idOf.get(pathToName(rel.slice(0, -path.extname(rel).length)))]);
 }
-const LEVEL_FILE_SYMBOL = { collision: 'level', background: 'background', boxes: 'boxes', powerups: 'powerups', enemies: 'enemies' };
+const LEVEL_FILE_SYMBOL = { collision: 'level', background: 'background', boxes: 'boxes', powerups: 'powerups', enemies: 'enemies', vision: 'vision' };
 for (const L of levels.levels) {
   for (const f of fs.readdirSync(path.join(ROOT, 'levels', L.folder)).filter((n) => /\.(json|png)$/.test(n)).sort()) {
     const base = f.replace(/\.\w+$/, '');
