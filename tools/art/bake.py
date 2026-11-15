@@ -330,6 +330,8 @@ def bake(g, decor, seed, opts):
     img = np.clip(base_art(g, seed, opts), 0, 1)
     shadow = np.zeros((H, W), np.float32)
     bloom = np.zeros((H, W, 3), np.float32)
+    lighting = np.zeros((H, W, 3), np.float32)
+    lo = opts['lights']
     for i, e in enumerate(decor):
         try: sp = sprite(e['sprite'])
         except OSError: print(f'decor.json[{i}]: no sprite {e["sprite"]!r}, skipped'); continue
@@ -357,10 +359,24 @@ def bake(g, decor, seed, opts):
         img[Y0:Y1, X0:X1] = region * (1 - a) + col * a
         if effect == 'shadow': shadow[Y0:Y1, X0:X1] += k * (a[..., 0] > 40 / 255)
         if effect == 'glow':
-            hot = np.clip((col.max(-1) - 0.75) * 4, 0, 1) * (col.max(-1) - col.min(-1) > 0.25)
+            hot = np.clip((col.max(-1) - 0.7) * 4, 0, 1) * a[..., 0]
             bloom[Y0:Y1, X0:X1] += k * hot[..., None] * col
+            # a pool of the light's own colour around it
+            if lo['radius'] > 0 and hot.sum() > 1:
+                c = (col * hot[..., None]).sum((0, 1)) / hot.sum()
+                c = c / max(c.max(), 1e-3)
+                r = lo['radius'] * max(w, h) / 2
+                cx, cy = float(e['x']), float(e['y'])
+                bx0, by0 = max(0, int(cx - 3 * r)), max(0, int(cy - 3 * r))
+                bx1, by1 = min(W, int(cx + 3 * r) + 1), min(H, int(cy + 3 * r) + 1)
+                if bx1 > bx0 and by1 > by0:
+                    d2 = (g.xx[by0:by1, bx0:bx1] - cx) ** 2 + (g.yy[by0:by1, bx0:bx1] - cy) ** 2
+                    lighting[by0:by1, bx0:bx1] += k * np.exp(-d2 / (2 * r * r))[..., None] * c
     img *= (1 - 0.5 * blur(np.clip(ndi.shift(shadow, (2, 2), order=0), 0, 1), 1.5))[..., None]
-    img += np.stack([blur(bloom[..., c], 5) for c in range(3)], -1) * 1.5
+    # lights: tinted brightening of what's under the pool (a "light" blend), then the bloom
+    # (strongest on mid tones, so the dark floor picks up colour and bright walls don't wash out)
+    img = img + lo['intensity'] * lighting * (0.12 + img) * (1 - np.clip(img, 0, 1))
+    img += np.stack([blur(bloom[..., c], 4) for c in range(3)], -1) * lo['bloom']
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
     sh = opts['edges']['sharpen']
     if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))

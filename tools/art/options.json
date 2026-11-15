@@ -2,33 +2,166 @@
   "edges": {
     "label": "Wall edges",
     "options": {
-      "round": {"label": "corner rounding", "default": 3.2, "min": 0, "max": 10, "step": 0.1, "tip": "how much corners are rounded, in px (0 keeps the collision map's square corners)"},
-      "aa": {"label": "edge softness", "default": 0.8, "min": 0.3, "max": 4, "step": 0.1, "tip": "anti-aliasing width of wall edges, in px; the originals are about 1"},
-      "sharpen": {"label": "sharpen", "default": 0.7, "min": 0, "max": 3, "step": 0.05, "tip": "unsharp mask over the finished art (0 is off)"}
+      "round": {
+        "label": "corner rounding",
+        "default": 3.2,
+        "min": 0,
+        "max": 10,
+        "step": 0.1,
+        "tip": "how much corners are rounded, in px (0 keeps the collision map's square corners)"
+      },
+      "aa": {
+        "label": "edge softness",
+        "default": 0.8,
+        "min": 0.3,
+        "max": 4,
+        "step": 0.1,
+        "tip": "anti-aliasing width of wall edges, in px; the originals are about 1"
+      },
+      "sharpen": {
+        "label": "sharpen",
+        "default": 0.7,
+        "min": 0,
+        "max": 3,
+        "step": 0.05,
+        "tip": "unsharp mask over the finished art (0 is off)"
+      }
     }
   },
   "sides": {
     "label": "Wall sides",
     "tip": "Built like the originals: the wall art is copied, darkened and scaled down slightly toward the camera point, again and again, under the walls.",
     "options": {
-      "steps": {"label": "copies", "default": 10, "min": 0, "max": 40, "step": 1, "tip": "how many darkened copies (0: no sides)"},
-      "scale": {"label": "scale per copy", "default": 0.0018, "min": 0, "max": 0.01, "step": 0.0001, "tip": "each copy is this much smaller (0.001 = 0.1%), toward the camera point; far from it the sides get deeper"},
-      "darken": {"label": "first copy brightness", "default": 0.45, "min": 0, "max": 1, "step": 0.01, "tip": "brightness of the copy right under the wall (1 = as bright as the wall top)"},
-      "fade": {"label": "fade per copy", "default": 0.94, "min": 0.5, "max": 1, "step": 0.01, "tip": "each deeper copy is this much darker"},
-      "cx": {"label": "camera x", "default": 0.5, "min": 0, "max": 1, "step": 0.01, "tip": "the point the walls lean away from, as a fraction of the level width"},
-      "cy": {"label": "camera y", "default": 0.5, "min": 0, "max": 1, "step": 0.01, "tip": "as a fraction of the level height"}
+      "steps": {
+        "label": "copies",
+        "default": 10,
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "tip": "how many darkened copies (0: no sides)"
+      },
+      "scale": {
+        "label": "scale per copy",
+        "default": 0.0018,
+        "min": 0,
+        "max": 0.01,
+        "step": 0.0001,
+        "tip": "each copy is this much smaller (0.001 = 0.1%), toward the camera point; far from it the sides get deeper"
+      },
+      "darken": {
+        "label": "first copy brightness",
+        "default": 0.45,
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "tip": "brightness of the copy right under the wall (1 = as bright as the wall top)"
+      },
+      "fade": {
+        "label": "fade per copy",
+        "default": 0.94,
+        "min": 0.5,
+        "max": 1,
+        "step": 0.01,
+        "tip": "each deeper copy is this much darker"
+      },
+      "cx": {
+        "label": "camera x",
+        "default": 0.5,
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "tip": "the point the walls lean away from, as a fraction of the level width"
+      },
+      "cy": {
+        "label": "camera y",
+        "default": 0.5,
+        "min": 0,
+        "max": 1,
+        "step": 0.01,
+        "tip": "as a fraction of the level height"
+      }
     }
   },
   "hazard": {
     "label": "Chasm stripes",
     "options": {
-      "width": {"label": "width", "default": 5, "min": 0, "max": 30, "step": 1, "tip": "px of floor around each chasm (0: none)"},
-      "period": {"label": "stripe period", "default": 14, "min": 2, "max": 64, "step": 1, "tip": "px from one stripe to the next"},
-      "angle": {"label": "angle", "default": 45, "min": 0, "max": 180, "step": 5, "tip": "stripe direction in degrees"},
-      "colourA": {"label": "colour 1", "type": "colour", "default": "#b88f1c"},
-      "colourB": {"label": "colour 2", "type": "colour", "default": "#171717"},
-      "opacity": {"label": "opacity", "default": 0.75, "min": 0, "max": 1, "step": 0.05},
-      "texture": {"label": "texture", "type": "text", "default": "", "tip": "a PNG in tools/art/parts (e.g. hazard.png) tiled along the stripe angle instead of the two colours"}
+      "width": {
+        "label": "width",
+        "default": 5,
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "tip": "px of floor around each chasm (0: none)"
+      },
+      "period": {
+        "label": "stripe period",
+        "default": 14,
+        "min": 2,
+        "max": 64,
+        "step": 1,
+        "tip": "px from one stripe to the next"
+      },
+      "angle": {
+        "label": "angle",
+        "default": 45,
+        "min": 0,
+        "max": 180,
+        "step": 5,
+        "tip": "stripe direction in degrees"
+      },
+      "colourA": {
+        "label": "colour 1",
+        "type": "colour",
+        "default": "#b88f1c"
+      },
+      "colourB": {
+        "label": "colour 2",
+        "type": "colour",
+        "default": "#171717"
+      },
+      "opacity": {
+        "label": "opacity",
+        "default": 0.75,
+        "min": 0,
+        "max": 1,
+        "step": 0.05
+      },
+      "texture": {
+        "label": "texture",
+        "type": "text",
+        "default": "",
+        "tip": "a PNG in tools/art/parts (e.g. hazard.png) tiled along the stripe angle instead of the two colours"
+      }
+    }
+  },
+  "lights": {
+    "label": "Lights",
+    "tip": "Each lit decor piece (effect glow) casts a pool of its own colour onto the floor and walls around it, blended as light (it brightens what's there, tinted), plus a small bloom on its bright core.",
+    "options": {
+      "radius": {
+        "label": "pool size",
+        "default": 2.5,
+        "min": 0,
+        "max": 10,
+        "step": 0.1,
+        "tip": "radius of the light pool, in sprite sizes (0: no pool)"
+      },
+      "intensity": {
+        "label": "pool brightness",
+        "default": 0.9,
+        "min": 0,
+        "max": 4,
+        "step": 0.05,
+        "tip": "how much the pool brightens what it falls on"
+      },
+      "bloom": {
+        "label": "bloom",
+        "default": 1.2,
+        "min": 0,
+        "max": 4,
+        "step": 0.05,
+        "tip": "glow around the bright core"
+      }
     }
   }
 }
