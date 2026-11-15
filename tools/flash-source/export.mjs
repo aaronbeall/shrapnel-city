@@ -8,9 +8,10 @@
 // e.g. "enemy assets/enemy stinger/shape 1".
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { nameToPath, encodeChar, encodeTimeline, rgbaToHex, encodeScript, pretty } from './format.mjs';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const OUT = path.resolve(ROOT, process.argv[2] || 'source');
 const swf = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/swf.json'), 'utf8'));
 const sym = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/symbols.json'), 'utf8'));

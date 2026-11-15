@@ -11,10 +11,11 @@
 // Character ids come from source/ids.json; a new library file gets the next free id.
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { pathToName, decodeChar, decodeTimeline, decodeScript, hexToRgba } from './format.mjs';
 import { loadLevels, composeScreen } from '../levels/levels.mjs';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const SRC = path.join(ROOT, 'source');
 const ASSETS = path.join(ROOT, 'assets');
 const check = process.argv.includes('--check');

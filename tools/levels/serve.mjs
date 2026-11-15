@@ -8,10 +8,11 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { FILES } from './levels.mjs';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const PORT = +(process.env.PORT || 8123);
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.png': 'image/png', '.css': 'text/css', '.svg': 'image/svg+xml', '.txt': 'text/plain', '.md': 'text/plain' };
 
@@ -19,7 +20,7 @@ let building = null, again = false;
 function build() {
   if (building) { again = true; return building; }
   building = new Promise((resolve) => {
-    const p = spawn('npm', ['run', 'build', '--silent'], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+    const p = spawn('npm', ['run', 'build', '--silent'], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'], shell: process.platform === 'win32' });
     let out = '';
     p.stdout.on('data', (d) => { out += d; });
     p.stderr.on('data', (d) => { out += d; });
