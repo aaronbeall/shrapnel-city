@@ -100,6 +100,11 @@
   summary { cursor: pointer; color: var(--muted); }
   summary.cur { color: var(--accent); }
   .muted { color: var(--muted); }
+  .playbar { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+  .tools .playbar button { border: 0; border-radius: 0; padding: 5px 9px; display: inline-flex; gap: 1px; align-items: center; background: var(--panel); }
+  .tools .playbar button + button { border-left: 1px solid var(--line); }
+  .playbar svg { width: 14px; height: 14px; }
+  .tools .playbar button.on { background: var(--accent); color: #032; }
   .kicon { display: inline-flex; width: 14px; height: 14px; vertical-align: -2px; flex: none; }
   .kicon svg { width: 100%; height: 100%; }
   .kind { white-space: nowrap; }
@@ -165,7 +170,11 @@
       <option value="checker">Checker</option>
       <option value="light">Light</option>
     </select>
-    <button id="pause">Pause all</button>
+    <div class="playbar" role="group" aria-label="Playback for all previews">
+      <button id="pb-stop" title="Stop: every preview on frame 1" aria-label="Stop"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="3.5" width="9" height="9" rx="1" fill="currentColor"/></svg></button>
+      <button id="pb-loop" title="Play, looping" aria-label="Play looping"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.6-3.7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M13.4 1.8v3.6H9.8z" fill="currentColor"/><path d="M6.5 5.6v4.8L10.3 8z" fill="currentColor"/></svg></button>
+      <button id="pb-once" title="Play once, then stop on the last frame" aria-label="Play once"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5v9l7-4.5z" fill="currentColor"/><rect x="11" y="3.5" width="1.8" height="9" fill="currentColor"/></svg></button>
+    </div>
     <button id="help-btn" title="What the kinds mean" aria-label="Help">?</button>
   </div>
 </header>

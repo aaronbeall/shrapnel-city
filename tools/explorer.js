@@ -185,6 +185,20 @@ class Preview {
       this.advance(probe);
     }
     this.bounds = b || [-10, 10, -10, 10];
+    // how many ticks "play once" runs: the label range, else the longest timeline in it
+    const r = this.spec.range;
+    const fresh = this.make();
+    const clips = [];
+    if (fresh) collect(fresh, clips);
+    this.length = r ? r[1] - r[0] + 1 : Math.max(1, ...clips.map((c) => c._totalframes || 1));
+    this.played = 0;
+  }
+
+  // back to the first frame (or the held frame / range start)
+  reset() {
+    if (this.node === undefined) return;
+    this.node = this.make();
+    this.played = 0;
   }
 
   advance(node = this.node) {
@@ -260,7 +274,7 @@ function paintBackground(ctx, W, H, bg) {
 }
 
 // ---------------------------------------------------------------- UI helpers
-const state = { bg: params.get('bg') || 'dark', paused: false, tab: 'files', query: params.get('filter') || '', dir: 'source/library', frame: params.get('frame') || '', size: '', ids: params.get('ids') || '', showAll: false };
+const state = { bg: params.get('bg') || 'dark', play: 'stop', tab: 'files', query: params.get('filter') || '', dir: 'source/library', frame: params.get('frame') || '', size: '', ids: params.get('ids') || '', showAll: false };
 const el = (tag, attrs = {}, ...kids) => {
   const e = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
@@ -912,8 +926,18 @@ searchBox.addEventListener('input', (e) => {
 const bgSel = document.getElementById('bg');
 bgSel.value = state.bg;
 bgSel.addEventListener('change', () => { state.bg = bgSel.value; redrawAll(); });
-const pauseBtn = document.getElementById('pause');
-pauseBtn.addEventListener('click', () => { state.paused = !state.paused; pauseBtn.textContent = state.paused ? 'Play all' : 'Pause all'; });
+// Global playback for every preview: stop (all on frame 1), loop, or play through once and stop
+const playBtns = { stop: document.getElementById('pb-stop'), loop: document.getElementById('pb-loop'), once: document.getElementById('pb-once') };
+function setPlay(mode) {
+  state.play = mode;
+  for (const [k, b] of Object.entries(playBtns)) { b.classList.toggle('on', k === mode); b.setAttribute('aria-pressed', k === mode); }
+  // stop and play-once both start from frame 1
+  if (mode !== 'loop') for (const p of all) if (p !== ip) p.reset();
+  else for (const p of all) p.played = 0;
+  redrawAll();
+}
+for (const [k, b] of Object.entries(playBtns)) b.addEventListener('click', () => setPlay(k));
+setPlay(state.play);
 function redrawAll() { for (const p of all) if (p.visible && p.node) p.draw(); }
 
 // ---------------------------------------------------------------- help
@@ -950,7 +974,7 @@ function inspect(spec) {
   ip.canvas = ui.canvas;
   // level maps and briefings are one frame of screen_mc: hold that frame, let its clips animate
   ip.lock = spec.id === SCREEN && spec.hold !== undefined;
-  ip.paused = spec.hold !== undefined && !ip.lock;
+  ip.paused = state.play === 'stop' || (spec.hold !== undefined && !ip.lock);
   ip.build();
   if (!ip.node) return;
   ip.visible = true;
@@ -959,8 +983,11 @@ function inspect(spec) {
     ip.node.gotoAndStop(spec.range[0]);
     const lab = labelsOf(spec.id).find(([, f]) => f === spec.range[0]);
     if (lab) ip.loopMode = 'label:' + lab[0];
-    ip.paused = false; ip.node.play(); rt.queue.length = 0;
+    ip.paused = state.play === 'stop';
+    if (!ip.paused) ip.node.play();
+    rt.queue.length = 0;
   }
+  if (state.play === 'once') ip.loopMode = 'once';
   const id = spec.id, s = sym(id), node = ip.node;
   ui.title.textContent = spec.title || (lib.symbols.has(id) ? shortName(id) : charLabel(id));
   ui.sub.replaceChildren(kindTag(spec.kind || kindOf(id)), ` · ${lib.symbols.has(id) ? s.name : charLabel(id)} · char ${id}`);
@@ -1213,10 +1240,12 @@ function loop(now) {
   const step = 1000 / FPS;
   if (acc >= step) {
     acc %= step;
-    if (!state.paused) {
+    if (state.play !== 'stop') {
       for (const p of all) {
         if (!p.visible || !p.node || p === ip) continue;
         if (dlg.open) continue;
+        if (state.play === 'once' && p.played >= p.length - 1) continue;
+        p.played++;
         p.tickN++;
         p.tick();
         if (p.tickN % (p.spec.every || 1) === 0) p.draw();
