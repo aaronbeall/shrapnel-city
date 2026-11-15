@@ -135,6 +135,13 @@ for (const L of levels.levels) {
     fileIndex.push([`levels/${L.folder}/${f}`, LEVEL_FILE_SYMBOL[base] ? idOf.get(`level assets/${LEVEL_FILE_SYMBOL[base]}${L.index}`) ?? null : null]);
   }
 }
+// the art bake's parts (textures, decor sheets and sprites, their prompts): no symbols, shown as files
+(function walkParts(rel) {
+  for (const e of fs.readdirSync(path.join(ROOT, rel), { withFileTypes: true }).sort((x, y) => (x.name < y.name ? -1 : 1))) {
+    if (e.isDirectory()) walkParts(`${rel}/${e.name}`);
+    else if (/\.(json|png|txt|noref)$/.test(e.name)) fileIndex.push([`${rel}/${e.name}`, null]);
+  }
+})('tools/art/parts');
 fileIndex.sort((a, b) => (a[0] < b[0] ? -1 : 1));
 
 // --- write or compare ------------------------------------------------------------

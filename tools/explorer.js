@@ -621,6 +621,12 @@ function fileCard(f) {
     if (c) { stats.char = f.id; stats.size = `${c.w}×${c.h}`; }
     stages = [el('figure', { class: 'stage' }, el('img', { class: 'thumb', src: fileUrl(f.path), alt: name, loading: 'lazy', style: `max-width:${cellSize()[0]}px;max-height:${cellSize()[1]}px` }))];
     open = () => window.open(fileUrl(f.path), '_blank');
+  } else if (/\.(txt|noref)$/.test(f.name)) {
+    // an art part's prompt or notes: show the start of the text
+    const box = el('div', { class: 'textpeek', style: `width:${cellSize()[0]}px;height:${cellSize()[1]}px` }, '…');
+    fetch(fileUrl(f.path)).then((r) => r.text()).then((t) => { box.textContent = t.slice(0, 400) || '(empty)'; }).catch(() => { box.textContent = '(could not load)'; });
+    stages = [el('figure', { class: 'stage missing' }, box)];
+    open = () => window.open(fileUrl(f.path), '_blank');
   } else {
     kind = f.id === 0 ? 'timeline' : c && c.type === 'font' ? 'font' : 'data';
     if (kind === 'font') stats.char = f.id;
