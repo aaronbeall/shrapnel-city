@@ -24,21 +24,21 @@
     "x": 974.55,
     "y": 48.85,
     "scale": [1.678741, 1.799988],
-    "script": ["onClipEvent (load) {", "    function onPickup(){", "        trigger('door2:open');", "    }", "}", "", ""]
+    "props": {"type": "trigger", "item": "door2:open"}
   },
   {
     "symbol": "game objects/powerup",
     "x": 974.55,
     "y": 549.8,
     "scale": [1.678741, 1.799988],
-    "script": ["onClipEvent (load) {", "    function onPickup(){", "        trigger('door3:open');", "    }", "}", "", ""]
+    "props": {"type": "trigger", "item": "door3:open"}
   },
   {
     "symbol": "game objects/powerup",
     "x": 1178.55,
     "y": 500.8,
     "scale": [1.440643, 1.799988],
-    "script": ["onClipEvent (load) {", "    function onPickup(){", "        trigger('door4:open');", "    }", "}", "", ""]
+    "props": {"type": "trigger", "item": "door4:open"}
   },
   {
     "symbol": "game objects/powerup",
@@ -108,7 +108,7 @@
     "x": 1266.3,
     "y": 97.9,
     "matrix": [0.747849, -0.747833, 1.428024, 1.42804],
-    "script": ["onClipEvent (load) {", "    function onPickup(){", "        trigger('door5:open');", "    }", "}", "", ""]
+    "props": {"type": "trigger", "item": "door5:open"}
   },
   {
     "symbol": "game objects/powerup",

@@ -4,6 +4,12 @@ _root.shots.push(this);
 
 var PADDING = 15, EASING = 4;
 
+// after the player leaves the onRollOut area the message stays up this many seconds
+// (killTriggers.linger overrides it), so flying through a beacon doesn't lose its message
+var LINGER = 4;
+var lingerFrames = Math.round((killTriggers.linger != undefined ? killTriggers.linger : LINGER) * frameRate);
+var outFrames = 0;
+
 // text styling
 import TextField.StyleSheet;
 var styles:StyleSheet = new TextField.StyleSheet();
@@ -35,7 +41,9 @@ function update(){
 		blur.blurX /= EASING;
 	}
 	if(killTriggers.onRollOut){
-		if(!_player.core_mc.hitTest(killTriggers.onRollOut))
+		if(_player.core_mc.hitTest(killTriggers.onRollOut))
+			outFrames = 0;
+		else if(++outFrames > lingerFrames)
 			hide();
 	}
 }

@@ -368,123 +368,123 @@
  "lights": [
   {
    "file": "lights/00.png",
+   "w": 158,
+   "h": 160
+  },
+  {
+   "file": "lights/01.png",
+   "w": 161,
+   "h": 158
+  },
+  {
+   "file": "lights/02.png",
+   "w": 146,
+   "h": 148
+  },
+  {
+   "file": "lights/03.png",
+   "w": 143,
+   "h": 140
+  },
+  {
+   "file": "lights/04.png",
+   "w": 103,
+   "h": 105
+  },
+  {
+   "file": "lights/05.png",
+   "w": 269,
+   "h": 87
+  },
+  {
+   "file": "lights/06.png",
+   "w": 98,
+   "h": 168
+  },
+  {
+   "file": "lights/07.png",
+   "w": 149,
+   "h": 151
+  },
+  {
+   "file": "lights/08.png",
+   "w": 161,
+   "h": 159
+  },
+  {
+   "file": "lights/09.png",
+   "w": 152,
+   "h": 152
+  },
+  {
+   "file": "lights/10.png",
+   "w": 150,
+   "h": 140
+  },
+  {
+   "file": "lights/11.png",
+   "w": 152,
+   "h": 146
+  },
+  {
+   "file": "lights/12.png",
+   "w": 69,
+   "h": 196
+  },
+  {
+   "file": "lights/13.png",
+   "w": 161,
+   "h": 164
+  },
+  {
+   "file": "lights/14.png",
+   "w": 160,
+   "h": 149
+  },
+  {
+   "file": "lights/15.png",
    "w": 151,
    "h": 152
   },
   {
-   "file": "lights/01.png",
-   "w": 165,
-   "h": 145
-  },
-  {
-   "file": "lights/02.png",
-   "w": 133,
-   "h": 136
-  },
-  {
-   "file": "lights/03.png",
-   "w": 133,
-   "h": 134
-  },
-  {
-   "file": "lights/04.png",
-   "w": 162,
-   "h": 131
-  },
-  {
-   "file": "lights/05.png",
-   "w": 264,
-   "h": 69
-  },
-  {
-   "file": "lights/06.png",
-   "w": 115,
-   "h": 108
-  },
-  {
-   "file": "lights/07.png",
-   "w": 201,
-   "h": 91
-  },
-  {
-   "file": "lights/08.png",
-   "w": 83,
-   "h": 84
-  },
-  {
-   "file": "lights/09.png",
-   "w": 82,
-   "h": 84
-  },
-  {
-   "file": "lights/10.png",
-   "w": 82,
-   "h": 84
-  },
-  {
-   "file": "lights/11.png",
-   "w": 82,
-   "h": 84
-  },
-  {
-   "file": "lights/12.png",
-   "w": 112,
-   "h": 165
-  },
-  {
-   "file": "lights/13.png",
-   "w": 111,
-   "h": 165
-  },
-  {
-   "file": "lights/14.png",
-   "w": 110,
-   "h": 165
-  },
-  {
-   "file": "lights/15.png",
-   "w": 110,
-   "h": 165
-  },
-  {
    "file": "lights/16.png",
-   "w": 191,
-   "h": 147
+   "w": 112,
+   "h": 113
   },
   {
    "file": "lights/17.png",
-   "w": 193,
-   "h": 147
+   "w": 115,
+   "h": 113
   },
   {
    "file": "lights/18.png",
-   "w": 86,
-   "h": 183
+   "w": 119,
+   "h": 180
   },
   {
    "file": "lights/19.png",
-   "w": 156,
-   "h": 156
+   "w": 155,
+   "h": 159
   },
   {
    "file": "lights/20.png",
-   "w": 145,
-   "h": 147
+   "w": 152,
+   "h": 151
   },
   {
    "file": "lights/21.png",
-   "w": 142,
-   "h": 143
+   "w": 148,
+   "h": 144
   },
   {
    "file": "lights/22.png",
-   "w": 137,
-   "h": 126
+   "w": 109,
+   "h": 111
   },
   {
    "file": "lights/23.png",
-   "w": 274,
-   "h": 105
+   "w": 267,
+   "h": 71
   }
  ],
  "rails": [
@@ -846,6 +846,68 @@
    "file": "wallmarks/23.png",
    "w": 193,
    "h": 79
+  }
+ ],
+ "panels": [
+  {
+   "file": "panels/00.png",
+   "w": 160,
+   "h": 160
+  },
+  {
+   "file": "panels/01.png",
+   "w": 160,
+   "h": 160
+  },
+  {
+   "file": "panels/02.png",
+   "w": 200,
+   "h": 200
+  },
+  {
+   "file": "panels/03.png",
+   "w": 240,
+   "h": 120
+  },
+  {
+   "file": "panels/04.png",
+   "w": 240,
+   "h": 120
+  },
+  {
+   "file": "panels/05.png",
+   "w": 300,
+   "h": 100
+  },
+  {
+   "file": "panels/06.png",
+   "w": 120,
+   "h": 120
+  },
+  {
+   "file": "panels/07.png",
+   "w": 180,
+   "h": 120
+  },
+  {
+   "file": "panels/08.png",
+   "w": 220,
+   "h": 160
+  },
+  {
+   "file": "panels/09.png",
+   "w": 140,
+   "h": 140
+  },
+  {
+   "file": "panels/10.png",
+   "w": 320,
+   "h": 160
+  },
+  {
+   "file": "panels/11.png",
+   "w": 100,
+   "h": 100
   }
  ]
 }
