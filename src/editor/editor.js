@@ -49,8 +49,8 @@ const NODE = 'game objects/node';
 const DECOR_DIR = 'tools/art/parts/decor/';
 // how each decor category is drawn by the bake when placed by hand
 // the decor types the art pipeline places (tools/art/bake.py CATEGORIES)
-const DECOR_TYPES = ['floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights'];
-const DECOR_DEFAULTS = { floorpaint: { effect: 'paint' }, greebles: { effect: 'shadow', strength: 0.35 }, greebles2: { effect: 'shadow', strength: 0.35 }, vents: { effect: 'shadow', strength: 0.3 }, rails: { effect: 'shadow', strength: 0.25 }, lights: { effect: 'glow', strength: 0.9 } };
+const DECOR_TYPES = ['panels', 'floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights'];
+const DECOR_DEFAULTS = { panels: { effect: 'emboss' }, floorpaint: { effect: 'paint' }, greebles: { effect: 'shadow', strength: 0.35 }, greebles2: { effect: 'shadow', strength: 0.35 }, vents: { effect: 'shadow', strength: 0.3 }, rails: { effect: 'shadow', strength: 0.25 }, lights: { effect: 'glow', strength: 0.9 } };
 const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as in Flash
 const TOOLS = [
   { key: 'select', label: 'Select', hot: 'V', tip: 'click something on the layer being edited to select it, drag to move (Shift snaps to the grid); R rotates, Delete removes, Ctrl+D duplicates' },
@@ -1362,12 +1362,12 @@ class Editor {
         num('scale', e.scale ?? 1, (v) => { e.scale = Math.max(0.01, round2(v * 1e4) / 1e4); }, { step: 0.01, min: 0.01 }),
         num('rotation', e.rotation || 0, (v) => { e.rotation = round2(((v % 360) + 360) % 360); }, { title: 'degrees, counter-clockwise' })),
       el('div', { class: 'le-row' }, 'Bake effect ',
-        el('select', { title: 'paint: soaks into the floor, worn; shadow: casts a drop shadow; glow: its bright coloured parts bloom', onchange: (ev) => edit(() => {
+        el('select', { title: 'paint: soaks into the floor, worn; emboss: a height map (grey = floor level) lit from the top-left, for floor panels; shadow: casts a drop shadow; glow: its bright coloured parts bloom', onchange: (ev) => edit(() => {
           const v = ev.target.value;
           if (v) e.effect = v; else delete e.effect;
           if (v === 'shadow' || v === 'glow') e.strength ??= (DECOR_DEFAULTS[cat] && DECOR_DEFAULTS[cat].strength) || (v === 'glow' ? 0.9 : 0.3);
           else delete e.strength;
-        }) }, ...['', 'paint', 'shadow', 'glow'].map((v) => el('option', { value: v, selected: (e.effect || '') === v }, v || 'none'))),
+        }) }, ...['', 'paint', 'emboss', 'shadow', 'glow'].map((v) => el('option', { value: v, selected: (e.effect || '') === v }, v || 'none'))),
         e.effect === 'shadow' || e.effect === 'glow' ? num('strength', e.strength ?? 0, (v) => { e.strength = round2(v); }, { step: 0.05, min: 0 }) : ''),
       el('div', { class: 'le-row' },
         el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
@@ -1406,7 +1406,7 @@ class Editor {
       el('div', { class: 'le-row' },
         btn('Bake art', 'bake', 'Save, then redraw background.png from the collision map and decor.json as they are'),
         this.confirmPlace
-          ? el('button', { disabled: off, class: 'le-danger', title: 'decor.json is replaced; Undo cannot bring the old layout back (git can)', onclick: () => { this.confirmPlace = false; this.runArt('all'); } }, all ? `Replace all ${n} decor and bake?` : `Replace ${this.list('decor').filter((e) => only.has(decorType(e.sprite))).length} ${[...only].join(', ')} and bake?`)
+          ? el('button', { disabled: off, class: 'le-danger', title: 'decor.json is replaced; Undo cannot bring the old layout back (git can)', onclick: () => { this.confirmPlace = false; this.runArt('all'); } }, all ? `Replace all ${n} decor and bake?` : `Replace ${this.list('decor').filter((e) => only.has(decorType(e))).length} ${[...only].join(', ')} and bake?`)
           : el('button', { disabled: off || !only.size, title: 'Save, then lay out new decor of the ticked types from the seed (replacing those in decor.json, hand edits too; the other types stay) and bake', onclick: () => { this.confirmPlace = true; this.refreshPanel(); } }, all ? 'Re-place decor + bake' : `Re-place ${only.size} type${only.size > 1 ? 's' : ''} + bake`),
         this.confirmPlace ? el('button', { onclick: () => { this.confirmPlace = false; this.refreshPanel(); } }, 'Cancel') : ''),
       el('div', { class: 'le-row le-types', title: 'which decor types Re-place lays out again; the others keep their placements' }, 'Re-place: ',
@@ -1608,8 +1608,9 @@ function decorBounds(e, size) {
   return [e.x - bw / 2, e.y - bh / 2, e.x + bw / 2, e.y + bh / 2];
 }
 
-function decorType(sprite) {
-  const c = sprite.split('/')[0];
+function decorType(e) {
+  if (e.of === 'panels') return 'panels'; // a panel's corner lights go with it
+  const c = e.sprite.split('/')[0];
   return c === 'greebles2' ? 'greebles' : c;
 }
 

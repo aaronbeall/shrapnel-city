@@ -163,5 +163,88 @@
         "tip": "glow around the bright core"
       }
     }
+  },
+  "greebles": {
+    "label": "Greebles (placement)",
+    "tip": "Used by Re-place decor. Some greebles can stick out past the wall edge; those are marked solid in decor.json and the bake adds them to collision.png as wall (and takes them out again if they move or go).",
+    "options": {
+      "count": {
+        "label": "count",
+        "default": 70,
+        "min": 0,
+        "max": 300,
+        "step": 1,
+        "tip": "how many greebles to try to place"
+      },
+      "size": {
+        "label": "max size",
+        "default": 44,
+        "min": 8,
+        "max": 120,
+        "step": 1,
+        "tip": "largest short side, in px (they also fit the wall's thickness)"
+      },
+      "overhang": {
+        "label": "overhang",
+        "default": 12,
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "tip": "how far, in px, one may stick out past the wall edge (0: always inside)"
+      },
+      "chance": {
+        "label": "overhang share",
+        "default": 0.4,
+        "min": 0,
+        "max": 1,
+        "step": 0.05,
+        "tip": "share of greebles that try to stick out"
+      }
+    }
+  },
+  "panels": {
+    "label": "Floor panels (placement)",
+    "tip": "Used by Re-place decor. Plated floor areas embossed into the floor (lit from the top-left), like the start pads in levels 0-2; the level's entrance always gets one.",
+    "options": {
+      "count": {
+        "label": "count",
+        "default": 8,
+        "min": 0,
+        "max": 60,
+        "step": 1,
+        "tip": "how many panels besides the entrance pad"
+      },
+      "minScale": {
+        "label": "min size",
+        "default": 0.45,
+        "min": 0.1,
+        "max": 2,
+        "step": 0.05,
+        "tip": "smallest scale of the panel sprites (100-320 px at 1)"
+      },
+      "maxScale": {
+        "label": "max size",
+        "default": 0.8,
+        "min": 0.1,
+        "max": 2,
+        "step": 0.05
+      },
+      "lights": {
+        "label": "corner lights share",
+        "default": 0.4,
+        "min": 0,
+        "max": 1,
+        "step": 0.05,
+        "tip": "share of panels with a light in each corner"
+      },
+      "depth": {
+        "label": "emboss depth",
+        "default": 1.5,
+        "min": 0,
+        "max": 3,
+        "step": 0.05,
+        "tip": "how strongly the panels' edges catch the light (Bake art)"
+      }
+    }
   }
 }

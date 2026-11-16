@@ -847,5 +847,67 @@
    "w": 193,
    "h": 79
   }
+ ],
+ "panels": [
+  {
+   "file": "panels/00.png",
+   "w": 160,
+   "h": 160
+  },
+  {
+   "file": "panels/01.png",
+   "w": 160,
+   "h": 160
+  },
+  {
+   "file": "panels/02.png",
+   "w": 200,
+   "h": 200
+  },
+  {
+   "file": "panels/03.png",
+   "w": 240,
+   "h": 120
+  },
+  {
+   "file": "panels/04.png",
+   "w": 240,
+   "h": 120
+  },
+  {
+   "file": "panels/05.png",
+   "w": 300,
+   "h": 100
+  },
+  {
+   "file": "panels/06.png",
+   "w": 120,
+   "h": 120
+  },
+  {
+   "file": "panels/07.png",
+   "w": 180,
+   "h": 120
+  },
+  {
+   "file": "panels/08.png",
+   "w": 220,
+   "h": 160
+  },
+  {
+   "file": "panels/09.png",
+   "w": 140,
+   "h": 140
+  },
+  {
+   "file": "panels/10.png",
+   "w": 320,
+   "h": 160
+  },
+  {
+   "file": "panels/11.png",
+   "w": 100,
+   "h": 100
+  }
  ]
 }

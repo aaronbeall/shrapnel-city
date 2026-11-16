@@ -14,7 +14,9 @@ from PIL import Image
 from scipy import ndimage as ndi
 
 D = os.path.join(os.path.dirname(__file__), 'parts', 'decor')
-index = {}
+# keep categories that aren't cut from a sheet (panels, from make_panels.py)
+ip = os.path.join(D, 'index.json')
+index = json.load(open(ip)) if os.path.exists(ip) else {}
 for sheet in sorted(glob.glob(os.path.join(D, 'sheet_*.png'))):
     cat = os.path.basename(sheet)[6:-4]
     a = np.array(Image.open(sheet).convert('RGB'), np.float32)

@@ -32,6 +32,7 @@ tools/art/parts/decor/, (x, y) the centre in level pixels, scale the sprite's si
 and rotation in degrees counter-clockwise. The level editor edits it (Decor layer).
 """
 import argparse
+import io
 import json
 import os
 import sys
@@ -230,15 +231,60 @@ PASSES = [
 ]
 
 
-CATEGORIES = ('floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights')
+CATEGORIES = ('panels', 'floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights')
 
 
-def category(sprite_path):
-    c = sprite_path.split('/')[0]
+def category(e):
+    if e.get('of') == 'panels': return 'panels'  # a panel's corner lights go with it
+    c = e['sprite'].split('/')[0]
     return 'greebles' if c == 'greebles2' else c
 
 
-def place_decor(g, seed, only=None, keep=()):
+def place_panels(g, rng, opts, cats, surface, used, entrance):
+    """Floor panels (and their corner lights): one under the entrance, then `count` more."""
+    po = opts['panels']
+    files = cats.get('panels', [])
+    lamps = [f for f in cats.get('lights', []) if 0.8 < sprite(f).size[0] / sprite(f).size[1] < 1.25]  # round/square ones
+    out = []
+    want = int(po['count']) + (1 if entrance else 0)
+    pool = []
+    for t in range(6000):
+        if len(out) >= want or not files: break
+        first = entrance and not out
+        if first: cx, cy = entrance
+        else:
+            pts = np.argwhere(surface)
+            if not len(pts): break
+            cy, cx = (int(v) for v in pts[rng.integers(len(pts))])
+        if not pool: pool = list(files)
+        f = pool[int(rng.integers(len(pool)))]
+        sp = sprite(f)
+        scale = float(rng.uniform(po['minScale'], max(po['minScale'], po['maxScale'])))
+        if first: scale = max(scale, 90 / min(sp.size))   # big enough to stand on
+        if first and max(sp.size) * scale > 150: continue
+        rotation = 90.0 if rng.random() < 0.3 else 0.0
+        spx = xform(sp, scale, rotation)
+        sw, sh = spx.size
+        x0, y0 = int(cx - sw / 2), int(cy - sh / 2)
+        if x0 < 0 or y0 < 0 or x0 + sw > g.W or y0 + sh > g.H:
+            if first and t > 40: entrance = None  # no panel fits there
+            continue
+        a = np.array(spx)[..., 3] > 40
+        if not first and (not surface[y0:y0 + sh, x0:x0 + sw][a].all() or used[y0:y0 + sh, x0:x0 + sw][a].any()): continue
+        used[y0:y0 + sh, x0:x0 + sw] |= ndi.binary_dilation(a, iterations=6)
+        pool.remove(f)
+        out.append({'sprite': f, 'x': cx, 'y': cy, 'scale': round(scale, 4), 'rotation': rotation, 'effect': 'emboss'})
+        if lamps and rng.random() < po['lights']:
+            lamp = lamps[int(rng.integers(len(lamps)))]
+            ls = 9 / max(sprite(lamp).size)
+            for fx in (-1, 1):
+                for fy in (-1, 1):
+                    out.append({'sprite': lamp, 'x': int(cx + fx * (sw / 2 - 9)), 'y': int(cy + fy * (sh / 2 - 9)), 'scale': round(ls, 4), 'rotation': 0, 'effect': 'glow', 'strength': 0.9, 'of': 'panels'})
+    print(f'panels on floor: {sum(1 for e in out if e["effect"] == "emboss")}')
+    return out
+
+
+def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
     """New decor placements. With `only` (a set of categories) just those are placed, after
     `keep` (the existing placements of the other categories, which they avoid)."""
     index = json.load(open(os.path.join(DECOR, 'index.json')))
@@ -271,8 +317,15 @@ def place_decor(g, seed, only=None, keep=()):
         sx0, sy0, sx1, sy1 = max(0, -x0), max(0, -y0), min(sw, W - x0), min(sh, H - y0)
         if sx1 > sx0 and sy1 > sy0: used[y0 + sy0:y0 + sy1, x0 + sx0:x0 + sx1] |= a[sy0:sy1, sx0:sx1]
 
+    if only is None or 'panels' in only:
+        out += place_panels(g, rng, opts, cats, surfaces['floor'], used, entrance)
+    go = opts['greebles']
+    # where an overhanging greeble may reach: near a wall, on open floor (not over a chasm)
+    reach = ndi.binary_dilation(g.wrb, iterations=int(go['overhang'])) & ~g.chasmb if go['overhang'] > 0 else g.wrb
     for cat, count, surf, short, long_max, o in PASSES:
         if only is not None and cat not in only: continue
+        if cat == 'greebles' and surf == 'wall':
+            count, short = int(go['count']), ('wall', 1.0, go['size'])
         surface = surfaces[surf]
         files = [f for f in cats.get(cat, []) if max(sprite(f).size) >= o.get('min_aspect', 0) * min(sprite(f).size)]
         pts = np.argwhere(surface)
@@ -283,7 +336,8 @@ def place_decor(g, seed, only=None, keep=()):
             along = o.get('along', True)
             orient = orients[o['orient']] if 'orient' in o else g.q
             ang = orient[cy, cx] * np.pi / 4 if along else 0.0
-            s_ = min(2 * g.dist[cy, cx] - 4, 10_000) * short[1] if isinstance(short, tuple) else short
+            over = cat == 'greebles' and go['overhang'] > 0 and rng.random() < go['chance']
+            s_ = min(2 * g.dist[cy, cx] - 4 + (2 * go['overhang'] if over else 0), 10_000) * short[1] if isinstance(short, tuple) else short
             if isinstance(short, tuple): s_ = min(s_, short[2])
             if s_ < 5: continue
             k = int(rng.integers(len(files)))
@@ -301,11 +355,15 @@ def place_decor(g, seed, only=None, keep=()):
             x0, y0 = int(cx - sw / 2), int(cy - sh / 2)
             if x0 < 0 or y0 < 0 or x0 + sw > W or y0 + sh > H: continue
             a = np.array(spx)[..., 3] > 40
-            if not surface[y0:y0 + sh, x0:x0 + sw][a].all() or used[y0:y0 + sh, x0:x0 + sw][a].any(): continue
+            allowed = reach if over else surface
+            if not allowed[y0:y0 + sh, x0:x0 + sw][a].all() or used[y0:y0 + sh, x0:x0 + sw][a].any(): continue
+            outside = (~g.wrb[y0:y0 + sh, x0:x0 + sw])[a].sum()
+            if over and (outside < 3 or outside > 0.4 * a.sum()): continue  # sticks out, but mostly on the wall
             used[y0:y0 + sh, x0:x0 + sw] |= ndi.binary_dilation(a, iterations=2)
             e = {'sprite': files[k], 'x': cx, 'y': cy, 'scale': round(float(scale), 4), 'rotation': float(rotation)}
             if o.get('effect'): e['effect'] = o['effect']
             if o.get('strength'): e['strength'] = o['strength']
+            if over: e['solid'] = True
             out.append(e)
             n += 1
             if o.get('unique'): files.pop(k)
@@ -347,6 +405,13 @@ def bake(g, decor, seed, opts):
         region = img[Y0:Y1, X0:X1]
         col, a = spx[..., :3], spx[..., 3:]
         effect, k = e.get('effect'), float(e.get('strength', 0))
+        if effect == 'emboss':
+            # a height map (grey 0.5 = floor level) lit from the top-left, worked into the floor
+            hgt = (col.mean(-1) - 0.5) * a[..., 0] * 2 * opts['panels']['depth']
+            gy, gx = np.gradient(blur(hgt, 0.6))
+            lit = 1 + 3.0 * (0.55 * gx + 0.6 * gy) + 0.3 * hgt
+            img[Y0:Y1, X0:X1] = region * np.clip(lit, 0.3, 2.0)[..., None]
+            continue
         if effect == 'paint':
             # soaked into the floor: takes the floor's shading and grain, worn through,
             # at partial opacity, like the markings in backgrounds 0-2
@@ -383,6 +448,40 @@ def bake(g, decor, seed, opts):
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
 
 
+SOLID = 'collision_decor.png'  # the wall pixels the bake added to collision.png for solid decor
+
+
+def footprint(decor, W, H):
+    """Pixels covered by decor marked solid (sticking out of walls), as a bool mask."""
+    m = np.zeros((H, W), bool)
+    for e in decor:
+        if not e.get('solid'): continue
+        try: sp = sprite(e['sprite'])
+        except OSError: continue
+        a = np.array(xform(sp, float(e.get('scale', 1)), float(e.get('rotation', 0))))[..., 3] > 127
+        sh, sw = a.shape
+        x0, y0 = int(e['x'] - sw / 2), int(e['y'] - sh / 2)
+        sx0, sy0, sx1, sy1 = max(0, -x0), max(0, -y0), min(sw, W - x0), min(sh, H - y0)
+        if sx1 > sx0 and sy1 > sy0: m[y0 + sy0:y0 + sy1, x0 + sx0:x0 + sx1] |= a[sy0:sy1, sx0:sx1]
+    return m
+
+
+def base_collision(d):
+    """collision.png without the solid decor the last bake added (back to open floor)."""
+    im = Image.open(os.path.join(d, 'collision.png')).convert('RGB')
+    arr = np.array(im)
+    sp = os.path.join(d, SOLID)
+    if os.path.exists(sp):
+        prev = np.array(Image.open(sp).convert('L'))[:arr.shape[0], :arr.shape[1]] > 127
+        arr[prev] = 255
+    return arr
+
+
+def png_bytes(arr):
+    b = io.BytesIO(); Image.fromarray(arr, 'RGB').save(b, 'PNG'); b.seek(0)
+    return b
+
+
 def write_decor(path, decor):
     # one placement per line, formatted like the editor writes it (whole numbers without ".0")
     decor = [{k: int(v) if isinstance(v, float) and v.is_integer() else v for k, v in e.items()} for e in decor]
@@ -400,21 +499,36 @@ def main():
     d, art = level_paths(args.level)
     opts = options(art)
     seed = int(art.get('seed', 2012))
-    g = Geometry(os.path.join(d, 'collision.png'), opts)
+    base = base_collision(d)
+    g = Geometry(png_bytes(base), opts)
     decor_path = os.path.join(d, 'decor.json')
     if args.step in ('place', 'all'):
         only, keep = None, []
+        entrance = None
+        fp = os.path.join(d, 'features.json')
+        if os.path.exists(fp):
+            for e in json.load(open(fp)):
+                if str(e.get('symbol', '')).endswith('entrance_mc'): entrance = (int(e['x']), int(e['y']))
         if args.only:
             only = {c.strip() for c in args.only.split(',') if c.strip()}
             bad = only - set(CATEGORIES)
             if bad: sys.exit(f'unknown decor types: {", ".join(sorted(bad))}; known: {", ".join(CATEGORIES)}')
             old = json.load(open(decor_path)) if os.path.exists(decor_path) else []
-            keep = [e for e in old if category(e['sprite']) not in only]
-        decor = place_decor(g, args.seed if args.seed is not None else seed, only, keep)
+            keep = [e for e in old if category(e) not in only]
+        decor = place_decor(g, args.seed if args.seed is not None else seed, opts, only, keep, entrance)
         write_decor(decor_path, decor)
         print(f'wrote levels/{args.level}/decor.json ({len(decor)} placements)')
     if args.step in ('bake', 'all'):
         decor = json.load(open(decor_path)) if os.path.exists(decor_path) else []
+        # solid decor (greebles sticking out of walls) becomes wall in collision.png
+        H, W = base.shape[:2]
+        solid = footprint(decor, W, H) & (base.min(-1) > 250)
+        coll = base.copy(); coll[solid] = 0
+        Image.fromarray(coll, 'RGB').convert('RGBA').save(os.path.join(d, 'collision.png'), optimize=True)
+        if solid.any(): Image.fromarray((solid * 255).astype(np.uint8), 'L').save(os.path.join(d, SOLID), optimize=True)
+        elif os.path.exists(os.path.join(d, SOLID)): os.remove(os.path.join(d, SOLID))
+        if solid.any(): print(f'collision.png: {int(solid.sum())} px of solid decor')
+        g = Geometry(png_bytes(coll), opts)
         out = bake(g, decor, seed, opts)
         Image.fromarray(out, 'RGB').convert('RGBA').save(os.path.join(d, 'background.png'), optimize=True)
         print(f'wrote levels/{args.level}/background.png ({len(decor)} decor placements)')
