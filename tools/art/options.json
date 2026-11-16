@@ -166,7 +166,7 @@
   },
   "greebles": {
     "label": "Greebles (placement)",
-    "tip": "Used by Re-place decor. Some greebles can stick out past the wall edge; those are marked solid in decor.json and the bake adds them to collision.png as wall (and takes them out again if they move or go).",
+    "tip": "Used by Re-place decor. Some greebles can stick out past the wall edge. Decor is only drawn: it never changes collision.png.",
     "options": {
       "count": {
         "label": "count",

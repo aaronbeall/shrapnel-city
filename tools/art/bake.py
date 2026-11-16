@@ -32,7 +32,6 @@ tools/art/parts/decor/, (x, y) the centre in level pixels, scale the sprite's si
 and rotation in degrees counter-clockwise. The level editor edits it (Decor layer).
 """
 import argparse
-import io
 import json
 import os
 import sys
@@ -363,7 +362,6 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
             e = {'sprite': files[k], 'x': cx, 'y': cy, 'scale': round(float(scale), 4), 'rotation': float(rotation)}
             if o.get('effect'): e['effect'] = o['effect']
             if o.get('strength'): e['strength'] = o['strength']
-            if over: e['solid'] = True
             out.append(e)
             n += 1
             if o.get('unique'): files.pop(k)
@@ -448,40 +446,6 @@ def bake(g, decor, seed, opts):
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
 
 
-SOLID = 'collision_decor.png'  # the wall pixels the bake added to collision.png for solid decor
-
-
-def footprint(decor, W, H):
-    """Pixels covered by decor marked solid (sticking out of walls), as a bool mask."""
-    m = np.zeros((H, W), bool)
-    for e in decor:
-        if not e.get('solid'): continue
-        try: sp = sprite(e['sprite'])
-        except OSError: continue
-        a = np.array(xform(sp, float(e.get('scale', 1)), float(e.get('rotation', 0))))[..., 3] > 127
-        sh, sw = a.shape
-        x0, y0 = int(e['x'] - sw / 2), int(e['y'] - sh / 2)
-        sx0, sy0, sx1, sy1 = max(0, -x0), max(0, -y0), min(sw, W - x0), min(sh, H - y0)
-        if sx1 > sx0 and sy1 > sy0: m[y0 + sy0:y0 + sy1, x0 + sx0:x0 + sx1] |= a[sy0:sy1, sx0:sx1]
-    return m
-
-
-def base_collision(d):
-    """collision.png without the solid decor the last bake added (back to open floor)."""
-    im = Image.open(os.path.join(d, 'collision.png')).convert('RGB')
-    arr = np.array(im)
-    sp = os.path.join(d, SOLID)
-    if os.path.exists(sp):
-        prev = np.array(Image.open(sp).convert('L'))[:arr.shape[0], :arr.shape[1]] > 127
-        arr[prev] = 255
-    return arr
-
-
-def png_bytes(arr):
-    b = io.BytesIO(); Image.fromarray(arr, 'RGB').save(b, 'PNG'); b.seek(0)
-    return b
-
-
 def write_decor(path, decor):
     # one placement per line, formatted like the editor writes it (whole numbers without ".0")
     decor = [{k: int(v) if isinstance(v, float) and v.is_integer() else v for k, v in e.items()} for e in decor]
@@ -499,8 +463,7 @@ def main():
     d, art = level_paths(args.level)
     opts = options(art)
     seed = int(art.get('seed', 2012))
-    base = base_collision(d)
-    g = Geometry(png_bytes(base), opts)
+    g = Geometry(os.path.join(d, 'collision.png'), opts)
     decor_path = os.path.join(d, 'decor.json')
     if args.step in ('place', 'all'):
         only, keep = None, []
@@ -520,15 +483,6 @@ def main():
         print(f'wrote levels/{args.level}/decor.json ({len(decor)} placements)')
     if args.step in ('bake', 'all'):
         decor = json.load(open(decor_path)) if os.path.exists(decor_path) else []
-        # solid decor (greebles sticking out of walls) becomes wall in collision.png
-        H, W = base.shape[:2]
-        solid = footprint(decor, W, H) & (base.min(-1) > 250)
-        coll = base.copy(); coll[solid] = 0
-        Image.fromarray(coll, 'RGB').convert('RGBA').save(os.path.join(d, 'collision.png'), optimize=True)
-        if solid.any(): Image.fromarray((solid * 255).astype(np.uint8), 'L').save(os.path.join(d, SOLID), optimize=True)
-        elif os.path.exists(os.path.join(d, SOLID)): os.remove(os.path.join(d, SOLID))
-        if solid.any(): print(f'collision.png: {int(solid.sum())} px of solid decor')
-        g = Geometry(png_bytes(coll), opts)
         out = bake(g, decor, seed, opts)
         Image.fromarray(out, 'RGB').convert('RGBA').save(os.path.join(d, 'background.png'), optimize=True)
         print(f'wrote levels/{args.level}/background.png ({len(decor)} decor placements)')
