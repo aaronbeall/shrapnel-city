@@ -485,6 +485,7 @@ class Editor {
   // point the tools that can work on a layer at it (Place's layer, what Polygon draws),
   // without changing the tool; the layer is shown if it was hidden
   pickLayer(key) {
+    this.pickedLayer = key;
     if (TOOL_LAYERS.place.includes(key)) { this.setPlaceLayer(key); }
     if (key === 'collision' || key === 'vision') { this.polyTarget = key; this.poly = null; }
     if (!this.visible[key]) this.setVisible(key, true);
@@ -1371,16 +1372,12 @@ class Editor {
     p.append(el('div', { class: 'le-row' }, el('b', {}, 'Level '), lvl,
       el('button', { title: 'Restart the level from the edited data', onclick: () => this.reload() }, 'Restart'),
       el('button', { title: 'Back to the game (`)', onclick: () => this.close() }, 'Play ▸')));
-    // tools; hovering one lights up the layers it works on (and hovering a layer, its tools)
-    const toolBtns = new Map(), layerRows = new Map();
-    const light = (keys, map, on) => { for (const k of keys) { const n = map.get(k); if (n) n.classList.toggle('hl', on); } };
+    // tools; the ones that work on the picked layer (its name clicked in Layers) are marked
     const toolsFor = (layer) => TOOLS.filter((t) => TOOL_LAYERS[t.key].includes(layer)).map((t) => t.key);
-    p.append(el('h4', {}, 'Tools'), el('div', { class: 'le-tools' }, ...TOOLS.map((t) => {
-      const b = el('button', { class: this.tool === t.key ? 'on' : '', title: `${t.tip}\nWorks on: ${TOOL_LAYERS[t.key].map(layerLabel).join(', ')}`, onclick: () => this.setTool(t.key),
-        onmouseenter: () => light(TOOL_LAYERS[t.key], layerRows, true), onmouseleave: () => light(TOOL_LAYERS[t.key], layerRows, false) }, `${t.label} (${t.hot})`);
-      toolBtns.set(t.key, b);
-      return b;
-    })));
+    const usable = new Set(this.pickedLayer ? toolsFor(this.pickedLayer) : []);
+    p.append(el('h4', {}, 'Tools'), el('div', { class: 'le-tools' }, ...TOOLS.map((t) => el('button', {
+      class: [this.tool === t.key ? 'on' : '', usable.has(t.key) ? 'usable' : ''].filter(Boolean).join(' '),
+      title: `${t.tip}\nWorks on: ${TOOL_LAYERS[t.key].map(layerLabel).join(', ')}`, onclick: () => this.setTool(t.key) }, `${t.label} (${t.hot})`))));
     const tip = TOOLS.find((t) => t.key === this.tool);
     const targets = this.toolLayers();
     p.append(el('div', { class: 'le-tip' }, tip.tip),
@@ -1411,16 +1408,15 @@ class Editor {
     VIEW_LAYERS.forEach((l, i) => {
       const hot = l.hot || String(i + 1);
       const lockable = LOCKABLE.has(l.key), vis = !!this.visible[l.key], locked = !!this.locked[l.key];
-      const cls = ['le-layer', targets.includes(l.key) ? 'target' : '', selLayers.has(l.key) ? 'has-sel' : '', locked ? 'locked' : '', vis ? '' : 'hidden'].filter(Boolean).join(' ');
+      const cls = ['le-layer', targets.includes(l.key) ? 'target' : '', this.pickedLayer === l.key ? 'picked' : '', selLayers.has(l.key) ? 'has-sel' : '', locked ? 'locked' : '', vis ? '' : 'hidden'].filter(Boolean).join(' ');
       const tools = toolsFor(l.key);
-      const row = el('div', { class: cls, onmouseenter: () => light(tools, toolBtns, true), onmouseleave: () => light(tools, toolBtns, false),
+      const row = el('div', { class: cls,
         title: tools.length ? 'Tools for this layer: ' + tools.map((t) => TOOLS.find((x) => x.key === t).label).join(', ') : '' },
         el('button', { class: 'le-icon' + (vis ? ' on' : ''), title: `${vis ? 'hide' : 'show'} (${hot})`, onclick: () => this.setVisible(l.key, !vis) }, vis ? ICON.eye : ICON.eyeOff),
         lockable ? el('button', { class: 'le-icon' + (locked ? ' on' : ''), title: locked ? 'unlock: let it be selected and edited' : 'lock: keep it from being selected or edited', onclick: () => this.setLocked(l.key, !locked) }, locked ? ICON.lock : ICON.unlock) : el('span', { class: 'le-icon-gap' }),
         el('span', { class: 'le-name' + (pickable(l.key) ? ' le-pick' : ''), title: pickable(l.key) ? 'click to point the tools at this layer: Place adds here, Polygon draws here (the tool stays as it is)' : null, onclick: pickable(l.key) ? () => this.pickLayer(l.key) : null }, `${hot}  ${l.label}`),
         selLayers.has(l.key) ? el('small', { class: 'le-nsel' }, this.selItems().filter((s) => s.layer === l.key).length + ' sel') : '',
         DATA_LAYERS.includes(l.key) ? el('small', {}, String(this.layerCount(l.key))) : '');
-      layerRows.set(l.key, row);
       layersEl.append(row);
     });
     p.append(el('h4', {}, 'Layers ', el('small', {}, 'eye: show · lock: no editing')), layersEl);
@@ -2013,7 +2009,7 @@ const CSS = `
 #level-editor .le-layer.has-sel .le-name { color: #2ee6ff; font-weight: bold; }
 #level-editor .le-layer.hidden .le-name, #level-editor .le-layer.locked .le-name { opacity: 0.55; }
 #level-editor .le-layer.target.locked { border-left-color: #c84; }
-#level-editor .le-layer.hl { outline: 1px dashed #fd6; }
+#level-editor .le-layer.picked .le-name { text-decoration: underline 2px #4fc; text-underline-offset: 3px; }
 #level-editor .le-nsel { color: #2ee6ff !important; }
 #level-editor button.le-icon { width: 20px; height: 18px; padding: 1px 2px; margin: 0; background: transparent; border-color: transparent; color: #577; display: inline-flex; align-items: center; justify-content: center; }
 #level-editor button.le-icon.on { color: #cfe; }
@@ -2021,7 +2017,7 @@ const CSS = `
 #level-editor .le-layer.locked button.le-icon.on { color: #fb6; }
 #level-editor .le-icon svg { width: 14px; height: 14px; }
 #level-editor .le-icon-gap { width: 20px; flex: none; }
-#level-editor .le-tools button.hl { outline: 2px solid #fd6; outline-offset: -1px; }
+#level-editor .le-tools button.usable { box-shadow: inset 3px 0 0 #4fc; }
 #level-editor .le-works { font-size: 11px; color: #799; margin: 2px 0; }
 #level-editor .le-works b { color: #8fd; font-weight: normal; border-bottom: 2px solid #4fc; }
 #level-editor .le-works b.locked { color: #fb6; border-color: #c84; }
