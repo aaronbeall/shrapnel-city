@@ -53,18 +53,25 @@ const DECOR_TYPES = ['panels', 'floorpaint', 'rails', 'greebles', 'vents', 'wall
 const DECOR_DEFAULTS = { panels: { effect: 'emboss' }, floorpaint: { effect: 'paint' }, greebles: { effect: 'shadow', strength: 0.35 }, greebles2: { effect: 'shadow', strength: 0.35 }, vents: { effect: 'shadow', strength: 0.3 }, rails: { effect: 'shadow', strength: 0.25 }, lights: { effect: 'glow', strength: 0.9 } };
 const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as in Flash
 const TOOLS = [
-  { key: 'select', label: 'Select', hot: 'V', tip: 'click something on the layer being edited to select it, drag to move (Shift snaps to the grid); R rotates, Delete removes, Ctrl+D duplicates' },
-  { key: 'place', label: 'Place', hot: 'P', tip: 'pick a symbol below, then click to drop one' },
+  { key: 'select', label: 'Select', hot: 'V', tip: 'click anything on a shown, unlocked layer; Shift+click adds or removes one (from any layer). Drag to move (hold Shift to snap to the grid), arrows nudge 1 px (Shift: 10); R rotates, Delete removes, Ctrl+D duplicates' },
+  { key: 'place', label: 'Place', hot: 'P', tip: 'pick a layer and a symbol below, then click to drop one (hold Shift to snap to the grid)' },
   { key: 'link', label: 'Path links', hot: 'N', tip: 'nodes link to every node of their colour they can see (dashed). Click a node, then another: that adds the link, or removes it if they were linked. Changed nodes keep their links pinned (solid)' },
-  { key: 'rect', label: 'Rectangle', hot: 'B', tip: 'drag a box; snaps to the grid (hold Alt for free)' },
-  { key: 'poly', label: 'Polygon', hot: 'G', tip: 'click corners, angles snap (hold Shift for free); click the first corner or Enter to close, Esc cancels. On the vision layer it draws a zone' },
+  { key: 'rect', label: 'Rectangle', hot: 'B', tip: 'drag a box (hold Shift to snap to the grid)' },
+  { key: 'poly', label: 'Polygon', hot: 'G', tip: 'click corners (hold Shift to snap: the first corner to the grid, the next ones to the angle step); click the first corner or Enter to close, Esc cancels. Draws collision or a vision zone (below)' },
   { key: 'autozone', label: 'Auto zone', hot: 'Z', tip: 'click a spot to make a vision zone of what can be seen from there, the way the game does for an enemy outside every zone' },
   { key: 'pencil', label: 'Pencil', hot: 'D', tip: 'paint pixels; [ and ] change the size' },
   { key: 'eraser', label: 'Eraser', hot: 'E', tip: 'paint open floor; [ and ] change the size' },
   { key: 'fill', label: 'Fill', hot: 'F', tip: 'flood-fill one colour region' },
 ];
 const DRAW_TOOLS = new Set(['rect', 'poly', 'pencil', 'eraser', 'fill']);
-const ZONE_TOOLS = new Set(['select', 'poly', 'autozone']);
+// layers that can be clicked and selected (every visible, unlocked one at once)
+const SELECT_LAYERS = [...PLACE_LAYERS, 'decor', 'vision'];
+// every layer each tool can work on (Place: the palette's layer; Polygon: collision or a zone)
+const TOOL_LAYERS = {
+  select: SELECT_LAYERS, place: [...PLACE_LAYERS, 'decor'], link: ['pathNodes'], rect: ['collision'], poly: ['collision', 'vision'],
+  autozone: ['vision'], pencil: ['collision'], eraser: ['collision'], fill: ['collision'],
+};
+const LOCKABLE = new Set([...DATA_LAYERS, 'collision']);
 
 let editor = null;
 
@@ -95,7 +102,9 @@ class Editor {
     this.redoStack = [];
     this.index = 0;
     this.tool = 'select';
-    this.active = 'enemies'; // layer that select/place work on
+    this.locked = {};        // layer -> true: can't be selected or edited
+    this.placeLayer = 'enemies'; // the layer Place adds to
+    this.polyTarget = 'collision'; // what Polygon draws: collision pixels or a vision zone
     this.visible = Object.fromEntries(VIEW_LAYERS.map((l) => [l.key, !['vision', 'preview', 'decor'].includes(l.key)]));
     this.decorIndex = null;  // tools/art/parts/decor/index.json: {category: [{file, w, h}]}
     this.decorImages = new Map();
@@ -106,9 +115,8 @@ class Editor {
     this.colour = 'wall';
     this.brush = 1;
     this.grid = 16;
-    this.snapGrid = true;
     this.snapAngle = 15;
-    this.sel = null;         // {layer, k}: the primary selection; this.multi holds every selected k (Shift+click adds)
+    this.selection = [];     // [{layer, k}] across layers; the last is the primary one (Shift+click adds)
     this.placeSymbol = null;
     this.poly = null;        // polygon in progress: [[x, y], ...]
     this.view = { z: 1, ox: 0, oy: 0 };
@@ -120,14 +128,18 @@ class Editor {
   }
 
   get L() { return this.levels[this.index]; }
-  get sel() { return this._sel; }
-  set sel(v) { this._sel = v; this.multi = new Set(v ? [v.k] : []); }
-  // indices of everything selected, on the selection's layer
-  selKeys() {
-    if (!this._sel) return [];
-    const list = this.list(this._sel.layer);
-    return [...this.multi].filter((k) => list[k]).sort((a, b) => a - b);
-  }
+  // the primary selection (the last clicked), or null; setting it selects just that
+  get sel() { const s = this.selItems(); return s.length ? s[s.length - 1] : null; }
+  set sel(v) { this.selection = v ? [{ layer: v.layer, k: v.k }] : []; }
+  // everything selected that still exists, primary last
+  selItems() { return this.selection.filter((s) => this.list(s.layer)[s.k]); }
+  isSelected(layer, k) { return this.selection.some((s) => s.layer === layer && s.k === k); }
+  selLayers() { return [...new Set(this.selItems().map((s) => s.layer))]; }
+  selFiles(items = this.selItems()) { return [...new Set(items.map((s) => s.layer + '.json'))]; }
+  // can this layer be clicked and edited? (shown and not locked)
+  editable(layer) { return !this.locked[layer] && !!this.visible[layer]; }
+  // the layers the tool works on right now
+  toolLayers(t = this.tool) { return t === 'place' ? [this.placeLayer] : t === 'poly' ? [this.polyTarget] : TOOL_LAYERS[t] || []; }
   get map() {
     const i = this.index;
     if (!this.maps[i]) this.maps[i] = new CollisionMap(this.rt.lib.images.get(this.applier.id(`level assets/level${i}/shape 1/bitmap 1`)));
@@ -159,7 +171,9 @@ class Editor {
     if (!r || r.index !== this.index) return;
     if (r.view) this.view = r.view;
     if (r.visible) Object.assign(this.visible, r.visible);
-    if (r.active) this.active = r.active;
+    if (r.locked) this.locked = r.locked;
+    if (r.placeLayer) this.placeLayer = r.placeLayer;
+    if (r.polyTarget) this.polyTarget = r.polyTarget;
     if (r.tool) this.tool = r.tool;
     this.refreshPanel();
     if (r.msg) this.status(r.msg);
@@ -371,49 +385,46 @@ class Editor {
 
   isNode(e) { return e && e.symbol === NODE; }
   layerShown(layer, e) {
-    if (layer === 'vision') return this.visible.vision && this.active === 'vision';
     return this.visible[layer];
   }
 
-  hitDecor(x, y) {
-    if (!this.visible.decor) return null;
-    const list = this.list('decor');
-    for (let k = list.length - 1; k >= 0; k--) {
-      const [x0, y0, x1, y1] = this.boundsOf('decor', k);
-      if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer: 'decor', k };
+  // what's under (x, y) on the visible, unlocked layers: the smallest thing there, so a pickup
+  // on a big floor panel can still be clicked; vision zones (big) only when nothing else is
+  hits(x, y, layers = SELECT_LAYERS) {
+    const out = [];
+    for (const l of layers) {
+      if (l === 'vision' || !this.editable(l)) continue;
+      const list = this.list(l);
+      for (let k = list.length - 1; k >= 0; k--) {
+        if (!this.layerShown(l, list[k])) continue;
+        const [x0, y0, x1, y1] = this.boundsOf(l, k);
+        if (x >= x0 && x <= x1 && y >= y0 && y <= y1) out.push({ layer: l, k, area: (x1 - x0) * (y1 - y0) });
+      }
     }
-    return null;
+    out.sort((a, b) => a.area - b.area);
+    if (layers.includes('vision') && this.editable('vision')) {
+      const zones = this.list('vision');
+      for (let k = zones.length - 1; k >= 0; k--) if (this.inZone(zones[k], x, y)) out.push({ layer: 'vision', k, area: Infinity });
+    }
+    return out.map(({ layer, k }) => ({ layer, k }));
   }
 
-  // only the active layer can be clicked (pick it with Tab or its name in Layers)
-  hit(x, y) {
-    const a = this.active;
-    if (a === 'decor') return this.hitDecor(x, y);
-    if (a === 'vision') {
-      if (!this.visible.vision) return null;
-      const zones = this.list('vision');
-      for (let k = zones.length - 1; k >= 0; k--) if (this.inZone(zones[k], x, y)) return { layer: 'vision', k };
-      return null;
-    }
-    if (!PLACE_LAYERS.includes(a)) return null;
-    const list = this.list(a);
-    for (let k = list.length - 1; k >= 0; k--) {
-      if (!this.layerShown(a, list[k])) continue;
-      const [x0, y0, x1, y1] = this.boundsOf(a, k);
-      if (x >= x0 && x <= x1 && y >= y0 && y <= y1) return { layer: a, k };
-    }
-    return null;
+  // the thing to click at (x, y): one already selected if there is one (so a group can be dragged)
+  hit(x, y, layers) {
+    const h = this.hits(x, y, layers);
+    return h.find((o) => this.isSelected(o.layer, o.k)) || h[0] || null;
   }
 
   // ------------------------------------------------------------------ coordinates
   toWorld(sx, sy) { const v = this.view; return [(sx - v.ox) / v.z, (sy - v.oy) / v.z]; }
-  snap(x, y, alt) {
-    if (!this.snapGrid || alt || !this.grid) return [x, y];
+  // Shift snaps: to the grid, and lines to the angle step
+  snap(x, y, on) {
+    if (!on || !this.grid) return [x, y];
     const g = this.grid;
     return [Math.round(x / g) * g, Math.round(y / g) * g];
   }
-  snapAngleFrom(p, x, y, free) {
-    if (free || !this.snapAngle) return [x, y];
+  snapAngleFrom(p, x, y, on) {
+    if (!on || !this.snapAngle) return [x, y];
     const dx = x - p[0], dy = y - p[1];
     const len = Math.hypot(dx, dy);
     const step = this.snapAngle * Math.PI / 180;
@@ -431,13 +442,10 @@ class Editor {
     if (mod && k === 's') { e.preventDefault(); this.save(); return; }
     if (mod && k === 'd') { e.preventDefault(); this.duplicate(); return; }
     if (mod) return;
-    if (e.key === 'Tab') {
-      e.preventDefault();
-      const order = [...PLACE_LAYERS, 'vision', 'decor', 'collision'];
-      this.pickLayer(order[(order.indexOf(this.active) + (e.shiftKey ? order.length - 1 : 1)) % order.length]);
-      return;
-    }
-    if (/^[1-9]$/.test(e.key)) { const l = VIEW_LAYERS[+e.key - 1]; if (l) { this.visible[l.key] = !this.visible[l.key]; this.refreshPanel(); } return; }
+    if (e.key === 'Shift') this.shiftDown = true;
+    const arrow = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (arrow) { e.preventDefault(); if (this.sel) this.nudge(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
+    if (/^[1-9]$/.test(e.key)) { const l = VIEW_LAYERS[+e.key - 1]; if (l) this.setVisible(l.key, !this.visible[l.key]); return; }
     const tool = TOOLS.find((t) => t.hot.toLowerCase() === k);
     if (tool) { this.setTool(tool.key); return; }
     if (k === 'r' && this.sel) { this.rotateSel(e.shiftKey ? -15 : 15); return; }
@@ -453,34 +461,44 @@ class Editor {
     if (k === '0') { this.fitView(); return; }
     if (k === 'a') { this.visible.preview = !this.visible.preview; this.refreshPanel(); return; }
     if (k === 't') { this.visible.triggers = !this.visible.triggers; this.refreshPanel(); return; }
-    if (k === 'k') { this.visible.decor = !this.visible.decor; this.refreshPanel(); return; }
+    if (k === 'k') { this.setVisible('decor', !this.visible.decor); return; }
     if (e.key === ' ') { this.spaceDown = true; e.preventDefault(); }
   }
 
+  // tools and layers are picked separately: a tool never changes the layers, nor a layer the tool
   setTool(t) {
     this.tool = t;
     this.poly = null;
     this.linkFrom = null;
-    if (t === 'autozone' || (t === 'poly' && this.active === 'vision')) this.active = 'vision';
-    else if (DRAW_TOOLS.has(t)) this.active = 'collision';
-    else if (this.active === 'collision' || (this.active === 'vision' && !ZONE_TOOLS.has(t)) || (this.active === 'decor' && t !== 'select' && t !== 'place')) this.active = t === 'link' ? 'pathNodes' : 'enemies';
-    if (t === 'link') { this.active = 'pathNodes'; this.visible.pathNodes = true; }
-    if (this.active === 'vision') this.visible.vision = true;
     this.refreshPanel();
   }
 
-  // make a layer the one tools work on, switching to a tool that works there
-  pickLayer(key) {
-    this.active = key;
-    if (key === 'collision' && !DRAW_TOOLS.has(this.tool)) this.tool = 'pencil';
-    else if (key === 'vision' && !ZONE_TOOLS.has(this.tool)) this.tool = 'select';
-    else if (key !== 'collision' && key !== 'vision' && (DRAW_TOOLS.has(this.tool) || this.tool === 'autozone')) this.tool = 'select';
-    if (key === 'vision') this.visible.vision = true;
-    if (key === 'pathNodes') this.visible.pathNodes = true;
-    if (key === 'decor') { this.visible.decor = true; this.loadDecorIndex(); if (this.tool !== 'select' && this.tool !== 'place') this.tool = 'select'; }
+  // the layer Place adds to (the tabs above its palette)
+  setPlaceLayer(key) {
+    this.placeLayer = key;
     if (key === 'pathNodes') this.placeSymbol = NODE; // the only thing to place there
-    else if (this.placeSymbol === NODE) this.placeSymbol = null;
-    this.poly = null;
+    else if (key === 'decor' ? typeof this.placeSymbol !== 'string' || !this.placeSymbol.includes('.') : this.placeSymbol === NODE || (typeof this.placeSymbol === 'string' && this.placeSymbol.includes('.'))) this.placeSymbol = null;
+    if (key === 'decor') this.loadDecorIndex();
+    this.refreshPanel();
+  }
+
+  // can the tool work on its layer now? Says why not in the status line
+  toolReady() {
+    const l = this.toolLayers().find((x) => this.locked[x]);
+    if (l) { this.status(`${layerLabel(l)} is locked: unlock it in Layers to edit it.`, true); return false; }
+    return true;
+  }
+
+  setVisible(key, on) {
+    this.visible[key] = on;
+    if (!on) this.selection = this.selection.filter((s) => s.layer !== key);
+    if (on && key === 'decor') this.loadDecorIndex();
+    this.refreshPanel();
+  }
+
+  setLocked(key, on) {
+    if (on) this.locked[key] = true; else delete this.locked[key];
+    if (on) this.selection = this.selection.filter((s) => s.layer !== key);
     this.refreshPanel();
   }
 
@@ -493,53 +511,43 @@ class Editor {
       return;
     }
     const t = this.tool;
+    if (t !== 'select' && !this.toolReady()) return;
     if (t === 'select') {
       const v = this.vertexAt(sx, sy);
       if (v) { this.drag = { kind: 'vertex', k: v.k, i: v.i, before: this.snapshot(), moved: false }; return; }
       const h = this.hit(x, y);
-      if (e.shiftKey && this.sel && h && h.layer === this.sel.layer) {
-        // Shift+click adds to the selection, or takes a selected one out
-        if (this.multi.has(h.k) && this.multi.size > 1) {
-          this.multi.delete(h.k);
-          if (this._sel.k === h.k) this._sel = { layer: h.layer, k: [...this.multi][0] };
-          this.refreshPanel();
-          return;
-        }
-        this.multi.add(h.k);
-        this._sel = h;
-      } else if (e.shiftKey && this.sel && !h) {
-        return; // Shift+click on nothing keeps the selection
-      } else if (!(h && this.sel && h.layer === this.sel.layer && this.multi.has(h.k))) {
-        this.sel = h; // clicking a selected one keeps the group, so it can be dragged
-      } else this._sel = h;
-      if (h) {
-        this.active = h.layer;
-        const list = this.list(h.layer);
-        this.drag = { kind: 'move', x, y, starts: new Map(this.selKeys().map((k) => [k, { x: list[k].x, y: list[k].y }])), before: this.snapshot(), moved: false };
+      let toggleOff = null;
+      if (!h) { if (!e.shiftKey) this.sel = null; this.refreshPanel(); return; } // Shift+click on nothing keeps the selection
+      const i = this.selection.findIndex((s) => s.layer === h.layer && s.k === h.k);
+      if (i < 0) { if (e.shiftKey) this.selection.push(h); else this.sel = h; } // Shift+click adds, from any layer
+      else {
+        this.selection.push(...this.selection.splice(i, 1)); // clicking a selected one keeps the group (it becomes the primary)
+        if (e.shiftKey) toggleOff = h; // Shift+click on a selected one takes it out, unless it gets dragged
       }
+      this.drag = { kind: 'move', x, y, toggleOff, starts: this.selItems().map((s) => ({ ...s, x: this.list(s.layer)[s.k].x, y: this.list(s.layer)[s.k].y })), before: this.snapshot(), moved: false };
       this.refreshPanel();
     } else if (t === 'place') {
-      if (!this.placeSymbol) { this.status('Pick a symbol to place first.', true); return; }
-      const [px, py] = this.snap(x, y, e.altKey);
+      if (!this.placeSymbol) { this.status('Pick something to place first.', true); return; }
+      const [px, py] = this.snap(x, y, e.shiftKey);
       this.placeAt(px, py);
     } else if (t === 'link') {
-      const h = this.hit(x, y);
-      if (!h || h.layer !== 'pathNodes') { this.linkFrom = null; return; }
+      const h = this.hit(x, y, ['pathNodes']);
+      if (!h) { this.linkFrom = null; if (!this.editable('pathNodes')) this.status('Show and unlock Path nodes to link them.', true); return; }
       if (this.linkFrom == null || this.linkFrom === h.k) { this.linkFrom = h.k; this.sel = h; this.refreshPanel(); return; }
       this.toggleLink(this.linkFrom, h.k);
       this.linkFrom = h.k;
     } else if (t === 'autozone') {
       this.autoZone(x, y);
     } else if (t === 'rect') {
-      const [px, py] = this.snap(x, y, e.altKey);
+      const [px, py] = this.snap(x, y, e.shiftKey);
       this.drag = { kind: 'rect', x0: px, y0: py, x1: px, y1: py };
     } else if (t === 'poly') {
-      let p = this.snap(x, y, e.altKey);
+      let p = [x, y];
       if (this.poly && this.poly.length) {
         const first = this.poly[0];
         if (this.poly.length > 2 && Math.hypot(first[0] - x, first[1] - y) * this.view.z < 10) { this.closePoly(); return; }
-        p = this.snapAngleFrom(this.poly[this.poly.length - 1], p[0], p[1], e.shiftKey);
-      }
+        p = this.snapAngleFrom(this.poly[this.poly.length - 1], x, y, e.shiftKey);
+      } else p = this.snap(x, y, e.shiftKey);
       (this.poly ||= []).push(p);
     } else if (t === 'pencil' || t === 'eraser') {
       const colour = t === 'eraser' ? 'open' : this.colour;
@@ -559,32 +567,28 @@ class Editor {
     const r = this.canvas.getBoundingClientRect();
     const sx = e.clientX - r.left, sy = e.clientY - r.top;
     const [x, y] = this.toWorld(sx, sy);
-    this.mouse = { x, y, sx, sy, alt: e.altKey, shift: e.shiftKey };
+    this.mouse = { x, y, sx, sy, shift: e.shiftKey };
+    this.shiftDown = e.shiftKey;
     const d = this.drag;
     if (!d) return;
     if (d.kind === 'pan') { this.view.ox = d.ox + sx - d.sx; this.view.oy = d.oy + sy - d.sy; }
     else if (d.kind === 'move') {
-      const layer = this.sel.layer, list = this.list(layer);
-      const p0 = d.starts.get(this.sel.k);
+      const p0 = d.starts[d.starts.length - 1]; // the primary (the one clicked)
       let nx = p0.x + x - d.x, ny = p0.y + y - d.y;
-      if (e.shiftKey) [nx, ny] = this.snap(nx, ny, false); // Shift snaps (the one under the mouse) to the grid
+      [nx, ny] = this.snap(nx, ny, e.shiftKey); // Shift snaps the one under the mouse to the grid
       const dx = nx - p0.x, dy = ny - p0.y;
-      if (dx || dy) d.moved = true;
-      for (const [k, s0] of d.starts) {
-        const ent = list[k];
-        ent.x = round2(s0.x + dx); ent.y = round2(s0.y + dy);
-        const c = this.clipFor(layer, k);
-        if (c) { c._x = ent.x; c._y = ent.y; }
-      }
+      if (!d.moved && Math.hypot(x - d.x, y - d.y) * this.view.z < 2) return; // a click, not a drag
+      d.moved = true;
+      for (const s0 of d.starts) this.moveTo(s0.layer, s0.k, s0.x + dx, s0.y + dy);
     } else if (d.kind === 'vertex') {
       const z = this.list('vision')[d.k];
-      let [wx, wy] = e.shiftKey ? this.snap(x, y, false) : [x, y];
+      const [wx, wy] = this.snap(x, y, e.shiftKey);
       const [a, b, c, dd, tx, ty] = zoneMatrix(z);
       const det = a * dd - b * c || 1;
       const lx = (dd * (wx - tx) - c * (wy - ty)) / det, ly = (-b * (wx - tx) + a * (wy - ty)) / det;
       z.points[d.i] = [round2(lx), round2(ly)];
       d.moved = true;
-    } else if (d.kind === 'rect') { [d.x1, d.y1] = this.snap(x, y, e.altKey); }
+    } else if (d.kind === 'rect') { [d.x1, d.y1] = this.snap(x, y, e.shiftKey); }
     else if (d.kind === 'paint') {
       this.map.line(d.lx, d.ly, x, y, this.brush, d.colour, d.box);
       this.map.commitStroke(d.box);
@@ -602,10 +606,13 @@ class Editor {
       this.reload();
       this.refreshPanel();
     } else if (d.kind === 'move' && d.moved) {
-      const file = this.sel.layer + '.json';
-      this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files: [file] });
-      this.markDirty(file);
+      const files = this.selFiles(d.starts);
+      this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files });
+      for (const f of files) this.markDirty(f);
       this.needsReload = true; // positions are live already; rebuild before playing
+      this.refreshPanel();
+    } else if (d.kind === 'move' && d.toggleOff) {
+      this.selection = this.selection.filter((s) => !(s.layer === d.toggleOff.layer && s.k === d.toggleOff.k));
       this.refreshPanel();
     } else if (d.kind === 'rect') {
       if (d.x0 !== d.x1 && d.y0 !== d.y1) {
@@ -638,7 +645,7 @@ class Editor {
     const p = this.poly;
     this.poly = null;
     if (!p || p.length < 3) return;
-    if (this.active === 'vision') { this.addZone(p); return; }
+    if (this.polyTarget === 'vision') { this.addZone(p); return; }
     const u = this.map.polygon(p, this.colour);
     if (u) { this.pushUndo({ type: 'pixels', level: this.index, ...u }); this.collisionChanged(); }
   }
@@ -663,7 +670,8 @@ class Editor {
   }
 
   placeAt(x, y) {
-    const layer = this.active;
+    const layer = this.placeLayer;
+    if (!this.visible[layer]) this.setVisible(layer, true); // what you place should show
     if (layer === 'decor') {
       const sprite = this.placeSymbol;
       const cat = sprite.split('/')[0];
@@ -703,18 +711,23 @@ class Editor {
     this.refreshPanel();
   }
 
+  // does changing these layers need the level rebuilt? (decor is only drawn by the editor)
+  needsRebuild(items) { return items.some((s) => s.layer !== 'decor'); }
+
   duplicate() {
-    if (!this.sel) return;
-    const layer = this.sel.layer, list = this.list(layer), keys = this.selKeys();
-    const copies = keys.map((k) => {
-      const ent = structuredClone(list[k]);
+    const items = this.selItems();
+    if (!items.length) return;
+    const copies = items.map(({ layer, k }) => {
+      const ent = structuredClone(this.list(layer)[k]);
       ent.x = round2(ent.x + (this.grid || 16)); ent.y = round2(ent.y + (this.grid || 16));
       if (layer === 'pathNodes') { delete ent.name; delete ent.props; } // the copy links itself by line of sight
       else if (ent.name) delete ent.name;
-      return ent;
+      return { layer, ent };
     });
-    this.change([layer + '.json'], () => {
-      for (const ent of copies) {
+    const added = [];
+    this.change(this.selFiles(items), () => {
+      for (const { layer, ent } of copies) {
+        const list = this.list(layer);
         if (layer === 'doors' && ent.props && ent.props.id) {
           let n = 1;
           const ids = new Set(list.map((d) => d.props && d.props.id));
@@ -722,35 +735,78 @@ class Editor {
           ent.props.id = 'door' + n;
         }
         list.push(ent);
+        added.push({ layer, k: list.length - 1 });
       }
-    }, { reload: layer !== 'decor' });
-    const n = list.length;
-    this.sel = { layer, k: n - 1 };
-    for (let i = 0; i < copies.length; i++) this.multi.add(n - copies.length + i);
+    }, { reload: this.needsRebuild(items) });
+    this.selection = added;
     this.refreshPanel();
   }
 
   deleteSel() {
-    const layer = this.sel.layer, list = this.list(layer), keys = this.selKeys();
-    const names = keys.map((k) => list[k].name).filter(Boolean);
-    this.change([layer + '.json'], () => {
-      for (const k of [...keys].reverse()) list.splice(k, 1);
-      // drop links to deleted nodes
-      if (names.length && layer === 'pathNodes') for (const e of list) if (e.props && Array.isArray(e.props.connections)) e.props.connections = e.props.connections.filter((c) => !(isRef(c) && names.includes(c.$ref)));
-    }, { reload: layer !== 'decor' });
+    const items = this.selItems();
+    if (!items.length) return;
+    this.change(this.selFiles(items), () => {
+      for (const layer of new Set(items.map((s) => s.layer))) {
+        const list = this.list(layer);
+        const keys = items.filter((s) => s.layer === layer).map((s) => s.k).sort((a, b) => b - a);
+        const names = keys.map((k) => list[k].name).filter(Boolean);
+        for (const k of keys) list.splice(k, 1);
+        // drop links to deleted nodes
+        if (names.length && layer === 'pathNodes') for (const e of list) if (e.props && Array.isArray(e.props.connections)) e.props.connections = e.props.connections.filter((c) => !(isRef(c) && names.includes(c.$ref)));
+      }
+    }, { reload: this.needsRebuild(items) });
     this.sel = null;
     this.refreshPanel();
   }
 
+  // put one thing at (x, y), moving its clip in the game too so it shows without a rebuild
+  moveTo(layer, k, x, y) {
+    const ent = this.list(layer)[k];
+    ent.x = round2(x); ent.y = round2(y);
+    const c = this.clipFor(layer, k);
+    if (c) { c._x = ent.x; c._y = ent.y; }
+  }
+
+  // arrow keys: move the selection by (dx, dy) px; presses in a row make one undo step
+  nudge(dx, dy) {
+    const items = this.selItems();
+    if (!items.length) return;
+    const key = this.index + ':' + JSON.stringify(items), last = this.undoStack[this.undoStack.length - 1];
+    const join = last && last.nudge === key && Date.now() - last.at < 1500 && !this.redoStack.length;
+    const before = join ? null : this.snapshot();
+    for (const { layer, k } of items) { const e = this.list(layer)[k]; this.moveTo(layer, k, e.x + dx, e.y + dy); }
+    const files = this.selFiles(items);
+    if (join) { last.after = this.snapshot(); last.at = Date.now(); }
+    else this.pushUndo({ type: 'data', level: this.index, before, after: this.snapshot(), files, nudge: key, at: Date.now() });
+    for (const f of files) this.markDirty(f);
+    this.needsReload = true;
+    clearTimeout(this.nudgeTimer); // the panel's x, y catch up once the keys stop
+    this.nudgeTimer = setTimeout(() => this.refreshPanel(), 150);
+  }
+
+  // line the selection up (same x or y, the middle of their spread), or space it evenly
+  // between the outermost two
+  arrange(axis, how) {
+    const items = this.selItems();
+    if (items.length < (how === 'space' ? 3 : 2)) return;
+    const ents = items.map((s) => ({ ...s, e: this.list(s.layer)[s.k] }));
+    const vals = ents.map((o) => o.e[axis]);
+    const lo = Math.min(...vals), hi = Math.max(...vals);
+    this.change(this.selFiles(items), () => {
+      if (how === 'align') for (const o of ents) o.e[axis] = round2((lo + hi) / 2);
+      else ents.sort((a, b) => a.e[axis] - b.e[axis]).forEach((o, i) => { o.e[axis] = round2(lo + (hi - lo) * i / (ents.length - 1)); });
+    }, { reload: this.needsRebuild(items) });
+  }
+
   // turn (degrees, clockwise on screen) and scale the selection: one thing about its own
   // origin, a group about its centre
-  transformSel(deg, f = 1, keys = this.selKeys()) {
-    const layer = this.sel.layer, list = this.list(layer);
-    const group = keys.length > 1;
-    const cx = keys.reduce((a, k) => a + list[k].x, 0) / keys.length, cy = keys.reduce((a, k) => a + list[k].y, 0) / keys.length;
+  transformSel(deg, f = 1, items = this.selItems()) {
+    if (!items.length) return;
+    const ents = items.map((s) => [s.layer, this.list(s.layer)[s.k]]);
+    const group = ents.length > 1;
+    const cx = ents.reduce((a, [, e]) => a + e.x, 0) / ents.length, cy = ents.reduce((a, [, e]) => a + e.y, 0) / ents.length;
     const r = deg * Math.PI / 180, cos = Math.cos(r), sin = Math.sin(r);
-    for (const k of keys) {
-      const e = list[k];
+    for (const [layer, e] of ents) {
       if (group) {
         const dx = e.x - cx, dy = e.y - cy;
         e.x = round2(cx + f * (dx * cos - dy * sin)); e.y = round2(cy + f * (dx * sin + dy * cos));
@@ -766,9 +822,9 @@ class Editor {
   }
 
   rotateSel(deg) {
-    if (!this.sel) return;
-    const layer = this.sel.layer;
-    this.change([layer + '.json'], () => this.transformSel(deg), { reload: layer !== 'decor' });
+    const items = this.selItems();
+    if (!items.length) return;
+    this.change(this.selFiles(items), () => this.transformSel(deg, 1, items), { reload: this.needsRebuild(items) });
   }
 
   toggleLink(a, b) {
@@ -880,7 +936,7 @@ class Editor {
 
   // a zone's corner under the mouse, for dragging
   vertexAt(sx, sy) {
-    if (!this.sel || this.sel.layer !== 'vision') return null;
+    if (!this.sel || this.sel.layer !== 'vision' || !this.editable('vision')) return null;
     const z = this.list('vision')[this.sel.k];
     if (!z || !z.points) return null;
     const M = zoneMatrix(z), v = this.view;
@@ -1026,7 +1082,7 @@ class Editor {
     ctx.setTransform(...M);
     if (this.visible.collision) {
       ctx.imageSmoothingEnabled = false;
-      ctx.globalAlpha = this.active === 'collision' ? 1 : 0.6;
+      ctx.globalAlpha = this.toolLayers().includes('collision') ? 1 : 0.6;
       ctx.drawImage(this.map.overlay, 0, 0);
       ctx.globalAlpha = 1;
     }
@@ -1034,7 +1090,7 @@ class Editor {
     // decor: the background shows the last bake; the sprites drawn over it show decor.json now
     if (this.visible.decor) {
       this.loadDecorIndex();
-      const on = this.active === 'decor';
+      const on = !this.locked.decor;
       ctx.imageSmoothingEnabled = true;
       this.list('decor').forEach((e) => {
         const { w: sw, h: sh } = this.decorSize(e.sprite), s = e.scale || 1, w = sw * s, h = sh * s;
@@ -1043,12 +1099,13 @@ class Editor {
         ctx.translate(e.x, e.y);
         ctx.rotate(-(e.rotation || 0) * Math.PI / 180);
         if (img) { ctx.globalAlpha = e.effect === 'paint' ? 0.6 : 0.9; ctx.drawImage(img, -w / 2, -h / 2, w, h); ctx.globalAlpha = 1; }
-        if (on) { ctx.strokeStyle = decorColour(e.sprite); ctx.lineWidth = px; ctx.strokeRect(-w / 2, -h / 2, w, h); }
+        if (on) { ctx.globalAlpha = 0.45; ctx.strokeStyle = decorColour(e.sprite); ctx.lineWidth = px; ctx.setLineDash([2 * px, 2 * px]); ctx.strokeRect(-w / 2, -h / 2, w, h); ctx.setLineDash([]); ctx.globalAlpha = 1; }
         ctx.restore();
       });
     }
     // grid
-    if (this.snapGrid && this.grid && this.grid * v.z >= 6 && (DRAW_TOOLS.has(this.tool) || this.drag)) {
+    // grid: while Shift (snap) is held
+    if (this.shiftDown && this.grid && this.grid * v.z >= 6 && this.tool !== 'link' && this.tool !== 'autozone') {
       ctx.strokeStyle = 'rgba(255,255,255,0.08)';
       ctx.lineWidth = px;
       ctx.beginPath();
@@ -1069,21 +1126,18 @@ class Editor {
     ctx.strokeStyle = 'rgba(120,255,255,0.5)';
     ctx.lineWidth = px;
     ctx.strokeRect(0, 0, w, h);
-    // vision zone outlines and corners while editing them
-    if (this.visible.vision && this.active === 'vision') {
-      this.list('vision').forEach((z, k) => {
-        const sel = this.sel && this.sel.layer === 'vision' && this.sel.k === k;
+    // vision zone outlines (thin, dashed) while they can be edited; selected ones are drawn below
+    if (this.editable('vision')) {
+      ctx.setLineDash([4 * px, 3 * px]);
+      this.list('vision').forEach((z) => {
         ctx.save();
         ctx.transform(...zoneMatrix(z));
-        ctx.strokeStyle = sel ? '#ffee44' : 'rgba(255,255,255,0.45)';
-        ctx.lineWidth = (sel ? 2 : 1) * px / Math.max(1e-6, Math.sqrt(Math.abs(det(zoneMatrix(z)))));
+        ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+        ctx.lineWidth = px / Math.max(1e-6, Math.sqrt(Math.abs(det(zoneMatrix(z)))));
         try { ctx.stroke(zonePath2D(z)); } catch { /* bad path */ }
         ctx.restore();
-        if (sel && z.points) {
-          ctx.fillStyle = '#ffee44';
-          for (const p of z.points) { const [x, y] = apply(zoneMatrix(z), p); ctx.fillRect(x - 3 * px, y - 3 * px, 6 * px, 6 * px); }
-        }
       });
+      ctx.setLineDash([]);
     }
     // things the game doesn't show (trigger pads, alpha-0 areas, hidden clips): outlined and named
     {
@@ -1160,13 +1214,39 @@ class Editor {
         if (this.linkFrom === k) { ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(e.x, e.y, 9 * px, 0, Math.PI * 2); ctx.stroke(); }
       });
     }
-    // selection
-    for (const k of this.selKeys()) {
-      const [x0, y0, x1, y1] = this.boundsOf(this.sel.layer, k);
-      ctx.strokeStyle = k === this.sel.k ? '#ffee44' : '#ffbb33'; ctx.lineWidth = 1.5 * px;
-      ctx.setLineDash([4 * px, 3 * px]);
-      ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
-      ctx.setLineDash([]);
+    // selection: solid cyan with a dark edge, a tint and corner handles (the primary's are white),
+    // so it stands out from the thin dashed outlines of everything else
+    {
+      const items = this.selItems(), primary = items[items.length - 1];
+      const SEL = '#2ee6ff';
+      const handles = (pts, main) => {
+        for (const [x, y] of pts) {
+          ctx.fillStyle = '#000'; ctx.fillRect(x - 4 * px, y - 4 * px, 8 * px, 8 * px);
+          ctx.fillStyle = main ? '#fff' : SEL; ctx.fillRect(x - 3 * px, y - 3 * px, 6 * px, 6 * px);
+        }
+      };
+      for (const it of items) {
+        const main = it === primary;
+        if (it.layer === 'vision') {
+          const z = this.list('vision')[it.k], Z = zoneMatrix(z), sw = px / Math.max(1e-6, Math.sqrt(Math.abs(det(Z))));
+          ctx.save();
+          ctx.transform(...Z);
+          try {
+            const path = zonePath2D(z);
+            ctx.fillStyle = 'rgba(46,230,255,0.12)'; ctx.fill(path);
+            ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4 * sw; ctx.stroke(path);
+            ctx.strokeStyle = SEL; ctx.lineWidth = 2 * sw; ctx.stroke(path);
+          } catch { /* bad path */ }
+          ctx.restore();
+          if (z.points) handles(z.points.map((p) => apply(Z, p)), main);
+          continue;
+        }
+        const [x0, y0, x1, y1] = this.boundsOf(it.layer, it.k);
+        ctx.fillStyle = 'rgba(46,230,255,0.14)'; ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+        ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4 * px; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+        ctx.strokeStyle = SEL; ctx.lineWidth = 2 * px; ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+        handles([[x0, y0], [x1, y0], [x0, y1], [x1, y1]], main);
+      }
     }
     // tool previews
     const m = this.mouse;
@@ -1179,9 +1259,7 @@ class Editor {
       this.hint(`${Math.abs(d.x1 - d.x0)} × ${Math.abs(d.y1 - d.y0)}`);
     }
     if (this.poly) {
-      let nx, ny;
-      [nx, ny] = this.snap(m.x, m.y, m.alt);
-      [nx, ny] = this.snapAngleFrom(this.poly[this.poly.length - 1], nx, ny, m.shift);
+      const [nx, ny] = this.snapAngleFrom(this.poly[this.poly.length - 1], m.x, m.y, m.shift);
       ctx.fillStyle = fillCol(this.colour, 0.4); ctx.strokeStyle = '#ff0'; ctx.lineWidth = px;
       ctx.beginPath();
       this.poly.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)));
@@ -1197,8 +1275,8 @@ class Editor {
       ctx.strokeRect(x0, y0, b, b);
     }
     if (this.tool === 'place' && this.placeSymbol) {
-      const [x, y] = this.snap(m.x, m.y, m.alt);
-      const img = this.active === 'decor' && typeof this.placeSymbol === 'string' && this.decorImage(this.placeSymbol);
+      const [x, y] = this.snap(m.x, m.y, m.shift);
+      const img = this.placeLayer === 'decor' && typeof this.placeSymbol === 'string' && this.decorImage(this.placeSymbol);
       if (img) {
         const s = this.decorScale(this.placeSymbol);
         ctx.globalAlpha = 0.6;
@@ -1254,12 +1332,14 @@ class Editor {
     window.addEventListener('keyup', (e) => {
       if (!this.isOpen) return;
       if (e.key === ' ') this.spaceDown = false;
+      if (e.key === 'Shift') this.shiftDown = false;
       if (!typing(e)) e.stopImmediatePropagation();
     }, true);
     this.panel.addEventListener('keydown', (e) => e.stopPropagation());
     this.panel.addEventListener('keyup', (e) => e.stopPropagation());
     window.addEventListener('mouseup', (e) => { if (!this.isOpen) return; e.stopImmediatePropagation(); this.onMouseUp(e); }, true);
     window.addEventListener('mousemove', (e) => { if (this.isOpen && this.drag) this.onMouseMove(e); }, true);
+    window.addEventListener('blur', () => { this.shiftDown = false; });
   }
 
   status(t, err) { this.statusEl.textContent = t; this.statusEl.classList.toggle('err', !!err); }
@@ -1282,55 +1362,82 @@ class Editor {
     p.append(el('div', { class: 'le-row' }, el('b', {}, 'Level '), lvl,
       el('button', { title: 'Restart the level from the edited data', onclick: () => this.reload() }, 'Restart'),
       el('button', { title: 'Back to the game (`)', onclick: () => this.close() }, 'Play ▸')));
-    // tools
-    p.append(el('h4', {}, 'Tools'), el('div', { class: 'le-tools' }, ...TOOLS.map((t) => el('button', { class: this.tool === t.key ? 'on' : '', title: t.tip, onclick: () => this.setTool(t.key) }, `${t.label} (${t.hot})`))));
+    // tools; hovering one lights up the layers it works on (and hovering a layer, its tools)
+    const toolBtns = new Map(), layerRows = new Map();
+    const light = (keys, map, on) => { for (const k of keys) { const n = map.get(k); if (n) n.classList.toggle('hl', on); } };
+    const toolsFor = (layer) => TOOLS.filter((t) => TOOL_LAYERS[t.key].includes(layer)).map((t) => t.key);
+    p.append(el('h4', {}, 'Tools'), el('div', { class: 'le-tools' }, ...TOOLS.map((t) => {
+      const b = el('button', { class: this.tool === t.key ? 'on' : '', title: `${t.tip}\nWorks on: ${TOOL_LAYERS[t.key].map(layerLabel).join(', ')}`, onclick: () => this.setTool(t.key),
+        onmouseenter: () => light(TOOL_LAYERS[t.key], layerRows, true), onmouseleave: () => light(TOOL_LAYERS[t.key], layerRows, false) }, `${t.label} (${t.hot})`);
+      toolBtns.set(t.key, b);
+      return b;
+    })));
     const tip = TOOLS.find((t) => t.key === this.tool);
-    p.append(el('div', { class: 'le-tip' }, tip.tip));
-    if (DRAW_TOOLS.has(this.tool)) {
+    const targets = this.toolLayers();
+    p.append(el('div', { class: 'le-tip' }, tip.tip),
+      el('div', { class: 'le-works' }, 'Works on ', ...targets.flatMap((l, i) => [i ? ', ' : '', el('b', { class: this.locked[l] ? 'locked' : this.visible[l] ? '' : 'off' }, layerLabel(l) + (this.locked[l] ? ' (locked)' : this.visible[l] ? '' : ' (hidden)'))])));
+    if (this.tool === 'poly') {
+      p.append(el('div', { class: 'le-row' }, 'Draws ', ...[['collision', 'collision'], ['vision', 'a vision zone']].map(([k, label]) => el('button', {
+        class: this.polyTarget === k ? 'on' : '', onclick: () => { this.polyTarget = k; this.poly = null; this.refreshPanel(); } }, label))));
+    }
+    if (DRAW_TOOLS.has(this.tool) && !(this.tool === 'poly' && this.polyTarget === 'vision')) {
       p.append(el('div', { class: 'le-row' }, 'Paint ', ...['wall', 'chasm', 'open'].map((c) => el('button', {
         class: 'le-swatch ' + (this.colour === c ? 'on' : ''), style: `--c: rgb(${COLOURS[c].join(',')})`, title: { wall: 'Wall (W)', chasm: 'Chasm: impassable, shoot over (C)', open: 'Open floor (O)' }[c],
         onclick: () => { this.colour = c; this.refreshPanel(); },
       }, c))));
-      p.append(el('div', { class: 'le-row' },
+      if (this.tool === 'pencil' || this.tool === 'eraser') p.append(el('div', { class: 'le-row' },
         'Brush ', el('input', { type: 'number', min: 1, max: 64, value: this.brush, onchange: (e) => { this.brush = Math.max(1, Math.min(64, +e.target.value || 1)); } }), ' px'));
-      p.append(el('div', { class: 'le-row' },
-        el('label', {}, el('input', { type: 'checkbox', checked: this.snapGrid, onchange: (e) => { this.snapGrid = e.target.checked; } }), ' Grid '),
-        el('select', { onchange: (e) => { this.grid = +e.target.value; } }, ...[4, 8, 16, 32, 64].map((g) => el('option', { value: g, selected: g === this.grid }, g + ' px'))),
-        ' Angles ',
-        el('select', { onchange: (e) => { this.snapAngle = +e.target.value; } }, ...[0, 5, 15, 22.5, 45, 90].map((a) => el('option', { value: a, selected: a === this.snapAngle }, a ? a + '°' : 'free')))));
-      if (this.stale) p.append(el('div', { class: 'le-warn' }, 'The collision map changed, so the background art no longer matches it. ' + (L.settings && L.settings.art ? 'Press Bake art (Art pipeline, below) to redraw it.' : 'This level keeps its original art; see Art pipeline below.')));
     }
-    // layers
-    const active = el('div', { class: 'le-layers' });
+    if (!['link', 'autozone', 'pencil', 'eraser', 'fill'].includes(this.tool)) {
+      p.append(el('div', { class: 'le-row', title: 'nothing snaps unless Shift is held' }, 'Hold Shift to snap: grid ',
+        el('select', { onchange: (e) => { this.grid = +e.target.value; } }, ...[1, 2, 4, 8, 16, 32, 64].map((g) => el('option', { value: g, selected: g === this.grid }, g + ' px'))),
+        ...(this.tool === 'poly' ? [' angles ', el('select', { onchange: (e) => { this.snapAngle = +e.target.value; } }, ...[0, 5, 15, 22.5, 45, 90].map((a) => el('option', { value: a, selected: a === this.snapAngle }, a ? a + '°' : 'off')))] : [])));
+    }
+    if (DRAW_TOOLS.has(this.tool) && this.stale) p.append(el('div', { class: 'le-warn' }, 'The collision map changed, so the background art no longer matches it. ' + (L.settings && L.settings.art ? 'Press Bake art (Art pipeline, below) to redraw it.' : 'This level keeps its original art; see Art pipeline below.')));
+    // layers: the eye shows or hides one, the lock keeps it from being selected or edited.
+    // Rows the current tool works on are marked, and rows with something selected are lit
+    const layersEl = el('div', { class: 'le-layers' });
+    const selLayers = new Set(this.selLayers());
     VIEW_LAYERS.forEach((l, i) => {
-      const editable = DATA_LAYERS.includes(l.key) || l.key === 'collision';
       const hot = l.hot || String(i + 1);
-      active.append(el('div', { class: 'le-layer' + (this.active === l.key ? ' on' : '') },
-        el('input', { type: 'checkbox', checked: this.visible[l.key], title: `show/hide (${hot})`, onchange: (e) => { this.visible[l.key] = e.target.checked; } }),
-        el('span', { class: editable ? 'le-pick' : '', onclick: editable ? () => this.pickLayer(l.key) : null }, `${hot}  ${l.label}`),
-        DATA_LAYERS.includes(l.key) ? el('small', {}, String(this.layerCount(l.key))) : ''));
+      const lockable = LOCKABLE.has(l.key), vis = !!this.visible[l.key], locked = !!this.locked[l.key];
+      const cls = ['le-layer', targets.includes(l.key) ? 'target' : '', selLayers.has(l.key) ? 'has-sel' : '', locked ? 'locked' : '', vis ? '' : 'hidden'].filter(Boolean).join(' ');
+      const tools = toolsFor(l.key);
+      const row = el('div', { class: cls, onmouseenter: () => light(tools, toolBtns, true), onmouseleave: () => light(tools, toolBtns, false),
+        title: tools.length ? 'Tools for this layer: ' + tools.map((t) => TOOLS.find((x) => x.key === t).label).join(', ') : '' },
+        el('button', { class: 'le-icon' + (vis ? ' on' : ''), title: `${vis ? 'hide' : 'show'} (${hot})`, onclick: () => this.setVisible(l.key, !vis) }, vis ? ICON.eye : ICON.eyeOff),
+        lockable ? el('button', { class: 'le-icon' + (locked ? ' on' : ''), title: locked ? 'unlock: let it be selected and edited' : 'lock: keep it from being selected or edited', onclick: () => this.setLocked(l.key, !locked) }, locked ? ICON.lock : ICON.unlock) : el('span', { class: 'le-icon-gap' }),
+        el('span', { class: 'le-name' }, `${hot}  ${l.label}`),
+        selLayers.has(l.key) ? el('small', { class: 'le-nsel' }, this.selItems().filter((s) => s.layer === l.key).length + ' sel') : '',
+        DATA_LAYERS.includes(l.key) ? el('small', {}, String(this.layerCount(l.key))) : '');
+      layerRows.set(l.key, row);
+      layersEl.append(row);
     });
-    p.append(el('h4', {}, 'Layers ', el('small', {}, 'editing: ', el('b', { class: 'le-editing' }, (VIEW_LAYERS.find((l) => l.key === this.active) || { label: this.active }).label), ' · Tab or click a name to change')), active);
+    p.append(el('h4', {}, 'Layers ', el('small', {}, 'eye: show · lock: no editing')), layersEl);
     // palette
-    if (this.tool === 'place' && this.active === 'decor') p.append(this.decorPalette());
-    else if (this.tool === 'place') {
-      const layer = PLACE_LAYERS.includes(this.active) ? this.active : 'enemies';
-      const syms = new Set();
-      // shared helper shapes (_circle, _box) are used as invisible areas, not placed on their own
-      for (const x of this.levels) for (const e of x[layer] || []) if (!e.symbol.startsWith('_')) syms.add(e.symbol);
-      for (const s of EXTRA[layer] || []) if (this.applier.ids[s] !== undefined) syms.add(s);
-      p.append(el('h4', {}, 'Place: ' + (VIEW_LAYERS.find((l) => l.key === layer) || { label: layer }).label.toLowerCase()), el('div', { class: 'le-palette' }, ...[...syms].sort().map((s) => el('button', {
-        class: this.placeSymbol === s ? 'on' : '', onclick: () => { this.placeSymbol = s; this.active = layer; this.refreshPanel(); },
-      }, s.split('/').pop())), ...(PRESETS[layer] || []).map((pr) => el('button', {
-        class: this.placeSymbol === pr ? 'on' : '', title: 'a ' + pr.symbol.split('/').pop() + ' set up as a ' + pr.label,
-        onclick: () => { this.placeSymbol = pr; this.active = layer; this.refreshPanel(); },
-      }, pr.label))));
+    if (this.tool === 'place') {
+      const layer = this.placeLayer;
+      p.append(el('div', { class: 'le-row le-tabs' }, 'Place on ', ...[...PLACE_LAYERS, 'decor'].map((l) => el('button', { class: l === layer ? 'on' : '', onclick: () => this.setPlaceLayer(l) }, layerLabel(l)))));
+      if (layer === 'decor') p.append(this.decorPalette());
+      else if (layer !== 'pathNodes') {
+        const syms = new Set();
+        // shared helper shapes (_circle, _box) are used as invisible areas, not placed on their own
+        for (const x of this.levels) for (const e of x[layer] || []) if (!e.symbol.startsWith('_')) syms.add(e.symbol);
+        for (const s of EXTRA[layer] || []) if (this.applier.ids[s] !== undefined) syms.add(s);
+        p.append(el('div', { class: 'le-palette' }, ...[...syms].sort().map((s) => el('button', {
+          class: this.placeSymbol === s ? 'on' : '', onclick: () => { this.placeSymbol = s; this.refreshPanel(); },
+        }, s.split('/').pop())), ...(PRESETS[layer] || []).map((pr) => el('button', {
+          class: this.placeSymbol === pr ? 'on' : '', title: 'a ' + pr.symbol.split('/').pop() + ' set up as a ' + pr.label,
+          onclick: () => { this.placeSymbol = pr; this.refreshPanel(); },
+        }, pr.label))));
+      } else p.append(el('div', { class: 'le-tip' }, 'Click to drop a path node; it joins the selected node\'s group.'));
     }
     // properties
-    if (this.sel && this.selKeys().length > 1) p.append(this.groupPanel());
-    else if (this.sel && this.list(this.sel.layer)[this.sel.k]) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.sel.layer === 'decor' ? this.decorPanel() : this.propsPanel());
-    else if (this.active === 'decor') p.append(el('div', { class: 'le-tip' }, 'Decor (decor.json) is what the art bake paints into background.png: floor paint, wall greebles, vents, rails, lights. The game never reads it. Select (V) moves one, Place (P) adds one, R turns it, Delete removes it; then Bake art below to see it for real.'));
-    else if (this.active === 'vision') p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones and their corners, Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
+    const nSel = this.selItems().length;
+    if (nSel > 1) p.append(this.groupPanel());
+    else if (nSel) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.sel.layer === 'decor' ? this.decorPanel() : this.propsPanel());
+    else if (this.tool === 'place' && this.placeLayer === 'decor') p.append(el('div', { class: 'le-tip' }, 'Decor (decor.json) is what the art bake paints into background.png: floor paint, wall greebles, vents, rails, lights. The game never reads it. Select (V) moves one, Place (P) adds one, R turns it, Delete removes it; then Bake art below to see it for real.'));
+    else if (this.toolLayers().includes('vision')) p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones and their corners, Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
     // stats + settings
     p.append(this.artPanel());
     p.append(this.triggerPanel());
@@ -1517,7 +1624,7 @@ class Editor {
     }
     // reload the page so the new background.png and decor.json come in, back where we were
     try {
-      sessionStorage.setItem('levelEditorResume', JSON.stringify({ index: this.index, view: this.view, visible: this.visible, active: this.active, tool: this.tool, msg: `Art ${step === 'all' ? 're-placed and baked' : 'baked'} for ${L.folder}.` }));
+      sessionStorage.setItem('levelEditorResume', JSON.stringify({ index: this.index, view: this.view, visible: this.visible, locked: this.locked, placeLayer: this.placeLayer, polyTarget: this.polyTarget, tool: this.tool, msg: `Art ${step === 'all' ? 're-placed and baked' : 'baked'} for ${L.folder}.` }));
     } catch { /* private window: we come back to the fitted view */ }
     const u = new URL(location.href);
     u.searchParams.set('edit', this.index);
@@ -1526,12 +1633,12 @@ class Editor {
 
   // a number field that applies as you type or step it (one undo step per edit), and
   // refreshes the panel when you leave it
-  liveNum(label, val, set, { file, reload = true, attrs = {} }) {
+  liveNum(label, val, set, { file, files = [file], reload = true, attrs = {} }) {
     let before = null;
     const commit = () => {
       if (before === null) return;
       const after = this.snapshot();
-      if (after !== before) this.pushUndo({ type: 'data', level: this.index, before, after, files: [file] });
+      if (after !== before) this.pushUndo({ type: 'data', level: this.index, before, after, files });
       before = null;
       this.refreshPanel();
     };
@@ -1541,17 +1648,17 @@ class Editor {
         if (raw === '' || !isFinite(v)) return;
         if (before === null) before = this.snapshot();
         set(v);
-        this.markDirty(file);
+        for (const f of files) this.markDirty(f);
         if (reload) this.reload(); else this.needsReload = true;
       },
       onchange: commit,
       onkeydown: (ev) => { if (ev.key === 'Enter') ev.target.blur(); } }));
   }
 
-  // several things selected: move them by dragging, turn and scale them together
+  // several things selected (from any layers): move, turn, scale, line up and space them together
   groupPanel() {
-    const layer = this.sel.layer, keys = this.selKeys(), file = layer + '.json';
-    const reload = layer !== 'decor';
+    const items = this.selItems(), files = this.selFiles(items);
+    const reload = this.needsRebuild(items);
     // relative fields: each change re-applies to the selection as it was when the edit started
     // (the panel is rebuilt when an edit ends, which starts the next one afresh)
     let base = null;
@@ -1559,14 +1666,21 @@ class Editor {
       if (base === null) base = this.snapshot();
       this.restoreData(base);
       apply(v);
-    }, { file, reload, attrs });
-    const label = (VIEW_LAYERS.find((l) => l.key === layer) || { label: layer }).label;
+    }, { files, reload, attrs });
+    const layers = this.selLayers().map((l) => layerLabel(l).toLowerCase()).join(', ');
+    const arr = (label, axis, how, title) => el('button', { title, disabled: items.length < (how === 'space' ? 3 : 2), onclick: () => this.arrange(axis, how) }, label);
     return el('div', { class: 'le-props' },
-      el('h4', {}, `${keys.length} selected`, el('small', {}, ` ${label.toLowerCase()}`)),
-      el('div', { class: 'le-tip' }, 'Drag one to move them all. Shift+click adds or removes one; Esc clears. The fields turn and scale the group about its centre, live.'),
+      el('h4', {}, `${items.length} selected`, el('small', {}, ` ${layers}`)),
+      el('div', { class: 'le-tip' }, 'Drag one to move them all (Shift snaps), arrows nudge 1 px (Shift: 10). Shift+click adds or removes one; Esc clears. The fields turn and scale the group about its centre, live.'),
       el('div', { class: 'le-row' },
-        rel('rotate by', 0, (v) => this.transformSel(v, 1, keys), { step: 5, title: 'degrees, clockwise' }),
-        rel('scale %', 100, (v) => { if (v > 0) this.transformSel(0, v / 100, keys); }, { step: 5, min: 1 })),
+        rel('rotate by', 0, (v) => this.transformSel(v, 1, items), { step: 5, title: 'degrees, clockwise' }),
+        rel('scale %', 100, (v) => { if (v > 0) this.transformSel(0, v / 100, items); }, { step: 5, min: 1 })),
+      el('div', { class: 'le-row le-arrange' }, 'Align ',
+        arr('⇹ in a row', 'y', 'align', 'line them up horizontally: the same y (the middle of their spread)'),
+        arr('⇳ in a column', 'x', 'align', 'line them up vertically: the same x (the middle of their spread)')),
+      el('div', { class: 'le-row le-arrange' }, 'Space evenly ',
+        arr('↔ across', 'x', 'space', 'even gaps left to right, between the leftmost and rightmost (3 or more)'),
+        arr('↕ down', 'y', 'space', 'even gaps top to bottom, between the topmost and bottommost (3 or more)')),
       el('div', { class: 'le-row' },
         el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
         el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
@@ -1661,7 +1775,7 @@ class Editor {
   // every trigger in the level: doors and what they listen for, and everything that sends one
   triggerPanel() {
     const rows = [];
-    const pick = (layer, k) => () => { this.setTool('select'); this.sel = { layer, k }; this.active = layer; this.visible[layer] = true; this.visible.triggers = true; this.refreshPanel(); };
+    const pick = (layer, k) => () => { this.tool = 'select'; this.visible[layer] = true; this.visible.triggers = true; if (this.locked[layer]) delete this.locked[layer]; this.sel = { layer, k }; this.refreshPanel(); };
     const where = (e) => `(${Math.round(e.x)}, ${Math.round(e.y)})`;
     this.list('doors').forEach((d, k) => {
       if (!d.props || !d.props.id) return;
@@ -1703,6 +1817,15 @@ class Editor {
 
 // ---------------------------------------------------------------------------- helpers
 function round2(v) { return Math.round(v * 100) / 100; }
+function layerLabel(key) { return (VIEW_LAYERS.find((l) => l.key === key) || { label: key }).label; }
+// small line icons for the layer rows
+const svg = (d) => { const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('viewBox', '0 0 16 16'); s.innerHTML = d; return s; };
+const ICON = {
+  get eye() { return svg('<path d="M1 8s2.6-5 7-5 7 5 7 5-2.6 5-7 5-7-5-7-5z" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="8" r="2.2" fill="currentColor"/>'); },
+  get eyeOff() { return svg('<path d="M1 8s2.6-5 7-5 7 5 7 5-2.6 5-7 5-7-5-7-5z" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".5"/><path d="M2 14L14 2" stroke="currentColor" stroke-width="1.6"/>'); },
+  get lock() { return svg('<rect x="3" y="7" width="10" height="7" rx="1.2" fill="currentColor"/><path d="M5 7V5a3 3 0 016 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/>'); },
+  get unlock() { return svg('<rect x="3" y="7" width="10" height="7" rx="1.2" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".6"/><path d="M5 7V5a3 3 0 016-.6" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".6"/>'); },
+};
 
 // box around a decor placement: its sprite scaled, turned (degrees counter-clockwise) and centred on x, y
 function decorBounds(e, size) {
@@ -1870,16 +1993,34 @@ const CSS = `
 #level-editor .le-tip { color: #799; font-size: 11px; margin: 2px 0; }
 #level-editor .le-warn { color: #fc6; font-size: 11px; margin: 4px 0; }
 #level-editor .le-swatch { border-left: 14px solid var(--c); }
-#level-editor .le-layer { display: flex; gap: 6px; align-items: center; padding: 1px 2px; border-radius: 3px; }
-#level-editor .le-layer.on { background: #164; }
-#level-editor .le-layer span { flex: 1; }
-#level-editor .le-pick { cursor: pointer; text-decoration: underline dotted #476; }
+#level-editor .le-layer { display: flex; gap: 4px; align-items: center; padding: 1px 2px 1px 4px; border-radius: 3px; border-left: 3px solid transparent; }
+#level-editor .le-layer .le-name { flex: 1; }
+#level-editor .le-layer.target { border-left-color: #4fc; background: #0f2d26; }
+#level-editor .le-layer.target .le-name { color: #8fd; }
+#level-editor .le-layer.has-sel { background: #0d3442; box-shadow: inset 0 0 0 1px #2ee6ff; }
+#level-editor .le-layer.has-sel .le-name { color: #2ee6ff; font-weight: bold; }
+#level-editor .le-layer.hidden .le-name, #level-editor .le-layer.locked .le-name { opacity: 0.55; }
+#level-editor .le-layer.target.locked { border-left-color: #c84; }
+#level-editor .le-layer.hl { outline: 1px dashed #fd6; }
+#level-editor .le-nsel { color: #2ee6ff !important; }
+#level-editor button.le-icon { width: 20px; height: 18px; padding: 1px 2px; margin: 0; background: transparent; border-color: transparent; color: #577; display: inline-flex; align-items: center; justify-content: center; }
+#level-editor button.le-icon.on { color: #cfe; }
+#level-editor button.le-icon:hover { border-color: #276; }
+#level-editor .le-layer.locked button.le-icon.on { color: #fb6; }
+#level-editor .le-icon svg { width: 14px; height: 14px; }
+#level-editor .le-icon-gap { width: 20px; flex: none; }
+#level-editor .le-tools button.hl { outline: 2px solid #fd6; outline-offset: -1px; }
+#level-editor .le-works { font-size: 11px; color: #799; margin: 2px 0; }
+#level-editor .le-works b { color: #8fd; font-weight: normal; border-bottom: 2px solid #4fc; }
+#level-editor .le-works b.locked { color: #fb6; border-color: #c84; }
+#level-editor .le-works b.off { color: #688; border-color: #355; }
+#level-editor .le-tabs button { font-size: 11px; padding: 1px 5px; }
+#level-editor button:disabled { opacity: 0.45; cursor: default; }
 #level-editor .le-palette button { font-size: 11px; }
 #level-editor .le-decor-pal { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 3px; max-height: 220px; overflow-y: auto; }
 #level-editor .le-decor-pal button { padding: 2px; height: 44px; background: #1b2b2b; }
 #level-editor .le-decor-pal img, #level-editor .le-decor-thumb { max-width: 100%; max-height: 100%; object-fit: contain; display: block; margin: auto; }
 #level-editor .le-decor-thumb { width: 48px; height: 48px; background: #1b2b2b; border-radius: 3px; }
-#level-editor .le-editing { color: #4fc; }
 #level-editor .le-types { flex-wrap: wrap; gap: 2px 8px; font-size: 11px; }
 #level-editor .le-optgroup { margin: 4px 0; }
 #level-editor .le-optgroup summary { font-size: 12px; color: #9cd; }
