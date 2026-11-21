@@ -108,7 +108,7 @@ class Editor {
     this.grid = 16;
     this.snapGrid = true;
     this.snapAngle = 15;
-    this.sel = null;         // {layer, k}
+    this.sel = null;         // {layer, k}: the primary selection; this.multi holds every selected k (Shift+click adds)
     this.placeSymbol = null;
     this.poly = null;        // polygon in progress: [[x, y], ...]
     this.view = { z: 1, ox: 0, oy: 0 };
@@ -120,6 +120,14 @@ class Editor {
   }
 
   get L() { return this.levels[this.index]; }
+  get sel() { return this._sel; }
+  set sel(v) { this._sel = v; this.multi = new Set(v ? [v.k] : []); }
+  // indices of everything selected, on the selection's layer
+  selKeys() {
+    if (!this._sel) return [];
+    const list = this.list(this._sel.layer);
+    return [...this.multi].filter((k) => list[k]).sort((a, b) => a - b);
+  }
   get map() {
     const i = this.index;
     if (!this.maps[i]) this.maps[i] = new CollisionMap(this.rt.lib.images.get(this.applier.id(`level assets/level${i}/shape 1/bitmap 1`)));
@@ -489,11 +497,25 @@ class Editor {
       const v = this.vertexAt(sx, sy);
       if (v) { this.drag = { kind: 'vertex', k: v.k, i: v.i, before: this.snapshot(), moved: false }; return; }
       const h = this.hit(x, y);
-      this.sel = h;
+      if (e.shiftKey && this.sel && h && h.layer === this.sel.layer) {
+        // Shift+click adds to the selection, or takes a selected one out
+        if (this.multi.has(h.k) && this.multi.size > 1) {
+          this.multi.delete(h.k);
+          if (this._sel.k === h.k) this._sel = { layer: h.layer, k: [...this.multi][0] };
+          this.refreshPanel();
+          return;
+        }
+        this.multi.add(h.k);
+        this._sel = h;
+      } else if (e.shiftKey && this.sel && !h) {
+        return; // Shift+click on nothing keeps the selection
+      } else if (!(h && this.sel && h.layer === this.sel.layer && this.multi.has(h.k))) {
+        this.sel = h; // clicking a selected one keeps the group, so it can be dragged
+      } else this._sel = h;
       if (h) {
         this.active = h.layer;
-        const ent = this.list(h.layer)[h.k];
-        this.drag = { kind: 'move', x, y, ex: ent.x, ey: ent.y, before: this.snapshot(), moved: false };
+        const list = this.list(h.layer);
+        this.drag = { kind: 'move', x, y, starts: new Map(this.selKeys().map((k) => [k, { x: list[k].x, y: list[k].y }])), before: this.snapshot(), moved: false };
       }
       this.refreshPanel();
     } else if (t === 'place') {
@@ -542,13 +564,18 @@ class Editor {
     if (!d) return;
     if (d.kind === 'pan') { this.view.ox = d.ox + sx - d.sx; this.view.oy = d.oy + sy - d.sy; }
     else if (d.kind === 'move') {
-      const ent = this.list(this.sel.layer)[this.sel.k];
-      let nx = d.ex + x - d.x, ny = d.ey + y - d.y;
-      if (e.shiftKey) [nx, ny] = this.snap(nx, ny, false); // Shift snaps to the grid
-      ent.x = round2(nx); ent.y = round2(ny);
-      d.moved = true;
-      const c = this.clipFor(this.sel.layer, this.sel.k);
-      if (c) { c._x = ent.x; c._y = ent.y; }
+      const layer = this.sel.layer, list = this.list(layer);
+      const p0 = d.starts.get(this.sel.k);
+      let nx = p0.x + x - d.x, ny = p0.y + y - d.y;
+      if (e.shiftKey) [nx, ny] = this.snap(nx, ny, false); // Shift snaps (the one under the mouse) to the grid
+      const dx = nx - p0.x, dy = ny - p0.y;
+      if (dx || dy) d.moved = true;
+      for (const [k, s0] of d.starts) {
+        const ent = list[k];
+        ent.x = round2(s0.x + dx); ent.y = round2(s0.y + dy);
+        const c = this.clipFor(layer, k);
+        if (c) { c._x = ent.x; c._y = ent.y; }
+      }
     } else if (d.kind === 'vertex') {
       const z = this.list('vision')[d.k];
       let [wx, wy] = e.shiftKey ? this.snap(x, y, false) : [x, y];
@@ -678,42 +705,70 @@ class Editor {
 
   duplicate() {
     if (!this.sel) return;
-    const { layer, k } = this.sel;
-    const ent = structuredClone(this.list(layer)[k]);
-    ent.x = round2(ent.x + (this.grid || 16)); ent.y = round2(ent.y + (this.grid || 16));
-    if (layer === 'pathNodes') { delete ent.name; delete ent.props; } // the copy links itself by line of sight
-    else if (ent.name) delete ent.name;
-    if (layer === 'doors' && ent.props && ent.props.id) {
-      let n = 1;
-      const ids = new Set(this.list('doors').map((d) => d.props && d.props.id));
-      while (ids.has('door' + n)) n++;
-      ent.props.id = 'door' + n;
-    }
-    this.change([layer + '.json'], () => this.list(layer).push(ent), { reload: layer !== 'decor' });
-    this.sel = { layer, k: this.list(layer).length - 1 };
+    const layer = this.sel.layer, list = this.list(layer), keys = this.selKeys();
+    const copies = keys.map((k) => {
+      const ent = structuredClone(list[k]);
+      ent.x = round2(ent.x + (this.grid || 16)); ent.y = round2(ent.y + (this.grid || 16));
+      if (layer === 'pathNodes') { delete ent.name; delete ent.props; } // the copy links itself by line of sight
+      else if (ent.name) delete ent.name;
+      return ent;
+    });
+    this.change([layer + '.json'], () => {
+      for (const ent of copies) {
+        if (layer === 'doors' && ent.props && ent.props.id) {
+          let n = 1;
+          const ids = new Set(list.map((d) => d.props && d.props.id));
+          while (ids.has('door' + n)) n++;
+          ent.props.id = 'door' + n;
+        }
+        list.push(ent);
+      }
+    }, { reload: layer !== 'decor' });
+    const n = list.length;
+    this.sel = { layer, k: n - 1 };
+    for (let i = 0; i < copies.length; i++) this.multi.add(n - copies.length + i);
     this.refreshPanel();
   }
 
   deleteSel() {
-    const { layer, k } = this.sel;
-    const ent = this.list(layer)[k];
+    const layer = this.sel.layer, list = this.list(layer), keys = this.selKeys();
+    const names = keys.map((k) => list[k].name).filter(Boolean);
     this.change([layer + '.json'], () => {
-      this.list(layer).splice(k, 1);
-      // drop links to a deleted node
-      if (ent.name && layer === 'pathNodes') for (const e of this.list('pathNodes')) if (e.props && Array.isArray(e.props.connections)) e.props.connections = e.props.connections.filter((c) => !(isRef(c) && c.$ref === ent.name));
+      for (const k of [...keys].reverse()) list.splice(k, 1);
+      // drop links to deleted nodes
+      if (names.length && layer === 'pathNodes') for (const e of list) if (e.props && Array.isArray(e.props.connections)) e.props.connections = e.props.connections.filter((c) => !(isRef(c) && names.includes(c.$ref)));
     }, { reload: layer !== 'decor' });
     this.sel = null;
     this.refreshPanel();
   }
 
+  // turn (degrees, clockwise on screen) and scale the selection: one thing about its own
+  // origin, a group about its centre
+  transformSel(deg, f = 1, keys = this.selKeys()) {
+    const layer = this.sel.layer, list = this.list(layer);
+    const group = keys.length > 1;
+    const cx = keys.reduce((a, k) => a + list[k].x, 0) / keys.length, cy = keys.reduce((a, k) => a + list[k].y, 0) / keys.length;
+    const r = deg * Math.PI / 180, cos = Math.cos(r), sin = Math.sin(r);
+    for (const k of keys) {
+      const e = list[k];
+      if (group) {
+        const dx = e.x - cx, dy = e.y - cy;
+        e.x = round2(cx + f * (dx * cos - dy * sin)); e.y = round2(cy + f * (dx * sin + dy * cos));
+      }
+      if (layer === 'decor') {
+        e.rotation = round2((((e.rotation || 0) - deg) % 360 + 360) % 360);
+        if (f !== 1) e.scale = Math.round((e.scale || 1) * f * 1e4) / 1e4;
+      } else {
+        const t = transformOf(e);
+        setTransform(e, t.rot + deg, t.sx * f, t.sy * f);
+      }
+    }
+  }
+
   rotateSel(deg) {
-    const { layer, k } = this.sel;
-    if (layer === 'decor') { this.change(['decor.json'], () => { const e = this.list('decor')[k]; e.rotation = round2((((e.rotation || 0) - deg) % 360 + 360) % 360); }, { reload: false }); return; }
-    this.change([layer + '.json'], () => {
-      const e = this.list(layer)[k];
-      const t = transformOf(e);
-      setTransform(e, t.rot + deg, t.sx, t.sy);
-    });
+    if (!this.sel) return;
+    const layer = this.sel.layer;
+    this.change([layer + '.json'], () => this.transformSel(deg), { reload: layer !== 'decor' });
   }
 
   toggleLink(a, b) {
@@ -1106,9 +1161,9 @@ class Editor {
       });
     }
     // selection
-    if (this.sel && this.list(this.sel.layer)[this.sel.k]) {
-      const [x0, y0, x1, y1] = this.boundsOf(this.sel.layer, this.sel.k);
-      ctx.strokeStyle = '#ffee44'; ctx.lineWidth = 1.5 * px;
+    for (const k of this.selKeys()) {
+      const [x0, y0, x1, y1] = this.boundsOf(this.sel.layer, k);
+      ctx.strokeStyle = k === this.sel.k ? '#ffee44' : '#ffbb33'; ctx.lineWidth = 1.5 * px;
       ctx.setLineDash([4 * px, 3 * px]);
       ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
       ctx.setLineDash([]);
@@ -1272,7 +1327,8 @@ class Editor {
       }, pr.label))));
     }
     // properties
-    if (this.sel && this.list(this.sel.layer)[this.sel.k]) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.sel.layer === 'decor' ? this.decorPanel() : this.propsPanel());
+    if (this.sel && this.selKeys().length > 1) p.append(this.groupPanel());
+    else if (this.sel && this.list(this.sel.layer)[this.sel.k]) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.sel.layer === 'decor' ? this.decorPanel() : this.propsPanel());
     else if (this.active === 'decor') p.append(el('div', { class: 'le-tip' }, 'Decor (decor.json) is what the art bake paints into background.png: floor paint, wall greebles, vents, rails, lights. The game never reads it. Select (V) moves one, Place (P) adds one, R turns it, Delete removes it; then Bake art below to see it for real.'));
     else if (this.active === 'vision') p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones and their corners, Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
     // stats + settings
@@ -1297,7 +1353,7 @@ class Editor {
     const e = this.list(layer)[k];
     const t = transformOf(e);
     const file = layer + '.json';
-    const num = (label, val, set) => el('label', {}, label + ' ', el('input', { type: 'number', step: 'any', value: round2(val), onchange: (ev) => { const v = +ev.target.value; if (isFinite(v)) this.change([file], () => set(v)); } }));
+    const num = (label, val, set) => this.liveNum(label, round2(val), set, { file });
     const box = el('div', { class: 'le-props' },
       el('h4', {}, e.symbol.split('/').pop(), el('small', {}, ` ${layer} #${k + 1}`)),
       el('div', { class: 'le-row' }, num('x', e.x, (v) => { e.x = v; }), num('y', e.y, (v) => { e.y = v; })),
@@ -1349,7 +1405,7 @@ class Editor {
     const e = this.list('decor')[k];
     const file = 'decor.json';
     const edit = (fn) => this.change([file], fn, { reload: false });
-    const num = (label, val, set, attrs = {}) => el('label', {}, label + ' ', el('input', { type: 'number', step: 'any', ...attrs, value: val, onchange: (ev) => { const v = +ev.target.value; if (isFinite(v)) edit(() => set(v)); } }));
+    const num = (label, val, set, attrs = {}) => this.liveNum(label, val, set, { file, reload: false, attrs });
     const cat = e.sprite.split('/')[0];
     const others = (this.decorIndex && this.decorIndex[cat]) || [];
     return el('div', { class: 'le-props' },
@@ -1468,6 +1524,54 @@ class Editor {
     location.replace(u.toString());
   }
 
+  // a number field that applies as you type or step it (one undo step per edit), and
+  // refreshes the panel when you leave it
+  liveNum(label, val, set, { file, reload = true, attrs = {} }) {
+    let before = null;
+    const commit = () => {
+      if (before === null) return;
+      const after = this.snapshot();
+      if (after !== before) this.pushUndo({ type: 'data', level: this.index, before, after, files: [file] });
+      before = null;
+      this.refreshPanel();
+    };
+    return el('label', {}, label + ' ', el('input', { type: 'number', step: 'any', ...attrs, value: val,
+      oninput: (ev) => {
+        const raw = ev.target.value, v = +raw;
+        if (raw === '' || !isFinite(v)) return;
+        if (before === null) before = this.snapshot();
+        set(v);
+        this.markDirty(file);
+        if (reload) this.reload(); else this.needsReload = true;
+      },
+      onchange: commit,
+      onkeydown: (ev) => { if (ev.key === 'Enter') ev.target.blur(); } }));
+  }
+
+  // several things selected: move them by dragging, turn and scale them together
+  groupPanel() {
+    const layer = this.sel.layer, keys = this.selKeys(), file = layer + '.json';
+    const reload = layer !== 'decor';
+    // relative fields: each change re-applies to the selection as it was when the edit started
+    // (the panel is rebuilt when an edit ends, which starts the next one afresh)
+    let base = null;
+    const rel = (label, val, apply, attrs) => this.liveNum(label, val, (v) => {
+      if (base === null) base = this.snapshot();
+      this.restoreData(base);
+      apply(v);
+    }, { file, reload, attrs });
+    const label = (VIEW_LAYERS.find((l) => l.key === layer) || { label: layer }).label;
+    return el('div', { class: 'le-props' },
+      el('h4', {}, `${keys.length} selected`, el('small', {}, ` ${label.toLowerCase()}`)),
+      el('div', { class: 'le-tip' }, 'Drag one to move them all. Shift+click adds or removes one; Esc clears. The fields turn and scale the group about its centre, live.'),
+      el('div', { class: 'le-row' },
+        rel('rotate by', 0, (v) => this.transformSel(v, 1, keys), { step: 5, title: 'degrees, clockwise' }),
+        rel('scale %', 100, (v) => { if (v > 0) this.transformSel(0, v / 100, keys); }, { step: 5, min: 1 })),
+      el('div', { class: 'le-row' },
+        el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
+        el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
+  }
+
   layerCount(key) {
     return (this.L[key] || []).length;
   }
@@ -1537,7 +1641,7 @@ class Editor {
     const z = this.list('vision')[k];
     const t = transformOf(z);
     const file = 'vision.json';
-    const num = (label, val, set) => el('label', {}, label + ' ', el('input', { type: 'number', step: 'any', value: round2(val), onchange: (ev) => { const v = +ev.target.value; if (isFinite(v)) this.change([file], () => set(v)); } }));
+    const num = (label, val, set) => this.liveNum(label, round2(val), set, { file });
     return el('div', { class: 'le-props' },
       el('h4', {}, 'Vision zone', el('small', {}, ` #${k + 1}`)),
       el('div', { class: 'le-row' }, num('x', z.x, (v) => { z.x = v; }), num('y', z.y, (v) => { z.y = v; })),
