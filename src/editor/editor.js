@@ -482,6 +482,15 @@ class Editor {
     this.refreshPanel();
   }
 
+  // point the tools that can work on a layer at it (Place's layer, what Polygon draws),
+  // without changing the tool; the layer is shown if it was hidden
+  pickLayer(key) {
+    if (TOOL_LAYERS.place.includes(key)) { this.setPlaceLayer(key); }
+    if (key === 'collision' || key === 'vision') { this.polyTarget = key; this.poly = null; }
+    if (!this.visible[key]) this.setVisible(key, true);
+    this.refreshPanel();
+  }
+
   // can the tool work on its layer now? Says why not in the status line
   toolReady() {
     const l = this.toolLayers().find((x) => this.locked[x]);
@@ -1398,6 +1407,7 @@ class Editor {
     // Rows the current tool works on are marked, and rows with something selected are lit
     const layersEl = el('div', { class: 'le-layers' });
     const selLayers = new Set(this.selLayers());
+    const pickable = (key) => key === 'collision' || key === 'vision' || TOOL_LAYERS.place.includes(key);
     VIEW_LAYERS.forEach((l, i) => {
       const hot = l.hot || String(i + 1);
       const lockable = LOCKABLE.has(l.key), vis = !!this.visible[l.key], locked = !!this.locked[l.key];
@@ -1407,7 +1417,7 @@ class Editor {
         title: tools.length ? 'Tools for this layer: ' + tools.map((t) => TOOLS.find((x) => x.key === t).label).join(', ') : '' },
         el('button', { class: 'le-icon' + (vis ? ' on' : ''), title: `${vis ? 'hide' : 'show'} (${hot})`, onclick: () => this.setVisible(l.key, !vis) }, vis ? ICON.eye : ICON.eyeOff),
         lockable ? el('button', { class: 'le-icon' + (locked ? ' on' : ''), title: locked ? 'unlock: let it be selected and edited' : 'lock: keep it from being selected or edited', onclick: () => this.setLocked(l.key, !locked) }, locked ? ICON.lock : ICON.unlock) : el('span', { class: 'le-icon-gap' }),
-        el('span', { class: 'le-name' }, `${hot}  ${l.label}`),
+        el('span', { class: 'le-name' + (pickable(l.key) ? ' le-pick' : ''), title: pickable(l.key) ? 'click to point the tools at this layer: Place adds here, Polygon draws here (the tool stays as it is)' : null, onclick: pickable(l.key) ? () => this.pickLayer(l.key) : null }, `${hot}  ${l.label}`),
         selLayers.has(l.key) ? el('small', { class: 'le-nsel' }, this.selItems().filter((s) => s.layer === l.key).length + ' sel') : '',
         DATA_LAYERS.includes(l.key) ? el('small', {}, String(this.layerCount(l.key))) : '');
       layerRows.set(l.key, row);
@@ -1995,6 +2005,8 @@ const CSS = `
 #level-editor .le-swatch { border-left: 14px solid var(--c); }
 #level-editor .le-layer { display: flex; gap: 4px; align-items: center; padding: 1px 2px 1px 4px; border-radius: 3px; border-left: 3px solid transparent; }
 #level-editor .le-layer .le-name { flex: 1; }
+#level-editor .le-layer .le-pick { cursor: pointer; }
+#level-editor .le-layer .le-pick:hover { text-decoration: underline; }
 #level-editor .le-layer.target { border-left-color: #4fc; background: #0f2d26; }
 #level-editor .le-layer.target .le-name { color: #8fd; }
 #level-editor .le-layer.has-sel { background: #0d3442; box-shadow: inset 0 0 0 1px #2ee6ff; }
