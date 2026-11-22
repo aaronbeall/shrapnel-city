@@ -3,7 +3,7 @@
 // compiler as the build (tools/levels/compile.mjs) and the same source decoder
 // (tools/flash-source/format.mjs).
 import { decodeChar, decodeTimeline, decodeScript } from '../../tools/flash-source/format.mjs';
-import { levelSymbols, composeScreen, propsScript, isRef, isTrigger, triggerNames } from '../../tools/levels/compile.mjs';
+import { levelSymbols, composeScreen, instanceScript, stripProps, isRef, isTrigger, triggerNames } from '../../tools/levels/compile.mjs';
 
 export class LevelApplier {
   constructor(rt, data) {
@@ -18,6 +18,9 @@ export class LevelApplier {
       const fn = rt.instanceScripts[key];
       if (fn && !this.compiled.has(text)) this.compiled.set(text, fn);
     }
+    // the same, by script part: a scripted instance whose props change still runs its compiled script
+    this.compiledCore = new Map();
+    for (const [text, fn] of this.compiled) if (text.includes('/* props */')) this.compiledCore.set(stripProps(text), fn);
   }
 
   id(name) {
@@ -29,20 +32,24 @@ export class LevelApplier {
     return v;
   }
 
-  // handler for an instance script; props scripts are applied directly, others reuse the build's compiled code
+  // handler for an instance script: the build's compiled code when the text is unchanged; else props are
+  // applied directly, followed by the compiled code of the script part (the text without its props)
   handlerFor(text, propsByText) {
     if (this.compiled.has(text)) return this.compiled.get(text);
     const props = propsByText.get(text);
-    if (props) {
-      const G = this.rt.env.G;
-      return {
-        'clip:load': ($c) => {
-          for (const [k, v] of Object.entries(props)) $c[k] = materialize(v, $c, G);
-        },
-      };
-    }
-    if (text.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '').trim()) console.warn('[editor] no compiled code for instance script:\n' + text);
-    return null;
+    const core = props ? stripProps(text) : text;
+    const compiled = core && core.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '').trim() ? this.compiled.get(core) || this.compiledCore.get(core) : {};
+    if (!compiled) console.warn('[editor] no compiled code for instance script (save to rebuild it):\n' + core);
+    if (!props) return compiled || null;
+    const G = this.rt.env.G;
+    const load = compiled && compiled['clip:load'];
+    return {
+      ...compiled,
+      'clip:load': function ($c) {
+        for (const [k, v] of Object.entries(props)) $c[k] = materialize(v, $c, G);
+        if (load) return load.call(this, $c);
+      },
+    };
   }
 
   // replace a library character in place (live clips keep a reference to the object)
@@ -79,7 +86,7 @@ export class LevelApplier {
   apply(levels, images = {}) {
     const propsByText = new Map();
     const collect = (list) => {
-      for (const inst of list || []) if (inst.props) propsByText.set(decodeScript(propsScript(inst.props)), inst.props);
+      for (const inst of list || []) if (inst.props) propsByText.set(decodeScript(instanceScript(inst.props, inst.script)), inst.props);
     };
     for (const L of levels) for (const k of ['boxes', 'powerups', 'enemies', 'doors', 'features', 'pathNodes']) collect(L[k]);
     for (const L of levels) {

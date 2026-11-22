@@ -1166,6 +1166,29 @@ class Editor {
       ctx.fillStyle = 'rgba(255,200,80,0.95)';
       for (const [x, y, t] of labels) ctx.fillText(t, x, y - 2 * px);
     }
+    // enemies with their own settings (cyan dot) or their own script (amber ƒ), while the layer is unlocked
+    if (this.editable('enemies')) {
+      const r = 4 * px;
+      ctx.font = `bold ${8 * px}px system-ui, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      this.list('enemies').forEach((e, k) => {
+        const hasProps = e.props && Object.keys(e.props).length, hasScript = e.script !== undefined;
+        if (!hasProps && !hasScript) return;
+        const [, y0, x1] = this.boundsOf('enemies', k);
+        let x = x1;
+        const badge = (fill, glyph) => {
+          ctx.beginPath(); ctx.arc(x, y0, r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(0,0,0,0.65)'; ctx.fill();
+          ctx.lineWidth = 1 * px; ctx.strokeStyle = fill; ctx.stroke();
+          if (glyph) { ctx.fillStyle = fill; ctx.fillText(glyph, x, y0 + 0.5 * px); } else { ctx.beginPath(); ctx.arc(x, y0, 1.8 * px, 0, Math.PI * 2); ctx.fillStyle = fill; ctx.fill(); }
+          x -= 2.4 * r;
+        };
+        if (hasScript) badge('rgba(255,190,90,0.95)', 'ƒ');
+        if (hasProps) badge('rgba(110,230,255,0.95)', null);
+      });
+      ctx.textAlign = 'start';
+    }
     // triggers: who sends what (labels), lines to the doors they open (green) or close (red)
     if (this.visible.triggers) {
       const doors = new Map(this.list('doors').map((d, k) => [d.props && d.props.id, [d, k]]).filter(([id]) => id));
@@ -1466,12 +1489,11 @@ class Editor {
       el('div', { class: 'le-row' }, el('label', {}, 'name ', el('input', { value: e.name || '', onchange: (ev) => this.change([file], () => { if (ev.target.value) e.name = ev.target.value; else delete e.name; }) }))));
     if (layer === 'pathNodes') box.append(this.nodeRows(k));
     box.append(...this.triggerRows(layer, e));
-    if (e.script !== undefined) {
-      box.append(el('div', { class: 'le-tip' }, 'This instance runs code when it loads, so it keeps its script (edit it in ' + file + '):'),
-        el('pre', {}, [].concat(e.script).join('\n')));
-    } else {
+    {
       const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
       if (spec) box.append(...this.settingsRows(layer, e, spec));
+      if (e.script !== undefined) box.append(this.scriptRows(layer, e));
+      else if (layer !== 'pathNodes') box.append(el('div', { class: 'le-row' }, el('button', { title: 'give this instance its own ActionScript load code, for things settings can\'t express (it runs after the settings)', onclick: () => { this.openGroups.add('$script'); this.change([layer + '.json'], () => { e.script = ['onClipEvent (load) {', '    ', '}']; }, { reload: false }); } }, '+ Script')));
       const raw = (...kids) => (spec ? el('details', { class: 'le-set-group', open: this.openGroups.has('$json') || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add('$json'); else this.openGroups.delete('$json'); } }, el('summary', {}, 'Raw JSON'), ...kids) : el('div', {}, ...kids));
       box.append(raw(el('div', { class: 'le-tip' }, spec ? 'The settings it has, as JSON (the same as the fields above; anything goes here):' : 'Variables set when it loads (JSON):'),
         el('textarea', { rows: Math.min(10, 2 + JSON.stringify(e.props || {}, null, 1).split('\n').length), spellcheck: false, onchange: (ev) => {
@@ -1731,7 +1753,6 @@ class Editor {
       const from = PLACE_LAYERS.flatMap((l) => this.list(l)).filter((o) => sentTriggers(o).some((n) => n === id + ':open' || n === id + ':close')).length;
       rows.push(el('div', { class: 'le-tip' }, `Opens on "${id}:open" and closes on "${id}:close"; ${from || 'nothing'} in this level sends ${from === 1 ? 'one' : 'them'}. Set a pickup, trigger pad, box or enemy to send one.`));
     }
-    if (e.script !== undefined) return rows;
     if (layer === 'powerups' && e.props && e.props.type === 'trigger') {
       rows.push(el('div', { class: 'le-row' }, 'Trigger pad sends ', input(e.props.item || '', (n) => { e.props.item = n[0] || ''; }, 'sent when the player walks over it')));
     }
@@ -1739,13 +1760,29 @@ class Editor {
     if (ev) {
       const [key, when] = ev;
       const cur = e.props && e.props[key];
-      if (cur === undefined || isTrigger(cur)) {
+      const scripted = e.script !== undefined && new RegExp('\\b' + key + '\\b').test([].concat(e.script).join('\n')); // its script sets it, after the props
+      if (!scripted && (cur === undefined || isTrigger(cur))) {
         rows.push(el('div', { class: 'le-row' }, `${when[0].toUpperCase() + when.slice(1)}, send `, input(cur ? triggerNames(cur).join(', ') : '', (n) => {
           if (n.length) { e.props ||= {}; e.props[key] = { $trigger: n.length === 1 ? n[0] : n }; } else if (e.props) { delete e.props[key]; if (!Object.keys(e.props).length) delete e.props; }
         }, 'trigger names, separated by commas; a door listens for "<id>:open" and "<id>:close"')));
       }
     }
     return rows;
+  }
+
+  // an instance's own ActionScript (load code that does more than set variables): runs after its
+  // settings, at the end of the same onClipEvent(load). The game runs the compiled script from the
+  // last build, so an edit here works once it's saved (npm run edit rebuilds) and the page reloads.
+  scriptRows(layer, e) {
+    const file = layer + '.json';
+    const text = [].concat(e.script).join('\n');
+    return el('details', { class: 'le-set-group', open: this.openGroups.has('$script') || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add('$script'); else this.openGroups.delete('$script'); } },
+      el('summary', {}, 'Script', el('small', {}, ' runs after the settings')),
+      el('div', { class: 'le-tip' }, 'ActionScript, e.g. onClipEvent (load) { ... }. Changes take effect after Save' + (this.writable ? ' (it rebuilds).' : ' and npm run build.') + ' Empty it to remove the script.'),
+      el('textarea', { class: 'le-script', rows: Math.min(18, text.split('\n').length + 1), spellcheck: false, onchange: (ev) => {
+        const v = ev.target.value.replace(/\r\n?/g, '\n');
+        this.change([file], () => { if (v.trim()) e.script = v.split('\n'); else delete e.script; });
+      } }, text));
   }
 
   // named fields for the settings this symbol's scripts read (assets/props.json, built by tools/props/spec.mjs):
@@ -2097,6 +2134,7 @@ const CSS = `
 #level-editor .le-set-name.forced { color: #666; text-decoration: line-through; }
 #level-editor .le-reset { padding: 0 4px; line-height: 1.2; }
 #level-editor .le-warn { color: #fa6; margin: 4px 0; }
+#level-editor textarea.le-script { font: 11px/1.35 ui-monospace, monospace; white-space: pre; tab-size: 4; }
 #level-editor pre { background: #021; padding: 4px; max-height: 160px; overflow: auto; font-size: 10px; margin: 2px 0; }
 #level-editor .le-row { margin: 4px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 #level-editor .le-tools button { width: calc(50% - 4px); text-align: left; }

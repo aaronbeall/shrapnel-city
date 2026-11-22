@@ -37,7 +37,7 @@ Every placement file is a list of instances, drawn in list order (later ones on 
 - `x`, `y`, `scale`, `matrix` (for rotation), `name`, `color`, `filters` and `blend` work as in the timeline format.
 - `props` are the instance's variables, set when it loads (they become its `onClipEvent (load)` script). Values are numbers, strings, `true`/`false`, lists and objects, and `{"$ref": "a2"}` for the sibling clip named `a2` (path nodes list their linked nodes this way: `"connections": [{"$ref": "a2"}, {"$ref": "a4"}]`).
 - `{"$trigger": "door2:open"}` (or a list of names) is a function that sends those triggers, for a pickup's `onPickup` or a box's or enemy's `onDie`: `"props": {"onPickup": {"$trigger": "door2:open"}}`.
-- `script` is used instead of `props` when the load code is more than plain variables, such as the Bridge's battery computers, whose `onDie` also throws shrapnel. It's kept as written.
+- `script` is ActionScript load code, for what plain variables can't say, such as the Bridge's battery computers, whose `onDie` also throws shrapnel. It's kept as written. An instance can have both: its `props` are set first, at the top of the script's `onClipEvent (load)` block (between `/* props */` markers in the compiled code), then the script runs, so the script wins where both set something.
 
 ## Settings (props)
 
@@ -49,7 +49,7 @@ What an instance can set in `props` is whatever its scripts read; there is no ha
 
 `tools/props/annotations.json` adds what code can't say: a description, a group (Behaviour, Movement, Weapon, ...), a type, choices, settings the scan can't see (`"for": [class]`), and names to ignore.
 
-In the editor, a selected instance shows its settings as named fields by group. An empty field uses the default (shown greyed, with its value worked out where it only depends on other settings); a set one is highlighted with a ↺ to go back to the default. Hover a name for what it does and where its default comes from. Keys its scripts never read are flagged (a typo does nothing in the game). Raw JSON is still there for anything else.
+In the editor, a selected instance shows its settings as named fields by group. An empty field uses the default (shown greyed, with its value worked out where it only depends on other settings); a set one is highlighted with a ↺ to go back to the default. Hover a name for what it does and where its default comes from. Keys its scripts never read are flagged (a typo does nothing in the game). Raw JSON is still there for anything else. A scripted instance gets the same fields plus an editable **Script** box (a script edit runs in the game after Save rebuilds); **+ Script** gives an instance one. While the Enemies layer is unlocked, an enemy with its own settings shows a small cyan dot and one with its own script a small amber ƒ at its top-right corner.
 
 ## Triggers
 

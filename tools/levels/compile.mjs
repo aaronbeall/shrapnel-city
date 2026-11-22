@@ -51,15 +51,29 @@ export function propsScript(props) {
   }), '}'];
 }
 
+// An instance's load code: its props as `name = value;` lines, run before its script when it has
+// both. They go at the top of the script's onClipEvent(load) block (a second load block would
+// replace the first), between PROPS_BEGIN/PROPS_END markers, so stripProps() gives back the script
+// as written: the editor uses that to keep running the build's compiled script after props change.
+export const PROPS_BEGIN = '/* props */', PROPS_END = '/* end props */';
+export function instanceScript(props, script) {
+  if (!props) return script;
+  if (script === undefined) return propsScript(props);
+  const lines = [].concat(script).join('\n').split('\n');
+  const at = lines.findIndex((l) => /^\s*onClipEvent\s*\(\s*load\s*\)\s*\{\s*$/.test(l));
+  const body = propsScript(props).slice(1, -1);
+  if (at < 0) return ['onClipEvent (load) {', '    ' + PROPS_BEGIN, ...body, '    ' + PROPS_END, '}', ...lines];
+  return [...lines.slice(0, at + 1), '    ' + PROPS_BEGIN, ...body, '    ' + PROPS_END, ...lines.slice(at + 1)];
+}
+export const stripProps = (text) => text.replace(/^[ \t]*\/\* props \*\/[\s\S]*?\/\* end props \*\/[^\n]*\n?/m, '').replace(/^onClipEvent \(load\) \{\n\}\n?/, '');
+
 // instance -> timeline place change
 export function place(inst, depth, where) {
   const { symbol, props, script, ...rest } = inst;
   if (!symbol) throw new Error(`${where}: instance without "symbol"`);
-  if (props && script) throw new Error(`${where}: an instance has either "props" or "script", not both`);
   const c = { place: symbol, depth, ...rest };
   try {
-    if (props) { c.clipEvents = [1]; c.script = propsScript(props); }
-    else if (script !== undefined) { c.clipEvents = [1]; c.script = script; }
+    if (props || script !== undefined) { c.clipEvents = [1]; c.script = instanceScript(props, script); }
   } catch (e) { throw new Error(`${where}: ${e.message}`); }
   return c;
 }
