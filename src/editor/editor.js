@@ -111,6 +111,7 @@ class Editor {
     this.mapVersion = 0;     // bumps when a collision map or the live level changes
     this.stacks = {};        // level index -> ShapeStack (collision shapes' pixel layers)
     this.mismatch = {};      // level index -> pixels where collision.png differs from the shapes' bake
+    this.outside = {};       // level index -> {diff, data}: those pixels and the map as it was loaded
     this.autoBake = true;    // bake shapes into the collision map as they're edited
     this.shapesAhead = false; // shapes edited since the last bake (only with autoBake off)
     this.openShapeGroups = new Set();
@@ -307,6 +308,7 @@ class Editor {
     to.push(e);
     if (e.level !== this.index) this.loadLevel(e.level);
     if (e.type === 'data') {
+      if (e.outside) { this.mismatch[e.level] = redo ? 0 : e.outside.diff.length; this.outside[e.level] = redo ? null : e.outside; }
       this.restoreData(redo ? e.after : e.before);
       for (const f of e.files) this.markDirty(f);
       this.sel = null;
@@ -1037,33 +1039,54 @@ class Editor {
     st.ready = true;
     // does the game read collision.png the same as what the shapes bake to? (not if it was
     // edited outside them; soft edges a grey or two apart don't count)
-    this.mismatch[i] = classDiff(st.bake(L.collision), map.data).length;
+    const diff = classDiff(st.bake(L.collision), map.data);
+    this.mismatch[i] = diff.length;
+    // keep them as loaded: until the choice is made the shapes don't bake, and Keep the map uses these
+    this.outside[i] = diff.length ? { diff, data: new Uint8ClampedArray(map.data.data) } : null;
     if (i === this.index) this.refreshPanel();
   }
 
-  // shapes -> collision map. Live while editing (this.autoBake), else only when forced
-  rebake(box, force = false) {
+  // shapes -> collision map. Live while editing (this.autoBake), else only when forced. While
+  // collision.png has edits outside the shapes nothing is baked until you pick Keep the map or Use
+  // the shapes (discard: replace those edits); returns whether the map is now the shapes' bake
+  rebake(box, force = false, discard = false) {
     const st = this.shapes;
-    if (!st) return;
-    if (!this.autoBake && !force) { this.shapesAhead = true; return; }
-    if (this.mismatch[this.index]) { box = null; this.mismatch[this.index] = 0; } // the map takes the shapes' pixels everywhere
+    if (!st) return false;
+    if (this.mismatch[this.index] && !discard) {
+      this.shapesAhead = true;
+      this.status(`collision.png has ${this.mismatch[this.index]} pixels edited outside the shapes: pick Keep the map or Use the shapes (Collision shapes panel) before the shapes bake.`, true);
+      return false;
+    }
+    if (!this.autoBake && !force) { this.shapesAhead = true; return false; }
+    if (this.mismatch[this.index]) { box = null; this.mismatch[this.index] = 0; this.outside[this.index] = null; } // the map takes the shapes' pixels everywhere
     let b = box ? this.map.clampBox(box[0] - 1, box[1] - 1, box[2] + 1, box[3] + 1) : [0, 0, st.w, st.h];
-    if (!b) return;
+    if (!b) return false;
     const changed = this.map.putRegion(st.bake(this.list('collision'), b), b[0], b[1]);
     if (!box) this.shapesAhead = false;
     if (changed) this.collisionChanged(false);
+    return true;
   }
 
-  bakeCollision() { this.rebake(null, true); this.status('Collision map baked from the shapes.'); this.refreshPanel(); }
+  bakeCollision(discard = false) {
+    const ok = this.rebake(null, true, discard);
+    if (ok) this.status(discard ? 'Collision map re-baked from the shapes; its outside edits are gone (git still has them).' : 'Collision map baked from the shapes.');
+    this.refreshPanel();
+    return ok;
+  }
 
   // keep collision.png as it is: its pixels the shapes don't make go in a locked layer on top
+  // (the pixels that differed when the level loaded, so shape edits made meanwhile still apply)
   keepMap() {
-    const st = this.shapes, map = this.map;
-    const d = map.data.data, file = this.newPixelsFile('edits'), q = st.data(file).data;
-    for (const k of classDiff(st.bake(this.list('collision')), map.data)) { q[k] = d[k]; q[k + 1] = d[k + 1]; q[k + 2] = d[k + 2]; q[k + 3] = 255; }
+    const st = this.shapes, o = this.outside[this.index];
+    if (!st || !o) return;
+    const d = o.data, file = this.newPixelsFile('edits'), q = st.data(file).data;
+    for (const k of o.diff) { q[k] = d[k]; q[k + 1] = d[k + 1]; q[k + 2] = d[k + 2]; q[k + 3] = 255; }
     st.commit(file, [0, 0, st.w, st.h]);
     this.mismatch[this.index] = 0;
+    this.outside[this.index] = null;
     this.change(['collision.json', file], () => this.list('collision').push({ name: 'map edits', pixels: file, x: 0, y: 0, locked: true }), { reload: false });
+    const e = this.undoStack[this.undoStack.length - 1];
+    if (e && e.files.includes(file)) e.outside = o; // undoing this brings the choice back
   }
 
   newPixelsFile(base = 'pixels') {
@@ -1147,10 +1170,10 @@ class Editor {
       el('summary', {}, 'Collision shapes ', el('small', {}, `${list.length}${this.L.collisionImplicit ? ' · no collision.json yet' : ''}`)));
     if (!st) { box.append(el('div', { class: 'le-tip' }, 'Loading…')); return box; }
     const mm = this.mismatch[this.index];
-    if (mm) box.append(el('div', { class: 'le-warn' }, `collision.png differs from what these shapes bake to in ${mm} pixels (it was edited outside them). Editing a shape re-bakes the whole map from the shapes.`,
+    if (mm) box.append(el('div', { class: 'le-warn' }, `collision.png differs from what these shapes bake to in ${mm} pixels (it was edited outside them). Shape edits won't bake into it until you pick one:`,
       el('div', { class: 'le-row' },
         el('button', { title: 'add the pixels only collision.png has as a locked layer on top, so the bake matches it', onclick: () => this.keepMap() }, 'Keep the map: add its edits as a layer'),
-        el('button', { title: 'replace collision.png with the shapes\' bake', onclick: () => this.bakeCollision() }, 'Use the shapes'))));
+        el('button', { title: 'replace collision.png with the shapes\' bake', onclick: () => this.bakeCollision(true) }, 'Use the shapes'))));
     const rows = el('div', { class: 'le-shape-list' });
     const selected = new Set(this.selItems().filter((s) => s.layer === 'collision').map((s) => s.k));
     const pick = (ks, e) => {
@@ -1447,7 +1470,11 @@ class Editor {
 
   async save() {
     const jobs = [];
-    for (const [i, files] of Object.entries(this.dirty)) for (const f of files) jobs.push([+i, f]);
+    for (const [i, files] of Object.entries(this.dirty)) for (const f of files) {
+      // a pixel layer no longer in the stack (its add was undone, or it was deleted) isn't written
+      if (/^collision-.+\.png$/.test(f) && !(this.levels[i].collision || []).some((s) => s.pixels === f)) continue;
+      jobs.push([+i, f]);
+    }
     if (!jobs.length) { this.status('Nothing to save.'); return; }
     await this.checkServer();
     if (this.writable) {
@@ -2126,7 +2153,7 @@ class Editor {
         el('button', { title: 'a new random seed (then Re-place decor to use it)', onclick: () => setArt({ seed: 1 + Math.floor(Math.random() * 9999) }) }, '🎲')),
       el('div', { class: 'le-row' },
         btn('Bake art', 'bake', 'Save, then redraw background.png from collision.png and decor.json as they are (collision shapes aren\'t re-baked)'),
-        this.shapesAhead ? el('button', { disabled: off, class: 'le-hot', title: 'the collision shapes changed since collision.png was baked: bake them into it first, then the art', onclick: () => { this.bakeCollision(); this.runArt('bake'); } }, 'Bake collision + art') : '',
+        this.shapesAhead ? el('button', { disabled: off, class: 'le-hot', title: 'the collision shapes changed since collision.png was baked: bake them into it first, then the art', onclick: () => { if (this.bakeCollision()) this.runArt('bake'); } }, 'Bake collision + art') : '',
         this.confirmPlace
           ? el('button', { disabled: off, class: 'le-danger', title: 'decor.json is replaced; Undo cannot bring the old layout back (git can)', onclick: () => { this.confirmPlace = false; this.runArt('all'); } }, all ? `Replace all ${n} decor and bake?` : `Replace ${this.list('decor').filter((e) => only.has(decorType(e))).length} ${[...only].join(', ')} and bake?`)
           : el('button', { disabled: off || !only.size, title: 'Save, then lay out new decor of the ticked types from the seed (replacing those in decor.json, hand edits too; the other types stay) and bake', onclick: () => { this.confirmPlace = true; this.refreshPanel(); } }, all ? 'Re-place decor + bake' : `Re-place ${only.size} type${only.size > 1 ? 's' : ''} + bake`),
