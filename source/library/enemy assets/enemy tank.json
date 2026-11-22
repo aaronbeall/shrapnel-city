@@ -20,9 +20,9 @@
         "//strafer = true;",
         "//wanderer = true;",
         "//hunter = true;",
-        "patroller = true;",
-        "pathID = \"auto\";//0x0000ff;",
-        "fixed = true;",
+        "if(patroller == undefined) patroller = true;",
+        "if(pathID == undefined) pathID = \"auto\";//0x0000ff;",
+        "if(fixed == undefined) fixed = true;",
         "",
         "#include \"as/object/enemyVehicle.as\""
       ],
