@@ -51,15 +51,29 @@ export function propsScript(props) {
   }), '}'];
 }
 
+// An instance's load code: its props as `name = value;` lines, run before its script when it has
+// both. They go at the top of the script's onClipEvent(load) block (a second load block would
+// replace the first), between PROPS_BEGIN/PROPS_END markers, so stripProps() gives back the script
+// as written: the editor uses that to keep running the build's compiled script after props change.
+export const PROPS_BEGIN = '/* props */', PROPS_END = '/* end props */';
+export function instanceScript(props, script) {
+  if (!props) return script;
+  if (script === undefined) return propsScript(props);
+  const lines = [].concat(script).join('\n').split('\n');
+  const at = lines.findIndex((l) => /^\s*onClipEvent\s*\(\s*load\s*\)\s*\{\s*$/.test(l));
+  const body = propsScript(props).slice(1, -1);
+  if (at < 0) return ['onClipEvent (load) {', '    ' + PROPS_BEGIN, ...body, '    ' + PROPS_END, '}', ...lines];
+  return [...lines.slice(0, at + 1), '    ' + PROPS_BEGIN, ...body, '    ' + PROPS_END, ...lines.slice(at + 1)];
+}
+export const stripProps = (text) => text.replace(/^[ \t]*\/\* props \*\/[\s\S]*?\/\* end props \*\/[^\n]*\n?/m, '').replace(/^onClipEvent \(load\) \{\n\}\n?/, '');
+
 // instance -> timeline place change
 export function place(inst, depth, where) {
   const { symbol, props, script, ...rest } = inst;
   if (!symbol) throw new Error(`${where}: instance without "symbol"`);
-  if (props && script) throw new Error(`${where}: an instance has either "props" or "script", not both`);
   const c = { place: symbol, depth, ...rest };
   try {
-    if (props) { c.clipEvents = [1]; c.script = propsScript(props); }
-    else if (script !== undefined) { c.clipEvents = [1]; c.script = script; }
+    if (props || script !== undefined) { c.clipEvents = [1]; c.script = instanceScript(props, script); }
   } catch (e) { throw new Error(`${where}: ${e.message}`); }
   return c;
 }
@@ -133,11 +147,97 @@ export function container(list, where) {
 // The library symbols one level adds: [[name, source object], ...] (bitmaps are named in the
 // fills; the caller supplies them as "level assets/level<N>/shape 1/bitmap 1" and
 // "level assets/background<N>/shape 1/bitmap 1").
+// --- briefings ----------------------------------------------------------------------
+// briefing.json is {title, body, captions: [{style, text, x, y}], graphics: [placements]} (see
+// levels/README.md). The screen around it is the same for every level: the wipe-in mask, the
+// backdrop, the "LVL.NN" label, the buttons and the scanlines. Texts are live text fields in the
+// game's embedded fonts, one generated symbol each: level assets/briefingN/text K.
+export const BRIEFING_STYLES = {
+  // font, size, colour, ascent (px), box width, alignment
+  title: { font: 'fonts/Digital Display Regular Bold', size: 36, color: '#ffffff', asc: 38.04, w: 640, align: 'left', glow: true },
+  label: { font: 'fonts/Digital Display Regular Bold', size: 14, color: '#ffffff', asc: 14.79, w: 200, align: 'left', glow: true },
+  body: { font: 'fonts/Consolas', size: 14, color: '#ffffff', asc: 12.88, w: 450, align: 'left', wrap: true, leading: 4 },
+  name: { font: 'fonts/Digital Display Regular', size: 16, color: '#00ffff', asc: 16.91, w: 240, align: 'center', glow: true },
+  note: { font: 'fonts/Consolas', size: 10, color: '#ffffff', asc: 9.2, w: 240, align: 'center', leading: 10.3 },
+};
+// where the fixed texts go: x is the left edge, y the top of the first line (captions: x is the centre)
+export const BRIEFING_LAYOUT = { title: { x: 87.05, y: 81.76 }, label: { x: 89.05, y: 76.01 }, body: { x: 90, y: 164.12 } };
+// the cyan glow the original briefings put on every Digital Display text (styles with glow: true)
+const BRIEFING_GLOW = { type: 'glow', color: '#00ffff', blurX: 15, blurY: 15, strength: 1, inner: false, knockout: false, passes: 2 };
+const BRIEFING_DEPTH = { mask: 3281, backdrop: 3369, first: 3370 };
+const BTN_PLAY = ['on (release) {', '    continueLevel();', '}', 'on (keyPress "<Space>") {', '    continueLevel();', '}', '', 'on (keyPress "<Enter>") {', '    continueLevel();', '}', ''];
+const BTN_BACK = ['on (release) {', '    quit();', '}', '', 'on (keyPress "<Escape>") {', '    quit();', '}', ''];
+
+export const briefingTextName = (i, k) => `level assets/briefing${i}/text ${k}`;
+
+// the texts of a level's briefing, in drawing order: [{style, text, x, y, leading?}]
+export function briefingTexts(L) {
+  const b = L.briefing || {};
+  const lay = BRIEFING_LAYOUT;
+  const out = [];
+  for (const c of b.captions || []) if (c && c.text) out.push({ style: BRIEFING_STYLES[c.style] ? c.style : 'note', text: String(c.text), x: +c.x || 0, y: +c.y || 0, leading: c.leading });
+  if (b.title) out.push({ style: 'title', text: String(b.title), ...lay.title });
+  out.push({ style: 'label', text: b.label !== undefined ? String(b.label) : 'LVL.' + String(L.index).padStart(2, '0'), ...lay.label });
+  if (b.body) out.push({ style: 'body', text: String(b.body), ...lay.body, leading: b.bodyLeading });
+  return out;
+}
+
+function textField(t) {
+  const s = BRIEFING_STYLES[t.style];
+  const lines = t.text.split('\n').length;
+  const leading = t.leading ?? s.leading ?? 2;
+  const h = Math.ceil(lines * (s.size * 1.2 + leading) + 8);
+  const x0 = s.align === 'center' ? -s.w / 2 : 0;
+  return {
+    kind: 'text field', bounds: [x0, x0 + s.w, 0, h], wordWrap: !!s.wrap, multiline: true, password: false, readOnly: true,
+    font: s.font, size: s.size, color: s.color, autoSize: false, align: s.align, leftMargin: 0, rightMargin: 0, indent: 0,
+    leading, noSelect: true, border: false, html: false, useOutlines: true, variable: '', text: t.text,
+  };
+}
+
+export function briefingSymbols(L) {
+  return briefingTexts(L).map((t, k) => [briefingTextName(L.index, k), textField(t)]);
+}
+
+// the briefing frame's placements on screen_mc
+export function briefingChanges(L) {
+  const b = L.briefing || {};
+  const where = `levels/${L.folder}/briefing.json`;
+  const c = [];
+  let d = BRIEFING_DEPTH.first;
+  c.push({ place: b.backdrop || 'screen_mc/shape 2', depth: BRIEFING_DEPTH.backdrop, x: 0, y: 0 });
+  (b.graphics || []).forEach((g, k) => c.push(place(g, d++, `${where} graphics[${k}]`)));
+  // text fields draw 2 px inside their box (centred ones are centred on x)
+  briefingTexts(L).forEach((t, k) => {
+    const st = BRIEFING_STYLES[t.style];
+    const p = { place: briefingTextName(L.index, k), depth: d++, x: round2(st.align === 'center' ? t.x : t.x - 2), y: round2(t.y - 2) };
+    if (st.glow) p.filters = [{ ...BRIEFING_GLOW }];
+    c.push(p);
+  });
+  c.push({ place: 'interface/buttons/btn play mission', depth: d++, x: 548, y: 544, clipEvents: [2048, 131072, 131072], script: BTN_PLAY });
+  c.push({ place: 'interface/buttons/btn back to main menu', depth: d++, x: 65, y: 3.05, script: BTN_BACK });
+  c.push({ place: 'interface/screens/briefing monitor scanlines anim', depth: d++, x: 0, y: 0, color: { alpha: 0.1484375 }, blend: 'overlay' });
+  c.unshift({ place: 'interface/mask wipe', depth: BRIEFING_DEPTH.mask, x: 0, y: 0, clipDepth: d });
+  return c;
+}
+const round2 = (v) => Math.round(v * 100) / 100;
+
+// briefing.json as written to disk: one key per line, captions and graphics one per line
+export function briefingJSON(b) {
+  const parts = [];
+  for (const [k, v] of Object.entries(b || {})) {
+    if (Array.isArray(v)) parts.push(`  ${JSON.stringify(k)}: [` + (v.length ? '\n' + v.map((x) => '    ' + JSON.stringify(x)).join(',\n') + '\n  ]' : ']'));
+    else parts.push(`  ${JSON.stringify(k)}: ${JSON.stringify(v)}`);
+  }
+  return '{\n' + parts.join(',\n') + '\n}\n';
+}
+
 export function levelSymbols(L) {
   const i = L.index;
   const out = [...bitmapSymbols(`level assets/level${i}`, L.size), ...bitmapSymbols(`level assets/background${i}`, L.backgroundSize || L.size)];
   for (const layer of LAYERS) out.push([`level assets/${layer}${i}`, container(L[layer] || [], `levels/${L.folder}/${layer}.json`)]);
   out.push(...visionSymbols(L));
+  out.push(...briefingSymbols(L));
   return out;
 }
 
@@ -181,7 +281,7 @@ export function composeScreen(screen, levels) {
     prev = changes.map((c) => c.depth);
   };
   for (const L of levels) {
-    frame(L.index * 2 + 1, (L.briefing || []).map((c) => ({ ...c })));
+    frame(L.index * 2 + 1, briefingChanges(L));
     const fade = [{ place: 'graphic assets/fade in anim', depth: DEPTH.fade, x: 0, y: 0 }];
     frame(L.index * 2 + 2, [...gameChanges(L), ...fade], 'startLevel();');
   }

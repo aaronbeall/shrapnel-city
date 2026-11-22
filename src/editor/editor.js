@@ -4,15 +4,17 @@
 // level in the browser and restarts it, so the view is the real game paused on the
 // level's first frame. Save writes each changed file back to levels/<NN_name>/ when the
 // page is served by `npm run edit`, and downloads the files otherwise.
-import { LevelApplier, restartLevel } from './apply.js';
+import { LevelApplier, restartLevel, showBriefing } from './apply.js';
 import { CollisionMap, COLOURS } from './collision.js';
+import { ShapeStack, isPixels, MODES, gameClass, greyOf } from './shapes.js';
 import { renderPreview } from './preview.js';
-import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour } from '../../tools/levels/compile.mjs';
+import { parsePath, pathString, fromPoints, isPolygon, clone, curveCount, segEnds, nearestSeg, insertNode, removeNodes, nodeHandles, isSmooth, toggleSmooth, oppositeHandle, moveNodes } from './path.js';
+import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour, briefingJSON } from '../../tools/levels/compile.mjs';
 import { pretty } from '../../tools/flash-source/format.mjs';
 import { mul } from '../flash/geom.js';
 
 const PLACE_LAYERS = ['enemies', 'boxes', 'powerups', 'doors', 'features', 'pathNodes'];
-const DATA_LAYERS = [...PLACE_LAYERS, 'vision', 'decor'];
+const DATA_LAYERS = [...PLACE_LAYERS, 'vision', 'decor', 'collision'];
 const VIEW_LAYERS = [
   { key: 'art', label: 'Background art' },
   { key: 'collision', label: 'Collision' },
@@ -56,7 +58,7 @@ const TOOLS = [
 ];
 const DRAW_TOOLS = new Set(['rect', 'poly', 'pencil', 'eraser', 'fill']);
 // layers that can be clicked and selected (every visible, unlocked one at once)
-const SELECT_LAYERS = [...PLACE_LAYERS, 'decor', 'vision'];
+const SELECT_LAYERS = [...PLACE_LAYERS, 'decor', 'vision', 'collision'];
 // every layer each tool can work on (Place: the palette's layer; Polygon: collision or a zone)
 const TOOL_LAYERS = {
   select: SELECT_LAYERS, place: [...PLACE_LAYERS, 'decor'], link: ['pathNodes'], rect: ['collision'], poly: ['collision', 'vision'],
@@ -74,6 +76,8 @@ const SERVER_POLL_MS = 3000;
 export async function toggle(rt) {
   if (!editor) {
     const data = await fetch('assets/levels.json', { cache: 'no-store' }).then((r) => r.json());
+    // the settings each placeable symbol reads (tools/props/spec.mjs); the panel falls back to raw JSON without it
+    data.props = await fetch('assets/props.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
     editor = new Editor(rt, data, await serverStatus());
     window.levelEditor = editor; // handy from the console
   }
@@ -87,6 +91,8 @@ class Editor {
     this.writable = !!server;
     this.applier = new LevelApplier(rt, data);
     this.palette = data.palette || {}; // layer -> library symbols placeable there (the build finds them by their class)
+    this.propsSpec = data.props;   // {groups, symbols: {name: {classes, settings: [...]}}} or null
+    this.openGroups = new Set(['behaviour']); // settings groups shown open in the panel
     this.levels = data.levels.map((L) => structuredClone(L));
     this.maps = {};          // level index -> CollisionMap
     this.dirty = {};         // level index -> Set of file names
@@ -103,6 +109,12 @@ class Editor {
     this.art = null;         // the art pipeline step running: {step, started}
     this.showTriggerList = true;
     this.mapVersion = 0;     // bumps when a collision map or the live level changes
+    this.stacks = {};        // level index -> ShapeStack (collision shapes' pixel layers)
+    this.mismatch = {};      // level index -> pixels where collision.png differs from the shapes' bake
+    this.outside = {};       // level index -> {diff, data}: those pixels and the map as it was loaded
+    this.autoBake = true;    // bake shapes into the collision map as they're edited
+    this.shapesAhead = false; // shapes edited since the last bake (only with autoBake off)
+    this.openShapeGroups = new Set();
     this.preview = null;     // {index, version, canvas} art preview
     this.colour = 'wall';
     this.brush = 1;
@@ -122,7 +134,7 @@ class Editor {
   get L() { return this.levels[this.index]; }
   // the primary selection (the last clicked), or null; setting it selects just that
   get sel() { const s = this.selItems(); return s.length ? s[s.length - 1] : null; }
-  set sel(v) { this.selection = v ? [{ layer: v.layer, k: v.k }] : []; }
+  set sel(v) { this.selection = v ? [{ layer: v.layer, k: v.k }] : []; this.pts = null; }
   // everything selected that still exists, primary last
   selItems() { return this.selection.filter((s) => this.list(s.layer)[s.k]); }
   isSelected(layer, k) { return this.selection.some((s) => s.layer === layer && s.k === k); }
@@ -239,8 +251,10 @@ class Editor {
     this.confirmPlace = false;
     this.artLog = '';
     this.poly = null;
+    this.initShapes(i);
     this.reload();
     this.refreshPanel();
+    this.loadShapes(i);
   }
 
   fitView() {
@@ -255,10 +269,15 @@ class Editor {
 
   markDirty(file, i = this.index) {
     (this.dirty[i] ||= new Set()).add(file);
+    if (file === 'collision.json') {
+      const L = this.levels[i];
+      if (L.collisionImplicit) { L.collisionImplicit = false; this.dirty[i].add('collision-base.png'); } // its first save writes the map as the base layer
+      if (i === this.index) this.rebake();
+    }
     this.refreshSave();
   }
 
-  snapshot() { return JSON.stringify({ ...Object.fromEntries(DATA_LAYERS.map((l) => [l, this.L[l] || []])), settings: this.L.settings }); }
+  snapshot() { return JSON.stringify({ ...Object.fromEntries(DATA_LAYERS.map((l) => [l, this.L[l] || []])), settings: this.L.settings, briefing: this.L.briefing }); }
 
   // run a data change with undo, then rebuild the level
   change(files, fn, { reload = true } = {}) {
@@ -277,6 +296,7 @@ class Editor {
     const o = JSON.parse(json);
     for (const k of DATA_LAYERS) this.L[k] = o[k];
     this.L.settings = o.settings;
+    this.L.briefing = o.briefing;
   }
 
   pushUndo(e) { this.undoStack.push(e); if (this.undoStack.length > 200) this.undoStack.shift(); this.redoStack.length = 0; }
@@ -288,10 +308,13 @@ class Editor {
     to.push(e);
     if (e.level !== this.index) this.loadLevel(e.level);
     if (e.type === 'data') {
+      if (e.outside) { this.mismatch[e.level] = redo ? 0 : e.outside.diff.length; this.outside[e.level] = redo ? null : e.outside; }
       this.restoreData(redo ? e.after : e.before);
       for (const f of e.files) this.markDirty(f);
       this.sel = null;
       this.reload();
+    } else if (e.type === 'layerPixels') {
+      if (this.shapes) { this.shapes.restore(redo ? e.after : e.before); this.markDirty(e.before.file); this.rebake(); }
     } else {
       this.map.restore(redo ? e.after : e.before);
       this.collisionChanged();
@@ -299,12 +322,12 @@ class Editor {
     this.refreshPanel();
   }
 
-  collisionChanged() {
+  collisionChanged(refresh = true) {
     this.markDirty('collision.png');
     this.stale = true;
     this.needsReload = true;
     this.mapVersion++;
-    this.refreshPanel();
+    if (refresh) this.refreshPanel();
   }
 
   // live clip for a placement, if the game still has it
@@ -323,9 +346,13 @@ class Editor {
   boundsOf(layer, k) {
     const e = this.list(layer)[k];
     if (layer === 'decor') return decorBounds(e, this.decorSize(e.sprite));
+    if (layer === 'collision') return this.shapes ? this.shapes.boundsOf(e) : [0, 0, 0, 0];
     const c = this.clipFor(layer, k);
     if (c) {
-      const b = c.getBounds(this.screen);
+      // around the body (core_mc) when it has one, so guns and treads don't stretch the box
+      const core = c.core_mc && !c.core_mc.removed && typeof c.core_mc.getBounds === 'function' ? c.core_mc : null;
+      let b = core && core.getBounds(this.screen);
+      if (!b || !(b.xMax > b.xMin) || b.xMax - b.xMin >= 1e6) b = c.getBounds(this.screen);
       if (b.xMax - b.xMin < 1e6 && b.xMax > b.xMin) {
         const pad = 2;
         return [Math.min(b.xMin, e.x - 6) - pad, Math.min(b.yMin, e.y - 6) - pad, Math.max(b.xMax, e.x + 6) + pad, Math.max(b.yMax, e.y + 6) + pad];
@@ -385,7 +412,7 @@ class Editor {
   hits(x, y, layers = SELECT_LAYERS) {
     const out = [];
     for (const l of layers) {
-      if (l === 'vision' || !this.editable(l)) continue;
+      if (l === 'vision' || l === 'collision' || !this.editable(l)) continue;
       const list = this.list(l);
       for (let k = list.length - 1; k >= 0; k--) {
         if (!this.layerShown(l, list[k])) continue;
@@ -397,6 +424,14 @@ class Editor {
     if (layers.includes('vision') && this.editable('vision')) {
       const zones = this.list('vision');
       for (let k = zones.length - 1; k >= 0; k--) if (this.inZone(zones[k], x, y)) out.push({ layer: 'vision', k, area: Infinity });
+    }
+    // collision shapes, top first: the one that paints the clicked pixel (locked ones never)
+    if (layers.includes('collision') && this.editable('collision') && this.shapes) {
+      const list = this.list('collision');
+      for (let k = list.length - 1; k >= 0; k--) {
+        const sh = list[k];
+        if (!sh.hidden && !sh.locked && this.shapes.hit(sh, x, y, this.hitCtx)) out.push({ layer: 'collision', k, area: Infinity });
+      }
     }
     return out.map(({ layer, k }) => ({ layer, k }));
   }
@@ -433,16 +468,25 @@ class Editor {
     if (mod && k === 'y') { e.preventDefault(); this.undo(true); return; }
     if (mod && k === 's') { e.preventDefault(); this.save(); return; }
     if (mod && k === 'd') { e.preventDefault(); this.duplicate(); return; }
+    if (mod && (e.code === 'BracketRight' || e.code === 'BracketLeft')) { // collision shapes up / down the stack
+      e.preventDefault();
+      const up = e.code === 'BracketRight';
+      this.reorderShapes(e.shiftKey ? (up ? Infinity : -Infinity) : up ? 1 : -1);
+      return;
+    }
     if (mod) return;
     if (e.key === 'Shift') this.shiftDown = true;
     const arrow = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (arrow && this.selPoints().length) { e.preventDefault(); this.nudgePoints(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
     if (arrow) { e.preventDefault(); if (this.sel) this.nudge(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
     if (/^[1-9]$/.test(e.key)) { const l = VIEW_LAYERS[+e.key - 1]; if (l) this.setVisible(l.key, !this.visible[l.key]); return; }
     const tool = TOOLS.find((t) => t.hot.toLowerCase() === k);
     if (tool) { this.setTool(tool.key); return; }
     if (k === 'r' && this.sel) { this.rotateSel(e.shiftKey ? -15 : 15); return; }
     if ((e.key === 'Delete' || e.key === 'Backspace') && this.tool === 'poly' && this.poly) { this.poly.pop(); if (!this.poly.length) this.poly = null; return; }
+    if ((e.key === 'Delete' || e.key === 'Backspace') && this.selPoints().length) { this.deletePoints(); return; }
     if ((e.key === 'Delete' || e.key === 'Backspace') && this.sel) { this.deleteSel(); return; }
+    if (e.key === 'Escape' && this.selPoints().length) { this.pts = null; this.refreshPanel(); return; }
     if (e.key === 'Escape') { this.poly = null; this.sel = null; this.linkFrom = null; this.refreshPanel(); return; }
     if (e.key === 'Enter' && this.poly) { this.closePoly(); return; }
     if (e.key === '[') { this.brush = Math.max(1, this.brush - (this.brush > 8 ? 4 : 1)); this.refreshPanel(); return; }
@@ -515,11 +559,15 @@ class Editor {
     const t = this.tool;
     if (t !== 'select' && !this.toolReady()) return;
     if (t === 'select') {
-      const v = this.vertexAt(sx, sy);
-      if (v) { this.drag = { kind: 'vertex', k: v.k, i: v.i, before: this.snapshot(), moved: false }; return; }
-      const h = this.hit(x, y);
+      const part = this.zonePartAt(sx, sy);
+      if (part && this.zoneMouseDown(part, e, x, y)) return;
+      // a click on the edited zone's edge (perhaps just outside its fill) is a click on the zone
+      const h = part && part.kind === 'edge' ? { layer: part.layer, k: part.k } : this.hit(x, y);
       let toggleOff = null;
+      // on nothing: a drag boxes points of the zone being edited; a click clears the selection
+      if (!h && this.editZone()) { this.drag = { kind: 'marquee', x0: x, y0: y, x1: x, y1: y, shift: e.shiftKey }; return; }
       if (!h) { if (!e.shiftKey) this.sel = null; this.refreshPanel(); return; } // Shift+click on nothing keeps the selection
+      if (!e.shiftKey) this.pts = null;
       const i = this.selection.findIndex((s) => s.layer === h.layer && s.k === h.k);
       if (i < 0) { if (e.shiftKey) this.selection.push(h); else this.sel = h; } // Shift+click adds, from any layer
       else {
@@ -553,15 +601,28 @@ class Editor {
       (this.poly ||= []).push(p);
     } else if (t === 'pencil' || t === 'eraser') {
       const colour = t === 'eraser' ? 'open' : this.colour;
-      const m = this.map;
+      const layer = this.pixelTarget();
+      if (!layer) return;
+      const st = this.shapes, f = layer.pixels, ox = Math.round(layer.x || 0), oy = Math.round(layer.y || 0);
       const box = [Infinity, Infinity, -Infinity, -Infinity];
-      const before = m.grab(0, 0, m.w, m.h);
-      m.dab(x, y, this.brush, colour, box);
-      m.commitStroke(box);
-      this.drag = { kind: 'paint', colour, box, before, lx: x, ly: y };
+      const before = st.grab(f, 0, 0, st.w, st.h);
+      st.dab(f, x - ox, y - oy, this.brush, colour, box);
+      st.commit(f, box);
+      this.rebake([box[0] + ox, box[1] + oy, box[2] + ox, box[3] + oy]);
+      this.drag = { kind: 'paint', colour, box, before, lx: x, ly: y, file: f, ox, oy };
     } else if (t === 'fill') {
-      const u = this.map.fill(x, y, this.colour);
-      if (u) { this.pushUndo({ type: 'pixels', level: this.index, ...u }); this.collisionChanged(); }
+      const area = this.map.floodMask(x, y);
+      if (!area || area.colour === this.colour) return;
+      const layer = this.pixelTarget();
+      if (!layer) return;
+      const st = this.shapes, f = layer.pixels, ox = Math.round(layer.x || 0), oy = Math.round(layer.y || 0);
+      const before = st.grab(f, 0, 0, st.w, st.h);
+      st.paintMask(f, area.mask, area.x - ox, area.y - oy, area.w, area.h, this.colour);
+      const b = st.commit(f, [area.x - ox, area.y - oy, area.x - ox + area.w, area.y - oy + area.h]);
+      if (b) this.pushUndo({ type: 'layerPixels', level: this.index, ...cropUndo(st, f, before, b) });
+      this.markDirty(f);
+      this.rebake([area.x, area.y, area.x + area.w, area.y + area.h]);
+      this.refreshPanel();
     }
   }
 
@@ -582,18 +643,36 @@ class Editor {
       if (!d.moved && Math.hypot(x - d.x, y - d.y) * this.view.z < 2) return; // a click, not a drag
       d.moved = true;
       for (const s0 of d.starts) this.moveTo(s0.layer, s0.k, s0.x + dx, s0.y + dy);
-    } else if (d.kind === 'vertex') {
-      const z = this.list('vision')[d.k];
-      const [wx, wy] = this.snap(x, y, e.shiftKey);
-      const [a, b, c, dd, tx, ty] = zoneMatrix(z);
-      const det = a * dd - b * c || 1;
-      const lx = (dd * (wx - tx) - c * (wy - ty)) / det, ly = (-b * (wx - tx) + a * (wy - ty)) / det;
-      z.points[d.i] = [round2(lx), round2(ly)];
+    } else if (d.kind === 'points') {
+      if (!d.moved && Math.hypot(x - d.x, y - d.y) * this.view.z < 2) return; // a click, not a drag
       d.moved = true;
-    } else if (d.kind === 'rect') { [d.x1, d.y1] = this.snap(x, y, e.shiftKey); }
+      const z = this.list(d.layer)[d.k], list = this.selPoints();
+      // the point that was clicked follows the mouse (Shift snaps it to the grid); the rest keep up
+      const p0 = d.from[d.ci].nodes[d.i], w0 = apply(zoneMatrix(z), p0);
+      const [wx, wy] = this.snap(w0[0] + x - d.x, w0[1] + y - d.y, e.shiftKey);
+      const [lx, ly] = this.zoneLocal(z, wx, wy);
+      const cs = clone(d.from);
+      moveNodes(cs, d.from, list, round2(lx - p0[0]), round2(ly - p0[1]));
+      this.setZoneContours(z, cs);
+    } else if (d.kind === 'handle') {
+      d.moved = true;
+      const z = this.list(d.layer)[d.k], cs = this.zoneContours(z), k = cs[d.ci];
+      const p = this.zoneLocal(z, ...this.snap(x, y, e.shiftKey)).map(round2);
+      k.segs[d.si].c[d.h] = p;
+      if (d.opp) { // a smooth node stays smooth: the other handle swings round, keeping its length
+        const node = k.nodes[d.opp.node], o = k.segs[d.opp.si].c[d.opp.h];
+        const len = Math.hypot(o[0] - node[0], o[1] - node[1]), a = Math.atan2(node[1] - p[1], node[0] - p[0]);
+        k.segs[d.opp.si].c[d.opp.h] = [round2(node[0] + Math.cos(a) * len), round2(node[1] + Math.sin(a) * len)];
+      }
+      this.setZoneContours(z, cs);
+    } else if (d.kind === 'marquee') { d.x1 = x; d.y1 = y; }
+    else if (d.kind === 'rect') { [d.x1, d.y1] = this.snap(x, y, e.shiftKey); }
     else if (d.kind === 'paint') {
-      this.map.line(d.lx, d.ly, x, y, this.brush, d.colour, d.box);
-      this.map.commitStroke(d.box);
+      const st = this.shapes, seg = [Infinity, Infinity, -Infinity, -Infinity];
+      st.line(d.file, d.lx - d.ox, d.ly - d.oy, x - d.ox, y - d.oy, this.brush, d.colour, seg);
+      st.commit(d.file, seg);
+      for (let j = 0; j < 2; j++) { d.box[j] = Math.min(d.box[j], seg[j]); d.box[j + 2] = Math.max(d.box[j + 2], seg[j + 2]); }
+      this.rebake([seg[0] + d.ox, seg[1] + d.oy, seg[2] + d.ox, seg[3] + d.oy]);
       d.lx = x; d.ly = y;
     }
   }
@@ -602,10 +681,26 @@ class Editor {
     const d = this.drag;
     this.drag = null;
     if (!d) return;
-    if (d.kind === 'vertex' && d.moved) {
-      this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files: ['vision.json'] });
-      this.markDirty('vision.json');
-      this.reload();
+    if ((d.kind === 'points' || d.kind === 'handle') && d.moved) {
+      this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files: [d.file] });
+      this.markDirty(d.file);
+      if (d.layer === 'vision') this.reload();
+      this.refreshPanel();
+    } else if (d.kind === 'points' && d.toggleOff) {
+      this.pts.list = this.pts.list.filter((q) => !(q.ci === d.toggleOff.ci && q.i === d.toggleOff.i));
+      this.refreshPanel();
+    } else if (d.kind === 'marquee') {
+      if (Math.hypot(d.x1 - d.x0, d.y1 - d.y0) * this.view.z < 3) { if (!d.shift) this.sel = null; } // a click
+      else {
+        const ez = this.editZone(), cs = this.zoneContours(ez.z), M = zoneMatrix(ez.z);
+        const [ax, bx] = [Math.min(d.x0, d.x1), Math.max(d.x0, d.x1)], [ay, by] = [Math.min(d.y0, d.y1), Math.max(d.y0, d.y1)];
+        const list = d.shift ? this.selPoints().slice() : [];
+        cs.forEach((k, ci) => k.nodes.forEach((p, i) => {
+          const [wx, wy] = apply(M, p);
+          if (wx >= ax && wx <= bx && wy >= ay && wy <= by && !list.some((q) => q.ci === ci && q.i === i)) list.push({ ci, i });
+        }));
+        this.pts = { k: ez.k, list };
+      }
       this.refreshPanel();
     } else if (d.kind === 'move' && d.moved) {
       const files = this.selFiles(d.starts);
@@ -618,18 +713,15 @@ class Editor {
       this.refreshPanel();
     } else if (d.kind === 'rect') {
       if (d.x0 !== d.x1 && d.y0 !== d.y1) {
-        const u = this.map.rect(d.x0, d.y0, d.x1, d.y1, this.colour);
-        if (u) { this.pushUndo({ type: 'pixels', level: this.index, ...u }); this.collisionChanged(); }
+        const [ax, bx] = [Math.min(d.x0, d.x1), Math.max(d.x0, d.x1)], [ay, by] = [Math.min(d.y0, d.y1), Math.max(d.y0, d.y1)];
+        this.addShape(this.colour, pathString(fromPoints([[ax, ay], [bx, ay], [bx, by], [ax, by]])));
       }
     } else if (d.kind === 'paint') {
-      const m = this.map;
-      const b = m.clampBox(...d.box);
+      const st = this.shapes, b = this.map.clampBox(...d.box);
       if (b) {
-        const [x, y, w, h] = b;
-        const before = { x, y, w, h, pixels: new ImageData(w, h) };
-        for (let j = 0; j < h; j++) before.pixels.data.set(d.before.pixels.data.subarray(((y + j) * m.w + x) * 4, ((y + j) * m.w + x + w) * 4), j * w * 4);
-        this.pushUndo({ type: 'pixels', level: this.index, before, after: m.grab(x, y, w, h) });
-        this.collisionChanged();
+        this.pushUndo({ type: 'layerPixels', level: this.index, ...cropUndo(st, d.file, d.before, b) });
+        this.markDirty(d.file);
+        this.refreshPanel();
       }
     }
   }
@@ -648,8 +740,7 @@ class Editor {
     this.poly = null;
     if (!p || p.length < 3) return;
     if (this.polyTarget === 'vision') { this.addZone(p); return; }
-    const u = this.map.polygon(p, this.colour);
-    if (u) { this.pushUndo({ type: 'pixels', level: this.index, ...u }); this.collisionChanged(); }
+    this.addShape(this.colour, pathString(fromPoints(p.map(([x, y]) => [round2(x), round2(y)]))));
   }
 
   // ------------------------------------------------------------------ placement edits
@@ -723,7 +814,11 @@ class Editor {
       const ent = structuredClone(this.list(layer)[k]);
       ent.x = round2(ent.x + (this.grid || 16)); ent.y = round2(ent.y + (this.grid || 16));
       if (layer === 'pathNodes') { delete ent.name; delete ent.props; } // the copy links itself by line of sight
-      else if (ent.name) delete ent.name;
+      else if (layer === 'collision') {
+        ent.name = this.shapeName((ent.name || 'shape').replace(/ \d+$/, ''));
+        delete ent.locked;
+        if (isPixels(ent)) { const f = this.newPixelsFile(); this.shapes.copy(ent.pixels, f); ent.pixels = f; this.markDirty(f); ent.x = Math.round(ent.x); ent.y = Math.round(ent.y); }
+      } else if (ent.name) delete ent.name;
       return { layer, ent };
     });
     const added = [];
@@ -764,6 +859,11 @@ class Editor {
   // put one thing at (x, y), moving its clip in the game too so it shows without a rebuild
   moveTo(layer, k, x, y) {
     const ent = this.list(layer)[k];
+    if (layer === 'collision') {
+      ent.x = isPixels(ent) ? Math.round(x) : round2(x); ent.y = isPixels(ent) ? Math.round(y) : round2(y);
+      this.rebake();
+      return;
+    }
     ent.x = round2(x); ent.y = round2(y);
     const c = this.clipFor(layer, k);
     if (c) { c._x = ent.x; c._y = ent.y; }
@@ -809,6 +909,7 @@ class Editor {
     const cx = ents.reduce((a, [, e]) => a + e.x, 0) / ents.length, cy = ents.reduce((a, [, e]) => a + e.y, 0) / ents.length;
     const r = deg * Math.PI / 180, cos = Math.cos(r), sin = Math.sin(r);
     for (const [layer, e] of ents) {
+      if (layer === 'collision' && isPixels(e)) continue; // pixel layers only move
       if (group) {
         const dx = e.x - cx, dy = e.y - cy;
         e.x = round2(cx + f * (dx * cos - dy * sin)); e.y = round2(cy + f * (dx * sin + dy * cos));
@@ -903,13 +1004,259 @@ class Editor {
     return links;
   }
 
+  // ------------------------------------------------------------------ collision shapes
+  // L.collision is collision.json: the shapes, bottom first, baked into collision.png (src/editor/
+  // shapes.js). A level without one starts as a single locked pixel layer holding its map.
+  // this.stacks[i] holds a level's pixel layers once they've loaded; until then shape editing waits.
+  get shapes() { const s = this.stacks[this.index]; return s && s.ready ? s : null; }
+  isShapePixels(e) { return isPixels(e); }
+
+  initShapes(i) {
+    const L = this.levels[i];
+    if (!Array.isArray(L.collision)) { L.collision = [{ name: 'original map', pixels: 'collision-base.png', locked: true }]; L.collisionImplicit = true; }
+    for (const s of L.collision) { s.x ??= 0; s.y ??= 0; }
+  }
+
+  async loadShapes(i) {
+    if (this.stacks[i]) return;
+    this.initShapes(i);
+    const L = this.levels[i], map = this.maps[i] || (i === this.index ? this.map : null);
+    if (!map) return;
+    const st = this.stacks[i] = new ShapeStack(map.w, map.h);
+    const load = (file) => new Promise((res) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = () => res(null);
+      img.src = `levels/${L.folder}/${file}?t=${Date.now()}`;
+    });
+    for (const s of L.collision) {
+      if (!isPixels(s) || st.canvases.has(s.pixels)) continue;
+      const img = L.collisionImplicit ? null : await load(s.pixels);
+      if (img) st.setImage(s.pixels, img);
+      else if (s.pixels === 'collision-base.png') st.setImage(s.pixels, map.canvas); // the map itself
+      else this.status(`Could not load levels/${L.folder}/${s.pixels}; that layer is empty.`, true);
+    }
+    st.ready = true;
+    // does the game read collision.png the same as what the shapes bake to? (not if it was
+    // edited outside them; soft edges a grey or two apart don't count)
+    const diff = classDiff(st.bake(L.collision), map.data);
+    this.mismatch[i] = diff.length;
+    // keep them as loaded: until the choice is made the shapes don't bake, and Keep the map uses these
+    this.outside[i] = diff.length ? { diff, data: new Uint8ClampedArray(map.data.data) } : null;
+    if (i === this.index) this.refreshPanel();
+  }
+
+  // shapes -> collision map. Live while editing (this.autoBake), else only when forced. While
+  // collision.png has edits outside the shapes nothing is baked until you pick Keep the map or Use
+  // the shapes (discard: replace those edits); returns whether the map is now the shapes' bake
+  rebake(box, force = false, discard = false) {
+    const st = this.shapes;
+    if (!st) return false;
+    if (this.mismatch[this.index] && !discard) {
+      this.shapesAhead = true;
+      this.status(`collision.png has ${this.mismatch[this.index]} pixels edited outside the shapes: pick Keep the map or Use the shapes (Collision shapes panel) before the shapes bake.`, true);
+      return false;
+    }
+    if (!this.autoBake && !force) { this.shapesAhead = true; return false; }
+    if (this.mismatch[this.index]) { box = null; this.mismatch[this.index] = 0; this.outside[this.index] = null; } // the map takes the shapes' pixels everywhere
+    let b = box ? this.map.clampBox(box[0] - 1, box[1] - 1, box[2] + 1, box[3] + 1) : [0, 0, st.w, st.h];
+    if (!b) return false;
+    const changed = this.map.putRegion(st.bake(this.list('collision'), b), b[0], b[1]);
+    if (!box) this.shapesAhead = false;
+    if (changed) this.collisionChanged(false);
+    return true;
+  }
+
+  bakeCollision(discard = false) {
+    const ok = this.rebake(null, true, discard);
+    if (ok) this.status(discard ? 'Collision map re-baked from the shapes; its outside edits are gone (git still has them).' : 'Collision map baked from the shapes.');
+    this.refreshPanel();
+    return ok;
+  }
+
+  // keep collision.png as it is: its pixels the shapes don't make go in a locked layer on top
+  // (the pixels that differed when the level loaded, so shape edits made meanwhile still apply)
+  keepMap() {
+    const st = this.shapes, o = this.outside[this.index];
+    if (!st || !o) return;
+    const d = o.data, file = this.newPixelsFile('edits'), q = st.data(file).data;
+    for (const k of o.diff) { q[k] = d[k]; q[k + 1] = d[k + 1]; q[k + 2] = d[k + 2]; q[k + 3] = 255; }
+    st.commit(file, [0, 0, st.w, st.h]);
+    this.mismatch[this.index] = 0;
+    this.outside[this.index] = null;
+    this.change(['collision.json', file], () => this.list('collision').push({ name: 'map edits', pixels: file, x: 0, y: 0, locked: true }), { reload: false });
+    const e = this.undoStack[this.undoStack.length - 1];
+    if (e && e.files.includes(file)) e.outside = o; // undoing this brings the choice back
+  }
+
+  newPixelsFile(base = 'pixels') {
+    const used = new Set(this.list('collision').filter(isPixels).map((s) => s.pixels));
+    for (const f of this.shapes ? this.shapes.canvases.keys() : []) used.add(f);
+    let n = 1;
+    while (used.has(`collision-${base}-${n}.png`)) n++;
+    return `collision-${base}-${n}.png`;
+  }
+
+  shapeName(prefix) {
+    const used = new Set(this.list('collision').map((s) => s.name));
+    let n = 1;
+    while (used.has(`${prefix} ${n}`)) n++;
+    return `${prefix} ${n}`;
+  }
+
+  // a new vector shape on top, selected
+  addShape(mode, d) {
+    if (!this.shapes) { this.status('Collision shapes are still loading.', true); return; }
+    const list = this.list('collision');
+    this.change(['collision.json'], () => list.push({ name: this.shapeName(mode), mode, d, x: 0, y: 0 }), { reload: false });
+    this.sel = { layer: 'collision', k: list.length - 1 };
+    this.refreshPanel();
+  }
+
+  // the pixel layer pencil, eraser and fill paint into: the selected one, else a new one on top
+  pixelTarget() {
+    const st = this.shapes;
+    if (!st) { this.status('Collision shapes are still loading.', true); return null; }
+    const s = this.sel, list = this.list('collision');
+    if (s && s.layer === 'collision' && isPixels(list[s.k]) && !list[s.k].locked && !list[s.k].hidden) return list[s.k];
+    const file = this.newPixelsFile();
+    st.canvas(file);
+    const layer = { name: this.shapeName('pixels'), pixels: file, x: 0, y: 0 };
+    this.change(['collision.json'], () => list.push(layer), { reload: false });
+    this.sel = { layer: 'collision', k: list.length - 1 };
+    this.refreshPanel();
+    return layer;
+  }
+
+  // move the selected shapes up (+1) or down (-1) the stack, or to the top / bottom (+-Infinity)
+  reorderShapes(dir) {
+    const list = this.list('collision');
+    const picked = this.selItems().filter((s) => s.layer === 'collision').map((s) => s.k);
+    if (!picked.length) return;
+    const set = new Set(picked);
+    const entries = list.map((e, k) => ({ e, k, on: set.has(k) }));
+    let order;
+    if (!isFinite(dir)) {
+      const on = entries.filter((x) => x.on), off = entries.filter((x) => !x.on);
+      order = dir > 0 ? [...off, ...on] : [...on, ...off];
+    } else {
+      order = entries.slice();
+      const idx = order.map((_, i) => i);
+      const step = (i) => { const j = i + dir; if (j < 0 || j >= order.length || order[j].on) return; [order[i], order[j]] = [order[j], order[i]]; };
+      if (dir > 0) for (let i = idx.length - 1; i >= 0; i--) { if (order[i].on) step(i); }
+      else for (let i = 0; i < idx.length; i++) { if (order[i].on) step(i); }
+    }
+    const primary = this.sel;
+    this.change(['collision.json'], () => { list.splice(0, list.length, ...order.map((x) => x.e)); }, { reload: false });
+    const at = new Map(order.map((x, i) => [x.k, i]));
+    this.selection = this.selection.map((s) => (s.layer === 'collision' ? { layer: 'collision', k: at.get(s.k) } : s));
+    if (primary && primary.layer === 'collision') { // keep the primary last
+      const p = this.selection.findIndex((s) => s.layer === 'collision' && s.k === at.get(primary.k));
+      if (p >= 0) this.selection.push(...this.selection.splice(p, 1));
+    }
+    this.refreshPanel();
+  }
+
+  setShapeFlag(ks, key, on) {
+    const list = this.list('collision');
+    this.change(['collision.json'], () => { for (const k of ks) { if (on) list[k][key] = true; else delete list[k][key]; } }, { reload: false });
+  }
+
+  // the stack, top first, with an eye and a lock per shape; consecutive shapes in a group fold
+  // into one row
+  shapesPanel() {
+    const list = this.list('collision'), st = this.shapes;
+    const box = el('details', { class: 'le-shapes', open: this.showShapes !== false, ontoggle: (ev) => { this.showShapes = ev.target.open; } },
+      el('summary', {}, 'Collision shapes ', el('small', {}, `${list.length}${this.L.collisionImplicit ? ' · no collision.json yet' : ''}`)));
+    if (!st) { box.append(el('div', { class: 'le-tip' }, 'Loading…')); return box; }
+    const mm = this.mismatch[this.index];
+    if (mm) box.append(el('div', { class: 'le-warn' }, `collision.png differs from what these shapes bake to in ${mm} pixels (it was edited outside them). Shape edits won't bake into it until you pick one:`,
+      el('div', { class: 'le-row' },
+        el('button', { title: 'add the pixels only collision.png has as a locked layer on top, so the bake matches it', onclick: () => this.keepMap() }, 'Keep the map: add its edits as a layer'),
+        el('button', { title: 'replace collision.png with the shapes\' bake', onclick: () => this.bakeCollision(true) }, 'Use the shapes'))));
+    const rows = el('div', { class: 'le-shape-list' });
+    const selected = new Set(this.selItems().filter((s) => s.layer === 'collision').map((s) => s.k));
+    const pick = (ks, e) => {
+      if (e.shiftKey) { for (const k of ks) { if (!selected.has(k)) this.selection.push({ layer: 'collision', k }); else if (ks.length === 1) this.selection = this.selection.filter((s) => !(s.layer === 'collision' && s.k === k)); } }
+      else this.selection = ks.map((k) => ({ layer: 'collision', k }));
+      this.pts = null;
+      this.refreshPanel();
+    };
+    const swatch = (s) => el('span', { class: 'le-mode', style: isPixels(s) ? '' : `--c: rgb(${greyOf(s)},${greyOf(s)},${greyOf(s)})`, title: isPixels(s) ? 'pixels' : s.mode + (s.outline ? ` outline ${s.outline}px` : '') }, isPixels(s) ? '▦' : s.outline ? '▢' : '■');
+    const row = (s, k, indent) => el('div', { class: 'le-shape' + (selected.has(k) ? ' on' : '') + (s.hidden ? ' hidden' : '') + (indent ? ' in' : '') },
+      el('button', { class: 'le-icon' + (s.hidden ? '' : ' on'), title: s.hidden ? 'show: bake it' : 'hide: leave it out of the bake', onclick: () => this.setShapeFlag([k], 'hidden', !s.hidden) }, s.hidden ? ICON.eyeOff : ICON.eye),
+      el('button', { class: 'le-icon' + (s.locked ? ' on' : ''), title: s.locked ? 'unlock' : 'lock: can\'t be selected on the map or edited', onclick: () => this.setShapeFlag([k], 'locked', !s.locked) }, s.locked ? ICON.lock : ICON.unlock),
+      swatch(s), el('span', { class: 'le-name', onclick: (e) => pick([k], e) }, s.name || `shape ${k + 1}`));
+    // top first
+    for (let k = list.length - 1; k >= 0;) {
+      const g = list[k].group;
+      if (!g) { rows.append(row(list[k], k, false)); k--; continue; }
+      const ks = [];
+      while (k >= 0 && list[k].group === g) ks.push(k--);
+      const open = this.openShapeGroups.has(g), shown = ks.filter((j) => !list[j].hidden).length;
+      rows.append(el('div', { class: 'le-shape group' + (ks.every((j) => selected.has(j)) ? ' on' : '') },
+        el('button', { class: 'le-icon' + (shown ? ' on' : ''), title: shown ? 'hide them all' : 'show them all', onclick: () => this.setShapeFlag(ks, 'hidden', !!shown) }, shown ? ICON.eye : ICON.eyeOff),
+        el('button', { class: 'le-icon', title: open ? 'fold' : 'unfold', onclick: () => { this.openShapeGroups[open ? 'delete' : 'add'](g); this.refreshPanel(); } }, open ? '▾' : '▸'),
+        el('span', { class: 'le-name', title: 'click to select them all', onclick: (e) => pick(ks, e) }, `${g} `, el('small', {}, `${shown}/${ks.length} shown`))));
+      if (open) for (const j of ks) rows.append(row(list[j], j, true));
+    }
+    const any = selected.size > 0;
+    box.append(rows,
+      el('div', { class: 'le-row' },
+        el('button', { disabled: !any, title: 'to the top (Ctrl+Shift+])', onclick: () => this.reorderShapes(Infinity) }, '⤒'),
+        el('button', { disabled: !any, title: 'up one (Ctrl+])', onclick: () => this.reorderShapes(1) }, '↑'),
+        el('button', { disabled: !any, title: 'down one (Ctrl+[)', onclick: () => this.reorderShapes(-1) }, '↓'),
+        el('button', { disabled: !any, title: 'to the bottom (Ctrl+Shift+[)', onclick: () => this.reorderShapes(-Infinity) }, '⤓'),
+        el('button', { title: 'a new empty pixel layer on top for Pencil, Eraser and Fill', onclick: () => { this.sel = null; this.pixelTarget(); } }, '+ Pixel layer'),
+        el('button', { disabled: !any, onclick: () => this.deleteSel() }, 'Delete')),
+      el('div', { class: 'le-row' },
+        el('label', { title: 'bake the shapes into collision.png as you edit them; off, the map only changes when you press Bake collision' },
+          el('input', { type: 'checkbox', checked: this.autoBake, onchange: (ev) => { this.autoBake = ev.target.checked; if (this.autoBake && this.shapesAhead) this.bakeCollision(); else this.refreshPanel(); } }), ' Bake as I edit'),
+        el('button', { class: this.shapesAhead ? 'le-hot' : '', title: 'shapes -> collision.png now (step 1; Bake art in Art pipeline is step 2 and reads only collision.png)', onclick: () => this.bakeCollision() }, 'Bake collision')),
+      this.shapesAhead ? el('div', { class: 'le-warn' }, 'The shapes changed since the collision map was baked.') : '',
+      el('div', { class: 'le-tip' }, 'Shapes paint in order, bottom first; hidden ones are left out. Rectangle and Polygon add a vector shape in the chosen colour; Pencil, Eraser and Fill paint into the selected pixel layer (or a new one). Select picks shapes on the map, drags and nudges them, and edits a vector shape\'s points and curves.'));
+    return box;
+  }
+
+  shapePanel() {
+    const { k } = this.sel;
+    const s = this.list('collision')[k], file = 'collision.json';
+    const num = (label, val, set) => this.liveNum(label, round2(val), set, { file, reload: false });
+    const setMode = (m) => this.change([file], () => { s.mode = m; delete s.grey; }, { reload: false });
+    return el('div', { class: 'le-props' },
+      el('h4', {}, isPixels(s) ? 'Pixel layer' : 'Collision shape', el('small', {}, ` #${k + 1} of ${this.list('collision').length}`)),
+      el('div', { class: 'le-row' }, 'Name ', el('input', { value: s.name || '', onchange: (ev) => this.change([file], () => { s.name = ev.target.value.trim() || s.name; }, { reload: false }) })),
+      isPixels(s) ? el('div', { class: 'le-tip' }, `${s.pixels}: Pencil, Eraser and Fill paint here while it's selected. Its pixels keep their own colours.`)
+        : el('div', { class: 'le-row' }, 'Paints ', ...MODES.map((m) => el('button', { class: 'le-swatch ' + (s.mode === m ? 'on' : ''), style: `--c: rgb(${COLOURS[m].join(',')})`, onclick: () => setMode(m) }, m)),
+          ' outline ', el('input', { type: 'number', min: 0, max: 64, step: 1, value: s.outline || 0, style: 'width: 4em', title: '0 fills the shape; more strokes its edge that many px wide instead', onchange: (ev) => this.change([file], () => { const v = Math.max(0, +ev.target.value || 0); if (v) s.outline = v; else delete s.outline; }, { reload: false }) })),
+      el('div', { class: 'le-row' }, num('x', s.x || 0, (v) => { s.x = isPixels(s) ? Math.round(v) : v; this.rebake(); }), num('y', s.y || 0, (v) => { s.y = isPixels(s) ? Math.round(v) : v; this.rebake(); })),
+      el('div', { class: 'le-row' },
+        el('label', {}, el('input', { type: 'checkbox', checked: !s.hidden, onchange: (ev) => this.setShapeFlag([k], 'hidden', !ev.target.checked) }), ' baked'),
+        el('label', {}, el('input', { type: 'checkbox', checked: !!s.locked, onchange: (ev) => this.setShapeFlag([k], 'locked', ev.target.checked) }), ' locked'),
+        s.group ? el('small', {}, ` in "${s.group}"`) : ''),
+      isPixels(s) || s.locked ? '' : this.zonePointsPanel(s),
+      el('div', { class: 'le-row' },
+        el('button', { onclick: () => this.reorderShapes(1), title: 'Ctrl+]' }, '↑ Up'), el('button', { onclick: () => this.reorderShapes(-1), title: 'Ctrl+[' }, '↓ Down'),
+        isPixels(s) ? '' : el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
+        el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
+  }
+
+  collisionJSON(list) {
+    const clean = list.map((s) => {
+      const o = {};
+      for (const [k, v] of Object.entries(s)) if (!((k === 'x' || k === 'y') && !v)) o[k] = v;
+      return o;
+    });
+    return '[\n' + clean.map((s) => '  ' + oneLine(s)).join(',\n') + '\n]\n';
+  }
+
   // ------------------------------------------------------------------ vision zones
   inZone(z, x, y) {
     const [a, b, c, d, tx, ty] = zoneMatrix(z);
     const det = a * d - b * c;
     if (!det) return false;
     const lx = (d * (x - tx) - c * (y - ty)) / det, ly = (-b * (x - tx) + a * (y - ty)) / det;
-    try { return this.hitCtx.isPointInPath(zonePath2D(z), lx, ly); } catch { return false; }
+    try { return this.hitCtx.isPointInPath(zonePath2D(z), lx, ly, 'evenodd'); } catch { return false; }
   }
 
   addZone(pts, at) {
@@ -936,28 +1283,165 @@ class Editor {
     this.addZone(pts, [x, y]);
   }
 
-  // a zone's corner under the mouse, for dragging
-  vertexAt(sx, sy) {
-    if (!this.sel || this.sel.layer !== 'vision' || !this.editable('vision')) return null;
-    const z = this.list('vision')[this.sel.k];
-    if (!z || !z.points) return null;
-    const M = zoneMatrix(z), v = this.view;
-    for (let i = z.points.length - 1; i >= 0; i--) {
-      const [x, y] = apply(M, z.points[i]);
-      if (Math.hypot(x * v.z + v.ox - sx, y * v.z + v.oy - sy) < 7) return { k: this.sel.k, i };
+  // ------------------------------------------------------------------ zone points and curves
+  // A zone's outline is edited point by point with Select: the zone being edited is the primary
+  // selection when it's a vision zone on an editable layer. this.pts = {k, list: [{ci, i}]} holds
+  // its selected points (contour, node); their handles are shown and can be dragged.
+  editZone() {
+    const s = this.sel;
+    if (!s || !(s.layer === 'vision' || s.layer === 'collision') || !this.editable(s.layer) || this.tool !== 'select') return null;
+    const z = this.list(s.layer)[s.k];
+    if (!z || (s.layer === 'collision' && (isPixels(z) || z.locked || typeof z.d !== 'string'))) return null;
+    return { layer: s.layer, k: s.k, z, file: s.layer + '.json' };
+  }
+  selPoints() { const e = this.editZone(); return e && this.pts && this.pts.k === e.k ? this.pts.list : []; }
+  isPointSel(ci, i) { return this.selPoints().some((p) => p.ci === ci && p.i === i); }
+
+  zoneContours(z) { return z.points ? fromPoints(z.points) : parsePath(z.d || ''); }
+  // write an outline back: a zone made of points stays points while it's a plain polygon;
+  // anything with curves (or several outlines) is a path, "d"
+  setZoneContours(z, cs) {
+    if (z.points && isPolygon(cs)) { z.points = cs[0].nodes.map(([x, y]) => [round2(x), round2(y)]); return; }
+    delete z.points;
+    z.d = pathString(cs);
+    if (z.mode) this.rebake(); // a collision shape
+  }
+  // world -> the zone's own coordinates
+  zoneLocal(z, wx, wy) {
+    const [a, b, c, d, tx, ty] = zoneMatrix(z), D = a * d - b * c || 1;
+    return [(d * (wx - tx) - c * (wy - ty)) / D, (-b * (wx - tx) + a * (wy - ty)) / D];
+  }
+
+  // the handles shown: those of the selected points
+  visibleHandles(cs) {
+    const out = [], seen = new Set();
+    for (const { ci, i } of this.selPoints()) {
+      const k = cs[ci];
+      if (!k || !k.nodes[i]) continue;
+      for (const h of nodeHandles(k, i)) {
+        const key = `${ci}:${h.si}:${h.h}`;
+        if (!seen.has(key)) { seen.add(key); out.push({ ci, ...h }); }
+      }
     }
+    return out;
+  }
+
+  // what's under the mouse on the zone being edited: a handle, a point or an edge
+  zonePartAt(sx, sy) {
+    const e = this.editZone();
+    if (!e) return null;
+    const cs = this.zoneContours(e.z), M = zoneMatrix(e.z), v = this.view;
+    const S = (p) => { const [x, y] = apply(M, p); return [x * v.z + v.ox, y * v.z + v.oy]; };
+    for (const h of this.visibleHandles(cs)) {
+      const [x, y] = S(cs[h.ci].segs[h.si].c[h.h]);
+      if (Math.hypot(x - sx, y - sy) < 6) return { kind: 'handle', ...e, cs, ...h };
+    }
+    for (let ci = cs.length - 1; ci >= 0; ci--) {
+      for (let i = cs[ci].nodes.length - 1; i >= 0; i--) {
+        const [x, y] = S(cs[ci].nodes[i]);
+        if (Math.hypot(x - sx, y - sy) < 7) return { kind: 'point', ...e, cs, ci, i };
+      }
+    }
+    const n = nearestSeg(cs, sx, sy, S);
+    if (n && n.dist < 5) return { kind: 'edge', ...e, cs, ...n };
     return null;
   }
 
-  zoneToPolygon(k) {
-    const z = this.list('vision')[k];
-    this.change(['vision.json'], () => {
-      z.points = flattenPath(z.d);
-      delete z.d;
-      const { points, ...rest } = z;
-      for (const key of Object.keys(z)) delete z[key];
-      Object.assign(z, rest, { points });
-    });
+  // true when it handled the click
+  zoneMouseDown(p, e, x, y) {
+    const { k, z, cs, layer, file } = p;
+    const before = this.snapshot();
+    if (p.kind === 'handle') {
+      this.drag = { kind: 'handle', layer, file, k, ci: p.ci, si: p.si, h: p.h, opp: e.altKey ? null : oppositeHandle(cs[p.ci], p.si, p.h), before, moved: false };
+      return true;
+    }
+    if (p.kind === 'edge') {
+      if (e.detail < 2) return false; // one click on an edge is a click on the zone
+      const i = insertNode(cs[p.ci], p.si, p.t); // double-click adds a point there
+      this.change([file], () => this.setZoneContours(z, cs), { reload: layer === 'vision' });
+      this.pts = { k, list: [{ ci: p.ci, i }] };
+      this.refreshPanel();
+      return true;
+    }
+    const list = this.selPoints().slice(), at = list.findIndex((q) => q.ci === p.ci && q.i === p.i);
+    if (e.altKey) { // Alt+click: corner <-> smooth
+      toggleSmooth(cs[p.ci], p.i);
+      if (at < 0) this.pts = { k, list: [{ ci: p.ci, i: p.i }] };
+      this.change([file], () => this.setZoneContours(z, cs), { reload: layer === 'vision' });
+      return true;
+    }
+    let toggleOff = null;
+    if (at < 0) { if (e.shiftKey) list.push({ ci: p.ci, i: p.i }); else list.splice(0, list.length, { ci: p.ci, i: p.i }); }
+    else if (e.shiftKey) toggleOff = { ci: p.ci, i: p.i }; // Shift+click on a selected one takes it out, unless it gets dragged
+    this.pts = { k, list };
+    this.drag = { kind: 'points', layer, file, k, ci: p.ci, i: p.i, from: clone(cs), x, y, toggleOff, before, moved: false };
+    this.refreshPanel();
+    return true;
+  }
+
+  // arrow keys on selected points; presses in a row make one undo step
+  nudgePoints(dx, dy) {
+    const e = this.editZone(), list = this.selPoints();
+    const cs = this.zoneContours(e.z), from = clone(cs);
+    const [lx, ly] = this.zoneLocal(e.z, (e.z.x || 0) + dx, (e.z.y || 0) + dy);
+    const key = `pts:${this.index}:${e.k}:${JSON.stringify(list)}`, last = this.undoStack[this.undoStack.length - 1];
+    const join = last && last.nudge === key && Date.now() - last.at < 1500 && !this.redoStack.length;
+    const before = join ? null : this.snapshot();
+    moveNodes(cs, from, list, round2(lx), round2(ly));
+    this.setZoneContours(e.z, cs);
+    if (join) { last.after = this.snapshot(); last.at = Date.now(); }
+    else this.pushUndo({ type: 'data', level: this.index, before, after: this.snapshot(), files: [e.file], nudge: key, at: Date.now() });
+    this.markDirty(e.file);
+    this.needsReload = true;
+  }
+
+  // Delete on selected points: the outline closes up around them (curves either side join into
+  // one); an outline left with fewer than 3 points goes, and the zone goes with its last outline
+  deletePoints() {
+    const e = this.editZone(), cs = this.zoneContours(e.z), by = new Map();
+    for (const { ci, i } of this.selPoints()) { if (!by.has(ci)) by.set(ci, []); by.get(ci).push(i); }
+    const keep = cs.filter((k, ci) => !by.has(ci) || removeNodes(k, by.get(ci)));
+    if (!keep.length) { this.deleteSel(); return; }
+    this.pts = null;
+    this.change([e.file], () => this.setZoneContours(e.z, keep), { reload: e.layer === 'vision' });
+  }
+
+  // the panel's Corner / Smooth buttons, on every selected point
+  setPointsSmooth(on) {
+    const e = this.editZone(), cs = this.zoneContours(e.z);
+    for (const { ci, i } of this.selPoints()) if (cs[ci] && cs[ci].nodes[i]) toggleSmooth(cs[ci], i, on);
+    this.change([e.file], () => this.setZoneContours(e.z, cs), { reload: e.layer === 'vision' });
+  }
+
+  drawZonePoints(ctx, px) {
+    const e = this.editZone();
+    if (!e) return;
+    const cs = this.zoneContours(e.z), M = zoneMatrix(e.z), W = (p) => apply(M, p);
+    ctx.lineWidth = px;
+    for (const h of this.visibleHandles(cs)) {
+      const k = cs[h.ci], s = k.segs[h.si], [p0, p1] = segEnds(k, h.si), q = W(s.c[h.h]);
+      ctx.strokeStyle = 'rgba(255,222,59,0.9)';
+      for (const a of s.c.length === 1 ? [p0, p1] : [h.h === 0 ? p0 : p1]) {
+        const A = W(a);
+        ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(q[0], q[1]); ctx.stroke();
+      }
+      ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(q[0], q[1], 4.5 * px, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = '#ffde3b'; ctx.beginPath(); ctx.arc(q[0], q[1], 3 * px, 0, 2 * Math.PI); ctx.fill();
+    }
+    // points: filled white when selected, hollow otherwise; smooth points are round
+    cs.forEach((k, ci) => k.nodes.forEach((p, i) => {
+      const [x, y] = W(p), on = this.isPointSel(ci, i), r = (on ? 4 : 3.5) * px;
+      const shape = (rr) => { ctx.beginPath(); if (isSmooth(k, i)) ctx.arc(x, y, rr, 0, 2 * Math.PI); else ctx.rect(x - rr, y - rr, 2 * rr, 2 * rr); };
+      ctx.fillStyle = '#000'; shape(r + px); ctx.fill();
+      ctx.fillStyle = on ? '#fff' : '#2ee6ff'; shape(r); ctx.fill();
+      if (!on) { ctx.fillStyle = '#000'; shape(r - 1.5 * px); ctx.fill(); }
+    }));
+    const d = this.drag;
+    if (d && d.kind === 'marquee') {
+      ctx.setLineDash([3 * px, 3 * px]); ctx.strokeStyle = '#fff'; ctx.lineWidth = px;
+      ctx.strokeRect(Math.min(d.x0, d.x1), Math.min(d.y0, d.y1), Math.abs(d.x1 - d.x0), Math.abs(d.y1 - d.y0));
+      ctx.setLineDash([]);
+    }
   }
 
   // ------------------------------------------------------------------ triggers
@@ -976,14 +1460,21 @@ class Editor {
   fileContent(i, file) {
     const L = this.levels[i];
     if (file === 'collision.png') return this.maps[i].toBlob();
+    if (file === 'collision.json') return this.collisionJSON(L.collision || []);
+    if (/^collision-.+\.png$/.test(file)) return this.stacks[i].toBlob(file);
     if (file === 'level.json') return pretty(L.settings) + '\n';
+    if (file === 'briefing.json') return briefingJSON(L.briefing);
     if (file === 'decor.json') return decorJSON(L.decor || []);
     return pretty(L[file.replace('.json', '')] || []) + '\n';
   }
 
   async save() {
     const jobs = [];
-    for (const [i, files] of Object.entries(this.dirty)) for (const f of files) jobs.push([+i, f]);
+    for (const [i, files] of Object.entries(this.dirty)) for (const f of files) {
+      // a pixel layer no longer in the stack (its add was undone, or it was deleted) isn't written
+      if (/^collision-.+\.png$/.test(f) && !(this.levels[i].collision || []).some((s) => s.pixels === f)) continue;
+      jobs.push([+i, f]);
+    }
     if (!jobs.length) { this.status('Nothing to save.'); return; }
     await this.checkServer();
     if (this.writable) {
@@ -1141,6 +1632,20 @@ class Editor {
       });
       ctx.setLineDash([]);
     }
+    // collision shapes that can be clicked: thin dashed outlines while selecting
+    if (this.tool === 'select' && this.editable('collision') && this.shapes) {
+      ctx.setLineDash([2 * px, 3 * px]);
+      ctx.strokeStyle = 'rgba(120,200,255,0.55)';
+      for (const sh of this.list('collision')) {
+        if (sh.hidden || sh.locked || isPixels(sh)) continue;
+        ctx.save();
+        ctx.transform(...zoneMatrix(sh));
+        ctx.lineWidth = px;
+        try { ctx.stroke(this.shapes.path(sh.d)); } catch { /* bad path */ }
+        ctx.restore();
+      }
+      ctx.setLineDash([]);
+    }
     // things the game doesn't show (trigger pads, alpha-0 areas, hidden clips): outlined and named
     {
       const labels = [];
@@ -1161,6 +1666,23 @@ class Editor {
       ctx.textBaseline = 'bottom';
       ctx.fillStyle = 'rgba(255,200,80,0.95)';
       for (const [x, y, t] of labels) ctx.fillText(t, x, y - 2 * px);
+    }
+    // enemies with their own settings (cyan square) or their own script (red square), while the layer is unlocked
+    if (this.editable('enemies')) {
+      const r = 3 * px;
+      this.list('enemies').forEach((e, k) => {
+        const hasProps = e.props && Object.keys(e.props).length, hasScript = e.script !== undefined;
+        if (!hasProps && !hasScript) return;
+        const [, y0, x1] = this.boundsOf('enemies', k);
+        let x = x1;
+        const badge = (fill) => {
+          ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(x - r - px, y0 - r - px, 2 * r + 2 * px, 2 * r + 2 * px);
+          ctx.fillStyle = fill; ctx.fillRect(x - r, y0 - r, 2 * r, 2 * r);
+          x -= 2 * r + 3 * px;
+        };
+        if (hasScript) badge('rgba(255,70,70,0.95)');
+        if (hasProps) badge('rgba(110,230,255,0.95)');
+      });
     }
     // triggers: who sends what (labels), lines to the doors they open (green) or close (red)
     if (this.visible.triggers) {
@@ -1235,12 +1757,25 @@ class Editor {
           ctx.transform(...Z);
           try {
             const path = zonePath2D(z);
-            ctx.fillStyle = 'rgba(46,230,255,0.12)'; ctx.fill(path);
+            ctx.fillStyle = 'rgba(46,230,255,0.12)'; ctx.fill(path, 'evenodd');
             ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4 * sw; ctx.stroke(path);
             ctx.strokeStyle = SEL; ctx.lineWidth = 2 * sw; ctx.stroke(path);
           } catch { /* bad path */ }
           ctx.restore();
-          if (z.points) handles(z.points.map((p) => apply(Z, p)), main);
+          if (!main || !this.editZone()) handles((z.points || []).map((p) => apply(Z, p)), main);
+          continue;
+        }
+        const sh = it.layer === 'collision' ? this.list('collision')[it.k] : null;
+        if (sh && !isPixels(sh) && this.shapes) { // a vector shape: its own outline
+          const Z = zoneMatrix(sh), sw = px / Math.max(1e-6, Math.sqrt(Math.abs(det(Z))));
+          ctx.save();
+          ctx.transform(...Z);
+          const path = this.shapes.path(sh.d);
+          ctx.fillStyle = 'rgba(46,230,255,0.18)';
+          if (!sh.outline) ctx.fill(path, 'evenodd');
+          ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4 * sw; ctx.stroke(path);
+          ctx.strokeStyle = SEL; ctx.lineWidth = 2 * sw; ctx.stroke(path);
+          ctx.restore();
           continue;
         }
         const [x0, y0, x1, y1] = this.boundsOf(it.layer, it.k);
@@ -1250,6 +1785,7 @@ class Editor {
         handles([[x0, y0], [x1, y0], [x0, y1], [x1, y1]], main);
       }
     }
+    this.drawZonePoints(ctx, px);
     // tool previews
     const m = this.mouse;
     const fillCol = (c, a) => `rgba(${COLOURS[c].join(',')},${a})`;
@@ -1408,6 +1944,7 @@ class Editor {
       layersEl.append(row);
     });
     p.append(el('h4', {}, 'Layers ', el('small', {}, 'eye: show · lock: no editing')), layersEl);
+    if (this.visible.collision) p.append(this.shapesPanel());
     // palette
     if (this.tool === 'place') {
       const layer = this.placeLayer;
@@ -1426,13 +1963,14 @@ class Editor {
     // properties
     const nSel = this.selItems().length;
     if (nSel > 1) p.append(this.groupPanel());
-    else if (nSel) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.sel.layer === 'decor' ? this.decorPanel() : this.propsPanel());
+    else if (nSel) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.sel.layer === 'decor' ? this.decorPanel() : this.sel.layer === 'collision' ? this.shapePanel() : this.propsPanel());
     else if (this.tool === 'place' && this.placeLayer === 'decor') p.append(el('div', { class: 'le-tip' }, 'Decor (decor.json) is what the art bake paints into background.png: floor paint, wall greebles, vents, rails, lights. The game never reads it. Select (V) moves one, Place (P) adds one, R turns it, Delete removes it; then Bake art below to see it for real.'));
-    else if (this.toolLayers().includes('vision')) p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones and their corners, Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
+    else if (this.toolLayers().includes('vision')) p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones, and their points and curve handles once one is selected; Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
     // stats + settings
     p.append(this.artPanel());
     p.append(this.triggerPanel());
     p.append(this.statsPanel());
+    p.append(this.briefingPanel());
     p.append(el('details', {}, el('summary', {}, 'Level settings (level.json)'),
       el('textarea', { rows: 4, spellcheck: false, onchange: (e) => {
         try {
@@ -1444,6 +1982,60 @@ class Editor {
     this.saveBtn = el('button', { class: 'le-save', title: this.writable ? 'Write the changed files into levels/ (Ctrl+S)' : 'Download the changed files (Ctrl+S). Run npm run edit to save into levels/ directly.', onclick: () => this.save() });
     p.append(el('div', { class: 'le-row' }, this.saveBtn, el('button', { onclick: () => this.undo(), title: 'Ctrl+Z' }, 'Undo'), el('button', { onclick: () => this.undo(true), title: 'Ctrl+Shift+Z' }, 'Redo')));
     this.refreshSave();
+  }
+
+  // the briefing screen (briefing.json): title, text, captions and the pictures beside them.
+  // Edits don't restart the level; Show briefing rebuilds and opens the briefing screen.
+  briefingPanel() {
+    const L = this.L;
+    const b = (L.briefing ||= {});
+    const edit = (fn) => this.change(['briefing.json'], () => { fn(L.briefing ||= {}); }, { reload: false });
+    const text = (value, set, attrs = {}) => el('input', { value: value || '', spellcheck: false, ...attrs, onchange: (ev) => edit((o) => set(o, ev.target.value)) });
+    const num = (label, value, set) => el('label', {}, label + ' ', el('input', { type: 'number', step: 'any', value: value ?? 0, style: 'width: 58px', onchange: (ev) => { const v = +ev.target.value; if (isFinite(v)) edit((o) => set(o, v)); } }));
+    const caps = b.captions || [];
+    const capRows = caps.map((c, k) => el('div', { class: 'le-brief-cap' },
+      el('div', { class: 'le-row' },
+        el('select', { title: 'name: cyan heading; note: small white text', onchange: (ev) => edit((o) => { o.captions[k].style = ev.target.value; }) },
+          ...['name', 'note'].map((s) => el('option', { value: s, selected: (c.style || 'note') === s }, s))),
+        num('x', c.x, (o, v) => { o.captions[k].x = v; }), num('y', c.y, (o, v) => { o.captions[k].y = v; }),
+        el('button', { title: 'remove this caption', onclick: () => edit((o) => { o.captions.splice(k, 1); }) }, '×')),
+      el('textarea', { rows: Math.max(1, String(c.text || '').split('\n').length), spellcheck: false, title: 'centred on x; y is the top of the text. Enter starts a new line.', onchange: (ev) => edit((o) => { o.captions[k].text = ev.target.value; }) }, c.text || '')));
+    const graphics = el('textarea', { rows: Math.min(10, 2 + (b.graphics || []).length), spellcheck: false, class: 'le-script', onchange: (ev) => {
+      try {
+        const v = ev.target.value.trim() ? JSON.parse(ev.target.value) : [];
+        if (!Array.isArray(v) || v.some((g) => !g || typeof g.symbol !== 'string')) throw new Error('expected a list of {"symbol", "x", "y", ...}');
+        edit((o) => { if (v.length) o.graphics = v; else delete o.graphics; });
+      } catch (err) { this.status('Briefing graphics: ' + err.message, true); }
+    } }, '[\n' + (b.graphics || []).map((g) => '  ' + JSON.stringify(g)).join(',\n') + '\n]');
+    return el('details', { class: 'le-set-group', open: this.openGroups.has('$briefing') || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add('$briefing'); else this.openGroups.delete('$briefing'); } },
+      el('summary', {}, 'Briefing (briefing.json)'),
+      el('div', { class: 'le-row' }, el('button', { title: 'rebuild and show this level\'s briefing screen (Play mission starts the level)', onclick: () => this.previewBriefing() }, 'Show briefing ▸')),
+      el('label', { class: 'le-set' }, el('span', { class: 'le-set-name' }, 'title'), text(b.title, (o, v) => { o.title = v; })),
+      el('label', { class: 'le-set' }, el('span', { class: 'le-set-name' }, 'label'), text(b.label, (o, v) => { if (v) o.label = v; else delete o.label; }, { placeholder: 'LVL.' + String(L.index).padStart(2, '0') })),
+      el('div', { class: 'le-tip' }, 'Mission text (wraps by itself; Enter starts a new line):'),
+      el('textarea', { rows: 7, spellcheck: true, class: 'le-script', style: 'white-space: pre-wrap', onchange: (ev) => edit((o) => { o.body = ev.target.value; }) }, b.body || ''),
+      el('div', { class: 'le-tip' }, 'Captions in the Intel panel (it spans about x 560 to 715):'),
+      ...capRows,
+      el('div', { class: 'le-row' }, el('button', { onclick: () => edit((o) => { (o.captions ||= []).push({ style: 'name', text: 'New target', x: 637, y: o.captions.length ? Math.max(...o.captions.map((c) => +c.y || 0)) + 45 : 210 }); }) }, '+ Caption')),
+      el('div', { class: 'le-tip' }, 'Pictures and other graphics: library symbols placed on the screen, like a level\'s placements (symbol, x, y, scale, ...):'),
+      graphics,
+      el('label', { class: 'le-set' }, el('span', { class: 'le-set-name' }, 'backdrop'),
+        el('select', { onchange: (ev) => edit((o) => { if (ev.target.value === 'screen_mc/shape 2') delete o.backdrop; else o.backdrop = ev.target.value; }) },
+          ...[['screen_mc/shape 2', 'standard'], ['screen_mc/shape 1', 'training (shape 1)']].map(([v, t]) => el('option', { value: v, selected: (b.backdrop || 'screen_mc/shape 2') === v }, t)))));
+  }
+
+  previewBriefing() {
+    const images = {};
+    for (const [i, m] of Object.entries(this.maps)) images[i] = m.canvas;
+    try {
+      this.applier.apply(this.levels, images);
+      this.needsReload = false;
+      showBriefing(this.rt, this.index);
+      this.close();
+    } catch (e) {
+      console.error(e);
+      this.status('Could not rebuild the briefing: ' + e.message, true);
+    }
   }
 
   propsPanel() {
@@ -1462,18 +2054,20 @@ class Editor {
       el('div', { class: 'le-row' }, el('label', {}, 'name ', el('input', { value: e.name || '', onchange: (ev) => this.change([file], () => { if (ev.target.value) e.name = ev.target.value; else delete e.name; }) }))));
     if (layer === 'pathNodes') box.append(this.nodeRows(k));
     box.append(...this.triggerRows(layer, e));
-    if (e.script !== undefined) {
-      box.append(el('div', { class: 'le-tip' }, 'This instance runs code when it loads, so it keeps its script (edit it in ' + file + '):'),
-        el('pre', {}, [].concat(e.script).join('\n')));
-    } else {
-      box.append(el('div', { class: 'le-tip' }, 'Variables set when it loads (JSON):'),
+    {
+      const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
+      if (spec) box.append(...this.settingsRows(layer, e, spec));
+      if (e.script !== undefined) box.append(this.scriptRows(layer, e));
+      else if (layer !== 'pathNodes') box.append(el('div', { class: 'le-row' }, el('button', { title: 'give this instance its own ActionScript load code, for things settings can\'t express (it runs after the settings)', onclick: () => { this.openGroups.add('$script'); this.change([layer + '.json'], () => { e.script = ['onClipEvent (load) {', '    ', '}']; }, { reload: false }); } }, '+ Script')));
+      const raw = (...kids) => (spec ? el('details', { class: 'le-set-group', open: this.openGroups.has('$json') || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add('$json'); else this.openGroups.delete('$json'); } }, el('summary', {}, 'Raw JSON'), ...kids) : el('div', {}, ...kids));
+      box.append(raw(el('div', { class: 'le-tip' }, spec ? 'The settings it has, as JSON (the same as the fields above; anything goes here):' : 'Variables set when it loads (JSON):'),
         el('textarea', { rows: Math.min(10, 2 + JSON.stringify(e.props || {}, null, 1).split('\n').length), spellcheck: false, onchange: (ev) => {
           try {
             const v = ev.target.value.trim() ? JSON.parse(ev.target.value) : {};
             if (typeof v !== 'object' || Array.isArray(v)) throw new Error('expected an object');
             this.change([file], () => { if (Object.keys(v).length) e.props = v; else delete e.props; });
           } catch (err) { this.status('Variables: ' + err.message, true); }
-        } }, JSON.stringify(e.props || {}, null, 1)));
+        } }, JSON.stringify(e.props || {}, null, 1))));
     }
     box.append(el('div', { class: 'le-row' },
       el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
@@ -1558,7 +2152,8 @@ class Editor {
         ' Seed ', el('input', { type: 'number', step: 1, value: art.seed, style: 'width: 6em', title: 'picks the decor layout and the floor grain', onchange: (ev) => { const v = Math.round(+ev.target.value); if (isFinite(v)) setArt({ seed: v }); } }),
         el('button', { title: 'a new random seed (then Re-place decor to use it)', onclick: () => setArt({ seed: 1 + Math.floor(Math.random() * 9999) }) }, '🎲')),
       el('div', { class: 'le-row' },
-        btn('Bake art', 'bake', 'Save, then redraw background.png from the collision map and decor.json as they are'),
+        btn('Bake art', 'bake', 'Save, then redraw background.png from collision.png and decor.json as they are (collision shapes aren\'t re-baked)'),
+        this.shapesAhead ? el('button', { disabled: off, class: 'le-hot', title: 'the collision shapes changed since collision.png was baked: bake them into it first, then the art', onclick: () => { if (this.bakeCollision()) this.runArt('bake'); } }, 'Bake collision + art') : '',
         this.confirmPlace
           ? el('button', { disabled: off, class: 'le-danger', title: 'decor.json is replaced; Undo cannot bring the old layout back (git can)', onclick: () => { this.confirmPlace = false; this.runArt('all'); } }, all ? `Replace all ${n} decor and bake?` : `Replace ${this.list('decor').filter((e) => only.has(decorType(e))).length} ${[...only].join(', ')} and bake?`)
           : el('button', { disabled: off || !only.size, title: 'Save, then lay out new decor of the ticked types from the seed (replacing those in decor.json, hand edits too; the other types stay) and bake', onclick: () => { this.confirmPlace = true; this.refreshPanel(); } }, all ? 'Re-place decor + bake' : `Re-place ${only.size} type${only.size > 1 ? 's' : ''} + bake`),
@@ -1724,7 +2319,6 @@ class Editor {
       const from = PLACE_LAYERS.flatMap((l) => this.list(l)).filter((o) => sentTriggers(o).some((n) => n === id + ':open' || n === id + ':close')).length;
       rows.push(el('div', { class: 'le-tip' }, `Opens on "${id}:open" and closes on "${id}:close"; ${from || 'nothing'} in this level sends ${from === 1 ? 'one' : 'them'}. Set a pickup, trigger pad, box or enemy to send one.`));
     }
-    if (e.script !== undefined) return rows;
     if (layer === 'powerups' && e.props && e.props.type === 'trigger') {
       rows.push(el('div', { class: 'le-row' }, 'Trigger pad sends ', input(e.props.item || '', (n) => { e.props.item = n[0] || ''; }, 'sent when the player walks over it')));
     }
@@ -1732,13 +2326,117 @@ class Editor {
     if (ev) {
       const [key, when] = ev;
       const cur = e.props && e.props[key];
-      if (cur === undefined || isTrigger(cur)) {
+      const scripted = e.script !== undefined && new RegExp('\\b' + key + '\\b').test([].concat(e.script).join('\n')); // its script sets it, after the props
+      if (!scripted && (cur === undefined || isTrigger(cur))) {
         rows.push(el('div', { class: 'le-row' }, `${when[0].toUpperCase() + when.slice(1)}, send `, input(cur ? triggerNames(cur).join(', ') : '', (n) => {
           if (n.length) { e.props ||= {}; e.props[key] = { $trigger: n.length === 1 ? n[0] : n }; } else if (e.props) { delete e.props[key]; if (!Object.keys(e.props).length) delete e.props; }
         }, 'trigger names, separated by commas; a door listens for "<id>:open" and "<id>:close"')));
       }
     }
     return rows;
+  }
+
+  // an instance's own ActionScript (load code that does more than set variables): runs after its
+  // settings, at the end of the same onClipEvent(load). The game runs the compiled script from the
+  // last build, so an edit here works once it's saved (npm run edit rebuilds) and the page reloads.
+  scriptRows(layer, e) {
+    const file = layer + '.json';
+    const text = [].concat(e.script).join('\n');
+    return el('details', { class: 'le-set-group', open: this.openGroups.has('$script') || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add('$script'); else this.openGroups.delete('$script'); } },
+      el('summary', {}, 'Script', el('small', {}, ' runs after the settings')),
+      el('div', { class: 'le-tip' }, 'ActionScript, e.g. onClipEvent (load) { ... }. Changes take effect after Save' + (this.writable ? ' (it rebuilds).' : ' and npm run build.') + ' Empty it to remove the script.'),
+      el('textarea', { class: 'le-script', rows: Math.min(18, text.split('\n').length + 1), spellcheck: false, onchange: (ev) => {
+        const v = ev.target.value.replace(/\r\n?/g, '\n');
+        this.change([file], () => { if (v.trim()) e.script = v.split('\n'); else delete e.script; });
+      } }, text));
+  }
+
+  // named fields for the settings this symbol's scripts read (assets/props.json, built by tools/props/spec.mjs):
+  // empty = the default (shown greyed), a value = set in this instance's props
+  settingsRows(layer, e, spec) {
+    const file = layer + '.json';
+    const props = e.props || {};
+    const settings = spec.settings.filter((s) => s.type !== 'trigger'); // triggers have their own rows above
+    const known = new Set(spec.settings.map((s) => s.name));
+    const set = (name, v) => this.change([file], () => {
+      if (v === undefined) { if (e.props) { delete e.props[name]; if (!Object.keys(e.props).length) delete e.props; } } else { e.props ||= {}; e.props[name] = v; }
+    });
+    const vals = effectiveSettings(spec.settings, props);
+    const fromLabel = (s) => (s.from === 'symbol' ? 'this symbol' : s.from + '.as');
+    const tipOf = (s) => [s.desc, s.forced !== undefined ? `Fixed by this symbol's script at ${s.forced}: setting it here has no effect.` : s.default !== undefined ? `Default: ${s.default} (${fromLabel(s)})` : `No default (${fromLabel(s)}).`].filter(Boolean).join('\n');
+    const shown = (v) => (v === undefined || v === null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v));
+    const placeholder = (s) => (s.forced !== undefined ? s.forced : s.default !== undefined ? (vals[s.name] !== undefined && shown(vals[s.name]) !== s.default ? `${s.default} = ${shown(vals[s.name])}` : s.default) : '');
+    const reset = (s) => (s.name in props ? el('button', { class: 'le-reset', title: 'back to the default', onclick: () => set(s.name, undefined) }, '↺') : null);
+    const pathGroups = () => {
+      const seen = new Map();
+      for (const n of this.list('pathNodes')) { const a = (n.color && n.color.add) || [0, 0, 0]; const v = (a[0] << 16) | (a[1] << 8) | a[2]; if (!seen.has(v)) seen.set(v, 0); seen.set(v, seen.get(v) + 1); }
+      return seen;
+    };
+    const field = (s) => {
+      const isSet = s.name in props, cur = props[s.name];
+      const attrs = { title: tipOf(s), disabled: s.forced !== undefined };
+      const label = el('span', { class: 'le-set-name' + (isSet ? ' on' : '') + (s.forced !== undefined ? ' forced' : ''), title: attrs.title }, s.name);
+      let input;
+      if (s.type === 'boolean') {
+        const v = isSet ? !!cur : !!vals[s.name];
+        input = el('input', { type: 'checkbox', ...attrs, checked: v, onchange: (ev) => {
+          const b = ev.target.checked;
+          set(s.name, vals.__defaults[s.name] === b ? undefined : b); // matching the default: leave it unset
+        } });
+        return el('label', { class: 'le-set le-set-bool', title: attrs.title }, input, label, reset(s));
+      }
+      if (s.type === 'path') {
+        const groups = pathGroups();
+        const hex = (v) => '#' + v.toString(16).padStart(6, '0');
+        input = el('select', { ...attrs, onchange: (ev) => set(s.name, ev.target.value === '' ? undefined : ev.target.value === 'auto' ? 'auto' : +ev.target.value) },
+          el('option', { value: '', selected: !isSet }, `default (${s.forced || s.default || 'auto'})`),
+          el('option', { value: 'auto', selected: cur === 'auto' }, 'auto: nearest node'),
+          ...[...groups].map(([v, n]) => el('option', { value: String(v), selected: isSet && cur === v, style: `color: ${hex(v)}` }, `■ ${hex(v)} (${n} node${n === 1 ? '' : 's'})`)),
+          ...(isSet && typeof cur === 'number' && !groups.has(cur) ? [el('option', { value: String(cur), selected: true }, `${hex(cur)} (no nodes)`)] : []));
+      } else if (s.choices) {
+        input = el('select', { ...attrs, onchange: (ev) => set(s.name, ev.target.value === '' ? undefined : s.type === 'number' ? +ev.target.value : ev.target.value) },
+          el('option', { value: '', selected: !isSet }, `default${s.default !== undefined ? ' (' + s.default + ')' : ''}`),
+          ...s.choices.map((c) => el('option', { value: String(c), selected: isSet && cur === c }, String(c))),
+          ...(isSet && !s.choices.includes(cur) ? [el('option', { value: shown(cur), selected: true }, shown(cur))] : []));
+      } else {
+        const parse = (raw) => {
+          if (raw.trim() === '') return undefined;
+          if (s.type === 'number') { const n = +raw; if (!isFinite(n)) throw new Error(s.name + ': not a number'); return n; }
+          if (s.type === 'json') return JSON.parse(raw);
+          return raw;
+        };
+        input = el('input', { type: s.type === 'number' ? 'number' : 'text', step: 'any', ...attrs, value: isSet ? shown(cur) : '', placeholder: placeholder(s), spellcheck: false,
+          onchange: (ev) => { try { set(s.name, parse(ev.target.value)); } catch (err) { this.status(err.message, true); } },
+          onkeydown: (ev) => { if (ev.key === 'Enter') ev.target.blur(); } });
+      }
+      return el('label', { class: 'le-set', title: attrs.title }, label, input, reset(s));
+    };
+    const out = [];
+    const unknown = Object.keys(props).filter((k) => !known.has(k));
+    if (unknown.length) out.push(el('div', { class: 'le-warn', title: 'Nothing in this symbol\'s scripts reads these, so they do nothing (a typo?). Edit them in the JSON below.' }, '⚠ Not a setting of this symbol: ' + unknown.join(', ')));
+    const groups = this.propsSpec.groups;
+    for (const g of Object.keys(groups)) {
+      const rows = settings.filter((s) => s.group === g);
+      if (!rows.length) continue;
+      const nSet = rows.filter((s) => s.name in props).length;
+      const d = el('details', { class: 'le-set-group', open: this.openGroups.has(g) || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add(g); else this.openGroups.delete(g); } },
+        el('summary', {}, groups[g], nSet ? el('small', {}, ` ${nSet} set`) : ''), ...rows.map(field));
+      out.push(d);
+    }
+    return out;
+  }
+
+  zonePointsPanel(z) {
+    const cs = this.zoneContours(z), n = cs.reduce((a, k) => a + k.nodes.length, 0), curves = curveCount(cs);
+    const picked = this.selPoints().length;
+    const what = `${n} points${curves ? `, ${curves} curved edge${curves > 1 ? 's' : ''}` : ''}${cs.length > 1 ? `, ${cs.length} outlines` : ''}`;
+    return el('div', {},
+      el('div', { class: 'le-tip' }, `${what}. Click a point to select it, Shift+click to add or remove, or drag a box from outside the zone. Drag points (Shift snaps), arrows nudge (Shift: 10), Delete removes them. Double-click an edge to add a point. Alt+click a point to switch it between corner and smooth; drag its yellow handles to bend the curve (Alt+drag breaks a smooth point).`),
+      picked ? el('div', { class: 'le-row' },
+        el('span', {}, `${picked} selected `),
+        el('button', { onclick: () => this.setPointsSmooth(false), title: 'sharp corners: the handles go onto the points (Alt+click)' }, 'Corner'),
+        el('button', { onclick: () => this.setPointsSmooth(true), title: 'smooth curves through the points (Alt+click)' }, 'Smooth'),
+        el('button', { onclick: () => this.deletePoints(), title: 'Delete' }, 'Delete points')) : null);
   }
 
   zonePanel() {
@@ -1755,9 +2453,7 @@ class Editor {
         num('scale x', t.sx, (v) => setTransform(z, t.rot, v, t.sy)),
         num('scale y', t.sy, (v) => setTransform(z, t.rot, t.sx, v))),
       el('div', { class: 'le-row' }, el('span', { class: 'le-swatch on', style: `--c: ${zoneColour(k)}`, title: 'each zone gets its own colour automatically, only for telling zones apart (the game never uses it)' }), ' Colour is automatic, one per zone'),
-      z.points
-        ? el('div', { class: 'le-tip' }, `${z.points.length} corners: drag them with Select (Shift snaps to the grid).`)
-        : el('div', { class: 'le-row' }, el('span', { class: 'le-tip' }, 'This zone has curves. '), el('button', { onclick: () => this.zoneToPolygon(k), title: 'turn the curves into straight segments so its corners can be dragged' }, 'Edit corners')),
+      this.zonePointsPanel(z),
       el('div', { class: 'le-row' },
         el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
         el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
@@ -1922,37 +2618,55 @@ function zonePath2D(z) {
   return p;
 }
 
-// M/L/Q/Z path -> polygon corners, curves cut into short straight pieces
-function flattenPath(d) {
-  const t = d.trim().split(/\s+/);
-  const pts = [];
-  let i = 0, cmd = 'M', last = [0, 0];
-  const n = () => +t[i++];
-  while (i < t.length) {
-    if (/^[A-Za-z]$/.test(t[i])) { cmd = t[i++].toUpperCase(); if (cmd === 'Z') continue; }
-    if (cmd === 'M' || cmd === 'L') { last = [n(), n()]; pts.push(last); }
-    else if (cmd === 'Q') {
-      const c = [n(), n()], e = [n(), n()];
-      for (let s = 1; s <= 6; s++) {
-        const u = s / 6, a = (1 - u) * (1 - u), b = 2 * u * (1 - u), cc = u * u;
-        pts.push([a * last[0] + b * c[0] + cc * e[0], a * last[1] + b * c[1] + cc * e[1]]);
-      }
-      last = e;
-    } else i++;
-  }
-  // drop the repeated closing corner and points on top of each other
-  const out = [];
-  for (const p of pts.map(([x, y]) => [round2(x), round2(y)])) {
-    const q = out[out.length - 1];
-    if (!q || q[0] !== p[0] || q[1] !== p[1]) out.push(p);
-  }
-  if (out.length > 1 && out[0][0] === out[out.length - 1][0] && out[0][1] === out[out.length - 1][1]) out.pop();
+// byte offsets of the pixels the game reads differently in two ImageDatas of the same size
+function classDiff(a, b) {
+  const p = a.data, d = b.data, out = [];
+  for (let k = 0; k < p.length; k += 4) if (gameClass(p[k], p[k + 1], p[k + 2]) !== gameClass(d[k], d[k + 1], d[k + 2])) out.push(k);
   return out;
+}
+
+// the undo record for a pixel layer edit, cropped to box [x, y, w, h], from a full-size grab
+function cropUndo(st, file, full, [x, y, w, h]) {
+  const before = { file, x, y, w, h, pixels: new ImageData(w, h) };
+  for (let j = 0; j < h; j++) before.pixels.data.set(full.pixels.data.subarray(((y + j) * st.w + x) * 4, ((y + j) * st.w + x + w) * 4), j * w * 4);
+  return { before, after: st.grab(file, x, y, w, h) };
+}
+
+// one-line JSON with a space after commas and colons
+function oneLine(v) {
+  if (v === null || typeof v !== 'object') return JSON.stringify(v);
+  if (Array.isArray(v)) return '[' + v.map(oneLine).join(', ') + ']';
+  return '{' + Object.entries(v).map(([k, x]) => JSON.stringify(k) + ': ' + oneLine(x)).join(', ') + '}';
 }
 
 function nodeColour(e) {
   const a = e.color && e.color.add;
   return a ? `rgb(${a[0]},${a[1]},${a[2]})` : '#0ff';
+}
+
+// the value every setting ends up with: props, else what the symbol forces, else its default
+// (expressions such as "hunter || patroller" are worked out when they only use other settings)
+function effectiveSettings(settings, props) {
+  const lit = (x) => { try { return x === undefined ? undefined : JSON.parse(x.replace(/^\./, '0.').replace(/^-\./, '-0.')); } catch { return undefined; } };
+  const vals = {}, defaults = {};
+  const exprOf = (s) => (s.forced !== undefined ? s.forced : s.default);
+  for (let pass = 0; pass < 3; pass++) {
+    for (const s of settings) {
+      const x = exprOf(s);
+      let d = s.value !== undefined && s.forced === undefined ? s.value : lit(x);
+      if (d === undefined && x && /^[\w\s|&!?:().*+\-/<>=]+$/.test(x)) {
+        const ids = [...new Set(x.match(/[A-Za-z_]\w*/g) || [])];
+        if (ids.every((id) => id in vals && (typeof vals[id] === 'number' || typeof vals[id] === 'boolean'))) {
+          try { d = Function(...ids, 'return (' + x + ');')(...ids.map((id) => vals[id])); } catch { d = undefined; }
+        }
+      }
+      if (d !== undefined) defaults[s.name] = d;
+      const v = s.forced === undefined && s.name in props ? props[s.name] : d;
+      if (v !== undefined) vals[s.name] = v;
+    }
+  }
+  vals.__defaults = defaults;
+  return vals;
 }
 
 function el(tag, attrs = {}, ...kids) {
@@ -1978,12 +2692,38 @@ const CSS = `
 #level-editor input, #level-editor select, #level-editor textarea { background: #021; color: #cfe; border: 1px solid #276; border-radius: 3px; font: 11px ui-monospace, monospace; }
 #level-editor input[type=number] { width: 58px; }
 #level-editor textarea { width: 100%; box-sizing: border-box; }
+#level-editor .le-set-group { margin: 4px 0; border-top: 1px solid #244; padding-top: 2px; }
+#level-editor .le-set-group summary { cursor: pointer; color: #8ff; font-weight: 600; padding: 2px 0; }
+#level-editor .le-set-group summary small { color: #fc6; font-weight: normal; }
+#level-editor .le-set { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+#level-editor .le-set > input:not([type=checkbox]), #level-editor .le-set > select { flex: 1; min-width: 0; }
+#level-editor .le-set input::placeholder { color: #587; }
+#level-editor .le-set-name { width: 112px; flex: none; overflow: hidden; text-overflow: ellipsis; color: #9bb; }
+#level-editor .le-set-bool .le-set-name { width: auto; flex: 1; }
+#level-editor .le-set-name.on { color: #fc6; }
+#level-editor .le-set-name.forced { color: #666; text-decoration: line-through; }
+#level-editor .le-reset { padding: 0 4px; line-height: 1.2; }
+#level-editor .le-warn { color: #fa6; margin: 4px 0; }
+#level-editor .le-brief-cap { border-left: 2px solid #276; padding-left: 6px; margin: 4px 0; }
+#level-editor .le-brief-cap textarea { margin-top: 2px; }
+#level-editor textarea.le-script { font: 11px/1.35 ui-monospace, monospace; white-space: pre; tab-size: 4; }
 #level-editor pre { background: #021; padding: 4px; max-height: 160px; overflow: auto; font-size: 10px; margin: 2px 0; }
 #level-editor .le-row { margin: 4px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 #level-editor .le-tools button { width: calc(50% - 4px); text-align: left; }
 #level-editor .le-tip { color: #799; font-size: 11px; margin: 2px 0; }
 #level-editor .le-warn { color: #fc6; font-size: 11px; margin: 4px 0; }
 #level-editor .le-swatch { border-left: 14px solid var(--c); }
+#level-editor .le-shapes { margin: 6px 0; }
+#level-editor .le-shapes summary { cursor: pointer; font-weight: bold; color: #9dd; }
+#level-editor .le-shape-list { max-height: 220px; overflow-y: auto; border: 1px solid #234; border-radius: 3px; margin: 4px 0; }
+#level-editor .le-shape { display: flex; gap: 4px; align-items: center; padding: 1px 4px; cursor: default; }
+#level-editor .le-shape.in { padding-left: 20px; }
+#level-editor .le-shape.on { background: rgba(46,230,255,0.18); }
+#level-editor .le-shape.hidden .le-name { opacity: 0.5; }
+#level-editor .le-shape.group .le-name { font-style: italic; }
+#level-editor .le-shape .le-name { flex: 1; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#level-editor .le-mode { width: 14px; text-align: center; color: var(--c, #9ab); text-shadow: 0 0 1px #8aa; }
+#level-editor .le-hot { border-color: #fc6 !important; color: #fc6; }
 #level-editor .le-layer { display: flex; gap: 4px; align-items: center; padding: 1px 2px 1px 4px; border-radius: 3px; border-left: 3px solid transparent; }
 #level-editor .le-layer .le-name { flex: 1; }
 #level-editor .le-layer .le-pick { cursor: pointer; }

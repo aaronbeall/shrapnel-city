@@ -1,0 +1,339 @@
+{
+  "groups": {
+    "behaviour": "Behaviour",
+    "movement": "Movement",
+    "combat": "Weapon",
+    "vision": "Vision",
+    "health": "Health",
+    "death": "When it dies",
+    "spawn": "Spawning",
+    "pickup": "Pickup",
+    "message": "Message",
+    "door": "Door",
+    "other": "Other"
+  },
+  "settings": {
+    "chaser": {
+      "group": "behaviour",
+      "desc": "While attacking, drive toward the player until within chaseDistance. After losing sight, drive to where it last saw them."
+    },
+    "strafer": {
+      "group": "behaviour",
+      "desc": "While attacking and facing its target, slide side to side across the player's line of fire (strafeAccel, strafeRate)."
+    },
+    "wanderer": {
+      "group": "behaviour",
+      "desc": "When idle, cast wanderSamples random rays and drive toward the farthest wall hit. Needs no path nodes. With hunter: travel between random path nodes instead."
+    },
+    "patroller": {
+      "group": "behaviour",
+      "desc": "Walk a chain of path nodes from its path group: round in a loop if the last node links back to the first, otherwise back and forth. Turns hunter and wanderer off. Needs path nodes."
+    },
+    "hunter": {
+      "group": "behaviour",
+      "desc": "Plan routes over the path nodes (A*). When an alerter spots the player, every hunter paths to the player. Re-plans when it bumps a wall. Needs path nodes."
+    },
+    "alerter": {
+      "group": "behaviour",
+      "type": "boolean",
+      "desc": "The first time it sees the player, send playerDetected so every hunter on the level comes for them. Default: on for hunters and patrollers."
+    },
+    "suicidal": {
+      "group": "behaviour",
+      "desc": "Blow up near the player (suicideDistance) or after suicideTimeLimit frames of attacking, hitting a chased player for suicideDamage. Pair with chaser."
+    },
+    "pathID": {
+      "group": "behaviour",
+      "type": "path",
+      "desc": "Path group (node colour) used by hunter and patroller. \"auto\" = the group of the nearest path node it can see when it spawns."
+    },
+    "patrolDirection": {
+      "group": "behaviour",
+      "type": "number",
+      "choices": [
+        1,
+        -1
+      ],
+      "desc": "Patrol direction along the chain: 1 forward, -1 backward."
+    },
+    "chaseDistance": {
+      "group": "movement",
+      "desc": "How close a chaser gets to the player (px)."
+    },
+    "strafeAccel": {
+      "group": "movement",
+      "desc": "Strafe push strength."
+    },
+    "strafeRate": {
+      "group": "movement",
+      "desc": "Strafe speed (how fast it swings side to side)."
+    },
+    "wanderSamples": {
+      "group": "movement",
+      "type": "number",
+      "desc": "Random directions tried when wandering."
+    },
+    "moveMinDistance": {
+      "group": "movement",
+      "type": "number",
+      "desc": "How close it gets to a waypoint before it counts as reached (px)."
+    },
+    "suicideDistance": {
+      "group": "behaviour",
+      "type": "number",
+      "desc": "Distance to the player that sets off a suicidal enemy (px)."
+    },
+    "suicideTimeLimit": {
+      "group": "behaviour",
+      "type": "number",
+      "desc": "Frames of attacking before a suicidal enemy blows up (31 frames = 1 s)."
+    },
+    "suicideDamage": {
+      "group": "behaviour",
+      "desc": "Damage a suicidal enemy does to the player it was chasing."
+    },
+    "accel": {
+      "group": "movement",
+      "desc": "Thrust per frame."
+    },
+    "speedMax": {
+      "group": "movement",
+      "type": "number",
+      "desc": "Top speed (px per frame)."
+    },
+    "turnSpeed": {
+      "group": "movement",
+      "desc": "Turn speed of the body or turret (degrees per frame)."
+    },
+    "drag": {
+      "group": "movement",
+      "desc": "Speed kept each frame (0 to 1)."
+    },
+    "bounce": {
+      "group": "movement",
+      "desc": "Bounciness off walls (0 to 1)."
+    },
+    "fixed": {
+      "group": "movement",
+      "type": "boolean",
+      "desc": "Not knocked back or spun by hits, and keeps its rotation when it dies."
+    },
+    "speedMin": {
+      "group": "movement",
+      "desc": "Below this speed it counts as stopped."
+    },
+    "speed": {
+      "group": "other",
+      "type": "number",
+      "desc": "Push given to the player at the entrance."
+    },
+    "shot": {
+      "group": "combat",
+      "desc": "Projectile clip it fires (shot_mcE...)."
+    },
+    "shotSpread": {
+      "group": "combat",
+      "desc": "Random aim spread (degrees)."
+    },
+    "refireRate": {
+      "group": "combat",
+      "desc": "Frames between shots."
+    },
+    "burstCount": {
+      "group": "combat",
+      "desc": "Shots per burst (0 = no bursts)."
+    },
+    "burstReload": {
+      "group": "combat",
+      "desc": "Frames between bursts."
+    },
+    "visionRange": {
+      "group": "vision",
+      "type": "number",
+      "desc": "Max distance it can see the player (px). Empty = unlimited."
+    },
+    "autoVision": {
+      "group": "vision",
+      "desc": "Ignore vision zones and make its own zone from 90 rays when the level starts."
+    },
+    "health": {
+      "group": "health",
+      "desc": "Hit points."
+    },
+    "resistence": {
+      "group": "health",
+      "type": "number",
+      "desc": "Knockback and stun resistance (higher = pushed less)."
+    },
+    "radius": {
+      "group": "health",
+      "type": "number",
+      "desc": "Collision radius (px). Default: half its width."
+    },
+    "required": {
+      "group": "health",
+      "desc": "Must be destroyed to open the exit."
+    },
+    "deathRoll": {
+      "group": "death",
+      "desc": "Tumble across the floor before exploding."
+    },
+    "blastRange": {
+      "group": "death",
+      "type": "number",
+      "desc": "Explosion radius (px). 0 = no explosion."
+    },
+    "damage": {
+      "group": "death",
+      "type": "number",
+      "desc": "Explosion damage."
+    },
+    "shakeStrength": {
+      "group": "death",
+      "type": "number",
+      "desc": "Screen shake from its explosion."
+    },
+    "blastMark": {
+      "group": "death",
+      "desc": "Scorch mark clip left on the floor."
+    },
+    "debrisType": {
+      "group": "death",
+      "desc": "Debris colour: gray, yellow, ..."
+    },
+    "debrisCount": {
+      "group": "death",
+      "type": "number",
+      "desc": "Debris pieces."
+    },
+    "frag": {
+      "group": "death",
+      "desc": "Shrapnel clip thrown when it dies."
+    },
+    "fragCount": {
+      "group": "death",
+      "desc": "Shrapnel pieces."
+    },
+    "particleType": {
+      "group": "death",
+      "desc": "Particle clip for its death burst."
+    },
+    "powerupDrop": {
+      "group": "death",
+      "type": "json",
+      "desc": "Pickup dropped when it dies, e.g. {\"type\": \"primary\", \"item\": \"Plasma\", \"quantity\": 10, \"probability\": 0.5}."
+    },
+    "onDie": {
+      "group": "death",
+      "type": "trigger",
+      "for": [
+        "enemyObject",
+        "box"
+      ],
+      "desc": "Runs when it dies; {\"$trigger\": \"door2:open\"} sends triggers."
+    },
+    "spawn": {
+      "group": "spawn",
+      "desc": "Clip spawned when it dies."
+    },
+    "spawnCount": {
+      "group": "spawn",
+      "desc": "How many to spawn."
+    },
+    "spawnInit": {
+      "group": "spawn",
+      "type": "json",
+      "desc": "Settings given to each spawn."
+    },
+    "spawnTrigger": {
+      "group": "spawn",
+      "type": "string",
+      "desc": "Stay hidden and inactive until this trigger is sent, then warp in."
+    },
+    "type": {
+      "group": "pickup",
+      "type": "string",
+      "choices": [
+        "primary",
+        "secondary",
+        "health",
+        "trigger",
+        "zoneWarp"
+      ],
+      "desc": "What the pickup is."
+    },
+    "item": {
+      "group": "pickup",
+      "type": "string",
+      "desc": "Weapon name (primary/secondary), health kind (health, superHealth, healthMax), or trigger name(s) for a trigger pad."
+    },
+    "quantity": {
+      "group": "pickup",
+      "type": "number",
+      "for": [
+        "powerup"
+      ],
+      "desc": "Ammo or health amount."
+    },
+    "persistent": {
+      "group": "pickup",
+      "type": "boolean",
+      "desc": "Stays after it's picked up (and can fire again)."
+    },
+    "onPickup": {
+      "group": "pickup",
+      "type": "trigger",
+      "for": [
+        "powerup"
+      ],
+      "desc": "Runs when picked up; {\"$trigger\": \"door2:open\"} sends triggers."
+    },
+    "alertMessage": {
+      "group": "message",
+      "type": "string",
+      "desc": "Message shown while the player is over it."
+    },
+    "alertLinger": {
+      "group": "message",
+      "type": "number",
+      "desc": "Seconds the message stays up after the player leaves (default 4)."
+    },
+    "alertNotification": {
+      "group": "message",
+      "type": "string",
+      "desc": "Short notification shown on pickup."
+    },
+    "alertKillTrigger": {
+      "group": "message",
+      "type": "string",
+      "desc": "Trigger that removes the message (instead of leaving the area)."
+    },
+    "id": {
+      "group": "door",
+      "type": "string",
+      "desc": "Door id; it listens for <id>:open and <id>:close."
+    },
+    "status": {
+      "group": "door",
+      "type": "string",
+      "desc": "Starting frame label (default: closed)."
+    },
+    "connections": {
+      "group": "other",
+      "type": "json",
+      "for": [
+        "pathNode"
+      ],
+      "desc": "Pinned links to other nodes (edit with Path links)."
+    },
+    "movable": {
+      "ignore": true
+    },
+    "distance": {
+      "ignore": true
+    },
+    "labelTxt": {
+      "ignore": true
+    }
+  }
+}

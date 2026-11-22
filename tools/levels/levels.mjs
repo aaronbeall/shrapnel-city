@@ -4,8 +4,10 @@
 // levels/NN_name/          named like the level's entry in the `levels` array in as2/functionsLevel.as
 //   level.json             level settings (all optional): art {kit, seed} for the art pipeline
 //   collision.png          the collision map: black wall, #999999 impassable but shoot-over, white open
+//   collision.json         the shapes the editor bakes into collision.png, + collision-*.png pixel
+//                          layers (editor only: the build and the art bake read just collision.png)
 //   background.png         the baked level art, same size as the collision map
-//   briefing.json          the briefing screen: {"changes": [timeline changes]}
+//   briefing.json          the briefing screen: {title, body, captions, graphics} (see levels/README.md)
 //   boxes.json             [instance, ...] placed in boxes_mc
 //   powerups.json          [instance, ...] placed in powerups_mc (pickups and message beacons)
 //   enemies.json           [instance, ...] placed in enemies_mc
@@ -25,7 +27,9 @@ import { LAYERS, levelSymbols, composeScreen } from './compile.mjs';
 
 export { composeScreen };
 
-export const FILES = ['level.json', 'collision.png', 'background.png', 'briefing.json', ...LAYERS.map((l) => l + '.json'), 'doors.json', 'features.json', 'pathNodes.json', 'vision.json', 'decor.json'];
+export const FILES = ['level.json', 'collision.png', 'collision.json', 'background.png', 'briefing.json', ...LAYERS.map((l) => l + '.json'), 'doors.json', 'features.json', 'pathNodes.json', 'vision.json', 'decor.json'];
+// a file the editor may write into a level folder: one of FILES, or a collision pixel layer
+export const isLevelFile = (name) => FILES.includes(name) || /^collision-[a-z0-9][a-z0-9-]*\.png$/.test(name);
 
 function readJSON(f, dflt) {
   if (!fs.existsSync(f)) { if (dflt !== undefined) return dflt; throw new Error(`missing ${f}`); }
@@ -58,12 +62,13 @@ export function loadLevels(root) {
     const L = {
       index: i, folder,
       settings: readJSON(f('level.json')),
-      briefing: readJSON(f('briefing.json'), { changes: [] }).changes,
+      briefing: readJSON(f('briefing.json'), {}),
       doors: readJSON(f('doors.json'), []),
       features: readJSON(f('features.json'), []),
       pathNodes: readJSON(f('pathNodes.json'), []),
       vision: readJSON(f('vision.json'), []),
       decor: readJSON(f('decor.json'), []),
+      collision: readJSON(f('collision.json'), null), // the shapes behind collision.png; the build only reads the PNG
       size: pngSize(f('collision.png')),
       backgroundSize: pngSize(f('background.png')),
     };
