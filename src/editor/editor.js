@@ -329,7 +329,10 @@ class Editor {
     if (layer === 'decor') return decorBounds(e, this.decorSize(e.sprite));
     const c = this.clipFor(layer, k);
     if (c) {
-      const b = c.getBounds(this.screen);
+      // around the body (core_mc) when it has one, so guns and treads don't stretch the box
+      const core = c.core_mc && !c.core_mc.removed && typeof c.core_mc.getBounds === 'function' ? c.core_mc : null;
+      let b = core && core.getBounds(this.screen);
+      if (!b || !(b.xMax > b.xMin) || b.xMax - b.xMin >= 1e6) b = c.getBounds(this.screen);
       if (b.xMax - b.xMin < 1e6 && b.xMax > b.xMin) {
         const pad = 2;
         return [Math.min(b.xMin, e.x - 6) - pad, Math.min(b.yMin, e.y - 6) - pad, Math.max(b.xMax, e.x + 6) + pad, Math.max(b.yMax, e.y + 6) + pad];
