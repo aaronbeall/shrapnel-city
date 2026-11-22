@@ -74,6 +74,8 @@ const SERVER_POLL_MS = 3000;
 export async function toggle(rt) {
   if (!editor) {
     const data = await fetch('assets/levels.json', { cache: 'no-store' }).then((r) => r.json());
+    // the settings each placeable symbol reads (tools/props/spec.mjs); the panel falls back to raw JSON without it
+    data.props = await fetch('assets/props.json', { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
     editor = new Editor(rt, data, await serverStatus());
     window.levelEditor = editor; // handy from the console
   }
@@ -87,6 +89,8 @@ class Editor {
     this.writable = !!server;
     this.applier = new LevelApplier(rt, data);
     this.palette = data.palette || {}; // layer -> library symbols placeable there (the build finds them by their class)
+    this.propsSpec = data.props;   // {groups, symbols: {name: {classes, settings: [...]}}} or null
+    this.openGroups = new Set(['behaviour']); // settings groups shown open in the panel
     this.levels = data.levels.map((L) => structuredClone(L));
     this.maps = {};          // level index -> CollisionMap
     this.dirty = {};         // level index -> Set of file names
@@ -1466,14 +1470,17 @@ class Editor {
       box.append(el('div', { class: 'le-tip' }, 'This instance runs code when it loads, so it keeps its script (edit it in ' + file + '):'),
         el('pre', {}, [].concat(e.script).join('\n')));
     } else {
-      box.append(el('div', { class: 'le-tip' }, 'Variables set when it loads (JSON):'),
+      const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
+      if (spec) box.append(...this.settingsRows(layer, e, spec));
+      const raw = (...kids) => (spec ? el('details', { class: 'le-set-group', open: this.openGroups.has('$json') || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add('$json'); else this.openGroups.delete('$json'); } }, el('summary', {}, 'Raw JSON'), ...kids) : el('div', {}, ...kids));
+      box.append(raw(el('div', { class: 'le-tip' }, spec ? 'The settings it has, as JSON (the same as the fields above; anything goes here):' : 'Variables set when it loads (JSON):'),
         el('textarea', { rows: Math.min(10, 2 + JSON.stringify(e.props || {}, null, 1).split('\n').length), spellcheck: false, onchange: (ev) => {
           try {
             const v = ev.target.value.trim() ? JSON.parse(ev.target.value) : {};
             if (typeof v !== 'object' || Array.isArray(v)) throw new Error('expected an object');
             this.change([file], () => { if (Object.keys(v).length) e.props = v; else delete e.props; });
           } catch (err) { this.status('Variables: ' + err.message, true); }
-        } }, JSON.stringify(e.props || {}, null, 1)));
+        } }, JSON.stringify(e.props || {}, null, 1))));
     }
     box.append(el('div', { class: 'le-row' },
       el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
@@ -1741,6 +1748,81 @@ class Editor {
     return rows;
   }
 
+  // named fields for the settings this symbol's scripts read (assets/props.json, built by tools/props/spec.mjs):
+  // empty = the default (shown greyed), a value = set in this instance's props
+  settingsRows(layer, e, spec) {
+    const file = layer + '.json';
+    const props = e.props || {};
+    const settings = spec.settings.filter((s) => s.type !== 'trigger'); // triggers have their own rows above
+    const known = new Set(spec.settings.map((s) => s.name));
+    const set = (name, v) => this.change([file], () => {
+      if (v === undefined) { if (e.props) { delete e.props[name]; if (!Object.keys(e.props).length) delete e.props; } } else { e.props ||= {}; e.props[name] = v; }
+    });
+    const vals = effectiveSettings(spec.settings, props);
+    const fromLabel = (s) => (s.from === 'symbol' ? 'this symbol' : s.from + '.as');
+    const tipOf = (s) => [s.desc, s.forced !== undefined ? `Fixed by this symbol's script at ${s.forced}: setting it here has no effect.` : s.default !== undefined ? `Default: ${s.default} (${fromLabel(s)})` : `No default (${fromLabel(s)}).`].filter(Boolean).join('\n');
+    const shown = (v) => (v === undefined || v === null ? '' : typeof v === 'object' ? JSON.stringify(v) : String(v));
+    const placeholder = (s) => (s.forced !== undefined ? s.forced : s.default !== undefined ? (vals[s.name] !== undefined && shown(vals[s.name]) !== s.default ? `${s.default} = ${shown(vals[s.name])}` : s.default) : '');
+    const reset = (s) => (s.name in props ? el('button', { class: 'le-reset', title: 'back to the default', onclick: () => set(s.name, undefined) }, '↺') : null);
+    const pathGroups = () => {
+      const seen = new Map();
+      for (const n of this.list('pathNodes')) { const a = (n.color && n.color.add) || [0, 0, 0]; const v = (a[0] << 16) | (a[1] << 8) | a[2]; if (!seen.has(v)) seen.set(v, 0); seen.set(v, seen.get(v) + 1); }
+      return seen;
+    };
+    const field = (s) => {
+      const isSet = s.name in props, cur = props[s.name];
+      const attrs = { title: tipOf(s), disabled: s.forced !== undefined };
+      const label = el('span', { class: 'le-set-name' + (isSet ? ' on' : '') + (s.forced !== undefined ? ' forced' : ''), title: attrs.title }, s.name);
+      let input;
+      if (s.type === 'boolean') {
+        const v = isSet ? !!cur : !!vals[s.name];
+        input = el('input', { type: 'checkbox', ...attrs, checked: v, onchange: (ev) => {
+          const b = ev.target.checked;
+          set(s.name, vals.__defaults[s.name] === b ? undefined : b); // matching the default: leave it unset
+        } });
+        return el('label', { class: 'le-set le-set-bool', title: attrs.title }, input, label, reset(s));
+      }
+      if (s.type === 'path') {
+        const groups = pathGroups();
+        const hex = (v) => '#' + v.toString(16).padStart(6, '0');
+        input = el('select', { ...attrs, onchange: (ev) => set(s.name, ev.target.value === '' ? undefined : ev.target.value === 'auto' ? 'auto' : +ev.target.value) },
+          el('option', { value: '', selected: !isSet }, `default (${s.forced || s.default || 'auto'})`),
+          el('option', { value: 'auto', selected: cur === 'auto' }, 'auto: nearest node'),
+          ...[...groups].map(([v, n]) => el('option', { value: String(v), selected: isSet && cur === v, style: `color: ${hex(v)}` }, `■ ${hex(v)} (${n} node${n === 1 ? '' : 's'})`)),
+          ...(isSet && typeof cur === 'number' && !groups.has(cur) ? [el('option', { value: String(cur), selected: true }, `${hex(cur)} (no nodes)`)] : []));
+      } else if (s.choices) {
+        input = el('select', { ...attrs, onchange: (ev) => set(s.name, ev.target.value === '' ? undefined : s.type === 'number' ? +ev.target.value : ev.target.value) },
+          el('option', { value: '', selected: !isSet }, `default${s.default !== undefined ? ' (' + s.default + ')' : ''}`),
+          ...s.choices.map((c) => el('option', { value: String(c), selected: isSet && cur === c }, String(c))),
+          ...(isSet && !s.choices.includes(cur) ? [el('option', { value: shown(cur), selected: true }, shown(cur))] : []));
+      } else {
+        const parse = (raw) => {
+          if (raw.trim() === '') return undefined;
+          if (s.type === 'number') { const n = +raw; if (!isFinite(n)) throw new Error(s.name + ': not a number'); return n; }
+          if (s.type === 'json') return JSON.parse(raw);
+          return raw;
+        };
+        input = el('input', { type: s.type === 'number' ? 'number' : 'text', step: 'any', ...attrs, value: isSet ? shown(cur) : '', placeholder: placeholder(s), spellcheck: false,
+          onchange: (ev) => { try { set(s.name, parse(ev.target.value)); } catch (err) { this.status(err.message, true); } },
+          onkeydown: (ev) => { if (ev.key === 'Enter') ev.target.blur(); } });
+      }
+      return el('label', { class: 'le-set', title: attrs.title }, label, input, reset(s));
+    };
+    const out = [];
+    const unknown = Object.keys(props).filter((k) => !known.has(k));
+    if (unknown.length) out.push(el('div', { class: 'le-warn', title: 'Nothing in this symbol\'s scripts reads these, so they do nothing (a typo?). Edit them in the JSON below.' }, '⚠ Not a setting of this symbol: ' + unknown.join(', ')));
+    const groups = this.propsSpec.groups;
+    for (const g of Object.keys(groups)) {
+      const rows = settings.filter((s) => s.group === g);
+      if (!rows.length) continue;
+      const nSet = rows.filter((s) => s.name in props).length;
+      const d = el('details', { class: 'le-set-group', open: this.openGroups.has(g) || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add(g); else this.openGroups.delete(g); } },
+        el('summary', {}, groups[g], nSet ? el('small', {}, ` ${nSet} set`) : ''), ...rows.map(field));
+      out.push(d);
+    }
+    return out;
+  }
+
   zonePanel() {
     const { k } = this.sel;
     const z = this.list('vision')[k];
@@ -1955,6 +2037,31 @@ function nodeColour(e) {
   return a ? `rgb(${a[0]},${a[1]},${a[2]})` : '#0ff';
 }
 
+// the value every setting ends up with: props, else what the symbol forces, else its default
+// (expressions such as "hunter || patroller" are worked out when they only use other settings)
+function effectiveSettings(settings, props) {
+  const lit = (x) => { try { return x === undefined ? undefined : JSON.parse(x.replace(/^\./, '0.').replace(/^-\./, '-0.')); } catch { return undefined; } };
+  const vals = {}, defaults = {};
+  const exprOf = (s) => (s.forced !== undefined ? s.forced : s.default);
+  for (let pass = 0; pass < 3; pass++) {
+    for (const s of settings) {
+      const x = exprOf(s);
+      let d = s.value !== undefined && s.forced === undefined ? s.value : lit(x);
+      if (d === undefined && x && /^[\w\s|&!?:().*+\-/<>=]+$/.test(x)) {
+        const ids = [...new Set(x.match(/[A-Za-z_]\w*/g) || [])];
+        if (ids.every((id) => id in vals && (typeof vals[id] === 'number' || typeof vals[id] === 'boolean'))) {
+          try { d = Function(...ids, 'return (' + x + ');')(...ids.map((id) => vals[id])); } catch { d = undefined; }
+        }
+      }
+      if (d !== undefined) defaults[s.name] = d;
+      const v = s.forced === undefined && s.name in props ? props[s.name] : d;
+      if (v !== undefined) vals[s.name] = v;
+    }
+  }
+  vals.__defaults = defaults;
+  return vals;
+}
+
 function el(tag, attrs = {}, ...kids) {
   const n = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
@@ -1978,6 +2085,18 @@ const CSS = `
 #level-editor input, #level-editor select, #level-editor textarea { background: #021; color: #cfe; border: 1px solid #276; border-radius: 3px; font: 11px ui-monospace, monospace; }
 #level-editor input[type=number] { width: 58px; }
 #level-editor textarea { width: 100%; box-sizing: border-box; }
+#level-editor .le-set-group { margin: 4px 0; border-top: 1px solid #244; padding-top: 2px; }
+#level-editor .le-set-group summary { cursor: pointer; color: #8ff; font-weight: 600; padding: 2px 0; }
+#level-editor .le-set-group summary small { color: #fc6; font-weight: normal; }
+#level-editor .le-set { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
+#level-editor .le-set > input:not([type=checkbox]), #level-editor .le-set > select { flex: 1; min-width: 0; }
+#level-editor .le-set input::placeholder { color: #587; }
+#level-editor .le-set-name { width: 112px; flex: none; overflow: hidden; text-overflow: ellipsis; color: #9bb; }
+#level-editor .le-set-bool .le-set-name { width: auto; flex: 1; }
+#level-editor .le-set-name.on { color: #fc6; }
+#level-editor .le-set-name.forced { color: #666; text-decoration: line-through; }
+#level-editor .le-reset { padding: 0 4px; line-height: 1.2; }
+#level-editor .le-warn { color: #fa6; margin: 4px 0; }
 #level-editor pre { background: #021; padding: 4px; max-height: 160px; overflow: auto; font-size: 10px; margin: 2px 0; }
 #level-editor .le-row { margin: 4px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
 #level-editor .le-tools button { width: calc(50% - 4px); text-align: left; }

@@ -39,6 +39,18 @@ Every placement file is a list of instances, drawn in list order (later ones on 
 - `{"$trigger": "door2:open"}` (or a list of names) is a function that sends those triggers, for a pickup's `onPickup` or a box's or enemy's `onDie`: `"props": {"onPickup": {"$trigger": "door2:open"}}`.
 - `script` is used instead of `props` when the load code is more than plain variables, such as the Bridge's battery computers, whose `onDie` also throws shrapnel. It's kept as written.
 
+## Settings (props)
+
+What an instance can set in `props` is whatever its scripts read; there is no hand-written list. `npm run build` reads it out of the scripts into `assets/props.json` (`tools/props/spec.mjs`), for every symbol the editor can place:
+
+- **defaults:** `if(x == undefined) x = ...;` in the symbol's frame-1 script and the class files it includes (`enemyVehicle.as` → `enemyTurret.as` → `enemyObject.as` → `enemy.as`). Props run first, so they win; the first default to run is the one that applies.
+- **fixed by the symbol:** a plain `x = ...;` in the symbol's own script for something a class has a default for. Props can't change it (the editor greys it out).
+- **no default:** names the compiled script reads but never sets, such as a pickup's `item`.
+
+`tools/props/annotations.json` adds what code can't say: a description, a group (Behaviour, Movement, Weapon, ...), a type, choices, settings the scan can't see (`"for": [class]`), and names to ignore.
+
+In the editor, a selected instance shows its settings as named fields by group. An empty field uses the default (shown greyed, with its value worked out where it only depends on other settings); a set one is highlighted with a ↺ to go back to the default. Hover a name for what it does and where its default comes from. Keys its scripts never read are flagged (a typo does nothing in the game). Raw JSON is still there for anything else.
+
 ## Triggers
 
 Triggers are names sent with `trigger("name")` to every clip that registered for them. A door with `"id": "door2"` listens for `door2:open` and `door2:close`. An area that sends a trigger when the player walks into it is a trigger pad: an invisible pickup with `"type": "trigger", "item": "door2:open"`, sized with `scale`. Boxes and enemies send one when destroyed with an `onDie` `$trigger` handler as above. A load script can also call `trigger()`.
