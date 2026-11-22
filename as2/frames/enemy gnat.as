@@ -9,8 +9,8 @@ if(resistence == undefined) resistence = 1;
 //if(blastRange == undefined) blastRange = 50;
 //if(damage == undefined) damage = 30;
 //if(shakeStrength == undefined) shakeStrength = 0;
-chaser = true;
-suicidal = true;
+if(chaser == undefined) chaser = true;
+if(suicidal == undefined) suicidal = true;
 if(suicideDamage == undefined) suicideDamage = 10;
 
 #include "as/object/enemyVehicle.as"
