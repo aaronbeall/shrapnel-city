@@ -59,7 +59,13 @@ def level_paths(folder):
     art = settings.get('art')
     if not art: sys.exit(f'levels/{folder}/level.json has no "art" settings, so its background is not baked (it keeps its original art)')
     if art.get('kit') not in KITS: sys.exit(f'unknown art kit {art.get("kit")!r}; known: {", ".join(KITS)}')
-    return d, art
+    size = settings.get('size') or {}
+    if not all(isinstance(size.get(k), int) and size[k] > 0 for k in 'wh'):
+        sys.exit(f'levels/{folder}/level.json needs "size": {{"w": <width>, "h": <height>}}')
+    with Image.open(os.path.join(d, 'collision.png')) as im:
+        if im.size != (size['w'], size['h']):
+            sys.exit(f'levels/{folder}/collision.png is {im.size[0]}x{im.size[1]} but level.json size is {size["w"]}x{size["h"]}; bake the collision (or resize the level) in the editor first')
+    return d, art, (size['w'], size['h'])
 
 
 # ---------------------------------------------------------------- options
@@ -84,8 +90,8 @@ def hex_rgb(h):
 class Geometry:
     """Everything derived from the collision map that both steps need."""
 
-    def __init__(self, path, opts):
-        with Image.open(path) as im: self.W, self.H = W, H = im.size
+    def __init__(self, path, size, opts):
+        self.W, self.H = W, H = size  # level.json size, the source of truth (collision.png matches it)
         self.wall, self.chasm = coverage(path, W, H)
         self.wallb, self.chasmb = self.wall > 0.5, self.chasm > 0.5
         self.yy, self.xx = np.mgrid[0:H, 0:W].astype(np.float32)
@@ -460,10 +466,10 @@ def main():
     ap.add_argument('--seed', type=int, help='seed for decor placement (default: level.json art.seed)')
     ap.add_argument('--only', help='place only these decor types, comma separated (' + ', '.join(CATEGORIES) + '); the others in decor.json are kept')
     args = ap.parse_args()
-    d, art = level_paths(args.level)
+    d, art, size = level_paths(args.level)
     opts = options(art)
     seed = int(art.get('seed', 2012))
-    g = Geometry(os.path.join(d, 'collision.png'), opts)
+    g = Geometry(os.path.join(d, 'collision.png'), size, opts)
     decor_path = os.path.join(d, 'decor.json')
     if args.step in ('place', 'all'):
         only, keep = None, []

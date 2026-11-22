@@ -1,180 +1,21 @@
 {
-  "changes": [
-    {"place": "interface/mask wipe", "depth": 3281, "x": 0, "y": 0, "ratio": 0.00006103608758678569, "clipDepth": 3423},
-    {"place": "screen_mc/shape 2", "depth": 3369, "x": 0, "y": 0},
-    {
-      "place": "game objects/box reactor core",
-      "depth": 3370,
-      "x": 590,
-      "y": 357,
-      "ratio": 0.00006103608758678569,
-      "name": "core_mc"
-    },
-    {"place": "game objects/box reactor rods", "depth": 3372, "x": 637, "y": 387.5, "ratio": 0.00006103608758678569},
-    {
-      "place": "game objects/box reactor ring pulse",
-      "depth": 3377,
-      "x": 637.2,
-      "y": 387.15,
-      "ratio": 0.00006103608758678569
-    },
-    {
-      "place": "game objects/box reactor glow",
-      "depth": 3379,
-      "x": 637,
-      "y": 388,
-      "color": {"alpha": 0.3515625},
-      "ratio": 0.00006103608758678569,
-      "blend": "screen"
-    },
-    {"place": "screen_mc/text 15", "depth": 3381, "x": 90, "y": 164, "scale": [1.000061, 1.000305]},
-    {
-      "place": "screen_mc/text 16",
-      "depth": 3382,
-      "x": 606.35,
-      "y": 229.8,
-      "scale": [1.000061, 1.000305],
-      "filters": [
-        {
-          "type": "glow",
-          "color": "#00ffff",
-          "blurX": 15,
-          "blurY": 15,
-          "strength": 1,
-          "inner": false,
-          "knockout": false,
-          "passes": 2
-        }
-      ]
-    },
-    {
-      "place": "screen_mc/text 17",
-      "depth": 3383,
-      "x": 591.35,
-      "y": 334.2,
-      "scale": [1.000061, 1.000305],
-      "filters": [
-        {
-          "type": "glow",
-          "color": "#00ffff",
-          "blurX": 15,
-          "blurY": 15,
-          "strength": 1,
-          "inner": false,
-          "knockout": false,
-          "passes": 2
-        }
-      ]
-    },
-    {
-      "place": "enemy assets/enemy stinger core - circle",
-      "depth": 3384,
-      "x": 637.05,
-      "y": 265,
-      "scale": [1.000061, 1.000305],
-      "ratio": 0.00006103608758678569,
-      "name": "core_mc"
-    },
-    {"place": "_shared/shape 618", "depth": 3396, "x": 637.05, "y": 265, "scale": [1.000061, 1.000305]},
-    {
-      "place": "_blank MC",
-      "depth": 3397,
-      "x": 637.05,
-      "y": 265,
-      "scale": [1.000061, 1.000305],
-      "ratio": 0.00006103608758678569,
-      "name": "muzzle_mc"
-    },
-    {
-      "place": "_glow",
-      "depth": 3399,
-      "x": 637.05,
-      "y": 265,
-      "scale": [1.000061, 1.000305],
-      "color": {"alpha": 0.859375},
-      "ratio": 0.00006103608758678569,
-      "name": "flash_mc",
-      "blend": "add",
-      "clipEvents": [1]
-    },
-    {"place": "screen_mc/text 18", "depth": 3401, "x": 606.35, "y": 276.8, "scale": [1.000061, 1.000305]},
-    {"place": "screen_mc/text 19", "depth": 3402, "x": 606.35, "y": 426.25, "scale": [1.000061, 1.000305]},
-    {
-      "place": "screen_mc/text 20",
-      "depth": 3403,
-      "x": 87.05,
-      "y": 81.8,
-      "scale": [1.000061, 1.000305],
-      "filters": [
-        {
-          "type": "glow",
-          "color": "#00ffff",
-          "blurX": 15,
-          "blurY": 15,
-          "strength": 1,
-          "inner": false,
-          "knockout": false,
-          "passes": 2
-        }
-      ]
-    },
-    {
-      "place": "screen_mc/text 21",
-      "depth": 3404,
-      "x": 89.05,
-      "y": 75.8,
-      "scale": [1.000061, 1.000305],
-      "filters": [
-        {
-          "type": "glow",
-          "color": "#00ffff",
-          "blurX": 15,
-          "blurY": 15,
-          "strength": 1,
-          "inner": false,
-          "knockout": false,
-          "passes": 2
-        }
-      ]
-    },
-    {"place": "screen_mc/shape 3", "depth": 3405, "x": 0, "y": -30},
-    {
-      "place": "interface/buttons/btn play mission",
-      "depth": 3406,
-      "x": 548,
-      "y": 544,
-      "ratio": 0.00006103608758678569,
-      "clipEvents": [2048, 131072, 131072],
-      "script": [
-        "on (release) {",
-        "    continueLevel();",
-        "}",
-        "on (keyPress \"<Space>\") {",
-        "    continueLevel();",
-        "}",
-        "",
-        "on (keyPress \"<Enter>\") {",
-        "    continueLevel();",
-        "}",
-        ""
-      ]
-    },
-    {
-      "place": "interface/buttons/btn back to main menu",
-      "depth": 3410,
-      "x": 65,
-      "y": 3.05,
-      "ratio": 0.00006103608758678569,
-      "script": ["on (release) {", "    quit();", "}", "", "on (keyPress \"<Escape>\") {", "    quit();", "}", ""]
-    },
-    {
-      "place": "interface/screens/briefing monitor scanlines anim",
-      "depth": 3414,
-      "x": 0,
-      "y": 0,
-      "color": {"alpha": 0.1484375},
-      "ratio": 0.00006103608758678569,
-      "blend": "overlay"
-    }
+  "title": "FIRST BLOCK",
+  "body": "Things are starting to get more heated! Fight through\nthe first block of the robot city. You will need to\ndestroy the reactor before proceeding. It's heavily\nguarded by Scurge sentries, but we've dropped in a\nShrapnel Bomb to help you.",
+  "captions": [
+    {"style":"name","text":"Scurge Sentry","x":637.58,"y":229.89},
+    {"style":"name","text":"Energy Reactor","x":637.55,"y":334.29},
+    {"style":"note","text":"Light threat.","x":637.55,"y":276.6},
+    {"style":"note","text":"Destroy it and run!","x":637.55,"y":426.05}
+  ],
+  "graphics": [
+    {"symbol":"game objects/box reactor core","x":590,"y":357,"ratio":0.00006103608758678569,"name":"core_mc"},
+    {"symbol":"game objects/box reactor rods","x":637,"y":387.5,"ratio":0.00006103608758678569},
+    {"symbol":"game objects/box reactor ring pulse","x":637.2,"y":387.15,"ratio":0.00006103608758678569},
+    {"symbol":"game objects/box reactor glow","x":637,"y":388,"color":{"alpha":0.3515625},"ratio":0.00006103608758678569,"blend":"screen"},
+    {"symbol":"enemy assets/enemy stinger core - circle","x":637.05,"y":265,"scale":[1.000061,1.000305],"ratio":0.00006103608758678569,"name":"core_mc"},
+    {"symbol":"_shared/shape 618","x":637.05,"y":265,"scale":[1.000061,1.000305]},
+    {"symbol":"_blank MC","x":637.05,"y":265,"scale":[1.000061,1.000305],"ratio":0.00006103608758678569,"name":"muzzle_mc"},
+    {"symbol":"_glow","x":637.05,"y":265,"scale":[1.000061,1.000305],"color":{"alpha":0.859375},"ratio":0.00006103608758678569,"name":"flash_mc","blend":"add"},
+    {"symbol":"screen_mc/shape 3","x":0,"y":-30}
   ]
 }

@@ -10,6 +10,7 @@ export function buildPath(d, out = new Path2D()) {
     if (c === 'M') { out.moveTo(d[i], d[i + 1]); i += 2; }
     else if (c === 'L') { out.lineTo(d[i], d[i + 1]); i += 2; }
     else if (c === 'Q') { out.quadraticCurveTo(d[i], d[i + 1], d[i + 2], d[i + 3]); i += 4; }
+    else if (c === 'C') { out.bezierCurveTo(d[i], d[i + 1], d[i + 2], d[i + 3], d[i + 4], d[i + 5]); i += 6; } // editor-made shapes (Flash has no cubics)
     else if (c === 'Z') { out.closePath(); }
   }
   return out;

@@ -1,5 +1,7 @@
 // Pixel-exact editing of a collision map canvas. Everything is drawn aliased, in exactly
 // the three collision colours, so what you paint is what the game hit-tests.
+import { gameClass } from './shapes.js';
+
 export const COLOURS = {
   wall: [0, 0, 0],
   chasm: [153, 153, 153],
@@ -23,17 +25,19 @@ export class CollisionMap {
     this.refreshOverlay(0, 0, this.w, this.h);
   }
 
-  // tinted view: walls blue, chasms orange, open floor clear
+  // tinted view of what the game makes of each pixel (wallHitTest in as2/functionsGame.as):
+  // exactly black is wall (blue), #999999 or darker blocks movement but not shots (orange), the
+  // rest is open floor (clear)
   refreshOverlay(x, y, w, h) {
     const src = this.data.data, W = this.w;
     const out = this.octx.createImageData(w, h);
     const o = out.data;
     for (let j = 0; j < h; j++) {
       for (let i = 0; i < w; i++) {
-        const v = src[((y + j) * W + x + i) * 4];
+        const q = ((y + j) * W + x + i) * 4, c = gameClass(src[q], src[q + 1], src[q + 2]);
         const k = (j * w + i) * 4;
-        if (v < 77) { o[k] = 40; o[k + 1] = 90; o[k + 2] = 255; o[k + 3] = 150; }
-        else if (v < 205) { o[k] = 255; o[k + 1] = 140; o[k + 2] = 0; o[k + 3] = 140; }
+        if (c === 0) { o[k] = 40; o[k + 1] = 90; o[k + 2] = 255; o[k + 3] = 150; }
+        else if (c === 1) { o[k] = 255; o[k + 1] = 140; o[k + 2] = 0; o[k + 3] = 140; }
       }
     }
     this.octx.putImageData(out, x, y);
@@ -173,11 +177,54 @@ export class CollisionMap {
     return { before: crop(before), after: this.grab(x0, y0, w, h) };
   }
 
+  // replace a region with baked pixels (ImageData at x, y); returns how many pixels changed
+  putRegion(img, x, y) {
+    const d = this.data.data, s = img.data, W = this.w;
+    let changed = 0;
+    for (let j = 0; j < img.height; j++) {
+      for (let i = 0; i < img.width; i++) {
+        const k = ((y + j) * W + x + i) * 4, q = (j * img.width + i) * 4;
+        if (d[k] !== s[q] || d[k + 3] !== 255) changed++;
+        d[k] = s[q]; d[k + 1] = s[q + 1]; d[k + 2] = s[q + 2]; d[k + 3] = 255;
+      }
+    }
+    if (changed) { this.ctx.putImageData(this.data, 0, 0, x, y, img.width, img.height); this.refreshOverlay(x, y, img.width, img.height); }
+    return changed;
+  }
+
+  // the 4-connected area of the exact colour under (x, y), as {x, y, w, h, mask} (mask: w*h bytes)
+  floodMask(x, y) {
+    x = Math.floor(x); y = Math.floor(y);
+    if (x < 0 || y < 0 || x >= this.w || y >= this.h) return null;
+    const d = this.data.data, W = this.w, H = this.h, k0 = (y * W + x) * 4;
+    const tr = d[k0], tg = d[k0 + 1], tb = d[k0 + 2];
+    const seen = new Uint8Array(W * H);
+    const same = (xx, yy) => { const k = (yy * W + xx) * 4; return !seen[yy * W + xx] && d[k] === tr && d[k + 1] === tg && d[k + 2] === tb; };
+    const stack = [x, y];
+    let x0 = x, y0 = y, x1 = x, y1 = y;
+    while (stack.length) {
+      const py = stack.pop(), px = stack.pop();
+      if (!same(px, py)) continue;
+      let l = px, r = px;
+      while (l > 0 && same(l - 1, py)) l--;
+      while (r < W - 1 && same(r + 1, py)) r++;
+      for (let xx = l; xx <= r; xx++) {
+        seen[py * W + xx] = 1;
+        if (py > 0 && same(xx, py - 1)) stack.push(xx, py - 1);
+        if (py < H - 1 && same(xx, py + 1)) stack.push(xx, py + 1);
+      }
+      x0 = Math.min(x0, l); x1 = Math.max(x1, r); y0 = Math.min(y0, py); y1 = Math.max(y1, py);
+    }
+    const w = x1 - x0 + 1, h = y1 - y0 + 1, mask = new Uint8Array(w * h);
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) mask[j * w + i] = seen[(y0 + j) * W + x0 + i];
+    return { x: x0, y: y0, w, h, mask, colour: ['wall', 'chasm', 'open'][gameClass(tr, tg, tb)] };
+  }
+
   colourAt(x, y) {
     x = Math.floor(x); y = Math.floor(y);
     if (x < 0 || y < 0 || x >= this.w || y >= this.h) return null;
-    const v = this.data.data[(y * this.w + x) * 4];
-    return v < 77 ? 'wall' : v < 205 ? 'chasm' : 'open';
+    const k = (y * this.w + x) * 4, d = this.data.data;
+    return ['wall', 'chasm', 'open'][gameClass(d[k], d[k + 1], d[k + 2])];
   }
 
   toBlob() { return new Promise((res) => this.canvas.toBlob(res, 'image/png')); }

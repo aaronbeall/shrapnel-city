@@ -5,5 +5,7 @@ assets/swf.json
 assets/symbols.json
 assets/levels.json
 assets/files.json
+assets/props.json
 assets/bitmaps/
 src/generated/
+as2/generated/
