@@ -154,14 +154,16 @@ export function container(list, where) {
 // game's embedded fonts, one generated symbol each: level assets/briefingN/text K.
 export const BRIEFING_STYLES = {
   // font, size, colour, ascent (px), box width, alignment
-  title: { font: 'fonts/Digital Display Regular Bold', size: 36, color: '#ffffff', asc: 38.04, w: 640, align: 'left' },
-  label: { font: 'fonts/Digital Display Regular Bold', size: 14, color: '#ffffff', asc: 14.79, w: 200, align: 'left' },
+  title: { font: 'fonts/Digital Display Regular Bold', size: 36, color: '#ffffff', asc: 38.04, w: 640, align: 'left', glow: true },
+  label: { font: 'fonts/Digital Display Regular Bold', size: 14, color: '#ffffff', asc: 14.79, w: 200, align: 'left', glow: true },
   body: { font: 'fonts/Consolas', size: 14, color: '#ffffff', asc: 12.88, w: 450, align: 'left', wrap: true, leading: 4 },
-  name: { font: 'fonts/Digital Display Regular', size: 16, color: '#00ffff', asc: 16.91, w: 240, align: 'center' },
+  name: { font: 'fonts/Digital Display Regular', size: 16, color: '#00ffff', asc: 16.91, w: 240, align: 'center', glow: true },
   note: { font: 'fonts/Consolas', size: 10, color: '#ffffff', asc: 9.2, w: 240, align: 'center', leading: 10.3 },
 };
 // where the fixed texts go: x is the left edge, y the top of the first line (captions: x is the centre)
 export const BRIEFING_LAYOUT = { title: { x: 87.05, y: 81.76 }, label: { x: 89.05, y: 76.01 }, body: { x: 90, y: 164.12 } };
+// the cyan glow the original briefings put on every Digital Display text (styles with glow: true)
+const BRIEFING_GLOW = { type: 'glow', color: '#00ffff', blurX: 15, blurY: 15, strength: 1, inner: false, knockout: false, passes: 2 };
 const BRIEFING_DEPTH = { mask: 3281, backdrop: 3369, first: 3370 };
 const BTN_PLAY = ['on (release) {', '    continueLevel();', '}', 'on (keyPress "<Space>") {', '    continueLevel();', '}', '', 'on (keyPress "<Enter>") {', '    continueLevel();', '}', ''];
 const BTN_BACK = ['on (release) {', '    quit();', '}', '', 'on (keyPress "<Escape>") {', '    quit();', '}', ''];
@@ -206,7 +208,12 @@ export function briefingChanges(L) {
   c.push({ place: b.backdrop || 'screen_mc/shape 2', depth: BRIEFING_DEPTH.backdrop, x: 0, y: 0 });
   (b.graphics || []).forEach((g, k) => c.push(place(g, d++, `${where} graphics[${k}]`)));
   // text fields draw 2 px inside their box (centred ones are centred on x)
-  briefingTexts(L).forEach((t, k) => c.push({ place: briefingTextName(L.index, k), depth: d++, x: round2(BRIEFING_STYLES[t.style].align === 'center' ? t.x : t.x - 2), y: round2(t.y - 2) }));
+  briefingTexts(L).forEach((t, k) => {
+    const st = BRIEFING_STYLES[t.style];
+    const p = { place: briefingTextName(L.index, k), depth: d++, x: round2(st.align === 'center' ? t.x : t.x - 2), y: round2(t.y - 2) };
+    if (st.glow) p.filters = [{ ...BRIEFING_GLOW }];
+    c.push(p);
+  });
   c.push({ place: 'interface/buttons/btn play mission', depth: d++, x: 548, y: 544, clipEvents: [2048, 131072, 131072], script: BTN_PLAY });
   c.push({ place: 'interface/buttons/btn back to main menu', depth: d++, x: 65, y: 3.05, script: BTN_BACK });
   c.push({ place: 'interface/screens/briefing monitor scanlines anim', depth: d++, x: 0, y: 0, color: { alpha: 0.1484375 }, blend: 'overlay' });
