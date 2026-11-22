@@ -35,18 +35,6 @@ const PRESETS = {
 };
 const AUTO_VISION_ANGLES = 90, LOS_SAMPLE_SIZE = 15; // as2/enemyTurret.as
 const NODE_LOS_SAMPLE = 10; // as2/pathNode.as
-// what the Place palette offers on each layer: the one list (add a library symbol here to
-// make it placeable); levels can still hold other symbols, which stay editable
-const PALETTE = {
-  enemies: ['enemy assets/enemy double battery', 'enemy assets/enemy drone', 'enemy assets/enemy gnat', 'enemy assets/enemy missile launcher',
-    'enemy assets/enemy object fire barrel', 'enemy assets/enemy scurge', 'enemy assets/enemy stinger', 'enemy assets/enemy stinger2',
-    'enemy assets/enemy stinger3', 'enemy assets/enemy tank', 'enemy assets/enemy wolfgun'],
-  boxes: ['game objects/box', 'game objects/box computer', 'game objects/box reactor'],
-  powerups: ['game objects/powerup', 'game objects/message beacon'],
-  doors: ['game objects/door', 'game objects/level gate'],
-  features: ['game objects/entrance_mc', 'game objects/exit_mc'],
-  pathNodes: ['game objects/node'],
-};
 const NODE = 'game objects/node';
 // decor (decor.json) is baked into the background by tools/art/bake.py; sprites live here
 const DECOR_DIR = 'tools/art/parts/decor/';
@@ -98,6 +86,7 @@ class Editor {
     this.server = server;    // latest /__editor answer, null when offline
     this.writable = !!server;
     this.applier = new LevelApplier(rt, data);
+    this.palette = data.palette || {}; // layer -> library symbols placeable there (the build finds them by their class)
     this.levels = data.levels.map((L) => structuredClone(L));
     this.maps = {};          // level index -> CollisionMap
     this.dirty = {};         // level index -> Set of file names
@@ -1425,7 +1414,7 @@ class Editor {
       if (layer !== 'decor') p.append(el('h4', {}, 'Place: ' + layerLabel(layer).toLowerCase(), el('small', {}, ' · click a layer name to change')));
       if (layer === 'decor') p.append(this.decorPalette());
       else if (layer !== 'pathNodes') {
-        const syms = (PALETTE[layer] || []).filter((s) => this.applier.ids[s] !== undefined);
+        const syms = (this.palette[layer] || []).filter((s) => this.applier.ids[s] !== undefined);
         p.append(el('div', { class: 'le-palette' }, ...syms.map((s) => el('button', {
           class: this.placeSymbol === s ? 'on' : '', onclick: () => { this.placeSymbol = s; this.refreshPanel(); },
         }, s.split('/').pop())), ...(PRESETS[layer] || []).map((pr) => el('button', {

@@ -39,6 +39,26 @@ for (const f of files) {
   lib.set(name, { file: f, ext });
 }
 
+// --- what the level editor can place, from the library -------------------------
+// A symbol is placeable on a layer when its frame script (inline, or the as2/frames file it
+// includes) includes that layer's class file: an enemy class makes it an enemy, and so on.
+const PLACE_CLASSES = {
+  enemies: ['enemyTurret', 'enemyVehicle', 'enemyObject'], boxes: ['box', 'boxReactor'], powerups: ['powerup'],
+  doors: ['door', 'gate'], features: ['entrance', 'exit'], pathNodes: ['pathNode'],
+};
+const palette = Object.fromEntries(Object.keys(PLACE_CLASSES).map((l) => [l, []]));
+for (const [name, { file, ext }] of lib) {
+  if (ext !== '.json') continue;
+  let text = fs.readFileSync(file, 'utf8');
+  for (const m of text.matchAll(/#include \\"as\/frames\/([^"\\]+\.as)\\"/g)) {
+    const f = path.join(ROOT, 'as2', 'frames', m[1]);
+    if (fs.existsSync(f)) text += fs.readFileSync(f, 'utf8');
+  }
+  const classes = new Set([...text.matchAll(/#include \\?"as\/(?:object|level)\/(\w+)\.as/g)].map((m) => m[1]));
+  for (const [layer, cls] of Object.entries(PLACE_CLASSES)) if (cls.some((c) => classes.has(c))) palette[layer].push(name);
+}
+for (const l of Object.values(palette)) l.sort();
+
 // --- add the levels --------------------------------------------------------------
 const levels = loadLevels(ROOT);
 const addGenerated = (name, entry) => {
@@ -168,7 +188,7 @@ if (check) {
   fs.writeFileSync(path.join(ASSETS, 'swf.json'), JSON.stringify(swf));
   fs.writeFileSync(path.join(ASSETS, 'symbols.json'), JSON.stringify(sym, null, 1));
   // the editor (src/editor/) recompiles levels in the browser from this
-  fs.writeFileSync(path.join(ASSETS, 'levels.json'), JSON.stringify({ ids: Object.fromEntries(idOf), screen: screenSource, levels: levels.levels }));
+  fs.writeFileSync(path.join(ASSETS, 'levels.json'), JSON.stringify({ ids: Object.fromEntries(idOf), screen: screenSource, palette, levels: levels.levels }));
   fs.writeFileSync(path.join(ASSETS, 'files.json'), JSON.stringify({ files: fileIndex, levels: levels.levels.map((L) => L.folder) }));
   fs.rmSync(path.join(ASSETS, 'bitmaps'), { recursive: true, force: true });
   fs.mkdirSync(path.join(ASSETS, 'bitmaps'));
