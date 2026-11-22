@@ -37,7 +37,7 @@ const AUTO_VISION_ANGLES = 90, LOS_SAMPLE_SIZE = 15; // as2/enemyTurret.as
 const NODE_LOS_SAMPLE = 10; // as2/pathNode.as
 // extra symbols offered in the place palette besides those already used in a level
 const EXTRA = {
-  enemies: ['enemy assets/enemy tank', 'enemy assets/enemy drone', 'enemy assets/enemy missile launcher'],
+  enemies: ['enemy assets/enemy tank', 'enemy assets/enemy drone', 'enemy assets/enemy gnat', 'enemy assets/enemy missile launcher'],
   boxes: ['game objects/box'],
   powerups: ['game objects/powerup', 'game objects/message beacon'],
   doors: ['game objects/door', 'game objects/level gate'],
@@ -57,7 +57,7 @@ const TOOLS = [
   { key: 'place', label: 'Place', hot: 'P', tip: 'pick a layer and a symbol below, then click to drop one (hold Shift to snap to the grid)' },
   { key: 'link', label: 'Path links', hot: 'N', tip: 'nodes link to every node of their colour they can see (dashed). Click a node, then another: that adds the link, or removes it if they were linked. Changed nodes keep their links pinned (solid)' },
   { key: 'rect', label: 'Rectangle', hot: 'B', tip: 'drag a box (hold Shift to snap to the grid)' },
-  { key: 'poly', label: 'Polygon', hot: 'G', tip: 'click corners (hold Shift to snap: the first corner to the grid, the next ones to the angle step); click the first corner or Enter to close, Esc cancels. Draws collision or a vision zone (below)' },
+  { key: 'poly', label: 'Polygon', hot: 'G', tip: 'click corners (hold Shift to snap: the first corner to the grid, the next ones to the angle step); click the first corner or Enter to close, Esc cancels. Draws collision or a vision zone: click either name in Layers' },
   { key: 'autozone', label: 'Auto zone', hot: 'Z', tip: 'click a spot to make a vision zone of what can be seen from there, the way the game does for an enemy outside every zone' },
   { key: 'pencil', label: 'Pencil', hot: 'D', tip: 'paint pixels; [ and ] change the size' },
   { key: 'eraser', label: 'Eraser', hot: 'E', tip: 'paint open floor; [ and ] change the size' },
@@ -1382,10 +1382,6 @@ class Editor {
     const targets = this.toolLayers();
     p.append(el('div', { class: 'le-tip' }, tip.tip),
       el('div', { class: 'le-works' }, 'Works on ', ...targets.flatMap((l, i) => [i ? ', ' : '', el('b', { class: this.locked[l] ? 'locked' : this.visible[l] ? '' : 'off' }, layerLabel(l) + (this.locked[l] ? ' (locked)' : this.visible[l] ? '' : ' (hidden)'))])));
-    if (this.tool === 'poly') {
-      p.append(el('div', { class: 'le-row' }, 'Draws ', ...[['collision', 'collision'], ['vision', 'a vision zone']].map(([k, label]) => el('button', {
-        class: this.polyTarget === k ? 'on' : '', onclick: () => { this.polyTarget = k; this.poly = null; this.refreshPanel(); } }, label))));
-    }
     if (DRAW_TOOLS.has(this.tool) && !(this.tool === 'poly' && this.polyTarget === 'vision')) {
       p.append(el('div', { class: 'le-row' }, 'Paint ', ...['wall', 'chasm', 'open'].map((c) => el('button', {
         class: 'le-swatch ' + (this.colour === c ? 'on' : ''), style: `--c: rgb(${COLOURS[c].join(',')})`, title: { wall: 'Wall (W)', chasm: 'Chasm: impassable, shoot over (C)', open: 'Open floor (O)' }[c],
@@ -1423,7 +1419,7 @@ class Editor {
     // palette
     if (this.tool === 'place') {
       const layer = this.placeLayer;
-      p.append(el('div', { class: 'le-row le-tabs' }, 'Place on ', ...[...PLACE_LAYERS, 'decor'].map((l) => el('button', { class: l === layer ? 'on' : '', onclick: () => this.setPlaceLayer(l) }, layerLabel(l)))));
+      if (layer !== 'decor') p.append(el('h4', {}, 'Place: ' + layerLabel(layer).toLowerCase(), el('small', {}, ' · click a layer name to change')));
       if (layer === 'decor') p.append(this.decorPalette());
       else if (layer !== 'pathNodes') {
         const syms = new Set();
@@ -1504,7 +1500,7 @@ class Editor {
     if (!cats.includes(this.decorCat)) this.decorCat = (typeof this.placeSymbol === 'string' && cats.find((c) => this.placeSymbol.startsWith(c + '/'))) || cats[0];
     const sprites = idx[this.decorCat] || [];
     return el('div', {},
-      el('h4', {}, 'Place: decor ', el('select', { onchange: (e) => { this.decorCat = e.target.value; this.refreshPanel(); } },
+      el('h4', {}, 'Place: decor ', el('small', {}, '(click a layer name to change) '), el('select', { onchange: (e) => { this.decorCat = e.target.value; this.refreshPanel(); } },
         ...cats.map((c) => el('option', { value: c, selected: c === this.decorCat }, `${c} (${idx[c].length})`)))),
       el('div', { class: 'le-decor-pal' }, ...sprites.map((s) => el('button', {
         class: this.placeSymbol === s.file ? 'on' : '', title: `${s.file} (${s.w} × ${s.h})`,
@@ -2022,7 +2018,6 @@ const CSS = `
 #level-editor .le-works b { color: #8fd; font-weight: normal; border-bottom: 2px solid #4fc; }
 #level-editor .le-works b.locked { color: #fb6; border-color: #c84; }
 #level-editor .le-works b.off { color: #688; border-color: #355; }
-#level-editor .le-tabs button { font-size: 11px; padding: 1px 5px; }
 #level-editor button:disabled { opacity: 0.45; cursor: default; }
 #level-editor .le-palette button { font-size: 11px; }
 #level-editor .le-decor-pal { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 3px; max-height: 220px; overflow-y: auto; }
