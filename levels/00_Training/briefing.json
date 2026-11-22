@@ -1,140 +1,17 @@
 {
-  "changes": [
-    {"place": "interface/mask wipe", "depth": 3281, "x": 0, "y": 0, "clipDepth": 3439},
-    {"place": "screen_mc/shape 1", "depth": 3370, "x": 0, "y": 0},
-    {
-      "place": "screen_mc/text 1",
-      "depth": 3371,
-      "x": 87.05,
-      "y": 81.8,
-      "scale": [1.000061, 1.000305],
-      "filters": [
-        {
-          "type": "glow",
-          "color": "#00ffff",
-          "blurX": 15,
-          "blurY": 15,
-          "strength": 1,
-          "inner": false,
-          "knockout": false,
-          "passes": 2
-        }
-      ]
-    },
-    {"place": "screen_mc/text 2", "depth": 3372, "x": 90.05, "y": 164.9, "scale": [1.000061, 1.000305]},
-    {"place": "_circle", "depth": 3373, "x": 638.5, "y": 249.05, "scale": [0.59761, 0.597763], "color": {"alpha": 0}},
-    {"place": "_shared/shape 254", "depth": 3386, "x": 638.5, "y": 249.05, "scale": [1.000061, 1.000305]},
-    {
-      "place": "screen_mc/text 3",
-      "depth": 3387,
-      "x": 607.2,
-      "y": 219.8,
-      "scale": [1.000061, 1.000305],
-      "filters": [
-        {
-          "type": "glow",
-          "color": "#00ffff",
-          "blurX": 15,
-          "blurY": 15,
-          "strength": 1,
-          "inner": false,
-          "knockout": false,
-          "passes": 2
-        }
-      ]
-    },
-    {
-      "place": "screen_mc/text 4",
-      "depth": 3388,
-      "x": 592.2,
-      "y": 305.2,
-      "scale": [1.000061, 1.000305],
-      "filters": [
-        {
-          "type": "glow",
-          "color": "#00ffff",
-          "blurX": 15,
-          "blurY": 15,
-          "strength": 1,
-          "inner": false,
-          "knockout": false,
-          "passes": 2
-        }
-      ]
-    },
-    {
-      "place": "game objects/exit_mc",
-      "depth": 3389,
-      "x": 636.95,
-      "y": 376.5,
-      "scale": [1.000061, 1.000305],
-      "clipEvents": [],
-      "script": [
-        "/*onClipEvent (load) {",
-        "    setTimeout(gotoAndStop, 1, 3);",
-        "}*/",
-        "",
-        "/*on (release) {",
-        "    this.play();",
-        "}*/",
-        ""
-      ]
-    },
-    {"place": "screen_mc/text 5", "depth": 3419, "x": 590.55, "y": 259.8, "scale": [1.000061, 1.000305]},
-    {"place": "screen_mc/text 6", "depth": 3420, "x": 630.65, "y": 429.8, "scale": [1.000061, 1.000305]},
-    {
-      "place": "screen_mc/text 7",
-      "depth": 3421,
-      "x": 89.05,
-      "y": 75.8,
-      "scale": [1.000061, 1.000305],
-      "filters": [
-        {
-          "type": "glow",
-          "color": "#00ffff",
-          "blurX": 15,
-          "blurY": 15,
-          "strength": 1,
-          "inner": false,
-          "knockout": false,
-          "passes": 2
-        }
-      ]
-    },
-    {
-      "place": "interface/buttons/btn play mission",
-      "depth": 3422,
-      "x": 548,
-      "y": 544,
-      "clipEvents": [2048, 131072, 131072],
-      "script": [
-        "on (release) {",
-        "    continueLevel();",
-        "}",
-        "on (keyPress \"<Space>\") {",
-        "    continueLevel();",
-        "}",
-        "",
-        "on (keyPress \"<Enter>\") {",
-        "    continueLevel();",
-        "}",
-        ""
-      ]
-    },
-    {
-      "place": "interface/buttons/btn back to main menu",
-      "depth": 3426,
-      "x": 65,
-      "y": 3.05,
-      "script": ["on (release) {", "    quit();", "}", "", "on (keyPress \"<Escape>\") {", "    quit();", "}", ""]
-    },
-    {
-      "place": "interface/screens/briefing monitor scanlines anim",
-      "depth": 3430,
-      "x": 0,
-      "y": 0,
-      "color": {"alpha": 0.1484375},
-      "blend": "overlay"
-    }
-  ]
+  "title": "BASIC TRAINING",
+  "body": "The city's defense robots have gone haywire! You\nneed to enter the city and reduce these\nmalfunctioning robots to scrap metal. In each\nmission you will need to destroy all the energy\ncontainers, then proceed to the exit.",
+  "captions": [
+    {"style":"name","text":"Energy Container","x":638.4,"y":219.89},
+    {"style":"name","text":"Exit","x":638.4,"y":305.29},
+    {"style":"note","text":"Destroy all of these.","x":638.75,"y":259.6},
+    {"style":"note","text":"Escape after all targets\ndestroyed.","x":641.35,"y":429.6}
+  ],
+  "graphics": [
+    {"symbol":"_circle","x":638.5,"y":249.05,"scale":[0.59761,0.597763],"color":{"alpha":0}},
+    {"symbol":"_shared/shape 254","x":638.5,"y":249.05,"scale":[1.000061,1.000305]},
+    {"symbol":"game objects/exit_mc","x":636.95,"y":376.5,"scale":[1.000061,1.000305],"script":["/*onClipEvent (load) {","    setTimeout(gotoAndStop, 1, 3);","}*/","","/*on (release) {","    this.play();","}*/",""]}
+  ],
+  "backdrop": "screen_mc/shape 1",
+  "bodyLeading": 2.11
 }

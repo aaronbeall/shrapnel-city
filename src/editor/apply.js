@@ -27,7 +27,7 @@ export class LevelApplier {
     if (name === null) return 65535;
     let v = this.ids[name];
     // a symbol the editor's data adds, such as a new vision zone, gets the next free id
-    if (v === undefined && /^level assets\/vision\d+-\d+(\/shape 1)?$/.test(name)) v = this.ids[name] = this.nextId++;
+    if (v === undefined && /^level assets\/(vision\d+-\d+(\/shape 1)?|briefing\d+\/text \d+)$/.test(name)) v = this.ids[name] = this.nextId++;
     if (v === undefined) throw new Error(`unknown symbol "${name}"`);
     return v;
   }
@@ -110,6 +110,17 @@ function materialize(v, clip, G) {
 }
 
 // Leave whatever is running and start level i from its (edited) data, stopped on its first frame.
+// open level i's briefing screen (its Play mission button starts the level)
+export function showBriefing(rt, i) {
+  const G = rt.env.G;
+  const s = rt.root.screen_mc;
+  if (s && s._currentframe % 2 === 0 && typeof G.endLevel === 'function') G.endLevel();
+  G.gotoLevel(i);
+  rt.flush();
+  rt.root.screen_mc.gotoAndStop(i * 2 + 1);
+  rt.flush();
+}
+
 export function restartLevel(rt, i) {
   const G = rt.env.G;
   const s = rt.root.screen_mc;

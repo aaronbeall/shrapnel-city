@@ -6,7 +6,7 @@ import { Runtime } from '../src/flash/runtime.js';
 import { MovieClip, SimpleButton, TextField } from '../src/flash/display.js';
 import { mul } from '../src/flash/geom.js';
 import { decodeTimeline } from './flash-source/format.mjs';
-import { container } from './levels/compile.mjs';
+import { container, briefingChanges } from './levels/compile.mjs';
 
 const params = new URLSearchParams(location.search);
 const rt = new Runtime(document.createElement('canvas'), { base: '../assets/' });
@@ -563,10 +563,9 @@ function levelPiece(path) {
   const L = m && levelData && levelData.levels.find((x) => x.folder === m[1]);
   if (L) {
     try {
-      const list = L[m[2]] || [];
       const o = m[2] === 'briefing'
-        ? { kind: 'sprite', frames: 1, timeline: [{ frame: 1, changes: list }] }
-        : container(list, path);
+        ? { kind: 'sprite', frames: 1, timeline: [{ frame: 1, changes: briefingChanges(L) }] }
+        : container(L[m[2]] || [], path);
       const t = decodeTimeline(o, (n) => { const v = levelData.ids[n] ?? lib.idFor(n); if (v === undefined) throw new Error(`unknown symbol "${n}"`); return v; });
       if (o.timeline[0].changes.length) {
         cid = nextPieceId++;

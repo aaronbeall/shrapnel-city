@@ -58,7 +58,7 @@ export function loadLevels(root) {
     const L = {
       index: i, folder,
       settings: readJSON(f('level.json')),
-      briefing: readJSON(f('briefing.json'), { changes: [] }).changes,
+      briefing: readJSON(f('briefing.json'), {}),
       doors: readJSON(f('doors.json'), []),
       features: readJSON(f('features.json'), []),
       pathNodes: readJSON(f('pathNodes.json'), []),

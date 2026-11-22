@@ -4,10 +4,10 @@
 // level in the browser and restarts it, so the view is the real game paused on the
 // level's first frame. Save writes each changed file back to levels/<NN_name>/ when the
 // page is served by `npm run edit`, and downloads the files otherwise.
-import { LevelApplier, restartLevel } from './apply.js';
+import { LevelApplier, restartLevel, showBriefing } from './apply.js';
 import { CollisionMap, COLOURS } from './collision.js';
 import { renderPreview } from './preview.js';
-import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour } from '../../tools/levels/compile.mjs';
+import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour, briefingJSON } from '../../tools/levels/compile.mjs';
 import { pretty } from '../../tools/flash-source/format.mjs';
 import { mul } from '../flash/geom.js';
 
@@ -262,7 +262,7 @@ class Editor {
     this.refreshSave();
   }
 
-  snapshot() { return JSON.stringify({ ...Object.fromEntries(DATA_LAYERS.map((l) => [l, this.L[l] || []])), settings: this.L.settings }); }
+  snapshot() { return JSON.stringify({ ...Object.fromEntries(DATA_LAYERS.map((l) => [l, this.L[l] || []])), settings: this.L.settings, briefing: this.L.briefing }); }
 
   // run a data change with undo, then rebuild the level
   change(files, fn, { reload = true } = {}) {
@@ -281,6 +281,7 @@ class Editor {
     const o = JSON.parse(json);
     for (const k of DATA_LAYERS) this.L[k] = o[k];
     this.L.settings = o.settings;
+    this.L.briefing = o.briefing;
   }
 
   pushUndo(e) { this.undoStack.push(e); if (this.undoStack.length > 200) this.undoStack.shift(); this.redoStack.length = 0; }
@@ -984,6 +985,7 @@ class Editor {
     const L = this.levels[i];
     if (file === 'collision.png') return this.maps[i].toBlob();
     if (file === 'level.json') return pretty(L.settings) + '\n';
+    if (file === 'briefing.json') return briefingJSON(L.briefing);
     if (file === 'decor.json') return decorJSON(L.decor || []);
     return pretty(L[file.replace('.json', '')] || []) + '\n';
   }
@@ -1457,6 +1459,7 @@ class Editor {
     p.append(this.artPanel());
     p.append(this.triggerPanel());
     p.append(this.statsPanel());
+    p.append(this.briefingPanel());
     p.append(el('details', {}, el('summary', {}, 'Level settings (level.json)'),
       el('textarea', { rows: 4, spellcheck: false, onchange: (e) => {
         try {
@@ -1468,6 +1471,60 @@ class Editor {
     this.saveBtn = el('button', { class: 'le-save', title: this.writable ? 'Write the changed files into levels/ (Ctrl+S)' : 'Download the changed files (Ctrl+S). Run npm run edit to save into levels/ directly.', onclick: () => this.save() });
     p.append(el('div', { class: 'le-row' }, this.saveBtn, el('button', { onclick: () => this.undo(), title: 'Ctrl+Z' }, 'Undo'), el('button', { onclick: () => this.undo(true), title: 'Ctrl+Shift+Z' }, 'Redo')));
     this.refreshSave();
+  }
+
+  // the briefing screen (briefing.json): title, text, captions and the pictures beside them.
+  // Edits don't restart the level; Show briefing rebuilds and opens the briefing screen.
+  briefingPanel() {
+    const L = this.L;
+    const b = (L.briefing ||= {});
+    const edit = (fn) => this.change(['briefing.json'], () => { fn(L.briefing ||= {}); }, { reload: false });
+    const text = (value, set, attrs = {}) => el('input', { value: value || '', spellcheck: false, ...attrs, onchange: (ev) => edit((o) => set(o, ev.target.value)) });
+    const num = (label, value, set) => el('label', {}, label + ' ', el('input', { type: 'number', step: 'any', value: value ?? 0, style: 'width: 58px', onchange: (ev) => { const v = +ev.target.value; if (isFinite(v)) edit((o) => set(o, v)); } }));
+    const caps = b.captions || [];
+    const capRows = caps.map((c, k) => el('div', { class: 'le-brief-cap' },
+      el('div', { class: 'le-row' },
+        el('select', { title: 'name: cyan heading; note: small white text', onchange: (ev) => edit((o) => { o.captions[k].style = ev.target.value; }) },
+          ...['name', 'note'].map((s) => el('option', { value: s, selected: (c.style || 'note') === s }, s))),
+        num('x', c.x, (o, v) => { o.captions[k].x = v; }), num('y', c.y, (o, v) => { o.captions[k].y = v; }),
+        el('button', { title: 'remove this caption', onclick: () => edit((o) => { o.captions.splice(k, 1); }) }, '×')),
+      el('textarea', { rows: Math.max(1, String(c.text || '').split('\n').length), spellcheck: false, title: 'centred on x; y is the top of the text. Enter starts a new line.', onchange: (ev) => edit((o) => { o.captions[k].text = ev.target.value; }) }, c.text || '')));
+    const graphics = el('textarea', { rows: Math.min(10, 2 + (b.graphics || []).length), spellcheck: false, class: 'le-script', onchange: (ev) => {
+      try {
+        const v = ev.target.value.trim() ? JSON.parse(ev.target.value) : [];
+        if (!Array.isArray(v) || v.some((g) => !g || typeof g.symbol !== 'string')) throw new Error('expected a list of {"symbol", "x", "y", ...}');
+        edit((o) => { if (v.length) o.graphics = v; else delete o.graphics; });
+      } catch (err) { this.status('Briefing graphics: ' + err.message, true); }
+    } }, '[\n' + (b.graphics || []).map((g) => '  ' + JSON.stringify(g)).join(',\n') + '\n]');
+    return el('details', { class: 'le-set-group', open: this.openGroups.has('$briefing') || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add('$briefing'); else this.openGroups.delete('$briefing'); } },
+      el('summary', {}, 'Briefing (briefing.json)'),
+      el('div', { class: 'le-row' }, el('button', { title: 'rebuild and show this level\'s briefing screen (Play mission starts the level)', onclick: () => this.previewBriefing() }, 'Show briefing ▸')),
+      el('label', { class: 'le-set' }, el('span', { class: 'le-set-name' }, 'title'), text(b.title, (o, v) => { o.title = v; })),
+      el('label', { class: 'le-set' }, el('span', { class: 'le-set-name' }, 'label'), text(b.label, (o, v) => { if (v) o.label = v; else delete o.label; }, { placeholder: 'LVL.' + String(L.index).padStart(2, '0') })),
+      el('div', { class: 'le-tip' }, 'Mission text (wraps by itself; Enter starts a new line):'),
+      el('textarea', { rows: 7, spellcheck: true, class: 'le-script', style: 'white-space: pre-wrap', onchange: (ev) => edit((o) => { o.body = ev.target.value; }) }, b.body || ''),
+      el('div', { class: 'le-tip' }, 'Captions in the Intel panel (it spans about x 560 to 715):'),
+      ...capRows,
+      el('div', { class: 'le-row' }, el('button', { onclick: () => edit((o) => { (o.captions ||= []).push({ style: 'name', text: 'New target', x: 637, y: o.captions.length ? Math.max(...o.captions.map((c) => +c.y || 0)) + 45 : 210 }); }) }, '+ Caption')),
+      el('div', { class: 'le-tip' }, 'Pictures and other graphics: library symbols placed on the screen, like a level\'s placements (symbol, x, y, scale, ...):'),
+      graphics,
+      el('label', { class: 'le-set' }, el('span', { class: 'le-set-name' }, 'backdrop'),
+        el('select', { onchange: (ev) => edit((o) => { if (ev.target.value === 'screen_mc/shape 2') delete o.backdrop; else o.backdrop = ev.target.value; }) },
+          ...[['screen_mc/shape 2', 'standard'], ['screen_mc/shape 1', 'training (shape 1)']].map(([v, t]) => el('option', { value: v, selected: (b.backdrop || 'screen_mc/shape 2') === v }, t)))));
+  }
+
+  previewBriefing() {
+    const images = {};
+    for (const [i, m] of Object.entries(this.maps)) images[i] = m.canvas;
+    try {
+      this.applier.apply(this.levels, images);
+      this.needsReload = false;
+      showBriefing(this.rt, this.index);
+      this.close();
+    } catch (e) {
+      console.error(e);
+      this.status('Could not rebuild the briefing: ' + e.message, true);
+    }
   }
 
   propsPanel() {
@@ -2131,6 +2188,8 @@ const CSS = `
 #level-editor .le-set-name.forced { color: #666; text-decoration: line-through; }
 #level-editor .le-reset { padding: 0 4px; line-height: 1.2; }
 #level-editor .le-warn { color: #fa6; margin: 4px 0; }
+#level-editor .le-brief-cap { border-left: 2px solid #276; padding-left: 6px; margin: 4px 0; }
+#level-editor .le-brief-cap textarea { margin-top: 2px; }
 #level-editor textarea.le-script { font: 11px/1.35 ui-monospace, monospace; white-space: pre; tab-size: 4; }
 #level-editor pre { background: #021; padding: 4px; max-height: 160px; overflow: auto; font-size: 10px; margin: 2px 0; }
 #level-editor .le-row { margin: 4px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
