@@ -1,8 +1,8 @@
 [
   {"sprite": "panels/06.png", "x": 86, "y": 522, "scale": 0.75, "rotation": 0, "effect": "emboss"},
   {"sprite": "panels/11.png", "x": 684, "y": 320, "scale": 0.5034, "rotation": 90, "effect": "emboss"},
-  {"sprite": "panels/09.png", "x": 246, "y": 146, "scale": 0.4724, "rotation": 0, "effect": "emboss"},
-  {"sprite": "panels/08.png", "x": 523, "y": 298, "scale": 0.4705, "rotation": 90, "effect": "emboss"},
+  {"sprite": "panels/09.png", "x": 251.2, "y": 185.51, "scale": 0.4724, "rotation": 0, "effect": "emboss"},
+  {"sprite": "panels/08.png", "x": 525.08, "y": 295.92, "scale": 0.4705, "rotation": 90, "effect": "emboss"},
   {"sprite": "panels/00.png", "x": 1191, "y": 81, "scale": 0.5056, "rotation": 0, "effect": "emboss"},
   {"sprite": "floorpaint/22.png", "x": 1248.89, "y": 314.64, "scale": 0.2778, "rotation": 0, "effect": "paint"},
   {"sprite": "floorpaint/20.png", "x": 251.33, "y": 185.51, "scale": 0.2721, "rotation": 0, "effect": "paint"},
@@ -230,7 +230,7 @@
   {"sprite": "greebles/22.png", "x": 1093, "y": 55, "scale": 0.0833, "rotation": 0, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles/10.png", "x": 953, "y": 91, "scale": 0.1228, "rotation": 0, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles/21.png", "x": 31, "y": 578, "scale": 0.2205, "rotation": 0, "effect": "shadow", "strength": 0.35},
-  {"sprite": "greebles2/06.png", "x": 888, "y": 21, "scale": 0.4, "rotation": 90, "effect": "shadow", "strength": 0.35},
+  {"sprite": "greebles2/06.png", "x": 893.2, "y": 16.84, "scale": 0.4, "rotation": 90, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles/16.png", "x": 1320, "y": 570, "scale": 0.0508, "rotation": 0, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles/21.png", "x": 43, "y": 463, "scale": 0.1689, "rotation": 225, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles2/01.png", "x": 13, "y": 539, "scale": 0.2817, "rotation": 0, "effect": "shadow", "strength": 0.35},
@@ -239,7 +239,7 @@
   {"sprite": "greebles2/12.png", "x": 837, "y": 15, "scale": 0.126, "rotation": 0, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles2/20.png", "x": 1066, "y": 131, "scale": 0.0985, "rotation": 45, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles2/14.png", "x": 615, "y": 92, "scale": 0.1333, "rotation": 0, "effect": "shadow", "strength": 0.35},
-  {"sprite": "greebles2/22.png", "x": 927, "y": 79, "scale": 0.3614, "rotation": 0, "effect": "shadow", "strength": 0.35},
+  {"sprite": "greebles2/22.png", "x": 927, "y": 86.28, "scale": 0.3614, "rotation": 0, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles/04.png", "x": 439, "y": 115, "scale": 0.1538, "rotation": 0, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles/02.png", "x": 1509, "y": 419, "scale": 0.2023, "rotation": 225, "effect": "shadow", "strength": 0.35},
   {"sprite": "greebles/16.png", "x": 1339, "y": 59, "scale": 0.1525, "rotation": 0, "effect": "shadow", "strength": 0.35},
@@ -281,5 +281,6 @@
   {"sprite": "lights/10.png", "x": 1159, "y": 49, "scale": 0.06, "rotation": 0, "effect": "glow", "strength": 0.9, "of": "panels"},
   {"sprite": "lights/10.png", "x": 1159, "y": 112, "scale": 0.06, "rotation": 0, "effect": "glow", "strength": 0.9, "of": "panels"},
   {"sprite": "lights/10.png", "x": 1222, "y": 49, "scale": 0.06, "rotation": 0, "effect": "glow", "strength": 0.9, "of": "panels"},
-  {"sprite": "lights/10.png", "x": 1222, "y": 112, "scale": 0.06, "rotation": 0, "effect": "glow", "strength": 0.9, "of": "panels"}
+  {"sprite": "lights/10.png", "x": 1222, "y": 112, "scale": 0.06, "rotation": 0, "effect": "glow", "strength": 0.9, "of": "panels"},
+  {"sprite": "floorpaint/01.png", "x": 85.2, "y": 522.8, "scale": 0.4, "rotation": 0, "effect": "paint"}
 ]
