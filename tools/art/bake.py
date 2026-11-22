@@ -373,10 +373,6 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
     index = json.load(open(os.path.join(DECOR, 'index.json')))
     cats = {c: [it['file'] for it in items] for c, items in index.items()}
     cats['greebles'] = cats.get('greebles', []) + cats.get('greebles2', [])
-    vo = opts['variant']
-    if vo['spriteShare'] < 1:  # this level's own subset of each type's sprites
-        pick = np.random.default_rng(seed + 99)
-        cats = {c: sorted(pick.choice(fs, max(2, int(round(len(fs) * vo['spriteShare']))), replace=False).tolist()) if len(fs) > 2 else fs for c, fs in cats.items()}
     rng = np.random.default_rng(seed + 1)
     H, W = g.H, g.W
     surfaces = {
@@ -413,7 +409,6 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
         if only is not None and cat not in only: continue
         if cat == 'greebles' and surf == 'wall':
             count, short = int(go['count']), ('wall', 1.0, go['size'])
-        count = int(round(count * vo['density']))
         surface = surfaces[surf]
         files = [f for f in cats.get(cat, []) if max(sprite(f).size) >= o.get('min_aspect', 0) * min(sprite(f).size)]
         pts = np.argwhere(surface)

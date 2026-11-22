@@ -45,7 +45,6 @@ const DECOR_DIR = 'tools/art/parts/decor/';
 // the decor types the art pipeline places (tools/art/bake.py CATEGORIES)
 // the names planned for levels 04-23, offered as New level's default name
 const PLANNED_NAMES = ['00_Training', '01_DropZone', '02_FirstBlock', '03_Bridge', '04_Urban', '05_Gateway', '06_Downtown', '07_Shipyard', '08_Bunker', '09_Complex', '10_Interface', '11_Skyrise', '12_Transit', '13_Security', '14_Core', '15_Escape', '16_Outskirts', '17_Outpost', '18_Docking', '19_Deep Space', '20_Station', '21_Central', '22_Source', '23_Terminate'];
-const GEN_STAGES = ['features', 'boxes', 'paths', 'enemies', 'doors']; // tools/levels/generate.py
 const DECOR_TYPES = ['panels', 'floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights'];
 const DECOR_DEFAULTS = { panels: { effect: 'emboss' }, floorpaint: { effect: 'paint' }, greebles: { effect: 'shadow', strength: 0.35 }, greebles2: { effect: 'shadow', strength: 0.35 }, vents: { effect: 'shadow', strength: 0.3 }, rails: { effect: 'shadow', strength: 0.25 }, lights: { effect: 'glow', strength: 0.9 } };
 const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as in Flash
@@ -2097,8 +2096,7 @@ class Editor {
         el('button', { class: this.shapesAhead ? 'le-hot' : '', title: 'shapes -> collision.png now', onclick: () => this.bakeCollision() }, 'Bake collision')),
       mm ? el('div', { class: 'le-tip' }, 'collision.png was edited outside the shapes; pick Keep the map or Use the shapes in the shape stack (Map tab) first.') : '');
     const s2 = step('2', 'Background art', L.settings && L.settings.art ? (this.stale ? warn('collision changed') : ok('')) : el('small', {}, 'original art'), this.artPanel());
-    const s3 = step('3', 'Placements', el('small', {}, 'generators'), this.genPanel());
-    return [el('div', { class: 'le-block' }, s1, s2, s3)];
+    return [el('div', { class: 'le-block' }, s1, s2)];
   }
 
   // the briefing screen (briefing.json): title, text, captions and the pictures beside them.
@@ -2278,70 +2276,27 @@ class Editor {
     // the bake's options (tools/art/options.json), saved in level.json art.<group>.<option>
     if (this.artOptions && !(this.artOptions instanceof Promise)) {
       box.append(el('div', { class: 'le-label le-gap' }, 'Bake options ', el('small', {}, 'take effect on the next Bake art')));
-      box.append(...this.optionGroups(this.artOptions, art, setArt));
-    }
-    return box;
-  }
-
-  // an options file's groups (tools/art/options.json, tools/levels/generate.json) as folding
-  // fields; `cur` holds the level's overrides by group, `setGroups({group: overrides|undefined})`
-  optionGroups(specs, cur, setGroups) {
-    return Object.entries(specs).map(([group, spec]) => {
-      const own = cur[group] || {};
-      const changed = Object.keys(own).length;
-      const set = (key, v) => setGroups({ [group]: (() => { const o = { ...own }; if (v === spec.options[key].default) delete o[key]; else o[key] = v; return Object.keys(o).length ? o : undefined; })() });
-      const rows = Object.entries(spec.options).map(([key, o]) => {
-        const v = own[key] ?? o.default;
-        const input = o.type === 'colour'
-          ? el('input', { type: 'color', value: v, onchange: (ev) => set(key, ev.target.value) })
-          : o.type === 'choice'
-            ? el('select', { onchange: (ev) => set(key, ev.target.value) }, ...o.choices.map((c) => el('option', { value: c, selected: c === v }, c)))
+      for (const [group, spec] of Object.entries(this.artOptions)) {
+        const cur = art[group] || {};
+        const changed = Object.keys(cur).length;
+        const set = (key, v) => setArt({ [group]: (() => { const o = { ...cur }; if (v === spec.options[key].default) delete o[key]; else o[key] = v; return Object.keys(o).length ? o : undefined; })() });
+        const rows = Object.entries(spec.options).map(([key, o]) => {
+          const v = cur[key] ?? o.default;
+          const input = o.type === 'colour'
+            ? el('input', { type: 'color', value: v, onchange: (ev) => set(key, ev.target.value) })
+            : o.type === 'choice'
+              ? el('select', { onchange: (ev) => set(key, ev.target.value) }, ...o.choices.map((c) => el('option', { value: c, selected: c === v }, c)))
             : o.type === 'text'
               ? el('input', { value: v, placeholder: 'none', onchange: (ev) => set(key, ev.target.value.trim()) })
               : el('input', { type: 'number', min: o.min, max: o.max, step: o.step, value: v, onchange: (ev) => { const x = +ev.target.value; if (isFinite(x)) set(key, Math.min(o.max ?? x, Math.max(o.min ?? x, x))); } });
-        return el('label', { class: 'le-opt' + (key in own ? ' set' : ''), title: (o.tip || '') + ` (default ${o.default === '' ? 'none' : o.default})` }, o.label, input);
-      });
-      const id = (specs === this.artOptions ? 'art:' : 'gen:') + group;
-      return el('details', { class: 'le-optgroup', open: !!(this.openOpts && this.openOpts.has(id)), ontoggle: (ev) => { (this.openOpts ||= new Set())[ev.target.open ? 'add' : 'delete'](id); } },
-        el('summary', {}, spec.label + (changed ? ` (${changed} changed)` : '')),
-        spec.tip ? el('div', { class: 'le-tip' }, spec.tip) : '', el('div', { class: 'le-opts' }, ...rows),
-        changed ? el('button', { onclick: () => setGroups({ [group]: undefined }) }, 'Defaults') : '');
-    });
-  }
-
-  // placement generators (tools/levels/generate.py), one file each, settings in level.json "generate"
-  genPanel() {
-    const L = this.L, gen = (L.settings && L.settings.generate) || {};
-    const box = el('div', { class: 'le-art' });
-    if (!this.genOptions) {
-      this.genOptions = fetch('tools/levels/generate.json', { cache: 'no-store' }).then((r) => r.json())
-        .then((j) => { this.genOptions = j; this.refreshPanel(); }).catch((e) => { this.genOptions = {}; this.status('Generator options: ' + e.message, true); });
+          return el('label', { class: 'le-opt' + (key in cur ? ' set' : ''), title: (o.tip || '') + ` (default ${o.default === '' ? 'none' : o.default})` }, o.label, input);
+        });
+        box.append(el('details', { class: 'le-optgroup', open: !!(this.openOpts && this.openOpts.has(group)), ontoggle: (ev) => { (this.openOpts ||= new Set())[ev.target.open ? 'add' : 'delete'](group); } },
+          el('summary', {}, spec.label + (changed ? ` (${changed} changed)` : '')),
+          spec.tip ? el('div', { class: 'le-tip' }, spec.tip) : '', el('div', { class: 'le-opts' }, ...rows),
+          changed ? el('button', { onclick: () => setArt({ [group]: undefined }) }, 'Defaults') : ''));
+      }
     }
-    const setGen = (o) => this.change(['level.json'], () => {
-      const g = { ...gen, ...o };
-      for (const k of Object.keys(g)) if (g[k] === undefined) delete g[k];
-      L.settings = { ...(L.settings || {}), generate: Object.keys(g).length ? g : undefined };
-      if (!L.settings.generate) delete L.settings.generate;
-    }, { reload: false });
-    const running = this.art || (this.server && this.server.art);
-    const off = !this.writable || !!running;
-    const ends = this.list('features').filter((e) => /(entrance|exit)_mc$/.test(e.symbol)).length;
-    const stages = [
-      ['features', 'Entrance + exit', ends, 'features.json: the entrance and exit, as far apart as the floor allows'],
-      ['boxes', 'Boxes', this.layerCount('boxes'), 'boxes.json: crates in small groups along the walls, some with drops'],
-      ['paths', 'Path nodes', this.layerCount('pathNodes'), 'pathNodes.json: a node network over the wide floor, for tanks and drones'],
-      ['enemies', 'Enemies', this.layerCount('enemies'), 'enemies.json: turrets where they see the most floor, tanks and drones on the path nodes (run Path nodes first)'],
-      ['doors', 'Doors', this.layerCount('doors'), 'doors.json: doors across narrow passages on the way to the exit, each with a trigger pad (powerups.json) on the near side'],
-    ];
-    box.append(el('div', { class: 'le-tip' }, 'Each generator reads collision.png and writes one file, replacing what is in it (hand edits too: Undo can\'t bring them back, git can). Run them in this order the first time.'),
-      el('div', { class: 'le-row' }, 'Seed ', el('input', { type: 'number', step: 1, value: gen.seed ?? 1, style: 'width: 6em', onchange: (ev) => { const v = Math.round(+ev.target.value); if (isFinite(v)) setGen({ seed: v === 1 ? undefined : v }); } }),
-        el('button', { title: 'a new random seed', onclick: () => setGen({ seed: 1 + Math.floor(Math.random() * 9999) }) }, '🎲')),
-      ...stages.map(([key, label, n, tip]) => el('div', { class: 'le-row' },
-        this.confirmGen === key
-          ? el('button', { disabled: off, class: 'le-danger', onclick: () => { this.confirmGen = null; this.runArt(key); } }, `Replace ${n} ${label.toLowerCase()}?`)
-          : el('button', { disabled: off, title: tip, onclick: () => { if (n) { this.confirmGen = key; this.refreshPanel(); } else this.runArt(key); } }, 'Generate ' + label.toLowerCase()),
-        this.confirmGen === key ? el('button', { onclick: () => { this.confirmGen = null; this.refreshPanel(); } }, 'Cancel') : el('small', {}, n ? `${n} now` : 'none yet'))));
-    if (this.genOptions && !(this.genOptions instanceof Promise)) box.append(el('div', { class: 'le-label le-gap' }, 'Generator options'), ...this.optionGroups(this.genOptions, gen, setGen));
     return box;
   }
 
@@ -2365,7 +2320,7 @@ class Editor {
       return;
     }
     // reload the page so the new background.png and decor.json come in, back where we were
-    this.reopen(this.index, GEN_STAGES.includes(step) ? `Generated ${step} for ${L.folder}.` : `Art ${step === 'all' ? 're-placed and baked' : 'baked'} for ${L.folder}.`);
+    this.reopen(this.index, `Art ${step === 'all' ? 're-placed and baked' : 'baked'} for ${L.folder}.`);
   }
 
   // reload the page on level `index` (after files changed on disk), back in the same view unless
