@@ -35,10 +35,13 @@ const PRESETS = {
 };
 const AUTO_VISION_ANGLES = 90, LOS_SAMPLE_SIZE = 15; // as2/enemyTurret.as
 const NODE_LOS_SAMPLE = 10; // as2/pathNode.as
-// extra symbols offered in the place palette besides those already used in a level
-const EXTRA = {
-  enemies: ['enemy assets/enemy tank', 'enemy assets/enemy drone', 'enemy assets/enemy gnat', 'enemy assets/enemy missile launcher'],
-  boxes: ['game objects/box'],
+// what the Place palette offers on each layer: the one list (add a library symbol here to
+// make it placeable); levels can still hold other symbols, which stay editable
+const PALETTE = {
+  enemies: ['enemy assets/enemy double battery', 'enemy assets/enemy drone', 'enemy assets/enemy gnat', 'enemy assets/enemy missile launcher',
+    'enemy assets/enemy object fire barrel', 'enemy assets/enemy scurge', 'enemy assets/enemy stinger', 'enemy assets/enemy stinger2',
+    'enemy assets/enemy stinger3', 'enemy assets/enemy tank', 'enemy assets/enemy wolfgun'],
+  boxes: ['game objects/box', 'game objects/box computer', 'game objects/box reactor'],
   powerups: ['game objects/powerup', 'game objects/message beacon'],
   doors: ['game objects/door', 'game objects/level gate'],
   features: ['game objects/entrance_mc', 'game objects/exit_mc'],
@@ -1422,11 +1425,8 @@ class Editor {
       if (layer !== 'decor') p.append(el('h4', {}, 'Place: ' + layerLabel(layer).toLowerCase(), el('small', {}, ' · click a layer name to change')));
       if (layer === 'decor') p.append(this.decorPalette());
       else if (layer !== 'pathNodes') {
-        const syms = new Set();
-        // shared helper shapes (_circle, _box) are used as invisible areas, not placed on their own
-        for (const x of this.levels) for (const e of x[layer] || []) if (!e.symbol.startsWith('_')) syms.add(e.symbol);
-        for (const s of EXTRA[layer] || []) if (this.applier.ids[s] !== undefined) syms.add(s);
-        p.append(el('div', { class: 'le-palette' }, ...[...syms].sort().map((s) => el('button', {
+        const syms = (PALETTE[layer] || []).filter((s) => this.applier.ids[s] !== undefined);
+        p.append(el('div', { class: 'le-palette' }, ...syms.map((s) => el('button', {
           class: this.placeSymbol === s ? 'on' : '', onclick: () => { this.placeSymbol = s; this.refreshPanel(); },
         }, s.split('/').pop())), ...(PRESETS[layer] || []).map((pr) => el('button', {
           class: this.placeSymbol === pr ? 'on' : '', title: 'a ' + pr.symbol.split('/').pop() + ' set up as a ' + pr.label,
