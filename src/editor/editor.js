@@ -1166,28 +1166,22 @@ class Editor {
       ctx.fillStyle = 'rgba(255,200,80,0.95)';
       for (const [x, y, t] of labels) ctx.fillText(t, x, y - 2 * px);
     }
-    // enemies with their own settings (cyan dot) or their own script (amber ƒ), while the layer is unlocked
+    // enemies with their own settings (cyan square) or their own script (red square), while the layer is unlocked
     if (this.editable('enemies')) {
-      const r = 4 * px;
-      ctx.font = `bold ${8 * px}px system-ui, sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
+      const r = 3 * px;
       this.list('enemies').forEach((e, k) => {
         const hasProps = e.props && Object.keys(e.props).length, hasScript = e.script !== undefined;
         if (!hasProps && !hasScript) return;
         const [, y0, x1] = this.boundsOf('enemies', k);
         let x = x1;
-        const badge = (fill, glyph) => {
-          ctx.beginPath(); ctx.arc(x, y0, r, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(0,0,0,0.65)'; ctx.fill();
-          ctx.lineWidth = 1 * px; ctx.strokeStyle = fill; ctx.stroke();
-          if (glyph) { ctx.fillStyle = fill; ctx.fillText(glyph, x, y0 + 0.5 * px); } else { ctx.beginPath(); ctx.arc(x, y0, 1.8 * px, 0, Math.PI * 2); ctx.fillStyle = fill; ctx.fill(); }
-          x -= 2.4 * r;
+        const badge = (fill) => {
+          ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(x - r - px, y0 - r - px, 2 * r + 2 * px, 2 * r + 2 * px);
+          ctx.fillStyle = fill; ctx.fillRect(x - r, y0 - r, 2 * r, 2 * r);
+          x -= 2 * r + 3 * px;
         };
-        if (hasScript) badge('rgba(255,190,90,0.95)', 'ƒ');
-        if (hasProps) badge('rgba(110,230,255,0.95)', null);
+        if (hasScript) badge('rgba(255,70,70,0.95)');
+        if (hasProps) badge('rgba(110,230,255,0.95)');
       });
-      ctx.textAlign = 'start';
     }
     // triggers: who sends what (labels), lines to the doors they open (green) or close (red)
     if (this.visible.triggers) {
