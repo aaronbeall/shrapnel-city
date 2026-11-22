@@ -7,6 +7,7 @@
 import { LevelApplier, restartLevel, showBriefing } from './apply.js';
 import { CollisionMap, COLOURS } from './collision.js';
 import { renderPreview } from './preview.js';
+import { parsePath, pathString, fromPoints, isPolygon, clone, curveCount, segEnds, nearestSeg, insertNode, removeNodes, nodeHandles, isSmooth, toggleSmooth, oppositeHandle, moveNodes } from './path.js';
 import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour, briefingJSON } from '../../tools/levels/compile.mjs';
 import { pretty } from '../../tools/flash-source/format.mjs';
 import { mul } from '../flash/geom.js';
@@ -126,7 +127,7 @@ class Editor {
   get L() { return this.levels[this.index]; }
   // the primary selection (the last clicked), or null; setting it selects just that
   get sel() { const s = this.selItems(); return s.length ? s[s.length - 1] : null; }
-  set sel(v) { this.selection = v ? [{ layer: v.layer, k: v.k }] : []; }
+  set sel(v) { this.selection = v ? [{ layer: v.layer, k: v.k }] : []; this.pts = null; }
   // everything selected that still exists, primary last
   selItems() { return this.selection.filter((s) => this.list(s.layer)[s.k]); }
   isSelected(layer, k) { return this.selection.some((s) => s.layer === layer && s.k === k); }
@@ -444,13 +445,16 @@ class Editor {
     if (mod) return;
     if (e.key === 'Shift') this.shiftDown = true;
     const arrow = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (arrow && this.selPoints().length) { e.preventDefault(); this.nudgePoints(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
     if (arrow) { e.preventDefault(); if (this.sel) this.nudge(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
     if (/^[1-9]$/.test(e.key)) { const l = VIEW_LAYERS[+e.key - 1]; if (l) this.setVisible(l.key, !this.visible[l.key]); return; }
     const tool = TOOLS.find((t) => t.hot.toLowerCase() === k);
     if (tool) { this.setTool(tool.key); return; }
     if (k === 'r' && this.sel) { this.rotateSel(e.shiftKey ? -15 : 15); return; }
     if ((e.key === 'Delete' || e.key === 'Backspace') && this.tool === 'poly' && this.poly) { this.poly.pop(); if (!this.poly.length) this.poly = null; return; }
+    if ((e.key === 'Delete' || e.key === 'Backspace') && this.selPoints().length) { this.deletePoints(); return; }
     if ((e.key === 'Delete' || e.key === 'Backspace') && this.sel) { this.deleteSel(); return; }
+    if (e.key === 'Escape' && this.selPoints().length) { this.pts = null; this.refreshPanel(); return; }
     if (e.key === 'Escape') { this.poly = null; this.sel = null; this.linkFrom = null; this.refreshPanel(); return; }
     if (e.key === 'Enter' && this.poly) { this.closePoly(); return; }
     if (e.key === '[') { this.brush = Math.max(1, this.brush - (this.brush > 8 ? 4 : 1)); this.refreshPanel(); return; }
@@ -523,11 +527,15 @@ class Editor {
     const t = this.tool;
     if (t !== 'select' && !this.toolReady()) return;
     if (t === 'select') {
-      const v = this.vertexAt(sx, sy);
-      if (v) { this.drag = { kind: 'vertex', k: v.k, i: v.i, before: this.snapshot(), moved: false }; return; }
-      const h = this.hit(x, y);
+      const part = this.zonePartAt(sx, sy);
+      if (part && this.zoneMouseDown(part, e, x, y)) return;
+      // a click on the edited zone's edge (perhaps just outside its fill) is a click on the zone
+      const h = part && part.kind === 'edge' ? { layer: 'vision', k: part.k } : this.hit(x, y);
       let toggleOff = null;
+      // on nothing: a drag boxes points of the zone being edited; a click clears the selection
+      if (!h && this.editZone()) { this.drag = { kind: 'marquee', x0: x, y0: y, x1: x, y1: y, shift: e.shiftKey }; return; }
       if (!h) { if (!e.shiftKey) this.sel = null; this.refreshPanel(); return; } // Shift+click on nothing keeps the selection
+      if (!e.shiftKey) this.pts = null;
       const i = this.selection.findIndex((s) => s.layer === h.layer && s.k === h.k);
       if (i < 0) { if (e.shiftKey) this.selection.push(h); else this.sel = h; } // Shift+click adds, from any layer
       else {
@@ -590,15 +598,30 @@ class Editor {
       if (!d.moved && Math.hypot(x - d.x, y - d.y) * this.view.z < 2) return; // a click, not a drag
       d.moved = true;
       for (const s0 of d.starts) this.moveTo(s0.layer, s0.k, s0.x + dx, s0.y + dy);
-    } else if (d.kind === 'vertex') {
-      const z = this.list('vision')[d.k];
-      const [wx, wy] = this.snap(x, y, e.shiftKey);
-      const [a, b, c, dd, tx, ty] = zoneMatrix(z);
-      const det = a * dd - b * c || 1;
-      const lx = (dd * (wx - tx) - c * (wy - ty)) / det, ly = (-b * (wx - tx) + a * (wy - ty)) / det;
-      z.points[d.i] = [round2(lx), round2(ly)];
+    } else if (d.kind === 'points') {
+      if (!d.moved && Math.hypot(x - d.x, y - d.y) * this.view.z < 2) return; // a click, not a drag
       d.moved = true;
-    } else if (d.kind === 'rect') { [d.x1, d.y1] = this.snap(x, y, e.shiftKey); }
+      const z = this.list('vision')[d.k], list = this.selPoints();
+      // the point that was clicked follows the mouse (Shift snaps it to the grid); the rest keep up
+      const p0 = d.from[d.ci].nodes[d.i], w0 = apply(zoneMatrix(z), p0);
+      const [wx, wy] = this.snap(w0[0] + x - d.x, w0[1] + y - d.y, e.shiftKey);
+      const [lx, ly] = this.zoneLocal(z, wx, wy);
+      const cs = clone(d.from);
+      moveNodes(cs, d.from, list, round2(lx - p0[0]), round2(ly - p0[1]));
+      this.setZoneContours(z, cs);
+    } else if (d.kind === 'handle') {
+      d.moved = true;
+      const z = this.list('vision')[d.k], cs = this.zoneContours(z), k = cs[d.ci];
+      const p = this.zoneLocal(z, ...this.snap(x, y, e.shiftKey)).map(round2);
+      k.segs[d.si].c[d.h] = p;
+      if (d.opp) { // a smooth node stays smooth: the other handle swings round, keeping its length
+        const node = k.nodes[d.opp.node], o = k.segs[d.opp.si].c[d.opp.h];
+        const len = Math.hypot(o[0] - node[0], o[1] - node[1]), a = Math.atan2(node[1] - p[1], node[0] - p[0]);
+        k.segs[d.opp.si].c[d.opp.h] = [round2(node[0] + Math.cos(a) * len), round2(node[1] + Math.sin(a) * len)];
+      }
+      this.setZoneContours(z, cs);
+    } else if (d.kind === 'marquee') { d.x1 = x; d.y1 = y; }
+    else if (d.kind === 'rect') { [d.x1, d.y1] = this.snap(x, y, e.shiftKey); }
     else if (d.kind === 'paint') {
       this.map.line(d.lx, d.ly, x, y, this.brush, d.colour, d.box);
       this.map.commitStroke(d.box);
@@ -610,10 +633,26 @@ class Editor {
     const d = this.drag;
     this.drag = null;
     if (!d) return;
-    if (d.kind === 'vertex' && d.moved) {
+    if ((d.kind === 'points' || d.kind === 'handle') && d.moved) {
       this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files: ['vision.json'] });
       this.markDirty('vision.json');
       this.reload();
+      this.refreshPanel();
+    } else if (d.kind === 'points' && d.toggleOff) {
+      this.pts.list = this.pts.list.filter((q) => !(q.ci === d.toggleOff.ci && q.i === d.toggleOff.i));
+      this.refreshPanel();
+    } else if (d.kind === 'marquee') {
+      if (Math.hypot(d.x1 - d.x0, d.y1 - d.y0) * this.view.z < 3) { if (!d.shift) this.sel = null; } // a click
+      else {
+        const ez = this.editZone(), cs = this.zoneContours(ez.z), M = zoneMatrix(ez.z);
+        const [ax, bx] = [Math.min(d.x0, d.x1), Math.max(d.x0, d.x1)], [ay, by] = [Math.min(d.y0, d.y1), Math.max(d.y0, d.y1)];
+        const list = d.shift ? this.selPoints().slice() : [];
+        cs.forEach((k, ci) => k.nodes.forEach((p, i) => {
+          const [wx, wy] = apply(M, p);
+          if (wx >= ax && wx <= bx && wy >= ay && wy <= by && !list.some((q) => q.ci === ci && q.i === i)) list.push({ ci, i });
+        }));
+        this.pts = { k: ez.k, list };
+      }
       this.refreshPanel();
     } else if (d.kind === 'move' && d.moved) {
       const files = this.selFiles(d.starts);
@@ -917,7 +956,7 @@ class Editor {
     const det = a * d - b * c;
     if (!det) return false;
     const lx = (d * (x - tx) - c * (y - ty)) / det, ly = (-b * (x - tx) + a * (y - ty)) / det;
-    try { return this.hitCtx.isPointInPath(zonePath2D(z), lx, ly); } catch { return false; }
+    try { return this.hitCtx.isPointInPath(zonePath2D(z), lx, ly, 'evenodd'); } catch { return false; }
   }
 
   addZone(pts, at) {
@@ -944,28 +983,163 @@ class Editor {
     this.addZone(pts, [x, y]);
   }
 
-  // a zone's corner under the mouse, for dragging
-  vertexAt(sx, sy) {
-    if (!this.sel || this.sel.layer !== 'vision' || !this.editable('vision')) return null;
-    const z = this.list('vision')[this.sel.k];
-    if (!z || !z.points) return null;
-    const M = zoneMatrix(z), v = this.view;
-    for (let i = z.points.length - 1; i >= 0; i--) {
-      const [x, y] = apply(M, z.points[i]);
-      if (Math.hypot(x * v.z + v.ox - sx, y * v.z + v.oy - sy) < 7) return { k: this.sel.k, i };
+  // ------------------------------------------------------------------ zone points and curves
+  // A zone's outline is edited point by point with Select: the zone being edited is the primary
+  // selection when it's a vision zone on an editable layer. this.pts = {k, list: [{ci, i}]} holds
+  // its selected points (contour, node); their handles are shown and can be dragged.
+  editZone() {
+    const s = this.sel;
+    if (!s || s.layer !== 'vision' || !this.editable('vision') || this.tool !== 'select') return null;
+    const z = this.list('vision')[s.k];
+    return z ? { k: s.k, z } : null;
+  }
+  selPoints() { const e = this.editZone(); return e && this.pts && this.pts.k === e.k ? this.pts.list : []; }
+  isPointSel(ci, i) { return this.selPoints().some((p) => p.ci === ci && p.i === i); }
+
+  zoneContours(z) { return z.points ? fromPoints(z.points) : parsePath(z.d || ''); }
+  // write an outline back: a zone made of points stays points while it's a plain polygon;
+  // anything with curves (or several outlines) is a path, "d"
+  setZoneContours(z, cs) {
+    if (z.points && isPolygon(cs)) { z.points = cs[0].nodes.map(([x, y]) => [round2(x), round2(y)]); return; }
+    delete z.points;
+    z.d = pathString(cs);
+  }
+  // world -> the zone's own coordinates
+  zoneLocal(z, wx, wy) {
+    const [a, b, c, d, tx, ty] = zoneMatrix(z), D = a * d - b * c || 1;
+    return [(d * (wx - tx) - c * (wy - ty)) / D, (-b * (wx - tx) + a * (wy - ty)) / D];
+  }
+
+  // the handles shown: those of the selected points
+  visibleHandles(cs) {
+    const out = [], seen = new Set();
+    for (const { ci, i } of this.selPoints()) {
+      const k = cs[ci];
+      if (!k || !k.nodes[i]) continue;
+      for (const h of nodeHandles(k, i)) {
+        const key = `${ci}:${h.si}:${h.h}`;
+        if (!seen.has(key)) { seen.add(key); out.push({ ci, ...h }); }
+      }
     }
+    return out;
+  }
+
+  // what's under the mouse on the zone being edited: a handle, a point or an edge
+  zonePartAt(sx, sy) {
+    const e = this.editZone();
+    if (!e) return null;
+    const cs = this.zoneContours(e.z), M = zoneMatrix(e.z), v = this.view;
+    const S = (p) => { const [x, y] = apply(M, p); return [x * v.z + v.ox, y * v.z + v.oy]; };
+    for (const h of this.visibleHandles(cs)) {
+      const [x, y] = S(cs[h.ci].segs[h.si].c[h.h]);
+      if (Math.hypot(x - sx, y - sy) < 6) return { kind: 'handle', ...e, cs, ...h };
+    }
+    for (let ci = cs.length - 1; ci >= 0; ci--) {
+      for (let i = cs[ci].nodes.length - 1; i >= 0; i--) {
+        const [x, y] = S(cs[ci].nodes[i]);
+        if (Math.hypot(x - sx, y - sy) < 7) return { kind: 'point', ...e, cs, ci, i };
+      }
+    }
+    const n = nearestSeg(cs, sx, sy, S);
+    if (n && n.dist < 5) return { kind: 'edge', ...e, cs, ...n };
     return null;
   }
 
-  zoneToPolygon(k) {
-    const z = this.list('vision')[k];
-    this.change(['vision.json'], () => {
-      z.points = flattenPath(z.d);
-      delete z.d;
-      const { points, ...rest } = z;
-      for (const key of Object.keys(z)) delete z[key];
-      Object.assign(z, rest, { points });
-    });
+  // true when it handled the click
+  zoneMouseDown(p, e, x, y) {
+    const { k, z, cs } = p;
+    const before = this.snapshot();
+    if (p.kind === 'handle') {
+      this.drag = { kind: 'handle', k, ci: p.ci, si: p.si, h: p.h, opp: e.altKey ? null : oppositeHandle(cs[p.ci], p.si, p.h), before, moved: false };
+      return true;
+    }
+    if (p.kind === 'edge') {
+      if (e.detail < 2) return false; // one click on an edge is a click on the zone
+      const i = insertNode(cs[p.ci], p.si, p.t); // double-click adds a point there
+      this.change(['vision.json'], () => this.setZoneContours(z, cs));
+      this.pts = { k, list: [{ ci: p.ci, i }] };
+      this.refreshPanel();
+      return true;
+    }
+    const list = this.selPoints().slice(), at = list.findIndex((q) => q.ci === p.ci && q.i === p.i);
+    if (e.altKey) { // Alt+click: corner <-> smooth
+      toggleSmooth(cs[p.ci], p.i);
+      if (at < 0) this.pts = { k, list: [{ ci: p.ci, i: p.i }] };
+      this.change(['vision.json'], () => this.setZoneContours(z, cs));
+      return true;
+    }
+    let toggleOff = null;
+    if (at < 0) { if (e.shiftKey) list.push({ ci: p.ci, i: p.i }); else list.splice(0, list.length, { ci: p.ci, i: p.i }); }
+    else if (e.shiftKey) toggleOff = { ci: p.ci, i: p.i }; // Shift+click on a selected one takes it out, unless it gets dragged
+    this.pts = { k, list };
+    this.drag = { kind: 'points', k, ci: p.ci, i: p.i, from: clone(cs), x, y, toggleOff, before, moved: false };
+    this.refreshPanel();
+    return true;
+  }
+
+  // arrow keys on selected points; presses in a row make one undo step
+  nudgePoints(dx, dy) {
+    const e = this.editZone(), list = this.selPoints();
+    const cs = this.zoneContours(e.z), from = clone(cs);
+    const [lx, ly] = this.zoneLocal(e.z, (e.z.x || 0) + dx, (e.z.y || 0) + dy);
+    const key = `pts:${this.index}:${e.k}:${JSON.stringify(list)}`, last = this.undoStack[this.undoStack.length - 1];
+    const join = last && last.nudge === key && Date.now() - last.at < 1500 && !this.redoStack.length;
+    const before = join ? null : this.snapshot();
+    moveNodes(cs, from, list, round2(lx), round2(ly));
+    this.setZoneContours(e.z, cs);
+    if (join) { last.after = this.snapshot(); last.at = Date.now(); }
+    else this.pushUndo({ type: 'data', level: this.index, before, after: this.snapshot(), files: ['vision.json'], nudge: key, at: Date.now() });
+    this.markDirty('vision.json');
+    this.needsReload = true;
+  }
+
+  // Delete on selected points: the outline closes up around them (curves either side join into
+  // one); an outline left with fewer than 3 points goes, and the zone goes with its last outline
+  deletePoints() {
+    const e = this.editZone(), cs = this.zoneContours(e.z), by = new Map();
+    for (const { ci, i } of this.selPoints()) { if (!by.has(ci)) by.set(ci, []); by.get(ci).push(i); }
+    const keep = cs.filter((k, ci) => !by.has(ci) || removeNodes(k, by.get(ci)));
+    if (!keep.length) { this.deleteSel(); return; }
+    this.pts = null;
+    this.change(['vision.json'], () => this.setZoneContours(e.z, keep));
+  }
+
+  // the panel's Corner / Smooth buttons, on every selected point
+  setPointsSmooth(on) {
+    const e = this.editZone(), cs = this.zoneContours(e.z);
+    for (const { ci, i } of this.selPoints()) if (cs[ci] && cs[ci].nodes[i]) toggleSmooth(cs[ci], i, on);
+    this.change(['vision.json'], () => this.setZoneContours(e.z, cs));
+  }
+
+  drawZonePoints(ctx, px) {
+    const e = this.editZone();
+    if (!e) return;
+    const cs = this.zoneContours(e.z), M = zoneMatrix(e.z), W = (p) => apply(M, p);
+    ctx.lineWidth = px;
+    for (const h of this.visibleHandles(cs)) {
+      const k = cs[h.ci], s = k.segs[h.si], [p0, p1] = segEnds(k, h.si), q = W(s.c[h.h]);
+      ctx.strokeStyle = 'rgba(255,222,59,0.9)';
+      for (const a of s.c.length === 1 ? [p0, p1] : [h.h === 0 ? p0 : p1]) {
+        const A = W(a);
+        ctx.beginPath(); ctx.moveTo(A[0], A[1]); ctx.lineTo(q[0], q[1]); ctx.stroke();
+      }
+      ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(q[0], q[1], 4.5 * px, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = '#ffde3b'; ctx.beginPath(); ctx.arc(q[0], q[1], 3 * px, 0, 2 * Math.PI); ctx.fill();
+    }
+    // points: filled white when selected, hollow otherwise; smooth points are round
+    cs.forEach((k, ci) => k.nodes.forEach((p, i) => {
+      const [x, y] = W(p), on = this.isPointSel(ci, i), r = (on ? 4 : 3.5) * px;
+      const shape = (rr) => { ctx.beginPath(); if (isSmooth(k, i)) ctx.arc(x, y, rr, 0, 2 * Math.PI); else ctx.rect(x - rr, y - rr, 2 * rr, 2 * rr); };
+      ctx.fillStyle = '#000'; shape(r + px); ctx.fill();
+      ctx.fillStyle = on ? '#fff' : '#2ee6ff'; shape(r); ctx.fill();
+      if (!on) { ctx.fillStyle = '#000'; shape(r - 1.5 * px); ctx.fill(); }
+    }));
+    const d = this.drag;
+    if (d && d.kind === 'marquee') {
+      ctx.setLineDash([3 * px, 3 * px]); ctx.strokeStyle = '#fff'; ctx.lineWidth = px;
+      ctx.strokeRect(Math.min(d.x0, d.x1), Math.min(d.y0, d.y1), Math.abs(d.x1 - d.x0), Math.abs(d.y1 - d.y0));
+      ctx.setLineDash([]);
+    }
   }
 
   // ------------------------------------------------------------------ triggers
@@ -1261,12 +1435,12 @@ class Editor {
           ctx.transform(...Z);
           try {
             const path = zonePath2D(z);
-            ctx.fillStyle = 'rgba(46,230,255,0.12)'; ctx.fill(path);
+            ctx.fillStyle = 'rgba(46,230,255,0.12)'; ctx.fill(path, 'evenodd');
             ctx.strokeStyle = 'rgba(0,0,0,0.7)'; ctx.lineWidth = 4 * sw; ctx.stroke(path);
             ctx.strokeStyle = SEL; ctx.lineWidth = 2 * sw; ctx.stroke(path);
           } catch { /* bad path */ }
           ctx.restore();
-          if (z.points) handles(z.points.map((p) => apply(Z, p)), main);
+          if (!main || !this.editZone()) handles((z.points || []).map((p) => apply(Z, p)), main);
           continue;
         }
         const [x0, y0, x1, y1] = this.boundsOf(it.layer, it.k);
@@ -1276,6 +1450,7 @@ class Editor {
         handles([[x0, y0], [x1, y0], [x0, y1], [x1, y1]], main);
       }
     }
+    this.drawZonePoints(ctx, px);
     // tool previews
     const m = this.mouse;
     const fillCol = (c, a) => `rgba(${COLOURS[c].join(',')},${a})`;
@@ -1454,7 +1629,7 @@ class Editor {
     if (nSel > 1) p.append(this.groupPanel());
     else if (nSel) p.append(this.sel.layer === 'vision' ? this.zonePanel() : this.sel.layer === 'decor' ? this.decorPanel() : this.propsPanel());
     else if (this.tool === 'place' && this.placeLayer === 'decor') p.append(el('div', { class: 'le-tip' }, 'Decor (decor.json) is what the art bake paints into background.png: floor paint, wall greebles, vents, rails, lights. The game never reads it. Select (V) moves one, Place (P) adds one, R turns it, Delete removes it; then Bake art below to see it for real.'));
-    else if (this.toolLayers().includes('vision')) p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones and their corners, Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
+    else if (this.toolLayers().includes('vision')) p.append(el('div', { class: 'le-tip' }, 'Vision zones: an enemy attacks when you and it are in the same zone and it can see you. An enemy outside every zone (or with autoVision) makes its own zone of what it can see. Select (V) moves zones, and their points and curve handles once one is selected; Polygon (G) draws one, Auto zone (Z) makes one from a spot.'));
     // stats + settings
     p.append(this.artPanel());
     p.append(this.triggerPanel());
@@ -1914,6 +2089,19 @@ class Editor {
     return out;
   }
 
+  zonePointsPanel(z) {
+    const cs = this.zoneContours(z), n = cs.reduce((a, k) => a + k.nodes.length, 0), curves = curveCount(cs);
+    const picked = this.selPoints().length;
+    const what = `${n} points${curves ? `, ${curves} curved edge${curves > 1 ? 's' : ''}` : ''}${cs.length > 1 ? `, ${cs.length} outlines` : ''}`;
+    return el('div', {},
+      el('div', { class: 'le-tip' }, `${what}. Click a point to select it, Shift+click to add or remove, or drag a box from outside the zone. Drag points (Shift snaps), arrows nudge (Shift: 10), Delete removes them. Double-click an edge to add a point. Alt+click a point to switch it between corner and smooth; drag its yellow handles to bend the curve (Alt+drag breaks a smooth point).`),
+      picked ? el('div', { class: 'le-row' },
+        el('span', {}, `${picked} selected `),
+        el('button', { onclick: () => this.setPointsSmooth(false), title: 'sharp corners: the handles go onto the points (Alt+click)' }, 'Corner'),
+        el('button', { onclick: () => this.setPointsSmooth(true), title: 'smooth curves through the points (Alt+click)' }, 'Smooth'),
+        el('button', { onclick: () => this.deletePoints(), title: 'Delete' }, 'Delete points')) : null);
+  }
+
   zonePanel() {
     const { k } = this.sel;
     const z = this.list('vision')[k];
@@ -1928,9 +2116,7 @@ class Editor {
         num('scale x', t.sx, (v) => setTransform(z, t.rot, v, t.sy)),
         num('scale y', t.sy, (v) => setTransform(z, t.rot, t.sx, v))),
       el('div', { class: 'le-row' }, el('span', { class: 'le-swatch on', style: `--c: ${zoneColour(k)}`, title: 'each zone gets its own colour automatically, only for telling zones apart (the game never uses it)' }), ' Colour is automatic, one per zone'),
-      z.points
-        ? el('div', { class: 'le-tip' }, `${z.points.length} corners: drag them with Select (Shift snaps to the grid).`)
-        : el('div', { class: 'le-row' }, el('span', { class: 'le-tip' }, 'This zone has curves. '), el('button', { onclick: () => this.zoneToPolygon(k), title: 'turn the curves into straight segments so its corners can be dragged' }, 'Edit corners')),
+      this.zonePointsPanel(z),
       el('div', { class: 'le-row' },
         el('button', { onclick: () => this.rotateSel(-15) }, '⟲ 15°'), el('button', { onclick: () => this.rotateSel(15) }, '⟳ 15° (R)'),
         el('button', { onclick: () => this.duplicate() }, 'Duplicate'), el('button', { onclick: () => this.deleteSel() }, 'Delete')));
@@ -2093,34 +2279,6 @@ function zonePath2D(z) {
   let p = paths.get(d);
   if (!p) { p = new Path2D(d); if (paths.size > 500) paths.clear(); paths.set(d, p); }
   return p;
-}
-
-// M/L/Q/Z path -> polygon corners, curves cut into short straight pieces
-function flattenPath(d) {
-  const t = d.trim().split(/\s+/);
-  const pts = [];
-  let i = 0, cmd = 'M', last = [0, 0];
-  const n = () => +t[i++];
-  while (i < t.length) {
-    if (/^[A-Za-z]$/.test(t[i])) { cmd = t[i++].toUpperCase(); if (cmd === 'Z') continue; }
-    if (cmd === 'M' || cmd === 'L') { last = [n(), n()]; pts.push(last); }
-    else if (cmd === 'Q') {
-      const c = [n(), n()], e = [n(), n()];
-      for (let s = 1; s <= 6; s++) {
-        const u = s / 6, a = (1 - u) * (1 - u), b = 2 * u * (1 - u), cc = u * u;
-        pts.push([a * last[0] + b * c[0] + cc * e[0], a * last[1] + b * c[1] + cc * e[1]]);
-      }
-      last = e;
-    } else i++;
-  }
-  // drop the repeated closing corner and points on top of each other
-  const out = [];
-  for (const p of pts.map(([x, y]) => [round2(x), round2(y)])) {
-    const q = out[out.length - 1];
-    if (!q || q[0] !== p[0] || q[1] !== p[1]) out.push(p);
-  }
-  if (out.length > 1 && out[0][0] === out[out.length - 1][0] && out[0][1] === out[out.length - 1][1]) out.pop();
-  return out;
 }
 
 function nodeColour(e) {
