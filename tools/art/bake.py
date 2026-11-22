@@ -159,9 +159,10 @@ def base_art(g, seed, opts):
     light = 0.86 + 0.24 * blur(np.clip(open_d / 90, 0, 1), 12)     # brighter away from walls
     light *= 1 + 0.10 * (blur(rng.random((H // 40 + 1, W // 40 + 1)).repeat(40, 0).repeat(40, 1)[:H, :W], 30) - 0.5)
     img *= light[..., None]
-    # gaps: the kit's chasm texture, or water, sky or stars (art.variant.gap)
+    # chasms
     inside = ndi.distance_transform_edt(g.chasmb).astype(np.float32)
-    ch = gap_fill(g, opts['variant'], chasm_t, inside, seed)
+    ch = tiled(g, chasm_t, 0.45, off=(37, 11))
+    ch = ch * (0.9 - 0.5 * np.clip(inside / 70, 0, 1))[..., None]
     img = img * (1 - g.chasm[..., None]) + ch * g.chasm[..., None]
     # hazard stripes on the floor around chasms
     hzo = opts['hazard']
@@ -203,85 +204,6 @@ def base_art(g, seed, opts):
         m = m[..., None]
         img = img * (1 - m) + copy * m
     return img * (1 - wr[..., None]) + top * wr[..., None]
-
-
-# ---------------------------------------------------------------- variants
-def noise(g, size, seed, octaves=4):
-    """Smooth fractal noise over the canvas, about -1..1; size is the largest feature in px."""
-    rng = np.random.default_rng(seed)
-    out = np.zeros((g.H, g.W), np.float32)
-    amp, total = 1.0, 0.0
-    for _ in range(octaves):
-        s = max(1.0, size)
-        n = rng.standard_normal((int(g.H / s) + 3, int(g.W / s) + 3)).astype(np.float32)
-        up = ndi.zoom(n, s, order=3)[:g.H, :g.W]
-        if up.shape != (g.H, g.W): up = np.pad(up, ((0, g.H - up.shape[0]), (0, g.W - up.shape[1])), mode='edge')
-        out += amp * up
-        total += amp
-        amp *= 0.5
-        size /= 2
-    return out / total
-
-
-def gap_fill(g, v, chasm_t, inside, seed):
-    """What the gaps (chasms) show. inside = distance into the gap, in px."""
-    depth = np.clip(inside / 70, 0, 1)[..., None]
-    kind = v['gap']
-    if kind == 'water':
-        c = hex_rgb(v['gapColour'])
-        n1, n2 = noise(g, 90, seed + 1), noise(g, 30, seed + 2, 3)
-        waves = np.sin((g.xx * 0.6 + g.yy * 0.35) / 6 + n1 * 5) * 0.5 + 0.5
-        caustic = np.clip(1 - np.abs(n2) * 9, 0, 1) ** 3
-        base = c * (0.75 - 0.45 * depth) * (0.9 + 0.12 * waves[..., None])
-        hi = np.clip(c * 0.6 + 0.45, 0, 1)
-        img = base + hi * (0.35 * caustic * (1 - depth[..., 0]) + 0.08)[..., None] * 0.6
-        foam = np.clip(1 - inside / 5, 0, 1) * (0.6 + 0.4 * (noise(g, 8, seed + 3, 2) > -0.1))
-        return np.clip(img + 0.35 * foam[..., None], 0, 1)
-    if kind == 'sky':
-        c = hex_rgb(v['gapColour'])
-        sky = np.clip(c * 0.55 + 0.35, 0, 1) * (1 - 0.35 * depth) + c * 0.25 * depth
-        n = noise(g, 160, seed + 4, 5)
-        cloud = np.clip((n + 0.05) * 2.2, 0, 1)
-        shade = np.clip(1 - 0.5 * np.clip(ndi.shift(n, (6, 6), order=1) - n, 0, 1), 0.6, 1)
-        img = sky * (1 - cloud[..., None]) + (np.array([0.93, 0.95, 0.98], np.float32) * shade[..., None]) * cloud[..., None]
-        edge = np.clip(1 - inside / 10, 0, 1)[..., None]  # haze where the drop starts
-        return img * (1 - 0.45 * edge)
-    if kind == 'stars':
-        rng = np.random.default_rng(seed + 5)
-        neb = noise(g, 200, seed + 6, 5)
-        img = np.array([0.02, 0.022, 0.05], np.float32) + np.clip(neb, 0, 1)[..., None] * np.array([0.10, 0.04, 0.16], np.float32)
-        img += np.clip(noise(g, 140, seed + 7, 4), 0, 1)[..., None] * np.array([0.02, 0.07, 0.12], np.float32)
-        stars = np.zeros((g.H, g.W), np.float32)
-        n = int(g.W * g.H / 260)
-        ys, xs = rng.integers(0, g.H, n), rng.integers(0, g.W, n)
-        stars[ys, xs] = rng.power(0.35, n) * 1.4
-        big = rng.random(n) < 0.03
-        glow = np.zeros_like(stars); glow[ys[big], xs[big]] = 6
-        stars = np.clip(stars + blur(glow, 1.4), 0, 1.5)
-        tintc = np.stack([np.ones(n), 0.9 + 0.1 * rng.random(n), 0.85 + 0.3 * rng.random(n)], -1).astype(np.float32)
-        col = np.ones((g.H, g.W, 3), np.float32); col[ys, xs] = tintc
-        img = img + stars[..., None] * col
-        edge = np.clip(1 - inside / 8, 0, 1)[..., None]
-        return np.clip(img * (1 - 0.6 * edge), 0, 1)
-    ch = tiled(g, chasm_t, 0.45, off=(37, 11))
-    return ch * (0.9 - 0.5 * depth)
-
-
-def grade(img, v):
-    """Colour grade over the finished art: hue, saturation, brightness, contrast, tint."""
-    if v['hue']:
-        a = np.radians(v['hue'])
-        # rotate round the grey axis (YIQ)
-        T = np.array([[0.299, 0.587, 0.114], [0.596, -0.274, -0.322], [0.211, -0.523, 0.312]], np.float32)
-        R = np.array([[1, 0, 0], [0, np.cos(a), -np.sin(a)], [0, np.sin(a), np.cos(a)]], np.float32)
-        img = img @ (np.linalg.inv(T) @ R @ T).T
-    if v['saturation'] != 1:
-        lum = (img * np.array([0.299, 0.587, 0.114], np.float32)).sum(-1, keepdims=True)
-        img = lum + (img - lum) * v['saturation']
-    if v['contrast'] != 1: img = (img - 0.3) * v['contrast'] + 0.3  # pivot on the art's mid tone
-    img = img * v['brightness']
-    if v['tintAmount'] > 0: img = img * (1 - v['tintAmount'] + v['tintAmount'] * hex_rgb(v['tint']))
-    return img
 
 
 # ---------------------------------------------------------------- decor sprites
@@ -525,7 +447,6 @@ def bake(g, decor, seed, opts):
     img = img + lo['intensity'] * lighting * (0.12 + img) * (1 - np.clip(img, 0, 1))
     img += np.stack([blur(bloom[..., c], 4) for c in range(3)], -1) * lo['bloom']
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
-    img = grade(img, opts['variant'])
     sh = opts['edges']['sharpen']
     if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
