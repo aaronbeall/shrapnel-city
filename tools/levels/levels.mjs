@@ -7,7 +7,7 @@
 //   collision.json         the shapes the editor bakes into collision.png, + collision-*.png pixel
 //                          layers (editor only: the build and the art bake read just collision.png)
 //   background.png         the baked level art, same size as the collision map
-//   briefing.json          the briefing screen: {"changes": [timeline changes]}
+//   briefing.json          the briefing screen: {title, body, captions, graphics} (see levels/README.md)
 //   boxes.json             [instance, ...] placed in boxes_mc
 //   powerups.json          [instance, ...] placed in powerups_mc (pickups and message beacons)
 //   enemies.json           [instance, ...] placed in enemies_mc

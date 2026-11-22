@@ -3,7 +3,7 @@
 // compiler as the build (tools/levels/compile.mjs) and the same source decoder
 // (tools/flash-source/format.mjs).
 import { decodeChar, decodeTimeline, decodeScript } from '../../tools/flash-source/format.mjs';
-import { levelSymbols, composeScreen, instanceScript, stripProps, isRef, isTrigger, triggerNames } from '../../tools/levels/compile.mjs';
+import { levelSymbols, composeScreen, instanceScript, stripProps, PROPS_BEGIN, PROPS_END, isRef, isTrigger, triggerNames } from '../../tools/levels/compile.mjs';
 
 export class LevelApplier {
   constructor(rt, data) {
@@ -18,9 +18,11 @@ export class LevelApplier {
       const fn = rt.instanceScripts[key];
       if (fn && !this.compiled.has(text)) this.compiled.set(text, fn);
     }
-    // the same, by script part: a scripted instance whose props change still runs its compiled script
+    // the same, by script part: a scripted instance whose props change still runs its compiled script.
+    // That code starts by setting the props it was built with (one `name = value;` line each), so
+    // keep their names: the handler skips those first writes and the edited props stand.
     this.compiledCore = new Map();
-    for (const [text, fn] of this.compiled) if (text.includes('/* props */')) this.compiledCore.set(stripProps(text), fn);
+    for (const [text, fn] of this.compiled) if (text.includes(PROPS_BEGIN)) this.compiledCore.set(stripProps(text), { fn, keys: builtPropNames(text) });
   }
 
   id(name) {
@@ -37,9 +39,15 @@ export class LevelApplier {
   handlerFor(text, propsByText) {
     if (this.compiled.has(text)) return this.compiled.get(text);
     const props = propsByText.get(text);
-    const core = props ? stripProps(text) : text;
-    const compiled = core && core.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '').trim() ? this.compiled.get(core) || this.compiledCore.get(core) : {};
-    if (!compiled) console.warn('[editor] no compiled code for instance script (save to rebuild it):\n' + core);
+    // a props-only instance has no script part (its text has no props markers: it is all props)
+    const core = props ? (text.includes(PROPS_BEGIN) ? stripProps(text) : '') : text;
+    let compiled = {}, builtKeys = [];
+    if (core && core.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '').trim()) {
+      const hit = this.compiledCore.get(core);
+      compiled = this.compiled.get(core) || (hit && hit.fn);
+      if (hit && !this.compiled.has(core)) builtKeys = hit.keys;
+      if (!compiled) console.warn('[editor] no compiled code for instance script (save to rebuild it):\n' + core);
+    }
     if (!props) return compiled || null;
     const G = this.rt.env.G;
     const load = compiled && compiled['clip:load'];
@@ -47,7 +55,9 @@ export class LevelApplier {
       ...compiled,
       'clip:load': function ($c) {
         for (const [k, v] of Object.entries(props)) $c[k] = materialize(v, $c, G);
-        if (load) return load.call(this, $c);
+        if (!load) return;
+        const release = skipFirstWrites($c, builtKeys);
+        try { return load.call(this, $c); } finally { release(); }
       },
     };
   }
@@ -109,7 +119,33 @@ function materialize(v, clip, G) {
   return v;
 }
 
-// Leave whatever is running and start level i from its (edited) data, stopped on its first frame.
+// the prop names in a built instance script's props block (propsScript writes one `name = value;` per line)
+function builtPropNames(text) {
+  const a = text.indexOf(PROPS_BEGIN), b = text.indexOf(PROPS_END, a);
+  if (a < 0 || b < 0) return [];
+  return [...text.slice(a, b).matchAll(/^\s*([A-Za-z_]\w*)\s*=/gm)].map((m) => m[1]);
+}
+
+// While old compiled code runs, ignore its first write to each of these names (the props it was
+// built with) and keep what the clip has now: the edited value, or nothing for a removed prop.
+// Later writes, by the script itself, go through. Returns a function that undoes any guard left.
+function skipFirstWrites($c, keys) {
+  const left = new Map();
+  const settle = (k) => {
+    const { had, val } = left.get(k);
+    left.delete(k);
+    delete $c[k];
+    if (had) $c[k] = val;
+  };
+  for (const k of keys) {
+    if (left.has(k)) continue;
+    const had = Object.prototype.hasOwnProperty.call($c, k), val = $c[k];
+    left.set(k, { had, val });
+    Object.defineProperty($c, k, { configurable: true, enumerable: true, get: () => val, set: () => settle(k) });
+  }
+  return () => { for (const k of [...left.keys()]) settle(k); };
+}
+
 // open level i's briefing screen (its Play mission button starts the level)
 export function showBriefing(rt, i) {
   const G = rt.env.G;
@@ -121,6 +157,7 @@ export function showBriefing(rt, i) {
   rt.flush();
 }
 
+// Leave whatever is running and start level i from its (edited) data, stopped on its first frame.
 export function restartLevel(rt, i) {
   const G = rt.env.G;
   const s = rt.root.screen_mc;
