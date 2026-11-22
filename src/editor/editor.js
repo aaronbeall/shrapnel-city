@@ -15,6 +15,7 @@ import { mul } from '../flash/geom.js';
 import { newLevelFiles, resizeOffset, shifted, loadImage, pngBase64, validSize, settingsJSON, PAD, MIN_SIZE, MAX_SIZE } from './levelsize.js';
 
 const PLACE_LAYERS = ['enemies', 'boxes', 'powerups', 'doors', 'features', 'pathNodes'];
+const INNER_SCROLLS = '.le-shape-list, .le-decor-pal, .le-inspector, .le-artlog';
 const DATA_LAYERS = [...PLACE_LAYERS, 'vision', 'decor', 'collision'];
 const VIEW_LAYERS = [
   { key: 'art', label: 'Background art' },
@@ -1898,6 +1899,9 @@ class Editor {
   refreshPanel() {
     const p = this.panel;
     if (this.body) (this.scrolls ||= {})[this.tab] = this.body.scrollTop;
+    // scrollable lists inside the panel (shape stack, decor palette, inspector) keep their scroll too
+    const inner = {};
+    for (const e of p.querySelectorAll(INNER_SCROLLS)) if (e.scrollTop) inner[e.className + '#' + [...p.querySelectorAll('.' + e.classList[0])].indexOf(e)] = e.scrollTop;
     p.textContent = '';
     this.tab ||= 'map';
     p.append(this.headerPanel());
@@ -1907,6 +1911,10 @@ class Editor {
     else if (this.tab === 'art') body.append(...this.artTab());
     else body.append(...this.mapTab());
     body.scrollTop = (this.scrolls && this.scrolls[this.tab]) || 0;
+    for (const e of p.querySelectorAll(INNER_SCROLLS)) {
+      const top = inner[e.className + '#' + [...p.querySelectorAll('.' + e.classList[0])].indexOf(e)];
+      if (top) e.scrollTop = top;
+    }
     this.refreshSave();
   }
 
