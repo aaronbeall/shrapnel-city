@@ -12,6 +12,7 @@ import { parsePath, pathString, fromPoints, isPolygon, clone, curveCount, segEnd
 import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour, briefingJSON } from '../../tools/levels/compile.mjs';
 import { pretty } from '../../tools/flash-source/format.mjs';
 import { mul } from '../flash/geom.js';
+import { newLevelFiles, resizeOffset, shifted, loadImage, pngBase64, validSize, settingsJSON, PAD, MIN_SIZE, MAX_SIZE } from './levelsize.js';
 
 const PLACE_LAYERS = ['enemies', 'boxes', 'powerups', 'doors', 'features', 'pathNodes'];
 const DATA_LAYERS = [...PLACE_LAYERS, 'vision', 'decor', 'collision'];
@@ -42,6 +43,8 @@ const NODE = 'game objects/node';
 const DECOR_DIR = 'tools/art/parts/decor/';
 // how each decor category is drawn by the bake when placed by hand
 // the decor types the art pipeline places (tools/art/bake.py CATEGORIES)
+// the names planned for levels 04-23, offered as New level's default name
+const PLANNED_NAMES = ['00_Training', '01_DropZone', '02_FirstBlock', '03_Bridge', '04_Urban', '05_Gateway', '06_Downtown', '07_Shipyard', '08_Bunker', '09_Complex', '10_Interface', '11_Skyrise', '12_Transit', '13_Security', '14_Core', '15_Escape', '16_Outskirts', '17_Outpost', '18_Docking', '19_Deep Space', '20_Station', '21_Central', '22_Source', '23_Terminate'];
 const DECOR_TYPES = ['panels', 'floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights'];
 const DECOR_DEFAULTS = { panels: { effect: 'emboss' }, floorpaint: { effect: 'paint' }, greebles: { effect: 'shadow', strength: 0.35 }, greebles2: { effect: 'shadow', strength: 0.35 }, vents: { effect: 'shadow', strength: 0.3 }, rails: { effect: 'shadow', strength: 0.25 }, lights: { effect: 'glow', strength: 0.9 } };
 const T = (d) => d - 16384; // timeline depths sit 16384 below script depths, as in Flash
@@ -1462,7 +1465,7 @@ class Editor {
     if (file === 'collision.png') return this.maps[i].toBlob();
     if (file === 'collision.json') return this.collisionJSON(L.collision || []);
     if (/^collision-.+\.png$/.test(file)) return this.stacks[i].toBlob(file);
-    if (file === 'level.json') return pretty(L.settings) + '\n';
+    if (file === 'level.json') return settingsJSON(L.settings || {});
     if (file === 'briefing.json') return briefingJSON(L.briefing);
     if (file === 'decor.json') return decorJSON(L.decor || []);
     return pretty(L[file.replace('.json', '')] || []) + '\n';
@@ -1900,6 +1903,7 @@ class Editor {
     p.append(el('div', { class: 'le-row' }, el('b', {}, 'Level '), lvl,
       el('button', { title: 'Restart the level from the edited data', onclick: () => this.reload() }, 'Restart'),
       el('button', { title: 'Back to the game (`)', onclick: () => this.close() }, 'Play ▸')));
+    p.append(this.sizePanel());
     // tools; the ones that work on the picked layer (its name clicked in Layers) are marked
     const toolsFor = (layer) => TOOLS.filter((t) => TOOL_LAYERS[t.key].includes(layer)).map((t) => t.key);
     const usable = new Set(this.pickedLayer ? toolsFor(this.pickedLayer) : []);
@@ -1975,6 +1979,8 @@ class Editor {
       el('textarea', { rows: 4, spellcheck: false, onchange: (e) => {
         try {
           const v = JSON.parse(e.target.value);
+          const sz = (o) => JSON.stringify(o && o.size);
+          if (sz(v) !== sz(L.settings)) { v.size = L.settings.size; this.status('The level size changes with Resize level (Level size, at the top), so the maps follow it; the rest of level.json is applied.', true); }
           this.change(['level.json'], () => { L.settings = v; });
         } catch (err) { this.status('level.json: ' + err.message, true); }
       } }, JSON.stringify(L.settings, null, 1))));
@@ -2209,12 +2215,111 @@ class Editor {
       return;
     }
     // reload the page so the new background.png and decor.json come in, back where we were
+    this.reopen(this.index, `Art ${step === 'all' ? 're-placed and baked' : 'baked'} for ${L.folder}.`);
+  }
+
+  // reload the page on level `index` (after files changed on disk), back in the same view unless
+  // `fresh` (a new or resized level is fitted to the window instead)
+  reopen(index, msg, fresh = false) {
     try {
-      sessionStorage.setItem('levelEditorResume', JSON.stringify({ index: this.index, view: this.view, visible: this.visible, locked: this.locked, placeLayer: this.placeLayer, polyTarget: this.polyTarget, tool: this.tool, msg: `Art ${step === 'all' ? 're-placed and baked' : 'baked'} for ${L.folder}.` }));
+      sessionStorage.setItem('levelEditorResume', JSON.stringify({ index, view: fresh ? null : this.view, visible: this.visible, locked: this.locked, placeLayer: this.placeLayer, polyTarget: this.polyTarget, tool: this.tool, msg }));
     } catch { /* private window: we come back to the fitted view */ }
     const u = new URL(location.href);
-    u.searchParams.set('edit', this.index);
+    u.searchParams.set('edit', index);
     location.replace(u.toString());
+  }
+
+  // ------------------------------------------------------------------ level size, new level
+  // send a level's files to npm run edit, which writes them and rebuilds; returns whether it worked
+  async writeLevel(folder, files, create = false) {
+    this.status(`${create ? 'Creating' : 'Writing'} levels/${folder}…`);
+    const r = await fetch('__level', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ folder, create, files }) })
+      .then((x) => x.json()).catch((e) => ({ ok: false, log: e.message }));
+    if (!r.ok) this.status(`Could not write levels/${folder}: ${r.log || 'failed'}`, true);
+    return r.ok;
+  }
+
+  // save unsaved edits first: New level and Resize reload the page from what's on disk
+  async saveFirst() {
+    await this.checkServer();
+    if (!this.writable) { this.status('New level and Resize need the local server: run npm run edit and open http://localhost:8123/?edit', true); return false; }
+    if (Object.keys(this.dirty).length) await this.save();
+    return !Object.keys(this.dirty).length;
+  }
+
+  async newLevel(name, w, h) {
+    name = name.trim();
+    if (!/^[A-Za-z0-9][A-Za-z0-9 _-]*$/.test(name)) { this.status('A level name is letters, digits, spaces and dashes, starting with a letter or digit.', true); return; }
+    if (!validSize(w) || !validSize(h)) { this.status(`A level is ${MIN_SIZE} to ${MAX_SIZE} px each way.`, true); return; }
+    if (!(await this.saveFirst())) return;
+    const index = this.levels.length, folder = String(index).padStart(2, '0') + '_' + name;
+    this.busy = 'Creating ' + folder;
+    this.refreshPanel();
+    const ok = await this.writeLevel(folder, await newLevelFiles(name, w, h), true);
+    this.busy = null;
+    if (ok) this.reopen(index, `Created levels/${folder} (${w}×${h}). It's level ${index} in the game's missions list.`, true);
+    else this.refreshPanel();
+  }
+
+  // Resize the current level to w x h. Everything placed moves with the map (by the anchor), so
+  // nothing shifts relative to the walls. Added collision space is wall, and the background art
+  // is padded to match; levels with an art kit need Bake art afterwards.
+  async resizeLevel(w, h, anchor) {
+    const L = this.L, from = L.size;
+    if (!validSize(w) || !validSize(h)) { this.status(`A level is ${MIN_SIZE} to ${MAX_SIZE} px each way.`, true); return; }
+    if (w === from.w && h === from.h) { this.status(`${L.folder} is already ${w}×${h}.`); return; }
+    const st = this.shapes;
+    if (!st) { this.status('Collision shapes are still loading.', true); return; }
+    if (!(await this.saveFirst())) return;
+    const { dx, dy } = resizeOffset(from, { w, h }, anchor);
+    const move = (e) => ({ ...e, x: round2((+e.x || 0) + dx), y: round2((+e.y || 0) + dy) });
+    const files = {};
+    const json = (file, text) => { files[file] = text; };
+    for (const layer of [...PLACE_LAYERS, 'vision']) if ((L[layer] || []).length) json(layer + '.json', pretty(L[layer].map(move)) + '\n');
+    if ((L.decor || []).length) json('decor.json', decorJSON(L.decor.map(move)));
+    // collision shapes move with the map; pixel layers are redrawn at the offset instead (their
+    // PNGs are always the level's size), the base map padded with wall, the others with nothing
+    const shapes = L.collision.map((s) => (isPixels(s) ? { ...s } : { ...s, x: (s.x || 0) + dx, y: (s.y || 0) + dy }));
+    json('collision.json', this.collisionJSON(shapes));
+    for (const s of shapes) if (isPixels(s) && !files[s.pixels]) files[s.pixels] = await pngBase64(shifted(st.canvas(s.pixels), w, h, dx, dy, s.pixels === 'collision-base.png' ? PAD.collision : null));
+    files['collision.png'] = await pngBase64(shifted(this.map.canvas, w, h, dx, dy, PAD.collision));
+    let art;
+    try { art = await loadImage(`levels/${L.folder}/background.png`); } catch (e) { this.status(e.message, true); return; }
+    files['background.png'] = await pngBase64(shifted(art, w, h, dx, dy, PAD.art));
+    json('level.json', settingsJSON({ ...(L.settings || {}), size: { w, h } }));
+    this.busy = 'Resizing ' + L.folder;
+    this.refreshPanel();
+    const ok = await this.writeLevel(L.folder, files);
+    this.busy = null;
+    if (ok) this.reopen(this.index, `Resized ${L.folder} from ${from.w}×${from.h} to ${w}×${h}.` + (L.settings && L.settings.art ? ' Press Bake art to redraw the background for the new size.' : ''), true);
+    else this.refreshPanel();
+  }
+
+  // Level size and New level, in the panel
+  sizePanel() {
+    const L = this.L, { w, h } = L.size;
+    const f = (this.sizeForm ||= {});
+    if (f.level !== L.folder) Object.assign(f, { level: L.folder, w, h, anchor: [0, 0] });
+    const nf = (this.newForm ||= { name: '', w: 800, h: 600 });
+    const num = (o, k) => el('input', { type: 'number', min: MIN_SIZE, max: MAX_SIZE, step: 1, value: o[k], style: 'width: 64px', oninput: (ev) => { o[k] = Math.round(+ev.target.value); } });
+    const off = !this.writable || !!this.busy;
+    const why = this.writable ? '' : ' (needs npm run edit)';
+    const anchors = el('div', { class: 'le-anchor', title: 'which part of the map stays put: space is added or cut on the other side(s)' },
+      ...[0, 0.5, 1].flatMap((ay) => [0, 0.5, 1].map((ax) => el('button', {
+        class: f.anchor[0] === ax && f.anchor[1] === ay ? 'on' : '', onclick: () => { f.anchor = [ax, ay]; this.refreshPanel(); },
+      }, f.anchor[0] === ax && f.anchor[1] === ay ? '●' : ''))));
+    const planned = PLANNED_NAMES[this.levels.length] || '';
+    return el('details', { class: 'le-set-group', open: this.openGroups.has('$size') || null, ontoggle: (ev) => { if (ev.target.open) this.openGroups.add('$size'); else this.openGroups.delete('$size'); } },
+      el('summary', {}, `Level size: ${w}×${h}`),
+      el('div', { class: 'le-tip' }, 'level.json "size" sets the level\'s size; collision.png and the background follow it. Resizing moves everything placed with the map, so nothing shifts against the walls. Added space is wall.'),
+      el('div', { class: 'le-row' }, 'w ', num(f, 'w'), ' h ', num(f, 'h'), anchors),
+      el('div', { class: 'le-row' }, el('button', { disabled: off, title: 'Save, then resize this level and reload' + why, onclick: () => this.resizeLevel(f.w, f.h, f.anchor) }, 'Resize level')),
+      el('h4', {}, 'New level'),
+      el('div', { class: 'le-tip' }, `Adds levels/${String(this.levels.length).padStart(2, '0')}_<name> after the last level, with a wall border, an entrance and an exit. The game's level list comes from the folders.`),
+      el('div', { class: 'le-row' }, 'name ', el('input', { value: nf.name, placeholder: planned.slice(3) || 'Name', spellcheck: false, style: 'width: 120px', oninput: (ev) => { nf.name = ev.target.value; } })),
+      el('div', { class: 'le-row' }, 'w ', num(nf, 'w'), ' h ', num(nf, 'h')),
+      el('div', { class: 'le-row' }, el('button', { disabled: off, title: 'Save, then create the level and open it' + why, onclick: () => this.newLevel(nf.name || planned.slice(3), nf.w, nf.h) }, 'Create level')),
+      this.busy ? el('div', { class: 'le-tip' }, this.busy + '…') : '');
   }
 
   // a number field that applies as you type or step it (one undo step per edit), and
@@ -2709,6 +2814,8 @@ const CSS = `
 #level-editor textarea.le-script { font: 11px/1.35 ui-monospace, monospace; white-space: pre; tab-size: 4; }
 #level-editor pre { background: #021; padding: 4px; max-height: 160px; overflow: auto; font-size: 10px; margin: 2px 0; }
 #level-editor .le-row { margin: 4px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+#level-editor .le-anchor { display: inline-grid; grid-template-columns: repeat(3, 16px); gap: 1px; margin-left: 8px; }
+#level-editor .le-anchor button { width: 16px; height: 16px; padding: 0; font-size: 9px; line-height: 14px; }
 #level-editor .le-tools button { width: calc(50% - 4px); text-align: left; }
 #level-editor .le-tip { color: #799; font-size: 11px; margin: 2px 0; }
 #level-editor .le-warn { color: #fc6; font-size: 11px; margin: 4px 0; }
