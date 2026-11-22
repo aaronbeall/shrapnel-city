@@ -4,14 +4,14 @@
 //
 // The editor saves with PUT /levels/<NN_name>/<file>. POST /__art {level, step, seed, only} runs an
 // art pipeline step (tools/art/bake.py: place decor, bake the background) and then the build. Only the level files listed in
-// tools/levels/levels.mjs, in existing level folders, can be written. After a save the
+// tools/levels/levels.mjs (and collision-*.png pixel layers), in existing level folders, can be written. After a save the
 // build runs, so a page reload picks the change up everywhere.
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { FILES } from './levels.mjs';
+import { isLevelFile } from './levels.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const PORT = +(process.env.PORT || 8123);
@@ -79,7 +79,7 @@ const server = http.createServer(async (req, res) => {
   if (url === '/__editor') return send(200, JSON.stringify({ writable: true, building: !!building, lastBuild, art }));
   if (req.method === 'PUT') {
     const m = /^\/levels\/(\d\d_[^/]+)\/([^/]+)$/.exec(url);
-    if (!m || !FILES.includes(m[2]) || !fs.existsSync(path.join(ROOT, 'levels', m[1]))) return send(403, JSON.stringify({ error: 'not a level file: ' + url }));
+    if (!m || !isLevelFile(m[2]) || !fs.existsSync(path.join(ROOT, 'levels', m[1]))) return send(403, JSON.stringify({ error: 'not a level file: ' + url }));
     const chunks = [];
     for await (const c of req) chunks.push(c);
     const body = Buffer.concat(chunks);
