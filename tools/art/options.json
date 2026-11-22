@@ -246,5 +246,71 @@
         "tip": "how strongly the panels' edges catch the light (Bake art)"
       }
     }
+  },
+  "variant": {
+    "label": "Variant (gap fill + colour grade)",
+    "tip": "Lets levels share one kit and still look different: what fills the gaps (chasms) and a colour grade over the finished art.",
+    "options": {
+      "gap": {
+        "label": "gap fill",
+        "type": "choice",
+        "choices": [
+          "chasm",
+          "water",
+          "sky",
+          "stars"
+        ],
+        "default": "chasm",
+        "tip": "what the gaps (grey in the collision map) show: the kit's chasm texture, or procedural water, sky far below, or stars"
+      },
+      "gapColour": {
+        "label": "gap colour",
+        "type": "colour",
+        "default": "#2f6f8f",
+        "tip": "main colour of water or sky (not used for chasm or stars)"
+      },
+      "hue": {
+        "label": "hue shift",
+        "default": 0,
+        "min": -180,
+        "max": 180,
+        "step": 1,
+        "tip": "degrees round the colour wheel"
+      },
+      "saturation": {
+        "label": "saturation",
+        "default": 1,
+        "min": 0,
+        "max": 2,
+        "step": 0.05
+      },
+      "brightness": {
+        "label": "brightness",
+        "default": 1,
+        "min": 0.3,
+        "max": 2,
+        "step": 0.05
+      },
+      "contrast": {
+        "label": "contrast",
+        "default": 1,
+        "min": 0.3,
+        "max": 2,
+        "step": 0.05
+      },
+      "tint": {
+        "label": "tint colour",
+        "type": "colour",
+        "default": "#ffffff"
+      },
+      "tintAmount": {
+        "label": "tint amount",
+        "default": 0,
+        "min": 0,
+        "max": 1,
+        "step": 0.05,
+        "tip": "how much the tint colour multiplies over the art (0: none)"
+      }
+    }
   }
 }

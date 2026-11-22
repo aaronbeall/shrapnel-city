@@ -2284,6 +2284,8 @@ class Editor {
           const v = cur[key] ?? o.default;
           const input = o.type === 'colour'
             ? el('input', { type: 'color', value: v, onchange: (ev) => set(key, ev.target.value) })
+            : o.type === 'choice'
+              ? el('select', { onchange: (ev) => set(key, ev.target.value) }, ...o.choices.map((c) => el('option', { value: c, selected: c === v }, c)))
             : o.type === 'text'
               ? el('input', { value: v, placeholder: 'none', onchange: (ev) => set(key, ev.target.value.trim()) })
               : el('input', { type: 'number', min: o.min, max: o.max, step: o.step, value: v, onchange: (ev) => { const x = +ev.target.value; if (isFinite(x)) set(key, Math.min(o.max ?? x, Math.max(o.min ?? x, x))); } });
