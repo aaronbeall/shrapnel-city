@@ -5,7 +5,8 @@
 // The editor saves with PUT /levels/<NN_name>/<file>. POST /__level {folder, create, files} writes
 // several files of one level at once and rebuilds: New level (create: a new folder, numbered next)
 // and Resize level use it. POST /__art {level, step, seed, only} runs an
-// art pipeline step (tools/art/bake.py: place decor, bake the background) and then the build. Only the level files listed in
+// art pipeline step (tools/art/bake.py: place decor, bake the background) or a placement generator
+// (tools/levels/generate.py: step features, boxes, paths, enemies or doors) and then the build. Only the level files listed in
 // tools/levels/levels.mjs (and collision-*.png pixel layers), in existing level folders, can be written. After a save the
 // build runs, so a page reload picks the change up everywhere.
 import http from 'node:http';
@@ -56,16 +57,17 @@ function run(cmd, args) {
 async function runArt({ level, step, seed, only }) {
   if (art) return { ok: false, log: `already running ${art.step} on ${art.level}` };
   if (!/^\d\d_[^/\\]+$/.test(level || '') || !fs.existsSync(path.join(ROOT, 'levels', level))) return { ok: false, log: 'no such level: ' + level };
-  if (!['place', 'bake', 'all'].includes(step)) return { ok: false, log: 'unknown step: ' + step };
+  const gen = ['features', 'boxes', 'paths', 'enemies', 'doors'].includes(step); // tools/levels/generate.py
+  if (!gen && !['place', 'bake', 'all'].includes(step)) return { ok: false, log: 'unknown step: ' + step };
   art = { level, step, started: Date.now() };
   try {
     const deps = await run(PYTHON, ['-c', 'import numpy, scipy, PIL']);
     if (deps.code !== 0) {
       return { ok: false, missing: true, log: deps.code === -1 ? `Python not found (tried "${PYTHON}"; set PYTHON to override).` : `The art pipeline needs numpy, scipy and Pillow:\n  ${PYTHON} -m pip install numpy scipy pillow\n\n${deps.out}` };
     }
-    const args = ['tools/art/bake.py', level, step];
+    const args = gen ? ['tools/levels/generate.py', level, step, '--replace'] : ['tools/art/bake.py', level, step];
     if (Number.isInteger(seed)) args.push('--seed', String(seed));
-    if (Array.isArray(only) && only.length && only.every((c) => /^[a-z0-9]+$/.test(c))) args.push('--only', only.join(','));
+    if (!gen && Array.isArray(only) && only.length && only.every((c) => /^[a-z0-9]+$/.test(c))) args.push('--only', only.join(','));
     const r = await run(PYTHON, args);
     console.log(`art ${step} ${level}: ${r.code ? 'FAILED' : 'ok'}\n${r.out.trim()}`);
     if (r.code) return { ok: false, log: r.out.slice(-3000) };

@@ -248,8 +248,8 @@
     }
   },
   "variant": {
-    "label": "Variant (gap fill + colour grade)",
-    "tip": "Lets levels share one kit and still look different: what fills the gaps (chasms) and a colour grade over the finished art.",
+    "label": "Variant (gap fill, decor mix, colour grade)",
+    "tip": "Lets levels share one kit and still look different: what fills the gaps (chasms), how much decor and which of the kit's sprites, and a colour grade over the finished art.",
     "options": {
       "gap": {
         "label": "gap fill",
@@ -310,6 +310,22 @@
         "max": 1,
         "step": 0.05,
         "tip": "how much the tint colour multiplies over the art (0: none)"
+      },
+      "density": {
+        "label": "decor density",
+        "default": 1,
+        "min": 0,
+        "max": 3,
+        "step": 0.05,
+        "tip": "multiplies how much floor paint, rails, greebles, vents, wall marks and lights Re-place lays out"
+      },
+      "spriteShare": {
+        "label": "sprite share",
+        "default": 1,
+        "min": 0.1,
+        "max": 1,
+        "step": 0.05,
+        "tip": "share of each decor type's sprites this level uses, picked by the seed, so levels on one kit get their own look (Re-place)"
       }
     }
   }

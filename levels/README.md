@@ -150,6 +150,22 @@ Press backtick (`` ` ``) in the game, or open the page with `?edit` (`?edit=3` f
 
 The editor recompiles levels in the browser with the same code as the build (`tools/levels/compile.mjs`). Load variables apply directly; instance scripts reuse the build's compiled code, so a changed `script` needs `npm run build`.
 
+## Placement generators
+
+`tools/levels/generate.py` lays out a level's placements from its collision map, one stage and one file at a time (Python with numpy, scipy and Pillow, like the art bake):
+
+| Stage | Writes | What it does |
+|---|---|---|
+| `features` | `features.json` | the entrance and exit, as far apart on foot as the walkable floor allows (other features stay) |
+| `boxes` | `boxes.json` | crates in small rows along the walls, some bigger with more health, some computers and reactors; a share drop something picked from what the levels already drop |
+| `paths` | `pathNodes.json` | a node network over the wide floor (one red group; they link by line of sight when the level starts) |
+| `enemies` | `enemies.json` | turrets where they see the most floor (scurge, stinger, wolfgun, double battery, missile launcher by weight), none near the entrance; tanks, drones and gnats start on path nodes |
+| `doors` | `doors.json` | doors across narrow passages on the way to the exit, each splitting the floor in two; each gets a trigger pad (in `powerups.json`) on the side the player reaches it from |
+
+`python tools/levels/generate.py 04_Street boxes` (`--seed N`, `--replace`). A stage refuses to overwrite a file that has placements unless `--replace` is given. Walkable floor is floor at least the player's radius (19 px) from walls and gaps; everything goes on the biggest connected piece of it, measured in walking distance. Options (counts, mixes, spacing; `tools/levels/generate.json`) are overridden per level in `level.json` `"generate": {"seed": 7, "boxes": {"count": 30}}`.
+
+In the editor, with `npm run edit`, the Art tab's **Placements** step has a Generate button per stage (asking first when the file has placements), a seed and the options; it saves, runs the stage, rebuilds and reloads.
+
 ## Art
 
 A level with `art` in its `level.json` gets its `background.png` generated from its collision map by `tools/art/bake.py` (Python with numpy, scipy and Pillow: `python -m pip install numpy scipy pillow`), in two steps:
@@ -159,7 +175,7 @@ A level with `art` in its `level.json` gets its `background.png` generated from 
 
 `python tools/art/bake.py 03_Bridge bake` (or `place`, or `all`; `--seed N` overrides the seed; `--only lights,rails` re-places just those types and keeps the rest of `decor.json`). Rails along one continuous chasm edge all use the same sprite.
 
-**Options.** `tools/art/options.json` lists the bake's options with their defaults: wall edges (corner rounding, edge softness, sharpen), wall sides (built like the originals: the wall art copied, darkened and scaled down a little toward a camera point, several times over; copies, scale per copy, brightness, fade, camera point), chasm stripes (width, period, angle, two colours, opacity, or a texture from `tools/art/parts`), lights (each lit piece casts a pool of its own colour, blended as light, plus a bloom), and for Re-place: greebles (count, size, overhang) and floor panels (count, sizes, corner lights, emboss depth). **Variant** lets levels share the kit and still look different: the gap fill (what the grey gaps show: the kit's `chasm` texture, or procedural `water`, `sky` far below or `stars`, with a colour for water and sky) and a colour grade over the finished art (hue shift, saturation, brightness, contrast, tint).
+**Options.** `tools/art/options.json` lists the bake's options with their defaults: wall edges (corner rounding, edge softness, sharpen), wall sides (built like the originals: the wall art copied, darkened and scaled down a little toward a camera point, several times over; copies, scale per copy, brightness, fade, camera point), chasm stripes (width, period, angle, two colours, opacity, or a texture from `tools/art/parts`), lights (each lit piece casts a pool of its own colour, blended as light, plus a bloom), and for Re-place: greebles (count, size, overhang) and floor panels (count, sizes, corner lights, emboss depth). **Variant** lets levels share the kit and still look different: the gap fill (what the grey gaps show: the kit's `chasm` texture, or procedural `water`, `sky` far below or `stars`, with a colour for water and sky) a decor mix for Re-place (density, and the share of each type's sprites the level draws from, picked by the seed) and a colour grade over the finished art (hue shift, saturation, brightness, contrast, tint).
 
 **Decor is only drawn.** It is baked into `background.png` and never changes `collision.png`, even where a greeble sticks out past a wall edge. **Floor panels** (`tools/art/parts/decor/panels`, made by `tools/art/make_panels.py`) are height maps with the `emboss` effect; the level's entrance always gets one, and some get a light in each corner (`"of": "panels"`, re-placed with them). A level overrides them in `level.json`, for example `"art": {"kit": "bridge", "seed": 2012, "sides": {"steps": 14}}`. The editor's Art tab has a field for each (changed ones in yellow) and checkboxes for which decor types Re-place lays out again.
 
