@@ -1,16 +1,19 @@
-"""One-time import of the original levels' collision shapes into levels/NN/collision.json.
+"""One-time import of the original levels' collision sources into levels/NN/collision.json.
 
 collision.json is the list of shapes, bottom first, that the editor bakes into collision.png
-(see levels/README.md, "Collision shapes"). What each original level gets:
+(see levels/README.md, "Collision shapes"). Every level gets the same stack:
 
-  00-02  Their collision maps were bitmaps in the SWF, so the bottom layer is that bitmap,
-         copied to collision-base.png and locked. On top, hidden, come the wall vectors from the
-         "walls" layer of original/art/level/levelN.fw.png. That layer is the BACKGROUND ART's
-         walls, not collision, but it traces the collision closely, so it's a starting point
-         for redrawing a level as shapes.
-  03     The Bridge's collision map was a vector shape in the SWF ("level assets/level3/shape 1",
-         before it was rasterised to collision.png in 868783b): its fills and outlines become
-         the shapes, exactly as Flash stored them (lines and quadratic curves).
+  collision map   a pixel layer: the level's collision.png itself, copied to collision-base.png
+                  (locked). Shown, it alone bakes to exactly the current collision.png.
+  vector walls    the original vector walls the map was made from, all hidden. Show them to
+                  bake from them instead.
+
+Where the vectors come from:
+  00-02  the "walls" layer of original/art/level/levelN.fw.png, which was exported as
+         levelN.walls.png and imported into the FLA as the collision bitmap (2008). DropZone's
+         walls layer also has two bitmap posts: they come in as a hidden pixel layer.
+  03     The Bridge's collision vector shape in the SWF ("level assets/level3/shape 1", before
+         868783b rasterised it): fills and outlines exactly as Flash stored them.
 
   python3 tools/levels/import_collision.py            writes all four, refusing to overwrite
   python3 tools/levels/import_collision.py --force    overwrites existing collision.json files
@@ -22,6 +25,9 @@ sys.path.insert(0, os.path.join(ROOT, 'tools', 'flash-source'))
 import fwpng  # noqa: E402
 
 FOLDERS = ['00_Training', '01_DropZone', '02_FirstBlock', '03_Bridge']
+# where the walls sit on the map: DropZone's walls bitmap landed 1 px left of its vectors (measured:
+# shifted so, the vectors bake to the map with no wall/open differences, only anti-aliased edges)
+OFFSET = {1: -1}
 SWF_SHAPE = ('868783b^', 'source/library/level assets/level3/shape 1.json')
 
 
@@ -60,7 +66,7 @@ def fw_d(contours):
 def fw_walls(i):
     doc = fwpng.Doc(os.path.join(ROOT, 'original/art/level/level%d.fw.png' % i))
     layer = next(l for l in doc.layers if l['name'] == 'walls')
-    shapes = []
+    shapes, images = [], []
 
     def walk(n):
         if n['kind'] == 'path' and n.get('fill') and n['contours']:
@@ -69,6 +75,8 @@ def fw_walls(i):
             if d:
                 # art greys (#333333 walls), not collision colours: dark is meant as wall
                 shapes.append({'mode': 'wall' if (r + g + b) / 3 < 128 else 'open', 'd': d})
+        if n['kind'] == 'image':
+            images.append((n, doc.image(n)))
         for c in n.get('children', []):
             walk(c)
     # Fireworks lists elements top first; collision.json is bottom first
@@ -77,8 +85,23 @@ def fw_walls(i):
     names, out = {}, []
     for s in shapes:
         names[s['mode']] = names.get(s['mode'], 0) + 1
-        out.append({'name': 'art %s %d' % (s['mode'], names[s['mode']]), **s})
-    return out
+        out.append({'name': '%s %d' % (s['mode'], names[s['mode']]), **s})
+    return out, images
+
+
+def bitmap_walls(folder, images):
+    """bitmaps in a walls layer -> one pixel layer, black where they're opaque"""
+    from PIL import Image
+    w, h = Image.open(os.path.join(ROOT, 'levels', folder, 'collision.png')).size
+    out = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+    for n, rgba in images:
+        x0, y0 = int(round(n['x'] + n['xo'])), int(round(n['y'] + n['yo']))
+        for j in range(rgba.shape[0]):
+            for i in range(rgba.shape[1]):
+                if rgba[j, i, 3] > 127 and 0 <= x0 + i < w and 0 <= y0 + j < h:
+                    out.putpixel((x0 + i, y0 + j), (0, 0, 0, 255))
+    out.save(os.path.join(ROOT, 'levels', folder, 'collision-bitmap-walls.png'))
+    return {'name': 'bitmap walls', 'pixels': 'collision-bitmap-walls.png'}
 
 
 def swf_bridge():
@@ -135,15 +158,19 @@ def main():
         if os.path.exists(os.path.join(ROOT, 'levels', folder, 'collision.json')) and not force:
             print('levels/%s/collision.json exists; --force overwrites it' % folder)
             continue
+        shutil.copyfile(os.path.join(ROOT, 'levels', folder, 'collision.png'), os.path.join(ROOT, 'levels', folder, 'collision-base.png'))
         if i < 3:
-            shutil.copyfile(os.path.join(ROOT, 'levels', folder, 'collision.png'), os.path.join(ROOT, 'levels', folder, 'collision-base.png'))
-            art = fw_walls(i)
-            for s in art:
-                s['hidden'] = True
-                s['group'] = 'background art walls'
-            write(folder, [{'name': 'original map', 'pixels': 'collision-base.png', 'locked': True}] + art)
+            vectors, images = fw_walls(i)
+            if images:
+                vectors.append(bitmap_walls(folder, images))
         else:
-            write(folder, swf_bridge())
+            vectors = swf_bridge()
+        for s in vectors:
+            if OFFSET.get(i):
+                s['x'] = OFFSET[i]
+            s['hidden'] = True
+            s['group'] = 'wall shapes'
+        write(folder, [{'name': 'collision map', 'pixels': 'collision-base.png', 'locked': True}] + vectors)
 
 
 if __name__ == '__main__':

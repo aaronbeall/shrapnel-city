@@ -111,10 +111,7 @@ There are two steps, run separately:
 
 If `collision.png` is changed outside the shapes, the editor says how many pixels the game would read differently, and offers to keep the map (its edits become a locked layer on top) or to re-bake it from the shapes.
 
-`tools/levels/import_collision.py` made the files for the original levels:
-
-- **00 to 02:** their collision maps were bitmaps in the SWF, so the bottom layer is that bitmap, `collision-base.png`, locked. On top, hidden in the group "background art walls", are the wall vectors from the "walls" layer of `original/art/level/levelN.fw.png`. That layer is the background art, not collision, but it traces the collision closely (94.5% to 98.2% of pixels), so it's a start for redrawing a level as shapes.
-- **03 Bridge:** its collision map was a vector shape in the SWF, so its fills and hairline outlines are the shapes, exactly as Flash stored them. They bake to a map the game reads identically to `collision.png`.
+Each original level's stack is the same: at the bottom, shown and locked, the "collision map" pixel layer (`collision-base.png`, a copy of its `collision.png`, so the stack bakes to exactly that map); above it, hidden, in the group "wall shapes", the vector walls the map was made from. Show them (and hide the map) to bake from the vectors instead. `tools/levels/import_collision.py` made these: the vectors for 00 to 02 are the "walls" layer of `original/art/level/levelN.fw.png` (exported as `levelN.walls.png`, the collision bitmap in the FLA; DropZone's also has two bitmap posts, a pixel layer), and the Bridge's are the vector shape its map was in the SWF. Baked on their own, the Bridge's match its map exactly and the others differ only in anti-aliased edge pixels.
 
 A level without `collision.json` starts in the editor as one locked pixel layer holding its map; the first shape edit writes `collision.json` and `collision-base.png`.
 
