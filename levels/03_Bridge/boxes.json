@@ -23,7 +23,7 @@
     "x": 400,
     "y": 288,
     "scale": 1.779358,
-    "props": {"health": 50, "powerupDrop": {"type": "secondary", "item": "Splinter Bomb", "quantity": 3}}
+    "props": {"health": 50, "powerupDrop": {"type": "secondary", "item": "Splinter Bomb", "quantity": 3, "alertMessage": "SPLINTER BOMB: explodes and sprays splinters of Banshee fire in every direction.", "alertOnce": true}}
   },
   {"symbol": "game objects/box", "x": 37, "y": 110},
   {"symbol": "game objects/box", "x": 86.3, "y": 39},
@@ -35,7 +35,7 @@
     "symbol": "game objects/box",
     "x": 248.95,
     "y": 46,
-    "props": {"powerupDrop": {"type": "secondary", "item": "Impact Mortar", "quantity": 1}}
+    "props": {"powerupDrop": {"type": "secondary", "item": "Impact Mortar", "quantity": 1, "alertMessage": "IMPACT MORTAR: a slow rocket that speeds up and blows on impact. Big blast, so keep your distance.", "alertOnce": true}}
   },
   {
     "symbol": "game objects/box",
@@ -145,7 +145,7 @@
     "x": 1550,
     "y": 375,
     "scale": 1.272705,
-    "props": {"powerupDrop": {"type": "secondary", "item": "Splinter Bomb", "quantity": 3}}
+    "props": {"powerupDrop": {"type": "secondary", "item": "Splinter Bomb", "quantity": 3, "alertMessage": "SPLINTER BOMB: explodes and sprays splinters of Banshee fire in every direction.", "alertOnce": true}}
   },
   {"symbol": "game objects/box", "x": 1500, "y": 155},
   {"symbol": "game objects/box", "x": 1445, "y": 100},

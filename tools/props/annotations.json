@@ -293,6 +293,11 @@
       "type": "string",
       "desc": "Message shown while the player is over it."
     },
+    "alertOnce": {
+      "group": "message",
+      "type": "boolean",
+      "desc": "Show the message only the first time in the level. Put it on every copy of a new weapon (pickups and drops) with the same intro message."
+    },
     "alertLinger": {
       "group": "message",
       "type": "number",
