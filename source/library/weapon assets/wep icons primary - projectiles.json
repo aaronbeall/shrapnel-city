@@ -106,6 +106,15 @@
           "color": {"add": [18, 0, 69, 0]}
         }
       ]
+    },
+    {
+      "frame": 24,
+      "changes": [
+        {"remove": 2},
+        {"remove": 4},
+        {"remove": 6},
+        {"place": "weapon assets/wep icons arc caster", "depth": 20, "x": 0, "y": 0, "scale": 0.8}
+      ]
     }
   ]
 }

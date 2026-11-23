@@ -1,0 +1,217 @@
+[
+  {"symbol": "game objects/box", "x": 80, "y": 920},
+  {"symbol": "game objects/box", "x": 80, "y": 940},
+  {"symbol": "game objects/box", "x": 80, "y": 960},
+  {"symbol": "game objects/box", "x": 80, "y": 980},
+  {"symbol": "game objects/box", "x": 160, "y": 1120},
+  {"symbol": "game objects/box", "x": 180, "y": 1120},
+  {
+    "symbol": "game objects/box",
+    "x": 200,
+    "y": 1120,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {"symbol": "game objects/box", "x": 220, "y": 1120},
+  {"symbol": "game objects/box", "x": 240, "y": 1000},
+  {"symbol": "game objects/box", "x": 240, "y": 1020},
+  {"symbol": "game objects/box", "x": 260, "y": 1000},
+  {"symbol": "game objects/box", "x": 260, "y": 1020},
+  {"symbol": "game objects/box", "x": 80, "y": 360},
+  {
+    "symbol": "game objects/box",
+    "x": 80,
+    "y": 380,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Arc Caster",
+        "quantity": 25,
+        "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
+        "alertOnce": true
+      }
+    }
+  },
+  {"symbol": "game objects/box", "x": 80, "y": 400},
+  {"symbol": "game objects/box", "x": 80, "y": 660},
+  {"symbol": "game objects/box", "x": 80, "y": 680},
+  {"symbol": "game objects/box", "x": 80, "y": 700},
+  {"symbol": "game objects/box", "x": 80, "y": 720},
+  {"symbol": "game objects/box", "x": 200, "y": 300},
+  {"symbol": "game objects/box", "x": 220, "y": 300},
+  {"symbol": "game objects/box", "x": 310, "y": 300},
+  {
+    "symbol": "game objects/box",
+    "x": 330,
+    "y": 300,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {"symbol": "game objects/box", "x": 430, "y": 806},
+  {"symbol": "game objects/box", "x": 450, "y": 806},
+  {"symbol": "game objects/box", "x": 470, "y": 806},
+  {"symbol": "game objects/box", "x": 244, "y": 600},
+  {"symbol": "game objects/box", "x": 244, "y": 620},
+  {"symbol": "game objects/box", "x": 244, "y": 640},
+  {"symbol": "game objects/box", "x": 200, "y": 740},
+  {"symbol": "game objects/box", "x": 200, "y": 760},
+  {"symbol": "game objects/box", "x": 220, "y": 740},
+  {"symbol": "game objects/box", "x": 220, "y": 760},
+  {"symbol": "game objects/box", "x": 440, "y": 300},
+  {
+    "symbol": "game objects/box",
+    "x": 460,
+    "y": 300,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Arc Caster",
+        "quantity": 25,
+        "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
+        "alertOnce": true
+      }
+    }
+  },
+  {"symbol": "game objects/box", "x": 430, "y": 186},
+  {
+    "symbol": "game objects/box",
+    "x": 430,
+    "y": 206,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 25}}
+  },
+  {"symbol": "game objects/box", "x": 430, "y": 226},
+  {"symbol": "game objects/box", "x": 80, "y": 76},
+  {"symbol": "game objects/box", "x": 100, "y": 76},
+  {"symbol": "game objects/box", "x": 120, "y": 76},
+  {"symbol": "game objects/box", "x": 740, "y": 76},
+  {
+    "symbol": "game objects/box",
+    "x": 740,
+    "y": 96,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "health", "item": "health", "quantity": 25}}
+  },
+  {"symbol": "game objects/box", "x": 1100, "y": 120},
+  {"symbol": "game objects/box", "x": 1080, "y": 120},
+  {"symbol": "game objects/box", "x": 1060, "y": 120},
+  {"symbol": "game objects/box", "x": 800, "y": 1120},
+  {"symbol": "game objects/box", "x": 820, "y": 1120},
+  {"symbol": "game objects/box", "x": 840, "y": 1120},
+  {"symbol": "game objects/box", "x": 860, "y": 1120},
+  {"symbol": "game objects/box", "x": 1060, "y": 560},
+  {
+    "symbol": "game objects/box",
+    "x": 1060,
+    "y": 580,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {"symbol": "game objects/box", "x": 1060, "y": 600},
+  {"symbol": "game objects/box", "x": 1100, "y": 960},
+  {"symbol": "game objects/box", "x": 1100, "y": 980},
+  {"symbol": "game objects/box", "x": 1100, "y": 1000},
+  {"symbol": "game objects/box", "x": 1100, "y": 1020},
+  {"symbol": "game objects/box", "x": 1060, "y": 1040},
+  {"symbol": "game objects/box", "x": 1060, "y": 1060},
+  {"symbol": "game objects/box", "x": 1080, "y": 1040},
+  {"symbol": "game objects/box", "x": 1080, "y": 1060},
+  {"symbol": "game objects/box", "x": 860, "y": 196},
+  {"symbol": "game objects/box", "x": 880, "y": 196},
+  {"symbol": "game objects/box", "x": 900, "y": 196},
+  {"symbol": "game objects/box", "x": 920, "y": 196},
+  {"symbol": "game objects/box", "x": 1176, "y": 632},
+  {
+    "symbol": "game objects/box",
+    "x": 1196,
+    "y": 632,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Arc Caster",
+        "quantity": 25,
+        "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
+        "alertOnce": true
+      }
+    }
+  },
+  {"symbol": "game objects/box", "x": 1216, "y": 632},
+  {"symbol": "game objects/box", "x": 1336, "y": 632},
+  {
+    "symbol": "game objects/box",
+    "x": 1356,
+    "y": 632,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 25}}
+  },
+  {"symbol": "game objects/box", "x": 1376, "y": 632},
+  {"symbol": "game objects/box", "x": 1500, "y": 632},
+  {
+    "symbol": "game objects/box",
+    "x": 1520,
+    "y": 632,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Vertigo", "quantity": 30}}
+  },
+  {"symbol": "game objects/box", "x": 1540, "y": 632},
+  {"symbol": "game objects/box", "x": 1224, "y": 916},
+  {
+    "symbol": "game objects/box",
+    "x": 1224,
+    "y": 936,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {"symbol": "game objects/box", "x": 1224, "y": 956},
+  {"symbol": "game objects/box", "x": 1340, "y": 1084},
+  {"symbol": "game objects/box", "x": 1360, "y": 1084},
+  {"symbol": "game objects/box", "x": 1380, "y": 1084},
+  {"symbol": "game objects/box", "x": 1500, "y": 1084},
+  {"symbol": "game objects/box", "x": 1520, "y": 1084},
+  {"symbol": "game objects/box", "x": 1540, "y": 1084},
+  {"symbol": "game objects/box", "x": 1384, "y": 916},
+  {"symbol": "game objects/box", "x": 1384, "y": 936},
+  {"symbol": "game objects/box", "x": 1384, "y": 956},
+  {"symbol": "game objects/box", "x": 1250, "y": 110},
+  {
+    "symbol": "game objects/box",
+    "x": 1250,
+    "y": 130,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "secondary",
+        "item": "Pulse Bomb",
+        "quantity": 1,
+        "alertMessage": "PULSE BOMBS: a bouncing charge that bursts into a ring of pulse shots. Roll one round a corner.",
+        "alertOnce": true
+      }
+    }
+  },
+  {"symbol": "game objects/box", "x": 1250, "y": 150},
+  {"symbol": "game objects/box", "x": 1610, "y": 380},
+  {"symbol": "game objects/box", "x": 1610, "y": 400},
+  {"symbol": "game objects/box", "x": 1610, "y": 420},
+  {"symbol": "game objects/box", "x": 1290, "y": 520},
+  {"symbol": "game objects/box", "x": 1310, "y": 520},
+  {"symbol": "game objects/box", "x": 1330, "y": 520},
+  {"symbol": "game objects/box", "x": 1500, "y": 520},
+  {"symbol": "game objects/box", "x": 1520, "y": 520},
+  {"symbol": "game objects/box", "x": 1540, "y": 520},
+  {"symbol": "game objects/box", "x": 1380, "y": 76},
+  {"symbol": "game objects/box", "x": 1400, "y": 76},
+  {"symbol": "game objects/box", "x": 1420, "y": 76},
+  {"symbol": "game objects/box", "x": 1540, "y": 150},
+  {"symbol": "game objects/box", "x": 1540, "y": 170},
+  {"symbol": "game objects/box", "x": 1560, "y": 150},
+  {"symbol": "game objects/box", "x": 1560, "y": 170},
+  {"symbol": "game objects/box computer", "x": 1610, "y": 860, "props": {"onDie": {"$trigger": "door1:open"}}},
+  {"symbol": "game objects/box computer", "x": 1180, "y": 1076, "props": {"onDie": {"$trigger": "yard:off"}}}
+]

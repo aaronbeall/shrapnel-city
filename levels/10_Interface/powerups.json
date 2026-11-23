@@ -1,0 +1,185 @@
+[
+  {
+    "symbol": "game objects/message beacon",
+    "x": 200,
+    "y": 960,
+    "props": {
+      "alertMessage": "Floor grids are <strong>LIVE</strong> when they crackle blue, and they warn you in amber first. Time your run.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 160,
+    "y": 740,
+    "props": {
+      "alertMessage": "<strong>ALARM PANELS</strong> and <strong>SENTINELS</strong> don't shoot. They call the hunters and power the floors. Kill them first, or stay out of sight.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 140,
+    "y": 260,
+    "props": {
+      "alertMessage": "The data bus. The <strong>LASER TURRET</strong> at the far end turns slowly: watch its red sight line and duck into the alcoves.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 1240,
+    "y": 1060,
+    "props": {
+      "alertMessage": "A <strong>BREAKER</strong> in this yard powers its floor grids, and the <strong>UPLINK TERMINAL</strong> holds the core door shut.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 1360,
+    "y": 680,
+    "props": {
+      "alertMessage": "Core door locked. Destroy the <strong>UPLINK TERMINAL</strong> in the yard.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 600,
+    "y": 804,
+    "props": {
+      "type": "primary",
+      "item": "Arc Caster",
+      "quantity": 80,
+      "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 560,
+    "y": 806,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1550,
+    "y": 1040,
+    "props": {
+      "type": "secondary",
+      "item": "Pulse Bomb",
+      "quantity": 3,
+      "alertMessage": "PULSE BOMBS: a bouncing charge that bursts into a ring of pulse shots. Roll one round a corner.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1580,
+    "y": 1040,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 120,
+    "y": 1110,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 60}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 340,
+    "y": 1110,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 130,
+    "y": 362,
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 60}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 600,
+    "y": 300,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 500,
+    "y": 104,
+    "props": {
+      "type": "primary",
+      "item": "Arc Caster",
+      "quantity": 40,
+      "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 270,
+    "y": 162,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 720,
+    "y": 904,
+    "props": {"type": "primary", "item": "Plasma", "quantity": 20}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1090,
+    "y": 600,
+    "props": {"type": "secondary", "item": "Thermal Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1080,
+    "y": 1100,
+    "props": {
+      "type": "primary",
+      "item": "Arc Caster",
+      "quantity": 40,
+      "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1440,
+    "y": 636,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1200,
+    "y": 1000,
+    "props": {
+      "type": "secondary",
+      "item": "Pulse Bomb",
+      "quantity": 2,
+      "alertMessage": "PULSE BOMBS: a bouncing charge that bursts into a ring of pulse shots. Roll one round a corner.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1270,
+    "y": 500,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1590,
+    "y": 320,
+    "props": {
+      "type": "primary",
+      "item": "Arc Caster",
+      "quantity": 40,
+      "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
+      "alertOnce": true
+    }
+  }
+]

@@ -63,7 +63,8 @@ onClipEvent(load){
 		{name:"Reaper", shot:"shot_mcReaper", ammo:0, max:200, refire:6, spread:8, fullname:"Reaper Cannon", fire:7, key:4}, 
 		{name:"Laser", shot:"shot_mcLaser", ammo:0, max:100, refire:11, spread:0, fullname:"Laser", fire:3, key:5}, 
 		{name:"Super Laser", shot:"shot_mcSuperLaser", ammo:0, max:500, refire:1, spread:0, fullname:"Super Laser", fire:3, key:5}, 
-		{name:"Heat Ray", shot:"shot_mcUltraLaser", ammo:0, max:300, refire:1, spread:0, fullname:"Death Ray", burst:5, burstReload:20, fire:3, key:5}
+		{name:"Heat Ray", shot:"shot_mcUltraLaser", ammo:0, max:300, refire:1, spread:0, fullname:"Death Ray", burst:5, burstReload:20, fire:3, key:5}, 
+		{name:"Arc Caster", shot:"shot_mcArc", ammo:0, max:150, refire:6, spread:0, fullname:"Arc Caster", fire:3, key:2}
 	]
 	for(var i in weapons1) weapons1[i].id = int(i);
 	weapons2 = [

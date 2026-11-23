@@ -1,0 +1,283 @@
+[
+  {"symbol": "game objects/door", "x": 1360, "y": 582, "matrix": [0, 1, -1, 0], "props": {"id": "door1"}},
+  {"symbol": "game objects/trap tile", "x": 300, "y": 860, "props": {"onTime": 1.2, "offTime": 2}},
+  {"symbol": "game objects/trap tile", "x": 340, "y": 860, "props": {"onTime": 1.2, "offTime": 2}},
+  {
+    "symbol": "game objects/trap tile",
+    "x": 80,
+    "y": 300,
+    "props": {"group": "hall", "dormant": true, "offTime": 0, "alarmTime": 10}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 120,
+    "y": 300,
+    "props": {"group": "hall", "dormant": true, "offTime": 0, "alarmTime": 10}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 160,
+    "y": 300,
+    "props": {"group": "hall", "dormant": true, "offTime": 0, "alarmTime": 10}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 400,
+    "y": 80,
+    "props": {"onTime": 1.4, "offTime": 1.4, "phase": 0}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 400,
+    "y": 120,
+    "props": {"onTime": 1.4, "offTime": 1.4, "phase": 0}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 620,
+    "y": 80,
+    "props": {"onTime": 1.4, "offTime": 1.4, "phase": 0.9}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 620,
+    "y": 120,
+    "props": {"onTime": 1.4, "offTime": 1.4, "phase": 0.9}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 960,
+    "y": 80,
+    "props": {"onTime": 1.4, "offTime": 1.4, "phase": 1.8}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 960,
+    "y": 120,
+    "props": {"onTime": 1.4, "offTime": 1.4, "phase": 1.8}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 820,
+    "y": 496,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 820,
+    "y": 528,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 860,
+    "y": 496,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 860,
+    "y": 528,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 900,
+    "y": 496,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 900,
+    "y": 528,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 940,
+    "y": 496,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 940,
+    "y": 528,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 980,
+    "y": 496,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 980,
+    "y": 528,
+    "props": {"group": "trench", "dormant": true, "offTime": 0, "alarmTime": 12},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 820,
+    "y": 856,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 820,
+    "y": 888,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 860,
+    "y": 856,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 860,
+    "y": 888,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 900,
+    "y": 856,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 900,
+    "y": 888,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 940,
+    "y": 856,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 940,
+    "y": 888,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 980,
+    "y": 856,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 980,
+    "y": 888,
+    "props": {"group": "trench", "onTime": 1, "offTime": 2.2},
+    "matrix": [1, 0, 0, 0.8]
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1180,
+    "y": 780,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 0}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1220,
+    "y": 780,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 0}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1340,
+    "y": 780,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 1.2}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1380,
+    "y": 780,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 1.2}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1500,
+    "y": 980,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 0.6}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1540,
+    "y": 980,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 0.6}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1420,
+    "y": 1040,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 1.8}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1420,
+    "y": 1080,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 1.8}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1420,
+    "y": 840,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 0.3}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1420,
+    "y": 880,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 0.3}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1460,
+    "y": 840,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 0.3}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1460,
+    "y": 880,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 0.3}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1340,
+    "y": 980,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 2}
+  },
+  {
+    "symbol": "game objects/trap tile",
+    "x": 1380,
+    "y": 980,
+    "props": {"group": "yard", "onTime": 1.3, "offTime": 1.7, "phase": 2}
+  }
+]

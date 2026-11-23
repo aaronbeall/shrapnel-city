@@ -2045,5 +2045,62 @@
    "w": 223,
    "h": 223
   }
+ ],
+ "interface": [
+  {
+   "file": "interface/cabinet0.png",
+   "w": 70,
+   "h": 110
+  },
+  {
+   "file": "interface/cabinet1.png",
+   "w": 70,
+   "h": 110
+  },
+  {
+   "file": "interface/cabinet2.png",
+   "w": 70,
+   "h": 110
+  },
+  {
+   "file": "interface/core.png",
+   "w": 88,
+   "h": 88
+  },
+  {
+   "file": "interface/lamp.png",
+   "w": 8,
+   "h": 16
+  },
+  {
+   "file": "interface/rack0.png",
+   "w": 32,
+   "h": 300
+  },
+  {
+   "file": "interface/rack1.png",
+   "w": 32,
+   "h": 300
+  },
+  {
+   "file": "interface/rack2.png",
+   "w": 32,
+   "h": 120
+  },
+  {
+   "file": "interface/rack3.png",
+   "w": 32,
+   "h": 120
+  },
+  {
+   "file": "interface/rack4.png",
+   "w": 32,
+   "h": 120
+  },
+  {
+   "file": "interface/stencil.png",
+   "w": 34,
+   "h": 30
+  }
  ]
 }

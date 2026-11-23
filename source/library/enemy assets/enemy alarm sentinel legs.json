@@ -1,0 +1,20 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 4,
+  "timeline": [
+    {"frame": 1, "changes": [{"place": "enemy assets/enemy alarm sentinel legs/shape 1", "depth": 1, "x": 0, "y": 0}]},
+    {
+      "frame": 2,
+      "changes": [{"remove": 1}, {"place": "enemy assets/enemy alarm sentinel legs/shape 2", "depth": 1, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 3,
+      "changes": [{"remove": 1}, {"place": "enemy assets/enemy alarm sentinel legs/shape 3", "depth": 1, "x": 0, "y": 0}]
+    },
+    {
+      "frame": 4,
+      "changes": [{"remove": 1}, {"place": "enemy assets/enemy alarm sentinel legs/shape 4", "depth": 1, "x": 0, "y": 0}]
+    }
+  ]
+}

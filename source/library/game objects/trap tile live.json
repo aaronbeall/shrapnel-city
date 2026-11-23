@@ -1,0 +1,24 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 3,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "_glow",
+          "depth": 0,
+          "x": 0,
+          "y": 0,
+          "scale": [2.3, 2.3],
+          "color": {"multiply": [0, 0, 0, 0.75], "add": [40, 150, 255, 0]},
+          "blend": "add"
+        },
+        {"place": "game objects/trap tile live/shape 1", "depth": 1, "x": 0, "y": 0}
+      ]
+    },
+    {"frame": 2, "changes": [{"remove": 1}, {"place": "game objects/trap tile live/shape 2", "depth": 1, "x": 0, "y": 0}]},
+    {"frame": 3, "changes": [{"remove": 1}, {"place": "game objects/trap tile live/shape 3", "depth": 1, "x": 0, "y": 0}]}
+  ]
+}
