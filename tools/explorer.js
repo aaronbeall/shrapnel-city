@@ -433,11 +433,19 @@ function weaponCard(w, slot) {
   });
 }
 
-const ENEMIES = [
-  'enemy gnat', 'enemy stinger', 'enemy stinger2', 'enemy stinger3', 'enemy scurge', 'enemy wolfgun', 'enemy double battery', 'enemy object fire barrel',
-].map((n) => lib.idFor('enemy assets/' + n));
-// finished in the FLA but only placed on guide layers, so the original game never used them
-const UNUSED_ENEMIES = ['enemy tank', 'enemy drone', 'enemy missile launcher'].map((n) => lib.idFor('enemy assets/' + n));
+// library symbols by folder
+const groups = {};
+for (const [id, s] of lib.symbols) {
+  if (id === 0) continue;
+  const folder = s.name.includes('/') ? s.name.replace(/\/[^/]*$/, '') : '(root)';
+  (groups[folder] ||= []).push(id);
+}
+for (const g of Object.values(groups)) g.sort((a, b) => sym(a).name.localeCompare(sym(b).name, undefined, { numeric: true }));
+const inFolder = (f, skip = []) => (groups[f] || []).filter((id) => !skip.includes(id));
+
+// every enemy in the library: a symbol in enemy assets/ whose frame 1 runs an enemy script.
+// The rest of that folder (cores, turrets, flashes) are the parts enemies are built from.
+const ENEMIES = inFolder('enemy assets').filter((id) => /\S/.test(scriptText(id, 1) || ''));
 
 function aliveDeadCard(id, extra = {}) {
   const T = framesOf(id);
@@ -476,15 +484,6 @@ function labelCards(id, title) {
     });
   });
 }
-
-const groups = {};
-for (const [id, s] of lib.symbols) {
-  if (id === 0) continue;
-  const folder = s.name.includes('/') ? s.name.replace(/\/[^/]*$/, '') : '(root)';
-  (groups[folder] ||= []).push(id);
-}
-for (const g of Object.values(groups)) g.sort((a, b) => sym(a).name.localeCompare(sym(b).name, undefined, { numeric: true }));
-const inFolder = (f, skip = []) => (groups[f] || []).filter((id) => !skip.includes(id));
 
 // A level's game frame on screen_mc, as startLevel() leaves it (the Levels tab).
 // Timeline depths come from tools/levels/compile.mjs: background 3, doors 10-199, collision map 200, vision 210,
@@ -761,10 +760,9 @@ const TABS = {
   enemies: {
     title: 'Enemies',
     build: () => [
-      section('Enemies', 'frame 1 is the live enemy; the rest of the timeline is its destruction. Stats are the defaults in each frame 1 script', ENEMIES.map((id) => aliveDeadCard(id))),
-      section('Unused enemies', 'finished in the FLA but only placed on guide layers, so not in any level yet', UNUSED_ENEMIES.map((id) => aliveDeadCard(id))),
+      section('Enemies', `${ENEMIES.length} enemy symbols in the library. Frame 1 is the live enemy; the rest of the timeline is its destruction. Stats are the defaults in each frame 1 script`, ENEMIES.map((id) => aliveDeadCard(id))),
       section('New enemy designs', 'vector designs from original/art/graphics/enemies.fw.png, not wired up yet', inFolder('enemy assets/designs').map((id) => genericCard(id))),
-      section('Enemy parts', 'cores, turrets and muzzle flashes the enemies are built from', inFolder('enemy assets', [...ENEMIES, ...UNUSED_ENEMIES]).map((id) => genericCard(id))),
+      section('Enemy parts', 'cores, turrets and muzzle flashes the enemies are built from', inFolder('enemy assets', ENEMIES).map((id) => genericCard(id))),
     ],
   },
   objects: {
