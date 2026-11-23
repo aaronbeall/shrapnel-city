@@ -56,9 +56,9 @@
     "y": 470,
     "props": {
       "type": "secondary",
-      "item": "Splinter Bomb",
-      "quantity": 3,
-      "alertMessage": "SPLINTER BOMBS: one blast, twenty-five splinters. Roll one into a room and stand well back.",
+      "item": "Shock Bomb",
+      "quantity": 1,
+      "alertMessage": "SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd.",
       "alertOnce": true
     }
   },
@@ -74,9 +74,9 @@
     "y": 420,
     "props": {
       "type": "secondary",
-      "item": "Splinter Bomb",
-      "quantity": 2,
-      "alertMessage": "SPLINTER BOMBS: one blast, twenty-five splinters. Roll one into a room and stand well back.",
+      "item": "Shock Bomb",
+      "quantity": 1,
+      "alertMessage": "SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd.",
       "alertOnce": true
     }
   },
@@ -145,6 +145,18 @@
     "x": 800,
     "y": 476,
     "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 384,
+    "props": {
+      "type": "secondary",
+      "item": "Shock Bomb",
+      "quantity": 1,
+      "alertMessage": "SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd.",
+      "alertOnce": true
+    }
   },
   {
     "symbol": "game objects/powerup",

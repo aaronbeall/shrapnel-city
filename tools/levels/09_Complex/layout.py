@@ -353,7 +353,7 @@ E(STINGER3, 1370, 840)
 grid(1262, 905, 2, 2)
 E(STINGER, 440, 700)
 E(STINGER, 1160, 700)
-# --- server vault (green): four hunters in the aisles, a stinger3 on the Splinter Bomb
+# --- server vault (green): four hunters in the aisles, a stinger3 on the Shock Bomb
 hunter(270, 470, GREEN, rot=0)
 hunter(430, 362, GREEN, rot=90)
 hunter(590, 590, GREEN, rot=-90)
@@ -414,9 +414,9 @@ pickup(250, 1136, 'primary', 'Pulse', 100)          # specimen room R1, past the
 pickup(170, 1240, 'health', 'health', 25)
 pickup(1200, 1400, 'primary', 'Pulse', 60)
 pickup(1040, 1120, 'health', 'health', 50)
-pickup(200, 470, 'secondary', 'Splinter Bomb', 3)   # the server vault's far end
+pickup(200, 470, 'secondary', 'Shock Bomb', 1)   # the server vault's far end
 pickup(170, 540, 'health', 'health', 50)
-pickup(1440, 420, 'secondary', 'Splinter Bomb', 2)
+pickup(1440, 420, 'secondary', 'Shock Bomb', 1)
 pickup(1430, 540, 'primary', 'Pulse', 60)
 pickup(380, 1650, 'primary', 'Bolter', 40)
 pickup(1300, 1660, 'secondary', 'Carbon Bomb', 2)
@@ -426,6 +426,7 @@ pickup(330, 860, 'health', 'health', 50)
 pickup(1320, 860, 'primary', 'Pulse', 40)           # east grotto
 pickup(1250, 840, 'secondary', 'Carbon Bomb', 2)
 pickup(800, 476, 'health', 'health', 50)            # the spine
+pickup(800, 384, 'secondary', 'Shock Bomb', 1)      # under the lift hall bulkhead, for the final room
 pickup(560, 92, 'health', 'health', 50)             # in the final room, if you get that far
 pickup(1040, 92, 'primary', 'Pulse', 60)
 pickup(800, 1590, 'primary', 'Bolter', 30)
@@ -439,7 +440,7 @@ doors = [P('game objects/door', *DOOR1, rot=90, props={'id': 'door1'}),
 boxes = []
 brng = random.Random(9090)
 DROPS = [{'type': 'health', 'item': 'health', 'quantity': 25}, {'type': 'primary', 'item': 'Bolter', 'quantity': 25},
-         {'type': 'primary', 'item': 'Pulse', 'quantity': 30}, {'type': 'secondary', 'item': 'Splinter Bomb', 'quantity': 1},
+         {'type': 'primary', 'item': 'Pulse', 'quantity': 30}, {'type': 'secondary', 'item': 'Shock Bomb', 'quantity': 1},
          {'type': 'secondary', 'item': 'Carbon Bomb', 'quantity': 1}, {'type': 'primary', 'item': 'Plasma', 'quantity': 10},
          {'type': 'primary', 'item': 'Vertigo', 'quantity': 30}]
 
@@ -558,7 +559,7 @@ def list_json(items):
 # this level's new weapons: an intro message on every copy (pickups and drops); alertOnce
 # shows it only for the first one the player picks up
 INTRO = {'Pulse': 'PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.',
-         'Splinter Bomb': 'SPLINTER BOMBS: one blast, twenty-five splinters. Roll one into a room and stand well back.'}
+         'Shock Bomb': 'SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd.'}
 
 
 def add_intros():
