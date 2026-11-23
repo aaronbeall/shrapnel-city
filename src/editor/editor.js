@@ -2262,7 +2262,7 @@ class Editor {
     const all = only.size === DECOR_TYPES.length;
     box.append(
       el('div', { class: 'le-row' }, 'Kit ', el('select', { title: 'the tile set: floor, wall and chasm textures and the decor sheets (tools/art/parts)', onchange: (ev) => setArt({ kit: ev.target.value }) },
-        ...['bridge', 'city'].map((kit) => el('option', { value: kit, selected: art.kit === kit }, kit))),
+        ...['bridge', 'city', 'rock'].map((kit) => el('option', { value: kit, selected: art.kit === kit }, kit))),
         ' Seed ', el('input', { type: 'number', step: 1, value: art.seed, style: 'width: 6em', title: 'picks the decor layout and the floor grain', onchange: (ev) => { const v = Math.round(+ev.target.value); if (isFinite(v)) setArt({ seed: v }); } }),
         el('button', { title: 'a new random seed (then Re-place decor to use it)', onclick: () => setArt({ seed: 1 + Math.floor(Math.random() * 9999) }) }, '🎲')),
       el('div', { class: 'le-row' },
