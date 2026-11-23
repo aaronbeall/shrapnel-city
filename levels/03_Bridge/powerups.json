@@ -75,12 +75,12 @@
     "scale": 0.999969,
     "props": {"type": "secondary", "item": "Shrapnel Bomb", "quantity": 1}
   },
-  {"symbol": "game objects/powerup", "x": 1050, "y": 50, "props": {"type": "primary", "item": "Banshee", "quantity": 100}},
+  {"symbol": "game objects/powerup", "x": 1050, "y": 50, "props": {"type": "primary", "item": "Banshee", "quantity": 100, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}},
   {
     "symbol": "game objects/powerup",
     "x": 1050,
     "y": 550,
-    "props": {"type": "primary", "item": "Banshee", "quantity": 100}
+    "props": {"type": "primary", "item": "Banshee", "quantity": 100, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}
   },
   {"symbol": "game objects/powerup", "x": 1150, "y": 500, "props": {"type": "health", "item": "health", "quantity": 15}},
   {
