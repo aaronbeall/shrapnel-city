@@ -359,7 +359,7 @@ function kindIcon(kind) {
 }
 const kindTag = (kind) => el('span', { class: 'kind' }, kindIcon(kind), ' ', (KINDS[kind] || KINDS.data).label);
 
-function card({ title, sub, stages, stats, tags, search, wide, kind }) {
+function card({ title, sub, stages, stats, tags, search, wide, kind, id }) {
   if (kind && stats && !stats.kind) stats = { kind: kindTag(kind), ...stats };
   const c = el('article', { class: 'card' + (wide ? ' wide' : '') },
     el('div', { class: 'stages' }, stages),
@@ -369,6 +369,7 @@ function card({ title, sub, stages, stats, tags, search, wide, kind }) {
       .map(([k, v]) => [el('dt', {}, k), el('dd', {}, v.nodeType ? v : String(v))])) : null,
   );
   c.dataset.search = (search || title + ' ' + (sub || '')).toLowerCase();
+  if (id !== undefined) c.dataset.sym = [].concat(id).filter((x) => x !== undefined).join(' ');
   c.addEventListener('click', () => {
     const first = c.querySelector('canvas');
     if (first && first.$preview) inspect(first.$preview.spec);
@@ -422,8 +423,9 @@ function weaponCard(w, slot) {
     Object.assign(ps, instParams(ps.frag));
   }
   for (const k of ['damage', 'speed', 'blastRange', 'fragCount']) if (ps[k] !== undefined && k !== 'fragCount') stats[k] = ps[k];
+  const st = templates.get(shot);
   return card({
-    title: w.name, sub: w.fullname && w.fullname !== w.name ? w.fullname : `${label} #${w.id + 1}`, wide: true,
+    title: w.name, sub: w.fullname && w.fullname !== w.name ? w.fullname : `${label} #${w.id + 1}`, wide: true, id: [t && t.id, st && st.id, icons],
     stats, search: `${w.name} ${w.fullname || ''} ${w.shot} ${WEAPON_KEYS[w.key]} ${t ? sym(t.id).name : ''}`,
     stages: [
       stage({ id: icons, hold: w.id + 1, title: `${w.name} HUD icon` }, 90, 80, 'HUD icon'),
@@ -433,11 +435,42 @@ function weaponCard(w, slot) {
   });
 }
 
-const ENEMIES = [
-  'enemy gnat', 'enemy stinger', 'enemy stinger2', 'enemy stinger3', 'enemy scurge', 'enemy wolfgun', 'enemy double battery', 'enemy object fire barrel',
-].map((n) => lib.idFor('enemy assets/' + n));
-// finished in the FLA but only placed on guide layers, so the original game never used them
-const UNUSED_ENEMIES = ['enemy tank', 'enemy drone', 'enemy missile launcher'].map((n) => lib.idFor('enemy assets/' + n));
+// the shot templates the weapon tables fire, following launchers to what they spawn
+const WEAPON_SHOTS = new Set([...weapons1, ...weapons2].flatMap((w) => {
+  const ps = instParams(w.shot);
+  return ps.frag && +ps.speed === 0 ? [w.shot, ps.frag] : [w.shot];
+}));
+// every projectile clip on screen_mc, by the projectile script its symbol runs
+const shotTemplates = () => [...templates.keys()].filter((n) => PROJECTILES.has(templates.get(n).id));
+function templateCard(n) {
+  const t = templates.get(n);
+  return card({ title: n.replace(/^shot_mc/, ''), sub: n + ' → ' + sym(t.id).name, stages: [shotStage(n, 150, 110)], id: t.id, kind: kindOf(t.id),
+    stats: { script: behaviourOf.get(t.id).replace(/^\w+\//, '') + '.as' } });
+}
+
+// library symbols by folder
+const groups = {};
+for (const [id, s] of lib.symbols) {
+  if (id === 0) continue;
+  const folder = s.name.includes('/') ? s.name.replace(/\/[^/]*$/, '') : '(root)';
+  (groups[folder] ||= []).push(id);
+}
+for (const g of Object.values(groups)) g.sort((a, b) => sym(a).name.localeCompare(sym(b).name, undefined, { numeric: true }));
+const inFolder = (f, skip = []) => (groups[f] || []).filter((id) => !skip.includes(id));
+
+// What a symbol is, read from the behaviour script its frame 1 includes ("object/enemyTurret",
+// "object/box", "level/exit", ...). The tabs below group the library by this, so a symbol added
+// to source/ shows up on its tab without touching this file.
+const behaviourOf = new Map();
+for (const [id, s] of lib.symbols) {
+  const m = /#include\s+"as\/((?:object|level|ui)\/[^"]+)\.as"/.exec((s.scripts || {})[1] || '');
+  if (m) behaviourOf.set(id, m[1]);
+}
+const byBehaviour = (re) => [...behaviourOf].filter(([, b]) => re.test(b)).map(([id]) => id)
+  .sort((a, b) => sym(a).name.localeCompare(sym(b).name, undefined, { numeric: true }));
+const ENEMIES = byBehaviour(/^object\/enemy(Turret|Vehicle|Object)$/);
+const PROJECTILES = new Set(byBehaviour(/^object\/(enemy)?[pP]rojectile/));
+const isEnemyShot = (id) => /^object\/enemyProjectile/.test(behaviourOf.get(id) || '');
 
 function aliveDeadCard(id, extra = {}) {
   const T = framesOf(id);
@@ -452,7 +485,7 @@ function aliveDeadCard(id, extra = {}) {
   const stages = [stage({ id, hold: 1, title: shortName(id) }, 120, 100, 'frame 1')];
   if (T > 1) stages.push(stage({ id, range: [2, T], title: shortName(id) + ' destroyed' }, 120, 100, `frames 2–${T}`));
   if (d.shot) stages.push(shotStage(d.shot.replace(/"/g, ''), 90, 100));
-  return card({ title: extra.title || shortName(id), sub: sym(id).name, stats, stages, wide: true, kind: kindOf(id) });
+  return card({ title: extra.title || shortName(id), sub: sym(id).name, stats, stages, wide: true, kind: kindOf(id), id });
 }
 
 function genericCard(id, opts = {}) {
@@ -461,7 +494,7 @@ function genericCard(id, opts = {}) {
   const s = sym(id);
   const stats = { id, frames: T > 1 ? T : undefined, linkage: s.linkage || undefined, labels: labs.map(([n, f]) => `${n}@${f}`).join(' ') || undefined, 'placed in': usedIn(id) || undefined, ...opts.stats };
   const stages = opts.stages || [stage({ id, ...opts.spec, title: shortName(id) }, opts.w || 150, opts.h || 120)];
-  return card({ title: opts.title || shortName(id), sub: s.name, stats, stages, wide: opts.wide, kind: kindOf(id) });
+  return card({ title: opts.title || shortName(id), sub: s.name, stats, stages, wide: opts.wide, kind: kindOf(id), id });
 }
 
 function labelCards(id, title) {
@@ -471,20 +504,11 @@ function labelCards(id, title) {
   return labs.map(([n, f], i) => {
     const end = i + 1 < labs.length ? labs[i + 1][1] - 1 : T;
     return card({
-      title: `${title}: ${n}`, sub: `${sym(id).name}, frames ${f}–${end}`,
+      title: `${title}: ${n}`, sub: `${sym(id).name}, frames ${f}–${end}`, id,
       stages: [stage({ id, range: [f, end], title: `${shortName(id)} ${n}` }, 150, 120)],
     });
   });
 }
-
-const groups = {};
-for (const [id, s] of lib.symbols) {
-  if (id === 0) continue;
-  const folder = s.name.includes('/') ? s.name.replace(/\/[^/]*$/, '') : '(root)';
-  (groups[folder] ||= []).push(id);
-}
-for (const g of Object.values(groups)) g.sort((a, b) => sym(a).name.localeCompare(sym(b).name, undefined, { numeric: true }));
-const inFolder = (f, skip = []) => (groups[f] || []).filter((id) => !skip.includes(id));
 
 // A level's game frame on screen_mc, as startLevel() leaves it (the Levels tab).
 // Timeline depths come from tools/levels/compile.mjs: background 3, doors 10-199, collision map 200, vision 210,
@@ -740,63 +764,63 @@ const TABS = {
   },
   weapons: {
     title: 'Weapons',
-    build: () => [
-      section('Primary weapons', `${weapons1.length} guns from player.as, with HUD icon, pickup and projectile clip`, weapons1.map((w) => weaponCard(w, 1))),
-      section('Secondary weapons', `${weapons2.length} bombs and missiles`, weapons2.map((w) => weaponCard(w, 2))),
-      section('Enemy projectiles', 'templates on screen_mc that enemies duplicate',
-        [...templates.keys()].filter((n) => /^shot_mcE[A-Z]/.test(n)).map((n) => {
-          const t = templates.get(n);
-          return card({ title: n.replace('shot_mc', ''), sub: n + ' → ' + sym(t.id).name, stages: [shotStage(n, 150, 110)] });
-        })),
-      section('Other projectile clips', 'shot templates not tied to one weapon in the tables, plus frag and shells',
-        ['shot_mcBomblet', 'shot_mcDrunkRocket', 'shot_mcSmarty', 'shot_mcSpready', 'shot_mcSpreadyFader', 'shot_mcSuperPlasma', 'shrap_mc', 'scrap_mc', 'frag_mc', 'shell_mc']
-          .filter((n) => templates.has(n)).map((n) => card({ title: n, sub: sym(templates.get(n).id).name, stages: [shotStage(n, 150, 110)] }))),
-      section('Weapon icon sheets', 'every frame of the icon clips',
-        [ICONS_PRIMARY, lib.idFor('weapon assets/wep icons primary - projectiles'), ICONS_SECONDARY].map((id) => card({
-          title: shortName(id), sub: `${framesOf(id)} frames`, wide: true,
-          stages: Array.from({ length: framesOf(id) }, (_, i) => stage({ id, hold: i + 1, static: true }, 56, 48, String(i + 1))),
-        }))),
-    ],
+    build: () => {
+      const iconSheets = inFolder('weapon assets').filter((id) => /^wep icons/.test(shortName(id)));
+      const shots = shotTemplates();
+      const shown = new Set([...iconSheets, ...shots.map((n) => templates.get(n).id), ...byBehaviour(/^object\/particle$/)]);
+      return [
+        section('Primary weapons', `${weapons1.length} guns from player.as, with HUD icon, pickup and projectile clip`, weapons1.map((w) => weaponCard(w, 1))),
+        section('Secondary weapons', `${weapons2.length} bombs and missiles`, weapons2.map((w) => weaponCard(w, 2))),
+        section('Enemy projectiles', 'templates on screen_mc whose clip runs an enemy projectile script',
+          shots.filter((n) => isEnemyShot(templates.get(n).id)).map(templateCard)),
+        section('Other projectile clips', 'every other projectile template on screen_mc that no weapon table fires: frag, shells, debris and spawned sub-shots',
+          shots.filter((n) => !isEnemyShot(templates.get(n).id) && !WEAPON_SHOTS.has(n)).map(templateCard)),
+        section('Weapon icon sheets', 'every frame of the icon clips',
+          iconSheets.map((id) => card({
+            title: shortName(id), sub: `${framesOf(id)} frames`, wide: true, id,
+            stages: Array.from({ length: framesOf(id) }, (_, i) => stage({ id, hold: i + 1, static: true }, 56, 48, String(i + 1))),
+          }))),
+        section('Other weapon assets', 'the rest of weapon assets/ in the library: shrapnel, shells and pieces', inFolder('weapon assets', [...shown]).map((id) => genericCard(id))),
+      ];
+    },
   },
   enemies: {
     title: 'Enemies',
     build: () => [
-      section('Enemies', 'frame 1 is the live enemy; the rest of the timeline is its destruction. Stats are the defaults in each frame 1 script', ENEMIES.map((id) => aliveDeadCard(id))),
-      section('Unused enemies', 'finished in the FLA but only placed on guide layers, so not in any level yet', UNUSED_ENEMIES.map((id) => aliveDeadCard(id))),
+      section('Enemies', `${ENEMIES.length} symbols that run an enemy script. Frame 1 is the live enemy; the rest of the timeline is its destruction. Stats are the defaults in each frame 1 script`, ENEMIES.map((id) => aliveDeadCard(id))),
       section('New enemy designs', 'vector designs from original/art/graphics/enemies.fw.png, not wired up yet', inFolder('enemy assets/designs').map((id) => genericCard(id))),
-      section('Enemy parts', 'cores, turrets and muzzle flashes the enemies are built from', inFolder('enemy assets', [...ENEMIES, ...UNUSED_ENEMIES]).map((id) => genericCard(id))),
+      section('Enemy parts', 'cores, turrets and muzzle flashes the enemies are built from', inFolder('enemy assets', ENEMIES).map((id) => genericCard(id))),
     ],
   },
   objects: {
     title: 'Objects',
     build: () => {
-      const boxes = ['box', 'box computer', 'box reactor'].map((n) => lib.idFor('game objects/' + n));
-      const states = [lib.idFor('game objects/exit_mc'), lib.idFor('game objects/entrance_mc'), lib.idFor('game objects/level gate')];
+      const boxes = byBehaviour(/^object\/box/);
+      const gear = byBehaviour(/^level\//);
+      const elsewhere = [...byBehaviour(/^object\/(powerup|smoke)/), ...PROJECTILES];
+      const title = (id) => shortName(id).replace(/_mc$/, '').replace(/^./, (c) => c.toUpperCase());
       return [
-        section('Destructible boxes', 'frame 1 intact, then the destruction', boxes.map((id) => aliveDeadCard(id))),
-        section('Level gear', 'exits, entrances and gates by timeline label', [
-          ...labelCards(states[0], 'Exit'), ...labelCards(states[2], 'Gate'),
-          genericCard(states[1], { title: 'Entrance warp-in' }),
-          genericCard(lib.idFor('game objects/door')),
-          genericCard(lib.idFor('game objects/node'), { title: 'Path node' }),
-        ]),
-        section('Other game objects', null, inFolder('game objects', [...boxes, ...states, lib.idFor('game objects/door'), lib.idFor('game objects/node'), POWERUP, lib.idFor('game objects/message beacon')]).map((id) => genericCard(id))),
+        section('Destructible boxes', 'symbols that run a box script; frame 1 intact, then the destruction', boxes.map((id) => aliveDeadCard(id))),
+        section('Level gear', 'symbols that run a level script (exits, entrances, gates, doors, path nodes), by timeline label',
+          gear.flatMap((id) => (labelsOf(id).length > 1 ? labelCards(id, title(id)) : [genericCard(id, { title: title(id) })]))),
+        section('Other game objects', 'the rest of game objects/ in the library', inFolder('game objects', [...boxes, ...gear, ...elsewhere]).map((id) => genericCard(id))),
       ];
     },
   },
   items: {
     title: 'Items',
     build: () => {
-      const inv = lib.idFor('interface/game ui/inventory item_mc');
+      const invItems = byBehaviour(/^ui\/hudInventoryItem$/);
       return [
         section('Pickups', 'the powerup clip by label; weapon pickups are on the Weapons tab', [
-          card({ title: 'Health', sub: 'powerup, label health', stats: { 'powerup clips placed': usedIn(POWERUP) }, stages: [stage({ id: POWERUP, hold: 'health' }, 150, 120)] }),
+          card({ title: 'Health', sub: 'powerup, label health', id: POWERUP, stats: { 'powerup clips placed': usedIn(POWERUP) }, stages: [stage({ id: POWERUP, hold: 'health' }, 150, 120)] }),
           card({ title: 'Primary ammo', sub: 'powerup, label primary (Bolter)', stages: [stage({ id: POWERUP, hold: 'primary', setup: (n) => n.icons_mc && n.icons_mc.gotoAndStop(2) }, 150, 120)] }),
           card({ title: 'Secondary ammo', sub: 'powerup, label secondary (Carbon Bomb)', stages: [stage({ id: POWERUP, hold: 'secondary', setup: (n) => n.icons_mc && n.icons_mc.gotoAndStop(1) }, 150, 120)] }),
           card({ title: 'Powerup timeline', sub: `all ${framesOf(POWERUP)} frames looping`, stages: [stage({ id: POWERUP }, 150, 120)] }),
-          genericCard(lib.idFor('game objects/message beacon'), { title: 'Message beacon' }),
+          // anything else that runs powerup.as (the message beacon)
+          ...byBehaviour(/^object\/powerup$/).filter((id) => id !== POWERUP).map((id) => genericCard(id)),
         ]),
-        section('Keys', 'inventory item clip, one label per key colour', labelCards(inv, 'Key')),
+        section('Keys', 'inventory item clip, one label per key colour', invItems.flatMap((id) => labelCards(id, 'Key'))),
         section('Pickups placed per level', 'from the onClipEvent(load) scripts in powerups0–3', levels.map((L) => {
           const items = {};
           for (const p of L.powerups) {
@@ -818,24 +842,25 @@ const TABS = {
         section('Player ship', 'player MC by timeline label', [...labelCards(P, 'Ship'), genericCard(lib.idFor('player assets/ship38x37'))]),
         section('Muzzle flashes', 'fire_mc frame = the weapon table\'s fire value',
           Array.from({ length: framesOf(fire) }, (_, i) => card({
-            title: `fire ${i + 1}`, sub: weapons1.filter((w) => w.fire === i + 1).map((w) => w.name).join(', ') || 'unused',
+            title: `fire ${i + 1}`, sub: weapons1.filter((w) => w.fire === i + 1).map((w) => w.name).join(', ') || 'no weapon in the table', id: fire,
             stages: [stage({ id: fire, hold: i + 1 }, 150, 120)],
           }))),
         section('Indicator', 'popups over the ship', labelCards(lib.idFor('player assets/indicator_mc'), 'Indicator')),
-        section('Ship parts', null, inFolder('player assets', [P, fire, lib.idFor('player assets/ship38x37'), lib.idFor('player assets/indicator_mc')]).map((id) => genericCard(id))),
+        section('Ship parts', 'the rest of player assets/ in the library', inFolder('player assets', [P, fire, lib.idFor('player assets/ship38x37'), lib.idFor('player assets/indicator_mc')]).map((id) => genericCard(id))),
       ];
     },
   },
   effects: {
     title: 'Effects',
-    build: () => [
-      section('Explosions, smoke and sparks', null, inFolder('graphic assets').map((id) => genericCard(id))),
-      section('Particles and fragments', null, ['particle blue', 'particle fire', 'particle dust', 'shrap', 'shrap piece', 'star', 'warhead', 'shell', 'mort fire', 'frag_mc']
-        .map((n) => lib.idFor('weapon assets/' + n)).filter((x) => x !== undefined).map((id) => genericCard(id))),
-      section('Smoke and blasts', null, ['smoke', 'smokeColumn', 'blasts_mc', 'hit_mc', 'debris', 'debris gray', 'debris yellow', 'debris core']
-        .map((n) => lib.idFor('game objects/' + n)).filter((x) => x !== undefined).map((id) => genericCard(id))),
-      section('Warp-in cells', '37 pieces of the warp-in effect', inFolder('graphic assets/warp in assets').map((id) => genericCard(id, { w: 90, h: 70 }))),
-    ],
+    build: () => {
+      const subs = Object.keys(groups).filter((g) => g.startsWith('graphic assets/')).sort();
+      return [
+        section('Graphic assets', 'everything in graphic assets/ in the library: explosions, sparks, beams and trails', inFolder('graphic assets').map((id) => genericCard(id))),
+        section('Particles', 'symbols that run particle.as', byBehaviour(/^object\/particle$/).map((id) => genericCard(id))),
+        section('Smoke', 'symbols that run smoke.as or smokeColumn.as', byBehaviour(/^object\/smoke/).map((id) => genericCard(id))),
+        ...subs.map((g) => section(displayName(g.split('/').pop()).replace(/^./, (c) => c.toUpperCase()), `${plural(groups[g].length, 'piece', 'pieces')} in ${g}/`, inFolder(g).map((id) => genericCard(id, { w: 90, h: 70 })))),
+      ];
+    },
   },
   levels: {
     title: 'Levels',
