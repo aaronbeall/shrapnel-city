@@ -6,6 +6,18 @@ cacheAsBitmap = true;
 var CLOSED = 0, OPENED = 1, DOCKING = 2, EXITING = 3;
 var state = CLOSED;
 
+// a locked exit (prop lock: a trigger name, e.g. "exit:open") stays shut whatever happens to
+// the boxes, until that trigger is sent; then it opens
+if(lock){
+	registerTrigger(this, lock);
+	onTrigger = function(id){
+		if(id == lock){
+			lock = null;
+			open();
+		}
+	}
+}
+
 // update
 function update(){
 	if(state == OPENED && !_player.dying && core_mc.hitTest(_player.core_mc)){
@@ -29,6 +41,8 @@ function update(){
 }
 
 function open(){
+	if(lock)
+		return;
 	if(state == CLOSED){
 		notify(_player, "Mission complete! Get to the exit!", frameRate * 3);
 		gotoAndPlay("open");

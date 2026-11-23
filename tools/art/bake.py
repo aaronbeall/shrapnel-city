@@ -17,6 +17,11 @@ baked, so the original backgrounds (levels 00-02) are never overwritten:
   tools/art/kit_rock.py with tools/art/parts/rock/ and tools/art/parts/decor/rock-*/; level.json
   art.interior lists the rects drawn as bunker).
 - seed: the random seed for decor placement and the floor's light variation.
+- metal (any kit but bridge): [[x0, y0, x1, y1], ...] rooms drawn with the metal (bridge)
+  kit's floor, walls and chasms over the level's own kit, with a lining of metal
+  (metalLining px, default 12) into the walls round them and a dark frame where the floors
+  meet; place puts the metal kit's decor in them and the level kit's everywhere else (first
+  used by 09 Complex: lab rooms dug into the rock).
 
 The kit's parts were generated with OpenAI gpt-image-2 using only the original levels
 (backgrounds 0-2) as style references; the prompts sit next to them. The bake lays them

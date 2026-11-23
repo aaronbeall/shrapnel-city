@@ -231,7 +231,7 @@ def P(symbol, x, y, props=None, rot=None, scale=None, name=None, color=None):
 
 features = [
     P('game objects/entrance_mc', *ENTRANCE, name='entrance_mc'),
-    P('game objects/exit_mc', *EXIT, name='exit_mc'),
+    P('game objects/exit_mc', *EXIT, name='exit_mc', props={'lock': 'exit:open'}),
 ]
 
 # Path nodes. One colour per lab wing; no connections listed, so the game links each node to
@@ -512,7 +512,7 @@ crates(660, 230, 2)
 crates(920, 230, 2)
 # the terminals: destroy them to open the bulkheads
 boxes.append(P('game objects/box computer', 1376, 1352, props={'onDie': {'$trigger': 'door1:open'}}))
-boxes.append(P('game objects/box computer', 1440, 600 - 8, props={'onDie': {'$trigger': 'door2:open'}}))
+boxes.append(P('game objects/box computer', 1440, 600 - 8, props={'onDie': {'$trigger': ['door2:open', 'exit:open']}}))
 
 
 BRIEFING = {

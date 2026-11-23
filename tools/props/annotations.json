@@ -13,6 +13,11 @@
     "other": "Other"
   },
   "settings": {
+    "lock": {
+      "group": "other",
+      "type": "string",
+      "desc": "Exit: a trigger name (e.g. exit:open). The exit stays shut, whatever happens to the boxes, until something sends it (an onDie or onPickup $trigger)."
+    },
     "healRange": {
       "group": "behaviour",
       "type": "number",

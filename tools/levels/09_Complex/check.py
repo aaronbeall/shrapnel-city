@@ -72,7 +72,8 @@ def main():
     L0 = labels(set())
     for x, y, n, _, kind in things:
         if kind != 'enemy' and not reach(L0, x, y): problems.append(n + ': not reachable from the entrance')
-    terms = {b['props']['onDie']['$trigger'].split(':')[0]: b for b in boxes if 'onDie' in b.get('props', {})}
+    first = lambda t: (t if isinstance(t, str) else t[0]).split(':')[0]
+    terms = {first(b['props']['onDie']['$trigger']): b for b in boxes if 'onDie' in b.get('props', {})}
     L2 = labels({'door1', 'door2'})
     L1 = labels({'door2'})
     if not reach(L2, terms['door1']['x'], terms['door1']['y']): problems.append('door1 terminal not reachable with both doors shut')

@@ -318,5 +318,10 @@
     "y": 1352,
     "props": {"onDie": {"$trigger": "door1:open"}}
   },
-  {"symbol": "game objects/box computer", "x": 1440, "y": 592, "props": {"onDie": {"$trigger": "door2:open"}}}
+  {
+    "symbol": "game objects/box computer",
+    "x": 1440,
+    "y": 592,
+    "props": {"onDie": {"$trigger": ["door2:open", "exit:open"]}}
+  }
 ]
