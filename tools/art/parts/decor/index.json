@@ -909,5 +909,1141 @@
    "w": 100,
    "h": 100
   }
+ ],
+ "city-lights": [
+  {
+   "file": "city-lights/00.png",
+   "w": 185,
+   "h": 126
+  },
+  {
+   "file": "city-lights/01.png",
+   "w": 138,
+   "h": 119
+  },
+  {
+   "file": "city-lights/02.png",
+   "w": 125,
+   "h": 117
+  },
+  {
+   "file": "city-lights/03.png",
+   "w": 116,
+   "h": 117
+  },
+  {
+   "file": "city-lights/04.png",
+   "w": 130,
+   "h": 101
+  },
+  {
+   "file": "city-lights/05.png",
+   "w": 116,
+   "h": 101
+  },
+  {
+   "file": "city-lights/06.png",
+   "w": 134,
+   "h": 132
+  },
+  {
+   "file": "city-lights/07.png",
+   "w": 127,
+   "h": 125
+  },
+  {
+   "file": "city-lights/08.png",
+   "w": 134,
+   "h": 123
+  },
+  {
+   "file": "city-lights/09.png",
+   "w": 105,
+   "h": 108
+  },
+  {
+   "file": "city-lights/10.png",
+   "w": 91,
+   "h": 92
+  },
+  {
+   "file": "city-lights/11.png",
+   "w": 78,
+   "h": 83
+  },
+  {
+   "file": "city-lights/12.png",
+   "w": 90,
+   "h": 149
+  },
+  {
+   "file": "city-lights/13.png",
+   "w": 89,
+   "h": 149
+  },
+  {
+   "file": "city-lights/14.png",
+   "w": 89,
+   "h": 148
+  },
+  {
+   "file": "city-lights/15.png",
+   "w": 108,
+   "h": 114
+  },
+  {
+   "file": "city-lights/16.png",
+   "w": 108,
+   "h": 110
+  },
+  {
+   "file": "city-lights/17.png",
+   "w": 110,
+   "h": 99
+  },
+  {
+   "file": "city-lights/18.png",
+   "w": 82,
+   "h": 130
+  },
+  {
+   "file": "city-lights/19.png",
+   "w": 122,
+   "h": 125
+  },
+  {
+   "file": "city-lights/20.png",
+   "w": 103,
+   "h": 105
+  },
+  {
+   "file": "city-lights/21.png",
+   "w": 103,
+   "h": 104
+  },
+  {
+   "file": "city-lights/22.png",
+   "w": 142,
+   "h": 95
+  },
+  {
+   "file": "city-lights/23.png",
+   "w": 76,
+   "h": 82
+  }
+ ],
+ "city-plants": [
+  {
+   "file": "city-plants/00.png",
+   "w": 207,
+   "h": 215
+  },
+  {
+   "file": "city-plants/01.png",
+   "w": 194,
+   "h": 189
+  },
+  {
+   "file": "city-plants/02.png",
+   "w": 164,
+   "h": 161
+  },
+  {
+   "file": "city-plants/03.png",
+   "w": 137,
+   "h": 140
+  },
+  {
+   "file": "city-plants/04.png",
+   "w": 116,
+   "h": 115
+  },
+  {
+   "file": "city-plants/05.png",
+   "w": 48,
+   "h": 49
+  },
+  {
+   "file": "city-plants/06.png",
+   "w": 199,
+   "h": 193
+  },
+  {
+   "file": "city-plants/07.png",
+   "w": 171,
+   "h": 174
+  },
+  {
+   "file": "city-plants/08.png",
+   "w": 156,
+   "h": 159
+  },
+  {
+   "file": "city-plants/09.png",
+   "w": 158,
+   "h": 156
+  },
+  {
+   "file": "city-plants/10.png",
+   "w": 114,
+   "h": 109
+  },
+  {
+   "file": "city-plants/11.png",
+   "w": 60,
+   "h": 56
+  },
+  {
+   "file": "city-plants/12.png",
+   "w": 55,
+   "h": 155
+  },
+  {
+   "file": "city-plants/13.png",
+   "w": 117,
+   "h": 110
+  },
+  {
+   "file": "city-plants/14.png",
+   "w": 103,
+   "h": 102
+  },
+  {
+   "file": "city-plants/15.png",
+   "w": 107,
+   "h": 103
+  },
+  {
+   "file": "city-plants/16.png",
+   "w": 218,
+   "h": 62
+  },
+  {
+   "file": "city-plants/17.png",
+   "w": 54,
+   "h": 53
+  },
+  {
+   "file": "city-plants/18.png",
+   "w": 53,
+   "h": 53
+  },
+  {
+   "file": "city-plants/19.png",
+   "w": 53,
+   "h": 52
+  },
+  {
+   "file": "city-plants/20.png",
+   "w": 121,
+   "h": 144
+  },
+  {
+   "file": "city-plants/21.png",
+   "w": 141,
+   "h": 136
+  },
+  {
+   "file": "city-plants/22.png",
+   "w": 163,
+   "h": 120
+  },
+  {
+   "file": "city-plants/23.png",
+   "w": 105,
+   "h": 102
+  },
+  {
+   "file": "city-plants/24.png",
+   "w": 98,
+   "h": 95
+  },
+  {
+   "file": "city-plants/25.png",
+   "w": 102,
+   "h": 100
+  }
+ ],
+ "city-roadpaint": [
+  {
+   "file": "city-roadpaint/00.png",
+   "w": 115,
+   "h": 155
+  },
+  {
+   "file": "city-roadpaint/01.png",
+   "w": 129,
+   "h": 155
+  },
+  {
+   "file": "city-roadpaint/02.png",
+   "w": 125,
+   "h": 152
+  },
+  {
+   "file": "city-roadpaint/03.png",
+   "w": 118,
+   "h": 149
+  },
+  {
+   "file": "city-roadpaint/04.png",
+   "w": 126,
+   "h": 150
+  },
+  {
+   "file": "city-roadpaint/05.png",
+   "w": 125,
+   "h": 146
+  },
+  {
+   "file": "city-roadpaint/06.png",
+   "w": 141,
+   "h": 135
+  },
+  {
+   "file": "city-roadpaint/07.png",
+   "w": 136,
+   "h": 133
+  },
+  {
+   "file": "city-roadpaint/08.png",
+   "w": 213,
+   "h": 77
+  },
+  {
+   "file": "city-roadpaint/09.png",
+   "w": 187,
+   "h": 68
+  },
+  {
+   "file": "city-roadpaint/10.png",
+   "w": 142,
+   "h": 63
+  },
+  {
+   "file": "city-roadpaint/11.png",
+   "w": 180,
+   "h": 49
+  },
+  {
+   "file": "city-roadpaint/12.png",
+   "w": 94,
+   "h": 144
+  },
+  {
+   "file": "city-roadpaint/13.png",
+   "w": 174,
+   "h": 132
+  },
+  {
+   "file": "city-roadpaint/14.png",
+   "w": 100,
+   "h": 136
+  },
+  {
+   "file": "city-roadpaint/15.png",
+   "w": 187,
+   "h": 88
+  },
+  {
+   "file": "city-roadpaint/16.png",
+   "w": 200,
+   "h": 76
+  },
+  {
+   "file": "city-roadpaint/17.png",
+   "w": 136,
+   "h": 61
+  },
+  {
+   "file": "city-roadpaint/18.png",
+   "w": 197,
+   "h": 138
+  },
+  {
+   "file": "city-roadpaint/19.png",
+   "w": 202,
+   "h": 132
+  },
+  {
+   "file": "city-roadpaint/20.png",
+   "w": 132,
+   "h": 136
+  },
+  {
+   "file": "city-roadpaint/21.png",
+   "w": 133,
+   "h": 134
+  },
+  {
+   "file": "city-roadpaint/22.png",
+   "w": 165,
+   "h": 124
+  },
+  {
+   "file": "city-roadpaint/23.png",
+   "w": 195,
+   "h": 104
+  },
+  {
+   "file": "city-roadpaint/24.png",
+   "w": 140,
+   "h": 134
+  },
+  {
+   "file": "city-roadpaint/25.png",
+   "w": 140,
+   "h": 131
+  },
+  {
+   "file": "city-roadpaint/26.png",
+   "w": 186,
+   "h": 106
+  },
+  {
+   "file": "city-roadpaint/27.png",
+   "w": 201,
+   "h": 62
+  },
+  {
+   "file": "city-roadpaint/28.png",
+   "w": 45,
+   "h": 43
+  },
+  {
+   "file": "city-roadpaint/29.png",
+   "w": 45,
+   "h": 43
+  },
+  {
+   "file": "city-roadpaint/30.png",
+   "w": 44,
+   "h": 42
+  },
+  {
+   "file": "city-roadpaint/31.png",
+   "w": 46,
+   "h": 43
+  },
+  {
+   "file": "city-roadpaint/32.png",
+   "w": 44,
+   "h": 41
+  },
+  {
+   "file": "city-roadpaint/33.png",
+   "w": 45,
+   "h": 41
+  }
+ ],
+ "city-roof": [
+  {
+   "file": "city-roof/00.png",
+   "w": 127,
+   "h": 161
+  },
+  {
+   "file": "city-roof/01.png",
+   "w": 104,
+   "h": 150
+  },
+  {
+   "file": "city-roof/02.png",
+   "w": 125,
+   "h": 138
+  },
+  {
+   "file": "city-roof/03.png",
+   "w": 129,
+   "h": 132
+  },
+  {
+   "file": "city-roof/04.png",
+   "w": 127,
+   "h": 130
+  },
+  {
+   "file": "city-roof/05.png",
+   "w": 73,
+   "h": 86
+  },
+  {
+   "file": "city-roof/06.png",
+   "w": 107,
+   "h": 130
+  },
+  {
+   "file": "city-roof/07.png",
+   "w": 112,
+   "h": 130
+  },
+  {
+   "file": "city-roof/08.png",
+   "w": 219,
+   "h": 130
+  },
+  {
+   "file": "city-roof/09.png",
+   "w": 98,
+   "h": 119
+  },
+  {
+   "file": "city-roof/10.png",
+   "w": 170,
+   "h": 114
+  },
+  {
+   "file": "city-roof/11.png",
+   "w": 140,
+   "h": 114
+  },
+  {
+   "file": "city-roof/12.png",
+   "w": 116,
+   "h": 135
+  },
+  {
+   "file": "city-roof/13.png",
+   "w": 112,
+   "h": 116
+  },
+  {
+   "file": "city-roof/14.png",
+   "w": 104,
+   "h": 113
+  },
+  {
+   "file": "city-roof/15.png",
+   "w": 184,
+   "h": 108
+  },
+  {
+   "file": "city-roof/16.png",
+   "w": 165,
+   "h": 92
+  },
+  {
+   "file": "city-roof/17.png",
+   "w": 124,
+   "h": 86
+  },
+  {
+   "file": "city-roof/18.png",
+   "w": 45,
+   "h": 139
+  },
+  {
+   "file": "city-roof/19.png",
+   "w": 32,
+   "h": 13
+  },
+  {
+   "file": "city-roof/20.png",
+   "w": 159,
+   "h": 125
+  },
+  {
+   "file": "city-roof/21.png",
+   "w": 108,
+   "h": 114
+  },
+  {
+   "file": "city-roof/22.png",
+   "w": 93,
+   "h": 98
+  },
+  {
+   "file": "city-roof/23.png",
+   "w": 192,
+   "h": 92
+  },
+  {
+   "file": "city-roof/24.png",
+   "w": 125,
+   "h": 97
+  }
+ ],
+ "city-roof2": [
+  {
+   "file": "city-roof2/00.png",
+   "w": 194,
+   "h": 202
+  },
+  {
+   "file": "city-roof2/01.png",
+   "w": 25,
+   "h": 180
+  },
+  {
+   "file": "city-roof2/02.png",
+   "w": 175,
+   "h": 171
+  },
+  {
+   "file": "city-roof2/03.png",
+   "w": 106,
+   "h": 154
+  },
+  {
+   "file": "city-roof2/04.png",
+   "w": 153,
+   "h": 160
+  },
+  {
+   "file": "city-roof2/05.png",
+   "w": 21,
+   "h": 23
+  },
+  {
+   "file": "city-roof2/06.png",
+   "w": 183,
+   "h": 128
+  },
+  {
+   "file": "city-roof2/07.png",
+   "w": 22,
+   "h": 20
+  },
+  {
+   "file": "city-roof2/08.png",
+   "w": 21,
+   "h": 20
+  },
+  {
+   "file": "city-roof2/09.png",
+   "w": 22,
+   "h": 21
+  },
+  {
+   "file": "city-roof2/10.png",
+   "w": 22,
+   "h": 21
+  },
+  {
+   "file": "city-roof2/11.png",
+   "w": 109,
+   "h": 211
+  },
+  {
+   "file": "city-roof2/12.png",
+   "w": 141,
+   "h": 167
+  },
+  {
+   "file": "city-roof2/13.png",
+   "w": 112,
+   "h": 154
+  },
+  {
+   "file": "city-roof2/14.png",
+   "w": 181,
+   "h": 87
+  },
+  {
+   "file": "city-roof2/15.png",
+   "w": 101,
+   "h": 100
+  },
+  {
+   "file": "city-roof2/16.png",
+   "w": 182,
+   "h": 94
+  },
+  {
+   "file": "city-roof2/17.png",
+   "w": 110,
+   "h": 137
+  },
+  {
+   "file": "city-roof2/18.png",
+   "w": 117,
+   "h": 114
+  },
+  {
+   "file": "city-roof2/19.png",
+   "w": 136,
+   "h": 105
+  },
+  {
+   "file": "city-roof2/20.png",
+   "w": 124,
+   "h": 109
+  },
+  {
+   "file": "city-roof2/21.png",
+   "w": 193,
+   "h": 92
+  },
+  {
+   "file": "city-roof2/22.png",
+   "w": 121,
+   "h": 92
+  },
+  {
+   "file": "city-roof2/23.png",
+   "w": 175,
+   "h": 157
+  },
+  {
+   "file": "city-roof2/24.png",
+   "w": 90,
+   "h": 147
+  },
+  {
+   "file": "city-roof2/25.png",
+   "w": 152,
+   "h": 156
+  },
+  {
+   "file": "city-roof2/26.png",
+   "w": 120,
+   "h": 137
+  },
+  {
+   "file": "city-roof2/27.png",
+   "w": 96,
+   "h": 115
+  },
+  {
+   "file": "city-roof2/28.png",
+   "w": 128,
+   "h": 97
+  }
+ ],
+ "city-rubble": [
+  {
+   "file": "city-rubble/00.png",
+   "w": 193,
+   "h": 187
+  },
+  {
+   "file": "city-rubble/01.png",
+   "w": 156,
+   "h": 155
+  },
+  {
+   "file": "city-rubble/02.png",
+   "w": 174,
+   "h": 154
+  },
+  {
+   "file": "city-rubble/03.png",
+   "w": 165,
+   "h": 152
+  },
+  {
+   "file": "city-rubble/04.png",
+   "w": 114,
+   "h": 108
+  },
+  {
+   "file": "city-rubble/05.png",
+   "w": 143,
+   "h": 89
+  },
+  {
+   "file": "city-rubble/06.png",
+   "w": 168,
+   "h": 159
+  },
+  {
+   "file": "city-rubble/07.png",
+   "w": 152,
+   "h": 152
+  },
+  {
+   "file": "city-rubble/08.png",
+   "w": 167,
+   "h": 140
+  },
+  {
+   "file": "city-rubble/09.png",
+   "w": 160,
+   "h": 128
+  },
+  {
+   "file": "city-rubble/10.png",
+   "w": 117,
+   "h": 103
+  },
+  {
+   "file": "city-rubble/11.png",
+   "w": 103,
+   "h": 88
+  },
+  {
+   "file": "city-rubble/12.png",
+   "w": 191,
+   "h": 160
+  },
+  {
+   "file": "city-rubble/13.png",
+   "w": 133,
+   "h": 128
+  },
+  {
+   "file": "city-rubble/14.png",
+   "w": 118,
+   "h": 113
+  },
+  {
+   "file": "city-rubble/15.png",
+   "w": 156,
+   "h": 109
+  },
+  {
+   "file": "city-rubble/16.png",
+   "w": 149,
+   "h": 133
+  },
+  {
+   "file": "city-rubble/17.png",
+   "w": 121,
+   "h": 104
+  },
+  {
+   "file": "city-rubble/18.png",
+   "w": 169,
+   "h": 150
+  },
+  {
+   "file": "city-rubble/19.png",
+   "w": 154,
+   "h": 148
+  },
+  {
+   "file": "city-rubble/20.png",
+   "w": 176,
+   "h": 151
+  },
+  {
+   "file": "city-rubble/21.png",
+   "w": 155,
+   "h": 133
+  },
+  {
+   "file": "city-rubble/22.png",
+   "w": 140,
+   "h": 138
+  },
+  {
+   "file": "city-rubble/23.png",
+   "w": 145,
+   "h": 136
+  },
+  {
+   "file": "city-rubble/24.png",
+   "w": 24,
+   "h": 17
+  }
+ ],
+ "city-street": [
+  {
+   "file": "city-street/00.png",
+   "w": 114,
+   "h": 113
+  },
+  {
+   "file": "city-street/01.png",
+   "w": 114,
+   "h": 114
+  },
+  {
+   "file": "city-street/02.png",
+   "w": 112,
+   "h": 113
+  },
+  {
+   "file": "city-street/03.png",
+   "w": 111,
+   "h": 102
+  },
+  {
+   "file": "city-street/04.png",
+   "w": 121,
+   "h": 88
+  },
+  {
+   "file": "city-street/05.png",
+   "w": 124,
+   "h": 85
+  },
+  {
+   "file": "city-street/06.png",
+   "w": 108,
+   "h": 116
+  },
+  {
+   "file": "city-street/07.png",
+   "w": 117,
+   "h": 109
+  },
+  {
+   "file": "city-street/08.png",
+   "w": 99,
+   "h": 98
+  },
+  {
+   "file": "city-street/09.png",
+   "w": 129,
+   "h": 81
+  },
+  {
+   "file": "city-street/10.png",
+   "w": 142,
+   "h": 77
+  },
+  {
+   "file": "city-street/11.png",
+   "w": 122,
+   "h": 118
+  },
+  {
+   "file": "city-street/12.png",
+   "w": 113,
+   "h": 98
+  },
+  {
+   "file": "city-street/13.png",
+   "w": 104,
+   "h": 87
+  },
+  {
+   "file": "city-street/14.png",
+   "w": 133,
+   "h": 80
+  },
+  {
+   "file": "city-street/15.png",
+   "w": 70,
+   "h": 66
+  },
+  {
+   "file": "city-street/16.png",
+   "w": 107,
+   "h": 57
+  },
+  {
+   "file": "city-street/17.png",
+   "w": 138,
+   "h": 137
+  },
+  {
+   "file": "city-street/18.png",
+   "w": 56,
+   "h": 55
+  },
+  {
+   "file": "city-street/19.png",
+   "w": 28,
+   "h": 20
+  },
+  {
+   "file": "city-street/20.png",
+   "w": 18,
+   "h": 40
+  },
+  {
+   "file": "city-street/21.png",
+   "w": 30,
+   "h": 26
+  },
+  {
+   "file": "city-street/22.png",
+   "w": 21,
+   "h": 28
+  },
+  {
+   "file": "city-street/23.png",
+   "w": 57,
+   "h": 82
+  },
+  {
+   "file": "city-street/24.png",
+   "w": 72,
+   "h": 72
+  },
+  {
+   "file": "city-street/25.png",
+   "w": 43,
+   "h": 48
+  },
+  {
+   "file": "city-street/26.png",
+   "w": 24,
+   "h": 24
+  },
+  {
+   "file": "city-street/27.png",
+   "w": 38,
+   "h": 32
+  },
+  {
+   "file": "city-street/28.png",
+   "w": 23,
+   "h": 21
+  },
+  {
+   "file": "city-street/29.png",
+   "w": 23,
+   "h": 19
+  },
+  {
+   "file": "city-street/30.png",
+   "w": 32,
+   "h": 28
+  },
+  {
+   "file": "city-street/31.png",
+   "w": 30,
+   "h": 22
+  },
+  {
+   "file": "city-street/32.png",
+   "w": 32,
+   "h": 23
+  }
+ ],
+ "city-urban": [
+  {
+   "file": "city-urban/00.png",
+   "w": 181,
+   "h": 226
+  },
+  {
+   "file": "city-urban/01.png",
+   "w": 205,
+   "h": 206
+  },
+  {
+   "file": "city-urban/02.png",
+   "w": 228,
+   "h": 143
+  },
+  {
+   "file": "city-urban/03.png",
+   "w": 254,
+   "h": 212
+  },
+  {
+   "file": "city-urban/04.png",
+   "w": 126,
+   "h": 126
+  },
+  {
+   "file": "city-urban/05.png",
+   "w": 179,
+   "h": 79
+  },
+  {
+   "file": "city-urban/06.png",
+   "w": 113,
+   "h": 121
+  },
+  {
+   "file": "city-urban/07.png",
+   "w": 110,
+   "h": 121
+  },
+  {
+   "file": "city-urban/08.png",
+   "w": 111,
+   "h": 122
+  },
+  {
+   "file": "city-urban/09.png",
+   "w": 109,
+   "h": 121
+  },
+  {
+   "file": "city-urban/10.png",
+   "w": 113,
+   "h": 122
+  },
+  {
+   "file": "city-urban/11.png",
+   "w": 108,
+   "h": 121
+  },
+  {
+   "file": "city-urban/12.png",
+   "w": 239,
+   "h": 25
+  },
+  {
+   "file": "city-urban/13.png",
+   "w": 218,
+   "h": 25
+  },
+  {
+   "file": "city-urban/14.png",
+   "w": 209,
+   "h": 25
+  },
+  {
+   "file": "city-urban/15.png",
+   "w": 207,
+   "h": 25
+  },
+  {
+   "file": "city-urban/16.png",
+   "w": 220,
+   "h": 25
+  },
+  {
+   "file": "city-urban/17.png",
+   "w": 240,
+   "h": 26
+  },
+  {
+   "file": "city-urban/18.png",
+   "w": 219,
+   "h": 26
+  },
+  {
+   "file": "city-urban/19.png",
+   "w": 211,
+   "h": 26
+  },
+  {
+   "file": "city-urban/20.png",
+   "w": 221,
+   "h": 26
+  },
+  {
+   "file": "city-urban/21.png",
+   "w": 210,
+   "h": 25
+  },
+  {
+   "file": "city-urban/22.png",
+   "w": 382,
+   "h": 41
+  },
+  {
+   "file": "city-urban/23.png",
+   "w": 380,
+   "h": 40
+  },
+  {
+   "file": "city-urban/24.png",
+   "w": 378,
+   "h": 41
+  },
+  {
+   "file": "city-urban/25.png",
+   "w": 223,
+   "h": 222
+  },
+  {
+   "file": "city-urban/26.png",
+   "w": 221,
+   "h": 223
+  },
+  {
+   "file": "city-urban/27.png",
+   "w": 223,
+   "h": 223
+  }
  ]
 }

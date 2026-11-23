@@ -192,8 +192,8 @@ add('checkpoint wall east', poly_d(chamfer_rect(gx1 - side, wy - cw / 2, W - B +
 gate = (gx0 + S / 2, wy)
 nx = street_x(3) - cw
 add('checkpoint wall north', poly_d(chamfer_rect(nx, B - 4, nx + cw, B + S + 4, 3)), group='checkpoint')
-# cover in the square: four planters round the exit pad
-for k, (px, py) in enumerate(((x0 + 34, y0 + 34), (x1 - 34, y0 + 34), (x0 + 34, y1 - 34), (x1 - 34, y1 - 34))):
+# cover in the square: two planters north of the exit pad (the blue tank drives the south edge)
+for k, (px, py) in enumerate(((x0 + 34, y0 + 34), (x1 - 34, y0 + 34))):
     add(f'exit square planter {k + 1}', poly_d(chamfer_rect(px - 20, py - 16, px + 20, py + 16, 6)), group='exit square')
 
 # Collapsed streets (chasm): close the west avenue between rows 1 and 2, and the north
@@ -207,13 +207,17 @@ add('collapsed north street', poly_d([(cx0, sy), (cx0 + S - 12, sy), (cx0 + S - 
 
 # Barricades: concrete barriers part-way across streets, cover for the player and the tanks' sightlines
 bar = [
-    (cross(1, 3)[0] + 70, street_y(3) + 20, 14, 50),
+    (cross(1, 3)[0] + 70, street_y(3) + S / 2, 50, 14),
     (cross(2, 2)[0], street_y(2) + 30, 60, 14),
-    (street_x(4) + 30, cross(4, 2)[1] + 120, 14, 50),
+    (street_x(4) + 16, cross(4, 2)[1] + 120, 14, 50),
     (cross(2, 0)[0] - 40, street_y(0) + S - 30, 60, 14),
 ]
 for k, (bx, by, bw, bh) in enumerate(bar):
     add(f'barrier {k + 1}', poly_d(chamfer_rect(bx - bw / 2, by - bh / 2, bx + bw / 2, by + bh / 2, 4)), group='barriers')
+
+
+# areas paved all over in the art: the plaza, the courtyards' yards and the exit square
+PAVED = [block(0, 1), block(3, 0)] + [(b[0] + 40, b[1] + 40, b[2] - 40, b[3] + 2) for b in (block(1, 2), block(1, 0))]
 
 
 # ---------------------------------------------------------------- placements
@@ -246,6 +250,10 @@ def loop(group, corners):
     for x, y in corners:
         node_n[0] += 1
         names.append(f'n{node_n[0]}')
+    # every other node 1 px to the right: a vehicle never drives exactly straight down, which
+    # it can't (enemyVehicle only thrusts once _rotation == targetRotation, and a target straight
+    # below is 180 while _rotation reads back as -180, so it turns forever)
+    corners = [(x + k % 2, y) for k, (x, y) in enumerate(corners)]
     for k, (x, y) in enumerate(corners):
         nxt, prv = names[(k + 1) % len(names)], names[k - 1]
         nodes.append(P('game objects/node', x, y, name=names[k], color={'multiply': [0, 0, 0, 1], 'add': GROUPS[group]},
@@ -268,33 +276,117 @@ Cq = [cross(3, 2), cross(4, 2), cross(4, 3), cross(3, 3)]
 green = loop('green', Cq)
 
 TANK = 'enemy assets/enemy tank'
-STINGER = 'enemy assets/enemy stinger'
 SCOUT = 'enemy assets/enemy scout'
+STINGER, STINGER2, STINGER3 = 'enemy assets/enemy stinger', 'enemy assets/enemy stinger2', 'enemy assets/enemy stinger3'
+WOLFGUN, BATTERY = 'enemy assets/enemy wolfgun', 'enemy assets/enemy double battery'
+SCURGE, BARREL = 'enemy assets/enemy scurge', 'enemy assets/enemy object fire barrel'
 
+# Density follows the earlier levels: Bridge has about 11 enemies and 11 crates per 100k px of
+# open floor, First Block about 8.5. Scurge are the filler, in small formations, packed denser
+# where it should be hard (the exit compound). Every turret type is used, the buffed stingers
+# (stinger2: fast bursts, stinger3: red bursts, drops health) guarding the valuable spots.
 enemies = []
+E = lambda sym, x, y, **kw: enemies.append(P(sym, x, y, **kw))
+
 # tanks: two on the tower loop (opposite sides), one on each of the others
-enemies.append(P(TANK, *mid(A[0], A[1]), props={'pathID': red}, rot=90))
-enemies.append(P(TANK, *mid(A[2], A[3]), props={'pathID': red}, rot=-90))
-enemies.append(P(TANK, *Bq[1], props={'pathID': blue}, rot=180))
-enemies.append(P(TANK, *mid(Cq[1], Cq[2]), props={'pathID': green, 'powerupDrop': {'type': 'health', 'item': 'health', 'quantity': 50}}, rot=180))
+E(TANK, *mid(A[0], A[1]), props={'pathID': red}, rot=90)
+E(TANK, *mid(A[2], A[3]), props={'pathID': red}, rot=-90)
+E(TANK, *Bq[1], props={'pathID': blue}, rot=180)
+E(TANK, mid(Cq[1], Cq[2])[0] - 3, mid(Cq[1], Cq[2])[1], props={'pathID': green, 'powerupDrop': {'type': 'health', 'item': 'health', 'quantity': 50}}, rot=180)
 
 
-# stingers: guns on the pavement at building corners, overlooking the crossings
 def corner(c, r, which, out=18):
+    """A spot on the pavement just off a building's corner."""
     x0, y0, x1, y1 = block(c, r)
     return {'nw': (x0 - out, y0 - out), 'ne': (x1 + out, y0 - out), 'sw': (x0 - out, y1 + out), 'se': (x1 + out, y1 + out)}[which]
 
 
-for c, r, w in ((0, 2, 'ne'), (3, 2, 'nw'), (3, 1, 'sw'), (2, 0, 'se'), (0, 0, 'se'), (3, 1, 'nw'), (2, 0, 'ne')):
-    enemies.append(P(STINGER, *corner(c, r, w)))
-# scouts: fast flankers in the courtyards and the plaza
-for x, y in ((yard_s_mid[0] - 50, yard_s_mid[1] - 20), (yard_s_mid[0] + 50, yard_s_mid[1] - 20),
-             (pcx - 60, pcy - 60), (pcx + 60, pcy + 60),
-             (yard_n_mid[0] - 50, yard_n_mid[1]), (yard_n_mid[0] + 50, yard_n_mid[1]),
-             (ex - 60, ey), (ex + 60, ey)):
-    enemies.append(P(SCOUT, x, y))
+def tri(x, y, s=30, down=False):
+    """Three scurge in a triangle (as on the Bridge)."""
+    k = -1 if down else 1
+    for dx, dy in ((0, -k * s * 0.58), (-s / 2, k * s * 0.29), (s / 2, k * s * 0.29)):
+        E(SCURGE, x + dx, y + dy)
 
-# pickups
+
+def grid(x, y, cols, rows, s=30):
+    """A block of scurge centred on (x, y)."""
+    for i in range(cols):
+        for j in range(rows):
+            E(SCURGE, x + (i - (cols - 1) / 2) * s, y + (j - (rows - 1) / 2) * s)
+
+
+# --- the start (south-west): a gentle first fight
+E(STINGER, *corner(0, 2, 'ne'))
+E(STINGER, *corner(0, 2, 'nw'))
+tri(76, 860)                                  # below the collapsed avenue
+tri(260, 1042)                                # along the south street
+tri(cross(1, 3)[0], 1042 - 4, down=True)
+E(BARREL, 330, 1010)
+# the south courtyard (Vertigo): scouts and a stinger2 over the prize
+E(SCOUT, yard_s_mid[0] - 50, yard_s_mid[1] - 20)
+E(SCOUT, yard_s_mid[0] + 50, yard_s_mid[1] - 20)
+E(STINGER2, yard_s_mid[0] + 58, yard_s_mid[1] + 36)
+E(WOLFGUN, *corner(1, 2, 'se'))
+# south street east of the courtyard, up to the crater
+tri(760, 1042)
+grid(cross(2, 3)[0] + 60, 1042, 2, 2)
+E(STINGER, *corner(2, 2, 'sw'))
+E(BARREL, 836, 1076)
+# the crater: guns on its far rim, scurge round its edge
+E(STINGER3, 981, 766)
+E(STINGER, 930, 1004)
+# --- the south-east block (green loop): its guns sit on the facades, clear of the tank
+x0, y0, x1, y1 = block(3, 2)
+E(STINGER, x0 + 60, y1 + 14)
+E(STINGER, x1 - 60, y1 + 14)
+E(WOLFGUN, (x0 + x1) / 2, y0 - 16)
+# --- the plaza (west): scouts, a wolfgun on the fountain's north side, scurge in the corners
+E(SCOUT, pcx - 60, pcy - 60)
+E(SCOUT, pcx + 60, pcy + 60)
+E(WOLFGUN, pcx, pcy - 82)
+tri(pcx - 45, pcy + 78, s=26, down=True)
+tri(pcx + 45, pcy - 78, s=26)
+E(STINGER, *corner(0, 1, 'se'))
+E(BARREL, pcx + 70, pcy + 40)
+# west avenue north of the collapse and the north-west corner
+tri(76, 470)
+grid(76, 570, 2, 3)
+grid(250, 70, 3, 2)
+E(STINGER, *corner(0, 0, 'nw'))
+E(STINGER, *corner(0, 0, 'se'))
+E(STINGER2, *corner(0, 0, 'sw'))
+# --- the north courtyard (Thermal Bomb, terminal): a stinger3 guards the terminal
+E(SCOUT, yard_n_mid[0] - 50, yard_n_mid[1])
+E(SCOUT, yard_n_mid[0] + 50, yard_n_mid[1])
+E(STINGER3, yard_n_mid[0] - 58, yard_n_mid[1] + 40)
+tri(cross(1, 1)[0], 250)                      # street 1 north of the tower loop
+tri(cross(1, 1)[0], 170, down=True)
+tri(cross(2, 1)[0], 250)
+E(STINGER, *corner(2, 0, 'nw'))
+E(STINGER, *corner(2, 0, 'sw'))
+grid(720, 70, 3, 2)                           # north street
+tri(1040, 92)
+E(WOLFGUN, 980, 40)
+E(BARREL, 640, 36)
+# --- round the tower (red loop): guns on the corners, scurge on the kerbs
+E(STINGER, *corner(3, 1, 'nw'))
+E(STINGER, *corner(3, 1, 'sw'))
+E(STINGER2, *corner(1, 1, 'sw'))
+grid(600, 1048, 3, 2, s=28)                   # south street, west of the crater
+# east avenue beside (3,1), outside the compound
+grid(1524, 560, 2, 3)
+E(STINGER, *corner(3, 1, 'ne'))
+# --- the exit compound: the final room. A double battery and stinger3s over the exit pad,
+# a packed block of scurge, scouts, and the blue tank circling
+E(BATTERY, 1262, 232, rot=180)
+E(STINGER3, ex - 30, 150)
+E(STINGER3, ex + 30, 150)
+grid(1430, 235, 3, 4, s=24)
+E(SCOUT, ex - 45, ey - 50)
+E(SCOUT, ex + 45, ey - 50)
+E(WOLFGUN, 1560, 200)
+
+# pickups: the new weapons in the courtyards, ammo and health along the way
 pick = []
 
 
@@ -308,32 +400,81 @@ pickup(yard_s_mid[0] - 30, yard_s_mid[1] + 10, 'health', 'health', 50)
 pickup(yard_n_mid[0], yard_n_mid[1] - 20, 'secondary', 'Thermal Bomb', 4,
        alertMessage='THERMAL BOMBS: lob one over a barrier and let it cook.')
 pickup(yard_n_mid[0] + 30, yard_n_mid[1] + 10, 'health', 'health', 50)
-pickup(pcx, pcy - 70, 'primary', 'Bolter', 40)
+pickup(150, 1080, 'primary', 'Bolter', 40)
+pickup(pcx, pcy + 62, 'primary', 'Bolter', 40)
+pickup(pcx + 50, pcy - 15, 'health', 'health', 25)
 pickup(*cross(2, 3), 'primary', 'Vertigo', 60)
+pickup(76, 300, 'secondary', 'Carbon Bomb', 2)
+pickup(800, 170, 'primary', 'Plasma', 15)
+pickup(1004, 76, 'health', 'health', 25)
+pickup(1524, 470, 'secondary', 'Thermal Bomb', 2)
+pickup(1524, 660, 'health', 'health', 50)
+pickup(1090, 1050, 'primary', 'Vertigo', 40)
+pickup(1343, 1004, 'secondary', 'Carbon Bomb', 2)
+pickup(60, 770, 'primary', 'Bolter', 30)
+pickup(ex - 43, 280, 'health', 'health', 50)    # in the final room, if you get that far
+pickup(ex + 43, 280, 'primary', 'Vertigo', 40)
 # the checkpoint gate, opened by the terminal in the north courtyard
 doors = [P('game objects/door', *gate, rot=90, props={'id': 'door1'})]
 
-# boxes: crates and debris along the kerbs, a few with drops
+# boxes: crates in rows along the kerbs and in stacks, some carrying drops. Every box
+# except the terminal is required: the exit opens when they're all gone.
 boxes = []
+brng = random.Random(4040)
+DROPS = [{'type': 'health', 'item': 'health', 'quantity': 25}, {'type': 'primary', 'item': 'Bolter', 'quantity': 25},
+         {'type': 'primary', 'item': 'Vertigo', 'quantity': 30}, {'type': 'secondary', 'item': 'Thermal Bomb', 'quantity': 1},
+         {'type': 'secondary', 'item': 'Carbon Bomb', 'quantity': 1}, {'type': 'primary', 'item': 'Plasma', 'quantity': 10}]
 
 
 def crates(x, y, n, dx=20, dy=0, drop=None):
+    """A row of n crates; the middle one, a bigger crate, carries a drop."""
     for k in range(n):
         o = P('game objects/box', x + k * dx, y + k * dy)
-        if drop and k == n // 2:
+        if drop is not False and k == n // 2 and (drop or brng.random() < 0.45):
             o['scale'] = 1.285706
-            o['props'] = {'health': 25, 'powerupDrop': drop}
+            o['props'] = {'health': 25, 'powerupDrop': drop or brng.choice(DROPS)}
         boxes.append(o)
 
 
-crates(street_x(0) + 14, street_y(3) - 40, 1)
-crates(block(0, 2)[2] + 14, block(0, 2)[1] + 60, 3, 0, 20, {'type': 'health', 'item': 'health', 'quantity': 30})
-crates(block(1, 2)[0] + 60, street_y(2) + 14, 3, 20, 0)
-crates(block(3, 2)[0] - 14, block(3, 2)[1] + 50, 3, 0, 20, {'type': 'secondary', 'item': 'Thermal Bomb', 'quantity': 1})
-crates(block(1, 0)[0] + 20, street_y(1) + S - 14, 4, 20, 0)
-crates(block(0, 0)[2] + 14, block(0, 0)[1] + 80, 2, 0, 20, {'type': 'primary', 'item': 'Bolter', 'quantity': 30})
-crates(street_x(4) + 14, B + 40, 3, 0, 20, {'type': 'health', 'item': 'health', 'quantity': 50})
-# the checkpoint terminal: destroy it to open the gate
+def stack(x, y):
+    """A 2x2 stack of crates."""
+    for dx in (0, 20):
+        crates(x + dx, y, 2, 0, 20, drop=False)
+
+
+def kerb_row(c, r, side, n, at=0.5, off=12):
+    """A row of crates on the pavement along one side of block (c, r), centred at `at` of it."""
+    x0, y0, x1, y1 = block(c, r)
+    L = (n - 1) * 20
+    if side in ('n', 's'):
+        cx = x0 + (x1 - x0) * at - L / 2
+        crates(cx, y0 - off if side == 'n' else y1 + off, n)
+    else:
+        cy = y0 + (y1 - y0) * at - L / 2
+        crates(x0 - off if side == 'w' else x1 + off, cy, n, 0, 20)
+
+
+for c, r, side, n, at in (
+        (0, 2, 'e', 4, 0.5), (0, 2, 'n', 5, 0.5), (0, 2, 's', 4, 0.3),
+        (1, 2, 'w', 4, 0.5), (1, 2, 'n', 4, 0.3), (1, 2, 's', 3, 0.15),
+        (3, 2, 'w', 4, 0.4), (3, 2, 'e', 4, 0.8),
+        (0, 0, 'e', 4, 0.6), (0, 0, 's', 5, 0.5), (0, 0, 'n', 4, 0.4),
+        (1, 0, 'n', 5, 0.5), (1, 0, 'w', 3, 0.5),
+        (2, 0, 'n', 4, 0.3), (2, 0, 'w', 4, 0.6),
+        (1, 1, 'n', 6, 0.18), (1, 1, 's', 6, 0.75),
+        (3, 1, 'w', 4, 0.5), (3, 1, 'e', 4, 0.3)):
+    kerb_row(c, r, side, n, at)
+# stacks in the open: courtyards, plaza, start, crater rim, north street
+stack(yard_s_mid[0] - 20, yard_s_mid[1] + 20)
+stack(yard_n_mid[0] + 40, yard_n_mid[1] - 40)
+stack(pcx - 50, pcy - 95)
+stack(pcx + 30, pcy + 75)
+stack(30, 1000)
+stack(1060, 990)
+stack(30, 150)
+crates(1220, 30, 6, drop={'type': 'health', 'item': 'health', 'quantity': 50})   # compound, north wall
+crates(1560, 300, 3, 0, -20)
+# the checkpoint terminal: destroy it to open the gate (not required for the exit)
 boxes.append(P('game objects/box computer', yard_n_mid[0], block(1, 0)[1] + 60, props={'onDie': {'$trigger': 'door1:open'}}))
 
 
@@ -399,8 +540,11 @@ def main():
     lj = os.path.join(a.out, 'level.json')
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
+    # the city art kit; paved = areas with paving all over instead of road (plaza, courtyards, exit square)
+    settings.setdefault('art', {'kit': 'city', 'seed': 404})
+    settings['art'].setdefault('paved', [[num(v) for v in r] for r in PAVED])
     with open(lj, 'w', encoding='utf-8', newline='\n') as f:
-        f.write('{\n' + ',\n'.join(f'  {json.dumps(k)}: {pretty(v)}' for k, v in settings.items()) + '\n}\n')
+        f.write('{\n' + ',\n'.join(f'  {json.dumps(k)}: {pretty(v, "  ")}' for k, v in settings.items()) + '\n}\n')
     bj = os.path.join(a.out, 'briefing.json')
     if not os.path.exists(bj):  # written once, then edited by hand or in the editor
         with open(bj, 'w', encoding='utf-8', newline='\n') as f: f.write(json.dumps(BRIEFING, indent=2) + '\n')
@@ -435,8 +579,8 @@ def preview(path):
             d.line([(n['x'], n['y']), (m['x'], m['y'])], fill=c, width=3)
         d.ellipse([n['x'] - 5, n['y'] - 5, n['x'] + 5, n['y'] + 5], fill=c)
     for e in enemies:
-        r = {TANK: 16, STINGER: 9, SCOUT: 8}[e['symbol']]
-        col = {TANK: (200, 60, 0), STINGER: (220, 180, 0), SCOUT: (180, 0, 200)}[e['symbol']]
+        r = {TANK: 16, SCOUT: 8, BATTERY: 18, WOLFGUN: 12}.get(e['symbol'], 9)
+        col = {TANK: (200, 60, 0), SCOUT: (180, 0, 200), SCURGE: (120, 120, 0), BARREL: (255, 0, 0)}.get(e['symbol'], (220, 180, 0))
         d.ellipse([e['x'] - r, e['y'] - r, e['x'] + r, e['y'] + r], fill=col)
     for p in pick:
         col = (0, 160, 255) if p['props']['type'] != 'trigger' else (120, 220, 120)

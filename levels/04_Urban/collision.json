@@ -174,18 +174,6 @@
     "group": "exit square"
   },
   {
-    "name": "exit square planter 3",
-    "mode": "wall",
-    "d": "M 1238 292 L 1266 292 L 1272 298 L 1272 318 L 1266 324 L 1238 324 L 1232 318 L 1232 298 Z",
-    "group": "exit square"
-  },
-  {
-    "name": "exit square planter 4",
-    "mode": "wall",
-    "d": "M 1420 292 L 1448 292 L 1454 298 L 1454 318 L 1448 324 L 1420 324 L 1414 318 L 1414 298 Z",
-    "group": "exit square"
-  },
-  {
     "name": "collapsed west avenue",
     "mode": "chasm",
     "d": "M 20 660 L 60 650 L 100 658 L 132 652 L 132 717.6 L 90 723.2 L 50 712 L 20 720.96 Z",
@@ -200,7 +188,7 @@
   {
     "name": "barrier 1",
     "mode": "wall",
-    "d": "M 505 981 L 511 981 L 515 985 L 515 1027 L 511 1031 L 505 1031 L 501 1027 L 501 985 Z",
+    "d": "M 487 1035 L 529 1035 L 533 1039 L 533 1045 L 529 1049 L 487 1049 L 483 1045 L 483 1039 Z",
     "group": "barriers"
   },
   {
@@ -212,7 +200,7 @@
   {
     "name": "barrier 3",
     "mode": "wall",
-    "d": "M 1495 815 L 1501 815 L 1505 819 L 1505 861 L 1501 865 L 1495 865 L 1491 861 L 1491 819 Z",
+    "d": "M 1481 815 L 1487 815 L 1491 819 L 1491 861 L 1487 865 L 1481 865 L 1477 861 L 1477 819 Z",
     "group": "barriers"
   },
   {

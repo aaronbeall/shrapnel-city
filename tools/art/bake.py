@@ -10,8 +10,10 @@ baked, so the original backgrounds (levels 00-02) are never overwritten:
 
     "art": {"kit": "bridge", "seed": 2012}
 
-- kit: the art kit, i.e. which textures and decor sprites to use. Only "bridge" exists
-  (tools/art/parts/: floor, wall and chasm textures plus the decor sprites).
+- kit: the art kit, i.e. which textures and decor sprites to use: "bridge" (metal decks,
+  tools/art/parts/: floor, wall and chasm textures plus the decor sprites) or "city" (streets
+  and rooftops on a grey day, tools/art/kit_city.py with tools/art/parts/city/ and the
+  decor sprites in tools/art/parts/decor/city-*/).
 - seed: the random seed for decor placement and the floor's light variation.
 
 The kit's parts were generated with OpenAI gpt-image-2 using only the original levels
@@ -42,11 +44,12 @@ from scipy import ndimage as ndi
 
 sys.path.insert(0, os.path.dirname(__file__))
 from collision import coverage  # noqa: E402
+import kit_city  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..'))
 PARTS = os.path.join(os.path.dirname(__file__), 'parts')
 DECOR = os.path.join(PARTS, 'decor')
-KITS = ('bridge',)
+KITS = ('bridge', 'city')
 
 
 def blur(a, s): return ndi.gaussian_filter(a.astype(np.float32), s, mode='nearest')
@@ -239,6 +242,10 @@ PASSES = [
 CATEGORIES = ('panels', 'floorpaint', 'rails', 'greebles', 'vents', 'wallmarks', 'lights')
 
 
+def kit_categories(kit):
+    return kit_city.CATEGORIES if kit == 'city' else CATEGORIES
+
+
 def category(e):
     if e.get('of') == 'panels': return 'panels'  # a panel's corner lights go with it
     c = e['sprite'].split('/')[0]
@@ -289,7 +296,7 @@ def place_panels(g, rng, opts, cats, surface, used, entrance):
     return out
 
 
-def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
+def place_decor(g, seed, opts, only=None, keep=(), entrance=None, kit='bridge', art=None):
     """New decor placements. With `only` (a set of categories) just those are placed, after
     `keep` (the existing placements of the other categories, which they avoid)."""
     index = json.load(open(os.path.join(DECOR, 'index.json')))
@@ -305,6 +312,11 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
     surfaces['lip'] = (cd <= 16) & (cd >= 8) & ~g.wallb
     ly, lx = np.gradient(blur(cd, 3))
     orients = {'lip': ndi.median_filter(np.round((np.arctan2(ly, lx) + np.pi / 2) / (np.pi / 4)).astype(int) % 4, 5)}
+    passes, kit_reach = PASSES, {}
+    if kit == 'city':
+        ks, ko, kit_reach = kit_city.surfaces(g, art or {}, seed)
+        surfaces.update(ks); orients.update(ko)
+        passes = kit_city.PASSES
     # one rail style per continuous chasm edge: each straight run of the lip band
     edge_ids = np.zeros((H, W), np.int32)
     for k in range(4):
@@ -322,12 +334,12 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
         sx0, sy0, sx1, sy1 = max(0, -x0), max(0, -y0), min(sw, W - x0), min(sh, H - y0)
         if sx1 > sx0 and sy1 > sy0: used[y0 + sy0:y0 + sy1, x0 + sx0:x0 + sx1] |= a[sy0:sy1, sx0:sx1]
 
-    if only is None or 'panels' in only:
+    if kit == 'bridge' and (only is None or 'panels' in only):
         out += place_panels(g, rng, opts, cats, surfaces['floor'], used, entrance)
     go = opts['greebles']
     # where an overhanging greeble may reach: near a wall, on open floor (not over a chasm)
     reach = ndi.binary_dilation(g.wrb, iterations=int(go['overhang'])) & ~g.chasmb if go['overhang'] > 0 else g.wrb
-    for cat, count, surf, short, long_max, o in PASSES:
+    for cat, count, surf, short, long_max, o in passes:
         if only is not None and cat not in only: continue
         if cat == 'greebles' and surf == 'wall':
             count, short = int(go['count']), ('wall', 1.0, go['size'])
@@ -342,6 +354,7 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
             orient = orients[o['orient']] if 'orient' in o else g.q
             ang = orient[cy, cx] * np.pi / 4 if along else 0.0
             over = cat == 'greebles' and go['overhang'] > 0 and rng.random() < go['chance']
+            if o.get('overhang'): over = True  # a kit's own overhang (city trees over their planters)
             s_ = min(2 * g.dist[cy, cx] - 4 + (2 * go['overhang'] if over else 0), 10_000) * short[1] if isinstance(short, tuple) else short
             if isinstance(short, tuple): s_ = min(s_, short[2])
             if s_ < 5: continue
@@ -354,16 +367,17 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None):
             if turn: w, h = h, w
             if not along: s_ = s_ * max(w, h) / min(w, h) if h > w else s_
             scale = min(s_ / h, long_max / w)
+            if o.get('max_scale'): scale = min(scale, o['max_scale'])  # never blown up past this (blurry)
             rotation = round((turn + np.degrees(-ang)) % 360, 2)
             spx = xform(sp, scale, rotation)
             sw, sh = spx.size
             x0, y0 = int(cx - sw / 2), int(cy - sh / 2)
             if x0 < 0 or y0 < 0 or x0 + sw > W or y0 + sh > H: continue
             a = np.array(spx)[..., 3] > 40
-            allowed = reach if over else surface
+            allowed = (kit_reach.get(surf, reach) if o.get('overhang') else reach) if over else surface
             if not allowed[y0:y0 + sh, x0:x0 + sw][a].all() or used[y0:y0 + sh, x0:x0 + sw][a].any(): continue
             outside = (~g.wrb[y0:y0 + sh, x0:x0 + sw])[a].sum()
-            if over and (outside < 3 or outside > 0.4 * a.sum()): continue  # sticks out, but mostly on the wall
+            if over and not o.get('overhang') and (outside < 3 or outside > 0.4 * a.sum()): continue  # sticks out, but mostly on the wall
             used[y0:y0 + sh, x0:x0 + sw] |= ndi.binary_dilation(a, iterations=2)
             e = {'sprite': files[k], 'x': cx, 'y': cy, 'scale': round(float(scale), 4), 'rotation': float(rotation)}
             if o.get('effect'): e['effect'] = o['effect']
@@ -387,9 +401,9 @@ def worn(h, w, seed):
     return chips * scuff * speck
 
 
-def bake(g, decor, seed, opts):
+def bake(g, decor, seed, opts, kit='bridge', art=None):
     W, H = g.W, g.H
-    img = np.clip(base_art(g, seed, opts), 0, 1)
+    img = np.clip(kit_city.base_art(g, seed, opts, art or {}) if kit == 'city' else base_art(g, seed, opts), 0, 1)
     shadow = np.zeros((H, W), np.float32)
     bloom = np.zeros((H, W, 3), np.float32)
     lighting = np.zeros((H, W, 3), np.float32)
@@ -447,6 +461,7 @@ def bake(g, decor, seed, opts):
     img = img + lo['intensity'] * lighting * (0.12 + img) * (1 - np.clip(img, 0, 1))
     img += np.stack([blur(bloom[..., c], 4) for c in range(3)], -1) * lo['bloom']
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
+    if kit == 'city': img = kit_city.grade(img)
     sh = opts['edges']['sharpen']
     if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
@@ -464,7 +479,7 @@ def main():
     ap.add_argument('level', help='level folder, e.g. 03_Bridge')
     ap.add_argument('step', choices=['place', 'bake', 'all'])
     ap.add_argument('--seed', type=int, help='seed for decor placement (default: level.json art.seed)')
-    ap.add_argument('--only', help='place only these decor types, comma separated (' + ', '.join(CATEGORIES) + '); the others in decor.json are kept')
+    ap.add_argument('--only', help='place only these decor types, comma separated (bridge: ' + ', '.join(CATEGORIES) + '; city: ' + ', '.join(kit_city.CATEGORIES) + '); the others in decor.json are kept')
     args = ap.parse_args()
     d, art, size = level_paths(args.level)
     opts = options(art)
@@ -480,16 +495,17 @@ def main():
                 if str(e.get('symbol', '')).endswith('entrance_mc'): entrance = (int(e['x']), int(e['y']))
         if args.only:
             only = {c.strip() for c in args.only.split(',') if c.strip()}
-            bad = only - set(CATEGORIES)
-            if bad: sys.exit(f'unknown decor types: {", ".join(sorted(bad))}; known: {", ".join(CATEGORIES)}')
+            cats = kit_categories(art['kit'])
+            bad = only - set(cats)
+            if bad: sys.exit(f'unknown decor types: {", ".join(sorted(bad))}; known: {", ".join(cats)}')
             old = json.load(open(decor_path)) if os.path.exists(decor_path) else []
             keep = [e for e in old if category(e) not in only]
-        decor = place_decor(g, args.seed if args.seed is not None else seed, opts, only, keep, entrance)
+        decor = place_decor(g, args.seed if args.seed is not None else seed, opts, only, keep, entrance, art['kit'], art)
         write_decor(decor_path, decor)
         print(f'wrote levels/{args.level}/decor.json ({len(decor)} placements)')
     if args.step in ('bake', 'all'):
         decor = json.load(open(decor_path)) if os.path.exists(decor_path) else []
-        out = bake(g, decor, seed, opts)
+        out = bake(g, decor, seed, opts, art['kit'], art)
         Image.fromarray(out, 'RGB').convert('RGBA').save(os.path.join(d, 'background.png'), optimize=True)
         print(f'wrote levels/{args.level}/background.png ({len(decor)} decor placements)')
 
