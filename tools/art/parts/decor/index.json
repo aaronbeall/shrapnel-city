@@ -2045,5 +2045,837 @@
    "w": 223,
    "h": 223
   }
+ ],
+ "rock-bunker": [
+  {
+   "file": "rock-bunker/00.png",
+   "w": 201,
+   "h": 195
+  },
+  {
+   "file": "rock-bunker/01.png",
+   "w": 189,
+   "h": 187
+  },
+  {
+   "file": "rock-bunker/02.png",
+   "w": 122,
+   "h": 159
+  },
+  {
+   "file": "rock-bunker/03.png",
+   "w": 147,
+   "h": 159
+  },
+  {
+   "file": "rock-bunker/04.png",
+   "w": 103,
+   "h": 153
+  },
+  {
+   "file": "rock-bunker/05.png",
+   "w": 213,
+   "h": 210
+  },
+  {
+   "file": "rock-bunker/06.png",
+   "w": 158,
+   "h": 180
+  },
+  {
+   "file": "rock-bunker/07.png",
+   "w": 283,
+   "h": 179
+  },
+  {
+   "file": "rock-bunker/08.png",
+   "w": 369,
+   "h": 115
+  },
+  {
+   "file": "rock-bunker/09.png",
+   "w": 213,
+   "h": 162
+  },
+  {
+   "file": "rock-bunker/10.png",
+   "w": 174,
+   "h": 174
+  },
+  {
+   "file": "rock-bunker/11.png",
+   "w": 203,
+   "h": 153
+  },
+  {
+   "file": "rock-bunker/12.png",
+   "w": 157,
+   "h": 164
+  },
+  {
+   "file": "rock-bunker/13.png",
+   "w": 170,
+   "h": 160
+  },
+  {
+   "file": "rock-bunker/14.png",
+   "w": 105,
+   "h": 170
+  },
+  {
+   "file": "rock-bunker/15.png",
+   "w": 159,
+   "h": 161
+  },
+  {
+   "file": "rock-bunker/16.png",
+   "w": 162,
+   "h": 167
+  },
+  {
+   "file": "rock-bunker/17.png",
+   "w": 152,
+   "h": 151
+  },
+  {
+   "file": "rock-bunker/18.png",
+   "w": 127,
+   "h": 140
+  },
+  {
+   "file": "rock-bunker/19.png",
+   "w": 158,
+   "h": 145
+  }
+ ],
+ "rock-floorpaint": [
+  {
+   "file": "rock-floorpaint/00.png",
+   "w": 144,
+   "h": 159
+  },
+  {
+   "file": "rock-floorpaint/01.png",
+   "w": 168,
+   "h": 162
+  },
+  {
+   "file": "rock-floorpaint/02.png",
+   "w": 155,
+   "h": 144
+  },
+  {
+   "file": "rock-floorpaint/03.png",
+   "w": 214,
+   "h": 132
+  },
+  {
+   "file": "rock-floorpaint/04.png",
+   "w": 243,
+   "h": 71
+  },
+  {
+   "file": "rock-floorpaint/05.png",
+   "w": 154,
+   "h": 177
+  },
+  {
+   "file": "rock-floorpaint/06.png",
+   "w": 161,
+   "h": 163
+  },
+  {
+   "file": "rock-floorpaint/07.png",
+   "w": 186,
+   "h": 156
+  },
+  {
+   "file": "rock-floorpaint/08.png",
+   "w": 173,
+   "h": 122
+  },
+  {
+   "file": "rock-floorpaint/09.png",
+   "w": 181,
+   "h": 112
+  },
+  {
+   "file": "rock-floorpaint/10.png",
+   "w": 145,
+   "h": 141
+  },
+  {
+   "file": "rock-floorpaint/11.png",
+   "w": 139,
+   "h": 136
+  },
+  {
+   "file": "rock-floorpaint/12.png",
+   "w": 149,
+   "h": 128
+  },
+  {
+   "file": "rock-floorpaint/13.png",
+   "w": 135,
+   "h": 133
+  },
+  {
+   "file": "rock-floorpaint/14.png",
+   "w": 163,
+   "h": 97
+  },
+  {
+   "file": "rock-floorpaint/15.png",
+   "w": 234,
+   "h": 85
+  },
+  {
+   "file": "rock-floorpaint/16.png",
+   "w": 209,
+   "h": 85
+  },
+  {
+   "file": "rock-floorpaint/17.png",
+   "w": 218,
+   "h": 74
+  },
+  {
+   "file": "rock-floorpaint/18.png",
+   "w": 215,
+   "h": 73
+  },
+  {
+   "file": "rock-floorpaint/19.png",
+   "w": 228,
+   "h": 68
+  },
+  {
+   "file": "rock-floorpaint/20.png",
+   "w": 170,
+   "h": 166
+  },
+  {
+   "file": "rock-floorpaint/21.png",
+   "w": 194,
+   "h": 171
+  },
+  {
+   "file": "rock-floorpaint/22.png",
+   "w": 173,
+   "h": 160
+  },
+  {
+   "file": "rock-floorpaint/23.png",
+   "w": 196,
+   "h": 148
+  },
+  {
+   "file": "rock-floorpaint/24.png",
+   "w": 228,
+   "h": 120
+  }
+ ],
+ "rock-ground": [
+  {
+   "file": "rock-ground/00.png",
+   "w": 24,
+   "h": 24
+  },
+  {
+   "file": "rock-ground/01.png",
+   "w": 141,
+   "h": 159
+  },
+  {
+   "file": "rock-ground/02.png",
+   "w": 123,
+   "h": 87
+  },
+  {
+   "file": "rock-ground/03.png",
+   "w": 130,
+   "h": 151
+  },
+  {
+   "file": "rock-ground/04.png",
+   "w": 20,
+   "h": 23
+  },
+  {
+   "file": "rock-ground/05.png",
+   "w": 131,
+   "h": 110
+  },
+  {
+   "file": "rock-ground/06.png",
+   "w": 113,
+   "h": 104
+  },
+  {
+   "file": "rock-ground/07.png",
+   "w": 123,
+   "h": 109
+  },
+  {
+   "file": "rock-ground/08.png",
+   "w": 96,
+   "h": 80
+  },
+  {
+   "file": "rock-ground/09.png",
+   "w": 151,
+   "h": 155
+  },
+  {
+   "file": "rock-ground/10.png",
+   "w": 180,
+   "h": 174
+  },
+  {
+   "file": "rock-ground/11.png",
+   "w": 39,
+   "h": 37
+  },
+  {
+   "file": "rock-ground/12.png",
+   "w": 167,
+   "h": 152
+  },
+  {
+   "file": "rock-ground/13.png",
+   "w": 41,
+   "h": 23
+  },
+  {
+   "file": "rock-ground/14.png",
+   "w": 144,
+   "h": 129
+  },
+  {
+   "file": "rock-ground/15.png",
+   "w": 41,
+   "h": 53
+  },
+  {
+   "file": "rock-ground/16.png",
+   "w": 151,
+   "h": 119
+  },
+  {
+   "file": "rock-ground/17.png",
+   "w": 139,
+   "h": 77
+  },
+  {
+   "file": "rock-ground/18.png",
+   "w": 43,
+   "h": 36
+  },
+  {
+   "file": "rock-ground/19.png",
+   "w": 32,
+   "h": 21
+  },
+  {
+   "file": "rock-ground/20.png",
+   "w": 25,
+   "h": 20
+  },
+  {
+   "file": "rock-ground/21.png",
+   "w": 154,
+   "h": 141
+  },
+  {
+   "file": "rock-ground/22.png",
+   "w": 142,
+   "h": 129
+  },
+  {
+   "file": "rock-ground/23.png",
+   "w": 43,
+   "h": 49
+  },
+  {
+   "file": "rock-ground/24.png",
+   "w": 109,
+   "h": 109
+  },
+  {
+   "file": "rock-ground/25.png",
+   "w": 112,
+   "h": 113
+  },
+  {
+   "file": "rock-ground/26.png",
+   "w": 138,
+   "h": 117
+  },
+  {
+   "file": "rock-ground/27.png",
+   "w": 25,
+   "h": 21
+  },
+  {
+   "file": "rock-ground/28.png",
+   "w": 87,
+   "h": 71
+  },
+  {
+   "file": "rock-ground/29.png",
+   "w": 22,
+   "h": 22
+  },
+  {
+   "file": "rock-ground/30.png",
+   "w": 23,
+   "h": 26
+  },
+  {
+   "file": "rock-ground/31.png",
+   "w": 29,
+   "h": 23
+  },
+  {
+   "file": "rock-ground/32.png",
+   "w": 202,
+   "h": 193
+  },
+  {
+   "file": "rock-ground/33.png",
+   "w": 158,
+   "h": 139
+  },
+  {
+   "file": "rock-ground/34.png",
+   "w": 149,
+   "h": 128
+  },
+  {
+   "file": "rock-ground/35.png",
+   "w": 127,
+   "h": 116
+  },
+  {
+   "file": "rock-ground/36.png",
+   "w": 137,
+   "h": 105
+  },
+  {
+   "file": "rock-ground/37.png",
+   "w": 143,
+   "h": 110
+  },
+  {
+   "file": "rock-ground/38.png",
+   "w": 30,
+   "h": 28
+  }
+ ],
+ "rock-groundpaint": [
+  {
+   "file": "rock-groundpaint/00.png",
+   "w": 159,
+   "h": 196
+  },
+  {
+   "file": "rock-groundpaint/01.png",
+   "w": 163,
+   "h": 186
+  },
+  {
+   "file": "rock-groundpaint/02.png",
+   "w": 150,
+   "h": 175
+  },
+  {
+   "file": "rock-groundpaint/03.png",
+   "w": 158,
+   "h": 171
+  },
+  {
+   "file": "rock-groundpaint/04.png",
+   "w": 193,
+   "h": 133
+  },
+  {
+   "file": "rock-groundpaint/05.png",
+   "w": 161,
+   "h": 136
+  },
+  {
+   "file": "rock-groundpaint/06.png",
+   "w": 230,
+   "h": 121
+  },
+  {
+   "file": "rock-groundpaint/07.png",
+   "w": 306,
+   "h": 84
+  },
+  {
+   "file": "rock-groundpaint/08.png",
+   "w": 253,
+   "h": 72
+  },
+  {
+   "file": "rock-groundpaint/09.png",
+   "w": 267,
+   "h": 71
+  },
+  {
+   "file": "rock-groundpaint/10.png",
+   "w": 90,
+   "h": 21
+  },
+  {
+   "file": "rock-groundpaint/11.png",
+   "w": 172,
+   "h": 151
+  },
+  {
+   "file": "rock-groundpaint/12.png",
+   "w": 127,
+   "h": 150
+  },
+  {
+   "file": "rock-groundpaint/13.png",
+   "w": 147,
+   "h": 140
+  },
+  {
+   "file": "rock-groundpaint/14.png",
+   "w": 164,
+   "h": 148
+  },
+  {
+   "file": "rock-groundpaint/15.png",
+   "w": 126,
+   "h": 98
+  },
+  {
+   "file": "rock-groundpaint/16.png",
+   "w": 175,
+   "h": 109
+  },
+  {
+   "file": "rock-groundpaint/17.png",
+   "w": 145,
+   "h": 181
+  },
+  {
+   "file": "rock-groundpaint/18.png",
+   "w": 172,
+   "h": 170
+  },
+  {
+   "file": "rock-groundpaint/19.png",
+   "w": 159,
+   "h": 145
+  },
+  {
+   "file": "rock-groundpaint/20.png",
+   "w": 172,
+   "h": 150
+  },
+  {
+   "file": "rock-groundpaint/21.png",
+   "w": 148,
+   "h": 136
+  },
+  {
+   "file": "rock-groundpaint/22.png",
+   "w": 152,
+   "h": 137
+  }
+ ],
+ "rock-lights": [
+  {
+   "file": "rock-lights/00.png",
+   "w": 76,
+   "h": 124
+  },
+  {
+   "file": "rock-lights/01.png",
+   "w": 151,
+   "h": 119
+  },
+  {
+   "file": "rock-lights/02.png",
+   "w": 118,
+   "h": 119
+  },
+  {
+   "file": "rock-lights/03.png",
+   "w": 109,
+   "h": 124
+  },
+  {
+   "file": "rock-lights/04.png",
+   "w": 92,
+   "h": 107
+  },
+  {
+   "file": "rock-lights/05.png",
+   "w": 206,
+   "h": 87
+  },
+  {
+   "file": "rock-lights/06.png",
+   "w": 111,
+   "h": 201
+  },
+  {
+   "file": "rock-lights/07.png",
+   "w": 111,
+   "h": 175
+  },
+  {
+   "file": "rock-lights/08.png",
+   "w": 113,
+   "h": 115
+  },
+  {
+   "file": "rock-lights/09.png",
+   "w": 113,
+   "h": 111
+  },
+  {
+   "file": "rock-lights/10.png",
+   "w": 114,
+   "h": 81
+  },
+  {
+   "file": "rock-lights/11.png",
+   "w": 136,
+   "h": 83
+  },
+  {
+   "file": "rock-lights/12.png",
+   "w": 132,
+   "h": 109
+  },
+  {
+   "file": "rock-lights/13.png",
+   "w": 167,
+   "h": 102
+  },
+  {
+   "file": "rock-lights/14.png",
+   "w": 129,
+   "h": 99
+  },
+  {
+   "file": "rock-lights/15.png",
+   "w": 96,
+   "h": 91
+  },
+  {
+   "file": "rock-lights/16.png",
+   "w": 122,
+   "h": 86
+  },
+  {
+   "file": "rock-lights/17.png",
+   "w": 123,
+   "h": 83
+  },
+  {
+   "file": "rock-lights/18.png",
+   "w": 102,
+   "h": 149
+  },
+  {
+   "file": "rock-lights/19.png",
+   "w": 114,
+   "h": 111
+  },
+  {
+   "file": "rock-lights/20.png",
+   "w": 140,
+   "h": 111
+  },
+  {
+   "file": "rock-lights/21.png",
+   "w": 132,
+   "h": 99
+  },
+  {
+   "file": "rock-lights/22.png",
+   "w": 105,
+   "h": 95
+  },
+  {
+   "file": "rock-lights/23.png",
+   "w": 165,
+   "h": 78
+  }
+ ],
+ "rock-top": [
+  {
+   "file": "rock-top/00.png",
+   "w": 166,
+   "h": 186
+  },
+  {
+   "file": "rock-top/01.png",
+   "w": 228,
+   "h": 193
+  },
+  {
+   "file": "rock-top/02.png",
+   "w": 101,
+   "h": 122
+  },
+  {
+   "file": "rock-top/03.png",
+   "w": 121,
+   "h": 119
+  },
+  {
+   "file": "rock-top/04.png",
+   "w": 110,
+   "h": 84
+  },
+  {
+   "file": "rock-top/05.png",
+   "w": 193,
+   "h": 78
+  },
+  {
+   "file": "rock-top/06.png",
+   "w": 42,
+   "h": 34
+  },
+  {
+   "file": "rock-top/07.png",
+   "w": 25,
+   "h": 20
+  },
+  {
+   "file": "rock-top/08.png",
+   "w": 199,
+   "h": 182
+  },
+  {
+   "file": "rock-top/09.png",
+   "w": 170,
+   "h": 168
+  },
+  {
+   "file": "rock-top/10.png",
+   "w": 158,
+   "h": 133
+  },
+  {
+   "file": "rock-top/11.png",
+   "w": 148,
+   "h": 155
+  },
+  {
+   "file": "rock-top/12.png",
+   "w": 107,
+   "h": 114
+  },
+  {
+   "file": "rock-top/13.png",
+   "w": 135,
+   "h": 119
+  },
+  {
+   "file": "rock-top/14.png",
+   "w": 38,
+   "h": 31
+  },
+  {
+   "file": "rock-top/15.png",
+   "w": 40,
+   "h": 35
+  },
+  {
+   "file": "rock-top/16.png",
+   "w": 186,
+   "h": 178
+  },
+  {
+   "file": "rock-top/17.png",
+   "w": 156,
+   "h": 157
+  },
+  {
+   "file": "rock-top/18.png",
+   "w": 175,
+   "h": 129
+  },
+  {
+   "file": "rock-top/19.png",
+   "w": 80,
+   "h": 124
+  },
+  {
+   "file": "rock-top/20.png",
+   "w": 37,
+   "h": 122
+  },
+  {
+   "file": "rock-top/21.png",
+   "w": 163,
+   "h": 111
+  },
+  {
+   "file": "rock-top/22.png",
+   "w": 69,
+   "h": 91
+  },
+  {
+   "file": "rock-top/23.png",
+   "w": 174,
+   "h": 207
+  },
+  {
+   "file": "rock-top/24.png",
+   "w": 165,
+   "h": 157
+  },
+  {
+   "file": "rock-top/25.png",
+   "w": 181,
+   "h": 151
+  },
+  {
+   "file": "rock-top/26.png",
+   "w": 158,
+   "h": 151
+  },
+  {
+   "file": "rock-top/27.png",
+   "w": 185,
+   "h": 126
+  },
+  {
+   "file": "rock-top/28.png",
+   "w": 96,
+   "h": 76
+  },
+  {
+   "file": "rock-top/29.png",
+   "w": 26,
+   "h": 23
+  },
+  {
+   "file": "rock-top/30.png",
+   "w": 47,
+   "h": 36
+  },
+  {
+   "file": "rock-top/31.png",
+   "w": 38,
+   "h": 33
+  },
+  {
+   "file": "rock-top/32.png",
+   "w": 25,
+   "h": 20
+  }
  ]
 }
