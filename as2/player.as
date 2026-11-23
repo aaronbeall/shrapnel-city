@@ -109,6 +109,10 @@ onClipEvent(load){
 	speed = 0;
 	dead = dying = false;
 	deathTime = 0;
+	stunned = 0;     // frames left of a stun (enemy stun shots): no thrust, no firing
+	stunImmune = 0;  // frames after a stun in which the player can't be stunned again
+	stunBudget = 0;  // what's left of one stun's 40 frame cap
+	movable = true;  // so stun zaps follow the ship
 	refire1 = 0;
 	refire2 = 0;
 	firing1 = false;
@@ -164,6 +168,24 @@ onClipEvent(load){
 			damage_mc.play();
 		}
 		updateDisplay("health");
+	}
+	
+	// stunned by an enemy stun shot: engines and guns cut out for a moment. Capped, and followed
+	// by a short immunity, so a pack of stunners can't hold the player down for good
+	function stun(frames){
+		if(dying || dead || stunImmune > 0)
+			return;
+		if(!(stunned > 0)){
+			stunned = 0;
+			stunBudget = 40;
+			notify(this, "STUNNED", 20);
+		}
+		frames = Math.min(frames, stunBudget);
+		if(frames <= 0)
+			return;
+		stunBudget -= frames;
+		stunned += frames;
+		makeZaps(this, stunned);
 	}
 	
 	// show indicator graphics
@@ -260,6 +282,7 @@ onClipEvent(load){
 	// activate player
 	function spawn(){
 		dead = dying = false;
+		stunned = stunImmune = 0;
 		_visible = _screen.shadow_mc._visible = true;
 		_player.blasts_mc._alpha = 100;
 	}
@@ -285,8 +308,20 @@ onClipEvent(load){
 		xSpeed *= decel;
 		ySpeed *= decel;
 		
+		// stun countdown
+		if(stunned > 0){
+			stunned -= time;
+			if(stunned <= 0){
+				stunned = 0;
+				stunImmune = 30;
+			}
+			if(randomPerSecond(10))
+				makeSparks(this, .6);
+		}else if(stunImmune > 0)
+			stunImmune -= time;
+		
 		// thrust input
-		if(!dying){
+		if(!dying && !(stunned > 0)){
 			if(Key.isDown(Key.UP)){
 				/*if(speed < speedMax)*/ thrust(accel, _rotation);
 				exhaust_mc._visible = true;
@@ -398,7 +433,7 @@ onClipEvent(load){
 			// SHOOTING
 			// primary weapon
 			if(refire1 < weapon1.refire) refire1 += time;
-			if(Key.isDown(Key.SPACE)) firing1 = true;
+			if(Key.isDown(Key.SPACE) && !(stunned > 0)) firing1 = true;
 			else if(!weapon1.burst || shotCount1 == 0) firing1 = false;
 			if(firing1 && refire1 >= weapon1.refire && weapon1.ammo > 0){
 				_root.stats.shots++;
@@ -449,7 +484,7 @@ onClipEvent(load){
 			
 			// secondary weapon
 			if(refire2 < weapon2.refire) refire2 += time;
-			if(Key.isDown(Key.CONTROL) && refire2 >= weapon2.refire && weapon2.ammo > 0){
+			if(Key.isDown(Key.CONTROL) && !(stunned > 0) && refire2 >= weapon2.refire && weapon2.ammo > 0){
 				_root.stats.bombs++;
 				refire2 = 0;
 				var d = shotID();

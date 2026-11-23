@@ -1,0 +1,653 @@
+[
+  {
+    "symbol": "game objects/node",
+    "x": 140,
+    "y": 1256,
+    "name": "n1",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 229,
+    "y": 1256,
+    "name": "n2",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 370,
+    "y": 1256,
+    "name": "n3",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 513,
+    "y": 1256,
+    "name": "n4",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 630,
+    "y": 1256,
+    "name": "n5",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 229,
+    "y": 1150,
+    "name": "n6",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 230,
+    "y": 1160,
+    "name": "n7",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 313,
+    "y": 1160,
+    "name": "n8",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 370,
+    "y": 1140,
+    "name": "n9",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 421,
+    "y": 1150,
+    "name": "n10",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 512,
+    "y": 1160,
+    "name": "n11",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 601,
+    "y": 1160,
+    "name": "n12",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 140,
+    "y": 1360,
+    "name": "n13",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 287,
+    "y": 1356,
+    "name": "n14",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 370,
+    "y": 1374,
+    "name": "n15",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 459,
+    "y": 1356,
+    "name": "n16",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 510,
+    "y": 1370,
+    "name": "n17",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 601,
+    "y": 1372,
+    "name": "n18",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 966,
+    "y": 1256,
+    "name": "n19",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1031,
+    "y": 1262,
+    "name": "n20",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1170,
+    "y": 1262,
+    "name": "n21",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1311,
+    "y": 1262,
+    "name": "n22",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1450,
+    "y": 1262,
+    "name": "n23",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1031,
+    "y": 1116,
+    "name": "n24",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1240,
+    "y": 1116,
+    "name": "n25",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1451,
+    "y": 1116,
+    "name": "n26",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1240,
+    "y": 1196,
+    "name": "n27",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1031,
+    "y": 1196,
+    "name": "n28",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1450,
+    "y": 1196,
+    "name": "n29",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1107,
+    "y": 1350,
+    "name": "n30",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1040,
+    "y": 1380,
+    "name": "n31",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1181,
+    "y": 1390,
+    "name": "n32",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1242,
+    "y": 1374,
+    "name": "n33",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1301,
+    "y": 1390,
+    "name": "n34",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1426,
+    "y": 1350,
+    "name": "n35",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1451,
+    "y": 1394,
+    "name": "n36",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 170,
+    "y": 362,
+    "name": "n37",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 171,
+    "y": 470,
+    "name": "n38",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 170,
+    "y": 590,
+    "name": "n39",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 429,
+    "y": 590,
+    "name": "n40",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 428,
+    "y": 630,
+    "name": "n41",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 271,
+    "y": 362,
+    "name": "n42",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 270,
+    "y": 470,
+    "name": "n43",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 271,
+    "y": 590,
+    "name": "n44",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 350,
+    "y": 362,
+    "name": "n45",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 351,
+    "y": 470,
+    "name": "n46",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 350,
+    "y": 590,
+    "name": "n47",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 431,
+    "y": 362,
+    "name": "n48",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 430,
+    "y": 470,
+    "name": "n49",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 431,
+    "y": 590,
+    "name": "n50",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 510,
+    "y": 362,
+    "name": "n51",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 511,
+    "y": 470,
+    "name": "n52",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 510,
+    "y": 590,
+    "name": "n53",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 591,
+    "y": 362,
+    "name": "n54",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 590,
+    "y": 470,
+    "name": "n55",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 591,
+    "y": 590,
+    "name": "n56",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 660,
+    "y": 362,
+    "name": "n57",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 661,
+    "y": 470,
+    "name": "n58",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 660,
+    "y": 590,
+    "name": "n59",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 701,
+    "y": 476,
+    "name": "n60",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 760,
+    "y": 476,
+    "name": "n61",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 200, 0, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1173,
+    "y": 630,
+    "name": "n62",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1172,
+    "y": 590,
+    "name": "n63",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 951,
+    "y": 590,
+    "name": "n64",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 950,
+    "y": 470,
+    "name": "n65",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 951,
+    "y": 370,
+    "name": "n66",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1100,
+    "y": 362,
+    "name": "n67",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1301,
+    "y": 362,
+    "name": "n68",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1430,
+    "y": 370,
+    "name": "n69",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1431,
+    "y": 480,
+    "name": "n70",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1430,
+    "y": 590,
+    "name": "n71",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1301,
+    "y": 590,
+    "name": "n72",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1100,
+    "y": 500,
+    "name": "n73",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1301,
+    "y": 500,
+    "name": "n74",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1100,
+    "y": 590,
+    "name": "n75",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 901,
+    "y": 476,
+    "name": "n76",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 840,
+    "y": 476,
+    "name": "n77",
+    "color": {"multiply": [0, 0, 0, 1], "add": [160, 0, 255, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 361,
+    "y": 60,
+    "name": "n78",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 360,
+    "y": 146,
+    "name": "n79",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 361,
+    "y": 228,
+    "name": "n80",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 560,
+    "y": 70,
+    "name": "n81",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 561,
+    "y": 146,
+    "name": "n82",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 560,
+    "y": 228,
+    "name": "n83",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 701,
+    "y": 228,
+    "name": "n84",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 800,
+    "y": 228,
+    "name": "n85",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 901,
+    "y": 228,
+    "name": "n86",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1040,
+    "y": 228,
+    "name": "n87",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1041,
+    "y": 146,
+    "name": "n88",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1040,
+    "y": 70,
+    "name": "n89",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1241,
+    "y": 60,
+    "name": "n90",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1240,
+    "y": 146,
+    "name": "n91",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1241,
+    "y": 228,
+    "name": "n92",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 800,
+    "y": 184,
+    "name": "n93",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 220, 220, 0]}
+  }
+]

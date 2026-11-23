@@ -1,0 +1,544 @@
+[
+  {"name": "collision map", "pixels": "collision-base.png", "locked": true},
+  {"name": "bedrock", "mode": "wall", "d": "M 0 0 L 1600 0 L 1600 1760 L 0 1760 Z", "group": "rock"},
+  {
+    "name": "dig site cavern",
+    "mode": "open",
+    "d": "M 1247.89 1628 L 1246.54 1653.97 L 1227.55 1681.57 L 1118.34 1697.09 L 1044.89 1720.05 L 917.54 1723.2 L 800 1727.96 L 668.77 1734.29 L 564.47 1716.53 L 481.64 1697.09 L 385.15 1679.98 L 324.14 1655.67 L 296.73 1628 L 377.67 1603.44 L 385.78 1576.1 L 473.55 1557.15 L 574.99 1543.42 L 672.82 1525 L 800 1525.55 L 912.79 1536.65 L 1051.74 1533.37 L 1136.5 1554.97 L 1198.33 1578.09 L 1227.23 1603.16 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "dig site west pocket",
+    "mode": "open",
+    "d": "M 501.5 1596 L 472.37 1631.23 L 440.13 1658.26 L 399.37 1683.41 L 348.03 1672.53 L 302.11 1659.87 L 258.3 1635.9 L 260.7 1596 L 278.01 1563.01 L 298.13 1528.49 L 344.72 1508.88 L 396.03 1519.28 L 447.63 1526.88 L 468.85 1562.01 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "dig site east pocket",
+    "mode": "open",
+    "d": "M 1346.72 1652 L 1344.69 1684.56 L 1307.23 1708.6 L 1259.21 1723.52 L 1201.09 1733.26 L 1160.31 1705.93 L 1112.8 1686.44 L 1105.28 1652 L 1121.09 1619.95 L 1155.4 1594.36 L 1202.04 1573.24 L 1260.97 1575.86 L 1303.78 1597.99 L 1348.81 1618.25 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "dig site entry",
+    "mode": "open",
+    "d": "M 895.05 1700 L 875.81 1722.37 L 842.78 1737.87 L 800 1743.46 L 752.57 1741.99 L 721.4 1723.19 L 715.82 1700 L 727.53 1678.62 L 751.52 1657.08 L 800 1654.69 L 843.76 1661.26 L 881.55 1675.93 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "excavation pit",
+    "mode": "chasm",
+    "d": "M 698.66 1574 L 701 1588.77 L 670.84 1596.4 L 640 1598.52 L 613.34 1593.36 L 583.37 1587.71 L 584.88 1574 L 589.91 1561.87 L 609.29 1551.69 L 640 1549.2 L 675.22 1548.42 L 695.15 1560.65 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "boulder 1",
+    "mode": "wall",
+    "d": "M 594.69 1660 L 579.98 1673.41 L 566.12 1687.79 L 543.17 1683.31 L 537.48 1666.56 L 530.9 1651.53 L 548.2 1643.65 L 563.97 1641.99 L 585.52 1642.87 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "boulder 2",
+    "mode": "wall",
+    "d": "M 1054.29 1596 L 1038.86 1613.85 L 1017.38 1626.83 L 992.97 1617.74 L 975.93 1605.14 L 969.65 1585.18 L 990.18 1570.7 L 1017.31 1565.46 L 1041.18 1576.72 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "boulder 3",
+    "mode": "wall",
+    "d": "M 473.71 1640 L 464.37 1649.34 L 455.47 1657.7 L 443.18 1653.76 L 435.3 1645.47 L 435.35 1634.54 L 443.06 1626.06 L 454.75 1625.95 L 465.1 1630.11 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "boulder 4",
+    "mode": "wall",
+    "d": "M 1141.27 1694 L 1137.67 1705.12 L 1123.82 1710.27 L 1108.97 1708.32 L 1097.51 1700.14 L 1100.72 1688.74 L 1107.33 1677.54 L 1123.32 1679.86 L 1140.63 1681.02 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "boulder 5",
+    "mode": "wall",
+    "d": "M 944.8 1668 L 944.12 1677.87 L 932.57 1680.15 L 920.29 1682.02 L 911.9 1673.49 L 913.7 1663.06 L 921.16 1655.24 L 932.77 1654.92 L 942.02 1659.6 Z",
+    "group": "dig site"
+  },
+  {
+    "name": "airlock",
+    "mode": "open",
+    "d": "M 765 1412 L 835 1412 L 835 1545 L 765 1545 Z",
+    "group": "lower labs"
+  },
+  {
+    "name": "decon atrium",
+    "mode": "open",
+    "d": "M 674 1090 L 926 1090 L 940 1104 L 940 1406 L 926 1420 L 674 1420 L 660 1406 L 660 1104 Z",
+    "group": "lower labs"
+  },
+  {
+    "name": "atrium pillar 1",
+    "mode": "wall",
+    "d": "M 719 1166 L 737 1166 L 742 1171 L 742 1189 L 737 1194 L 719 1194 L 714 1189 L 714 1171 Z",
+    "group": "lower labs"
+  },
+  {
+    "name": "atrium pillar 2",
+    "mode": "wall",
+    "d": "M 863 1166 L 881 1166 L 886 1171 L 886 1189 L 881 1194 L 863 1194 L 858 1189 L 858 1171 Z",
+    "group": "lower labs"
+  },
+  {
+    "name": "atrium pillar 3",
+    "mode": "wall",
+    "d": "M 719 1316 L 737 1316 L 742 1321 L 742 1339 L 737 1344 L 719 1344 L 714 1339 L 714 1321 Z",
+    "group": "lower labs"
+  },
+  {
+    "name": "atrium pillar 4",
+    "mode": "wall",
+    "d": "M 863 1316 L 881 1316 L 886 1321 L 886 1339 L 881 1344 L 863 1344 L 858 1339 L 858 1321 Z",
+    "group": "lower labs"
+  },
+  {
+    "name": "bulkhead 1 throat",
+    "mode": "open",
+    "d": "M 773 1040 L 827 1040 L 827 1096 L 773 1096 Z",
+    "group": "lower labs"
+  },
+  {
+    "name": "specimen corridor",
+    "mode": "open",
+    "d": "M 110 1222 L 666 1222 L 666 1290 L 110 1290 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen room R1",
+    "mode": "open",
+    "d": "M 118 1082 L 342 1082 L 350 1090 L 350 1184 L 342 1192 L 118 1192 L 110 1184 L 110 1090 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen room R2",
+    "mode": "open",
+    "d": "M 398 1082 L 622 1082 L 630 1090 L 630 1184 L 622 1192 L 398 1192 L 390 1184 L 390 1090 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen room R3",
+    "mode": "open",
+    "d": "M 118 1320 L 342 1320 L 350 1328 L 350 1416 L 342 1424 L 118 1424 L 110 1416 L 110 1328 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen room R4",
+    "mode": "open",
+    "d": "M 398 1320 L 622 1320 L 630 1328 L 630 1416 L 622 1424 L 398 1424 L 390 1416 L 390 1328 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen R1 door",
+    "mode": "open",
+    "d": "M 196 1186 L 252 1186 L 252 1228 L 196 1228 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen R2 door",
+    "mode": "open",
+    "d": "M 484 1186 L 540 1186 L 540 1228 L 484 1228 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen R3 door",
+    "mode": "open",
+    "d": "M 258 1284 L 314 1284 L 314 1326 L 258 1326 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen R4 door",
+    "mode": "open",
+    "d": "M 430 1284 L 486 1284 L 486 1326 L 430 1326 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen R1-R2 door",
+    "mode": "open",
+    "d": "M 344 1112 L 396 1112 L 396 1168 L 344 1168 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen R3-R4 door",
+    "mode": "open",
+    "d": "M 344 1346 L 396 1346 L 396 1402 L 344 1402 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen tank 1",
+    "mode": "wall",
+    "d": "M 153 1110 L 151.26 1116.5 L 146.5 1121.26 L 140 1123 L 133.5 1121.26 L 128.74 1116.5 L 127 1110 L 128.74 1103.5 L 133.5 1098.74 L 140 1097 L 146.5 1098.74 L 151.26 1103.5 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen tank 2",
+    "mode": "wall",
+    "d": "M 193 1110 L 191.26 1116.5 L 186.5 1121.26 L 180 1123 L 173.5 1121.26 L 168.74 1116.5 L 167 1110 L 168.74 1103.5 L 173.5 1098.74 L 180 1097 L 186.5 1098.74 L 191.26 1103.5 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen tank 3",
+    "mode": "wall",
+    "d": "M 313 1110 L 311.26 1116.5 L 306.5 1121.26 L 300 1123 L 293.5 1121.26 L 288.74 1116.5 L 287 1110 L 288.74 1103.5 L 293.5 1098.74 L 300 1097 L 306.5 1098.74 L 311.26 1103.5 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen tank 4",
+    "mode": "wall",
+    "d": "M 443 1110 L 441.26 1116.5 L 436.5 1121.26 L 430 1123 L 423.5 1121.26 L 418.74 1116.5 L 417 1110 L 418.74 1103.5 L 423.5 1098.74 L 430 1097 L 436.5 1098.74 L 441.26 1103.5 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen tank 5",
+    "mode": "wall",
+    "d": "M 603 1110 L 601.26 1116.5 L 596.5 1121.26 L 590 1123 L 583.5 1121.26 L 578.74 1116.5 L 577 1110 L 578.74 1103.5 L 583.5 1098.74 L 590 1097 L 596.5 1098.74 L 601.26 1103.5 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen tank 6",
+    "mode": "wall",
+    "d": "M 153 1396 L 151.26 1402.5 L 146.5 1407.26 L 140 1409 L 133.5 1407.26 L 128.74 1402.5 L 127 1396 L 128.74 1389.5 L 133.5 1384.74 L 140 1383 L 146.5 1384.74 L 151.26 1389.5 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen tank 7",
+    "mode": "wall",
+    "d": "M 603 1396 L 601.26 1402.5 L 596.5 1407.26 L 590 1409 L 583.5 1407.26 L 578.74 1402.5 L 577 1396 L 578.74 1389.5 L 583.5 1384.74 L 590 1383 L 596.5 1384.74 L 601.26 1389.5 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "specimen tank 8",
+    "mode": "wall",
+    "d": "M 443 1396 L 441.26 1402.5 L 436.5 1407.26 L 430 1409 L 423.5 1407.26 L 418.74 1402.5 L 417 1396 L 418.74 1389.5 L 423.5 1384.74 L 430 1383 L 436.5 1384.74 L 441.26 1389.5 Z",
+    "group": "specimen lab"
+  },
+  {
+    "name": "workshop corridor",
+    "mode": "open",
+    "d": "M 934 1222 L 1000 1222 L 1000 1290 L 934 1290 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "workshop hall",
+    "mode": "open",
+    "d": "M 1002 1082 L 1478 1082 L 1490 1094 L 1490 1280 L 1478 1292 L 1002 1292 L 990 1280 L 990 1094 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "assembly line west",
+    "mode": "wall",
+    "d": "M 1059 1148 L 1201 1148 L 1205 1152 L 1205 1160 L 1201 1164 L 1059 1164 L 1055 1160 L 1055 1152 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "assembly line east",
+    "mode": "wall",
+    "d": "M 1279 1148 L 1421 1148 L 1425 1152 L 1425 1160 L 1421 1164 L 1279 1164 L 1275 1160 L 1275 1152 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "press 1",
+    "mode": "wall",
+    "d": "M 1090 1221 L 1110 1221 L 1115 1226 L 1115 1246 L 1110 1251 L 1090 1251 L 1085 1246 L 1085 1226 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "press 2",
+    "mode": "wall",
+    "d": "M 1230 1221 L 1250 1221 L 1255 1226 L 1255 1246 L 1250 1251 L 1230 1251 L 1225 1246 L 1225 1226 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "press 3",
+    "mode": "wall",
+    "d": "M 1370 1221 L 1390 1221 L 1395 1226 L 1395 1246 L 1390 1251 L 1370 1251 L 1365 1246 L 1365 1226 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "store room 1",
+    "mode": "open",
+    "d": "M 998 1322 L 1214 1322 L 1222 1330 L 1222 1416 L 1214 1424 L 998 1424 L 990 1416 L 990 1330 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "store room 2",
+    "mode": "open",
+    "d": "M 1270 1322 L 1482 1322 L 1490 1330 L 1490 1416 L 1482 1424 L 1270 1424 L 1262 1416 L 1262 1330 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "workshop store 1 door",
+    "mode": "open",
+    "d": "M 1078 1286 L 1134 1286 L 1134 1328 L 1078 1328 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "workshop store 2 door",
+    "mode": "open",
+    "d": "M 1398 1286 L 1454 1286 L 1454 1328 L 1398 1328 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "workshop store 1-2 door",
+    "mode": "open",
+    "d": "M 1216 1346 L 1268 1346 L 1268 1402 L 1216 1402 Z",
+    "group": "robotics workshop"
+  },
+  {
+    "name": "climb throat",
+    "mode": "open",
+    "d": "M 843.24 1042.24 L 839.61 1003.04 L 849.58 970.9 L 767.94 950.49 L 756.88 997.27 L 754.65 1049.94 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "climb cavern",
+    "mode": "open",
+    "d": "M 1112.83 860 L 1140.41 898.14 L 1089.77 929.13 L 1037.08 955.47 L 986.05 982.52 L 918.4 1001.9 L 839.85 1009.18 L 761.99 1002.29 L 675.3 1009.46 L 606.89 987.17 L 548.08 961.45 L 517.85 927.31 L 466.79 897.33 L 457.65 860 L 471.84 823.23 L 509.54 790.71 L 558.58 762.78 L 619.02 740.82 L 682.63 719.33 L 758.13 703.27 L 838.81 714.72 L 909.51 728.74 L 995.12 731.51 L 1049.04 759.71 L 1100.39 788.34 L 1109.24 825.35 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "the fissure",
+    "mode": "chasm",
+    "d": "M 1002.64 852 L 973 865.49 L 964.11 881.51 L 896.51 887.82 L 836.45 896.29 L 768.73 890 L 699.92 889.14 L 659.89 877.19 L 600.66 867.55 L 595.1 852 L 611.22 837.28 L 639.97 823.22 L 713.44 819.87 L 768.68 813.93 L 831.35 813.9 L 894.43 816.95 L 944.07 826.1 L 996.48 836.68 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "north-west tunnel",
+    "mode": "open",
+    "d": "M 584.73 742.52 L 525.86 680.24 L 463.45 648.63 L 464.15 626.49 L 384.58 629.81 L 398.17 702.04 L 476.67 748.27 L 534.68 798.14 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "north-east tunnel",
+    "mode": "open",
+    "d": "M 1064.15 796.84 L 1123.25 748.65 L 1203.1 701.45 L 1218.03 628 L 1128.28 628 L 1135.19 645.88 L 1074.37 680.01 L 1011.19 737.99 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "west grotto tunnel",
+    "mode": "open",
+    "d": "M 486.61 860.46 L 420 866.28 L 374.82 859.86 L 366.14 932.21 L 420 940.01 L 493.58 941.77 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "west grotto",
+    "mode": "open",
+    "d": "M 397.69 900 L 386.07 932.7 L 360.77 962.73 L 315.06 977.62 L 261.78 987.4 L 211.64 969.46 L 194.79 932.41 L 177 900 L 174.39 860.64 L 217.89 836.08 L 264.4 820.71 L 318.43 811.96 L 357.61 840.07 L 388.85 866.35 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "east grotto tunnel",
+    "mode": "open",
+    "d": "M 1115.52 918.67 L 1181.67 903.47 L 1226.69 915.34 L 1233.38 831.73 L 1178.17 833.33 L 1104.6 842.21 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "east grotto",
+    "mode": "open",
+    "d": "M 1422.79 870 L 1419.58 909.58 L 1378.05 934 L 1337.15 959.21 L 1280.94 965.48 L 1226.71 948.33 L 1189.1 913.67 L 1201.02 870 L 1192.03 827.39 L 1243.8 807.74 L 1285.33 788.94 L 1333.95 791.31 L 1379.93 804.23 L 1426.64 827.87 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "cave boulder 1",
+    "mode": "wall",
+    "d": "M 625.61 952 L 610.38 962.05 L 599.41 968.1 L 585.6 967.01 L 572.9 959.01 L 578.56 946.71 L 586.21 937.87 L 599.49 935.51 L 612.47 940.48 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "cave boulder 2",
+    "mode": "wall",
+    "d": "M 1028.19 952 L 1021.89 962.26 L 1010.77 972.81 L 990.51 972.64 L 985.37 957.78 L 982.48 945.41 L 995.64 938.2 L 1010.14 933.92 L 1027.35 938.22 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "cave boulder 3",
+    "mode": "wall",
+    "d": "M 660.26 752 L 656.43 764.25 L 642.55 764.84 L 632.19 764.02 L 623.9 757.21 L 622.77 746.42 L 630.72 737.72 L 642.35 740.16 L 652.21 742.89 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "cave boulder 4",
+    "mode": "wall",
+    "d": "M 1015.92 760 L 1012.28 774.69 L 994.54 780.24 L 977.8 776.61 L 964.55 767.28 L 960.27 751.5 L 973.36 737.35 L 994.74 738.87 L 1015.77 743.01 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "cave boulder 5",
+    "mode": "wall",
+    "d": "M 318.83 860 L 318.84 872.93 L 304.13 879.18 L 291.09 872.63 L 276.15 867.1 L 280.07 854.07 L 287.67 842.53 L 304.04 841.24 L 320.99 845.59 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "cave boulder 6",
+    "mode": "wall",
+    "d": "M 1356.91 920 L 1351.64 933.62 L 1333.35 934.25 L 1319.39 933.79 L 1306.12 926.52 L 1312.77 915.3 L 1315.88 901.66 L 1334.41 901.24 L 1351.48 906.48 Z",
+    "group": "the climb"
+  },
+  {
+    "name": "server vault",
+    "mode": "open",
+    "d": "M 144 330 L 676 330 L 690 344 L 690 606 L 676 620 L 144 620 L 130 606 L 130 344 Z",
+    "group": "server vault"
+  },
+  {
+    "name": "vault entry",
+    "mode": "open",
+    "d": "M 398 612 L 458 612 L 458 650 L 398 650 Z",
+    "group": "server vault"
+  },
+  {
+    "name": "server rack 1",
+    "mode": "wall",
+    "d": "M 224 395 L 236 395 L 239 398 L 239 542 L 236 545 L 224 545 L 221 542 L 221 398 Z",
+    "group": "server vault"
+  },
+  {
+    "name": "server rack 2",
+    "mode": "wall",
+    "d": "M 304 382 L 316 382 L 319 385 L 319 555 L 316 558 L 304 558 L 301 555 L 301 385 Z",
+    "group": "server vault"
+  },
+  {
+    "name": "server rack 3",
+    "mode": "wall",
+    "d": "M 384 395 L 396 395 L 399 398 L 399 542 L 396 545 L 384 545 L 381 542 L 381 398 Z",
+    "group": "server vault"
+  },
+  {
+    "name": "server rack 4",
+    "mode": "wall",
+    "d": "M 464 382 L 476 382 L 479 385 L 479 555 L 476 558 L 464 558 L 461 555 L 461 385 Z",
+    "group": "server vault"
+  },
+  {
+    "name": "server rack 5",
+    "mode": "wall",
+    "d": "M 544 395 L 556 395 L 559 398 L 559 542 L 556 545 L 544 545 L 541 542 L 541 398 Z",
+    "group": "server vault"
+  },
+  {
+    "name": "server rack 6",
+    "mode": "wall",
+    "d": "M 624 382 L 636 382 L 639 385 L 639 555 L 636 558 L 624 558 L 621 555 L 621 385 Z",
+    "group": "server vault"
+  },
+  {
+    "name": "drone bay",
+    "mode": "open",
+    "d": "M 924 330 L 1456 330 L 1470 344 L 1470 606 L 1456 620 L 924 620 L 910 606 L 910 344 Z",
+    "group": "drone bay"
+  },
+  {
+    "name": "bay entry",
+    "mode": "open",
+    "d": "M 1142 612 L 1202 612 L 1202 650 L 1142 650 Z",
+    "group": "drone bay"
+  },
+  {
+    "name": "cargo stack west",
+    "mode": "wall",
+    "d": "M 1004 421 L 1056 421 L 1061 426 L 1061 446 L 1056 451 L 1004 451 L 999 446 L 999 426 Z",
+    "group": "drone bay"
+  },
+  {
+    "name": "cargo stack east",
+    "mode": "wall",
+    "d": "M 1330 421 L 1382 421 L 1387 426 L 1387 446 L 1382 451 L 1330 451 L 1325 446 L 1325 426 Z",
+    "group": "drone bay"
+  },
+  {
+    "name": "cargo stack south",
+    "mode": "wall",
+    "d": "M 1165 534 L 1235 534 L 1240 539 L 1240 557 L 1235 562 L 1165 562 L 1160 557 L 1160 539 Z",
+    "group": "drone bay"
+  },
+  {
+    "name": "maintenance pit",
+    "mode": "chasm",
+    "d": "M 1160 384 L 1240 384 L 1250 394 L 1250 460 L 1240 470 L 1160 470 L 1150 460 L 1150 394 Z",
+    "group": "drone bay"
+  },
+  {
+    "name": "spine corridor",
+    "mode": "open",
+    "d": "M 684 440 L 916 440 L 916 510 L 684 510 Z",
+    "group": "spine"
+  },
+  {
+    "name": "lift corridor",
+    "mode": "open",
+    "d": "M 765 286 L 835 286 L 835 446 L 765 446 Z",
+    "group": "spine"
+  },
+  {
+    "name": "bulkhead 2 throat",
+    "mode": "open",
+    "d": "M 773 250 L 827 250 L 827 292 L 773 292 Z",
+    "group": "spine"
+  },
+  {
+    "name": "lift hall",
+    "mode": "open",
+    "d": "M 338 30 L 1262 30 L 1280 48 L 1280 240 L 1262 258 L 338 258 L 320 240 L 320 48 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift shaft",
+    "mode": "chasm",
+    "d": "M 646 52 L 954 52 L 964 62 L 964 186 L 954 196 L 646 196 L 636 186 L 636 62 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift platform",
+    "mode": "open",
+    "d": "M 704 84 L 896 84 L 896 166 L 704 166 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift bridge south",
+    "mode": "open",
+    "d": "M 772 160 L 828 160 L 828 202 L 772 202 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift bridge west",
+    "mode": "open",
+    "d": "M 630 104 L 710 104 L 710 146 L 630 146 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift bridge east",
+    "mode": "open",
+    "d": "M 890 104 L 970 104 L 970 146 L 890 146 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift hall column 1",
+    "mode": "wall",
+    "d": "M 460 81 L 480 81 L 485 86 L 485 106 L 480 111 L 460 111 L 455 106 L 455 86 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift hall column 2",
+    "mode": "wall",
+    "d": "M 460 181 L 480 181 L 485 186 L 485 206 L 480 211 L 460 211 L 455 206 L 455 186 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift hall column 3",
+    "mode": "wall",
+    "d": "M 1120 81 L 1140 81 L 1145 86 L 1145 106 L 1140 111 L 1120 111 L 1115 106 L 1115 86 Z",
+    "group": "lift hall"
+  },
+  {
+    "name": "lift hall column 4",
+    "mode": "wall",
+    "d": "M 1120 181 L 1140 181 L 1145 186 L 1145 206 L 1140 211 L 1120 211 L 1115 206 L 1115 186 Z",
+    "group": "lift hall"
+  }
+]

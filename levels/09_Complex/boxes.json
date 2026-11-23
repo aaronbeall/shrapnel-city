@@ -1,0 +1,322 @@
+[
+  {"symbol": "game objects/box", "x": 470, "y": 1678, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 490, "y": 1678, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 510,
+    "y": 1678,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Pulse",
+        "quantity": 30,
+        "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+        "alertOnce": true
+      }
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 530, "y": 1678, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1050, "y": 1566, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1070, "y": 1566, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 1090,
+    "y": 1566,
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "health", "item": "health", "quantity": 25}},
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 1110, "y": 1566, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 400, "y": 1540, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 400, "y": 1560, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 420, "y": 1540, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 420, "y": 1560, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1270, "y": 1615, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1270, "y": 1635, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1290, "y": 1615, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1290, "y": 1635, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 640, "y": 1700, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 660,
+    "y": 1700,
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 25}},
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 680, "y": 1700, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 950, "y": 1702, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 970,
+    "y": 1702,
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "health", "item": "health", "quantity": 25}},
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 990, "y": 1702, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 688, "y": 1250, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 688, "y": 1270, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 688, "y": 1290, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 688, "y": 1310, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 912, "y": 1250, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 912, "y": 1270, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 912,
+    "y": 1290,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Pulse",
+        "quantity": 30,
+        "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+        "alertOnce": true
+      }
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 912, "y": 1310, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 740, "y": 1404, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 760, "y": 1404, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 780, "y": 1404, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 150, "y": 1230, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 410, "y": 1176, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 430, "y": 1176, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 450, "y": 1176, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 470, "y": 1176, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 180, "y": 1404, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 200, "y": 1404, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 220, "y": 1404, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 536, "y": 1340, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 556, "y": 1340, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 576, "y": 1340, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 596, "y": 1340, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 590, "y": 1232, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 590, "y": 1252, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 610, "y": 1232, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 610, "y": 1252, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 240, "y": 1176, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 260,
+    "y": 1176,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 280, "y": 1176, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1070, "y": 1186, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1090, "y": 1186, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 1110,
+    "y": 1186,
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "health", "item": "health", "quantity": 25}},
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 1130, "y": 1186, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1290, "y": 1186, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1310, "y": 1186, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 1330,
+    "y": 1186,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {
+        "type": "secondary",
+        "item": "Splinter Bomb",
+        "quantity": 1,
+        "alertMessage": "SPLINTER BOMBS: one blast, twenty-five splinters. Roll one into a room and stand well back.",
+        "alertOnce": true
+      }
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 1350, "y": 1186, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1010, "y": 1340, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 1010,
+    "y": 1360,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 1010, "y": 1380, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1160, "y": 1340, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1160, "y": 1360, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1160, "y": 1380, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1290, "y": 1408, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1310, "y": 1408, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 1330,
+    "y": 1408,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Pulse",
+        "quantity": 30,
+        "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+        "alertOnce": true
+      }
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 1350, "y": 1408, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1460, "y": 1340, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1460, "y": 1360, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1480, "y": 1340, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1480, "y": 1360, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1010, "y": 1098, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1030, "y": 1098, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1050, "y": 1098, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1070, "y": 1098, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 650, "y": 984, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 670,
+    "y": 984,
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "primary", "item": "Plasma", "quantity": 10}},
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 690, "y": 984, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 842, "y": 742, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 862,
+    "y": 742,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 240, "y": 940, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 240, "y": 960, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 260, "y": 940, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 260, "y": 960, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1360, "y": 880, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1360, "y": 900, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1380, "y": 880, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1380, "y": 900, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 790,
+    "y": 1010,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Pulse",
+        "quantity": 30,
+        "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+        "alertOnce": true
+      }
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 270, "y": 400, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 270, "y": 422, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 270, "y": 444, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 430, "y": 400, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 430,
+    "y": 422,
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "primary", "item": "Vertigo", "quantity": 30}},
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 430, "y": 444, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 590, "y": 400, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 590, "y": 422, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 590, "y": 444, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 330, "y": 350, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 350,
+    "y": 350,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {
+        "type": "secondary",
+        "item": "Splinter Bomb",
+        "quantity": 1,
+        "alertMessage": "SPLINTER BOMBS: one blast, twenty-five splinters. Roll one into a room and stand well back.",
+        "alertOnce": true
+      }
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 370, "y": 350, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 560, "y": 610, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 580, "y": 610, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 600, "y": 610, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 650, "y": 575, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 650, "y": 595, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 670, "y": 575, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 670, "y": 595, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1000, "y": 400, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1020, "y": 400, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1040, "y": 400, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1340, "y": 470, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1360, "y": 470, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1380, "y": 470, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1160, "y": 600, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1180, "y": 600, "props": {"required": false}},
+  {
+    "symbol": "game objects/box",
+    "x": 1200,
+    "y": 600,
+    "props": {
+      "required": false,
+      "health": 25,
+      "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}
+    },
+    "scale": 1.29
+  },
+  {"symbol": "game objects/box", "x": 1220, "y": 600, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1430, "y": 344, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1430, "y": 364, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1450, "y": 344, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1450, "y": 364, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 940, "y": 350, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 940, "y": 370, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 700, "y": 456, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 700, "y": 478, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 890, "y": 456, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 890, "y": 478, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 340, "y": 110, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 340, "y": 132, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 340, "y": 154, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1258, "y": 110, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1258, "y": 132, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 1258, "y": 154, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 660, "y": 230, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 680, "y": 230, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 920, "y": 230, "props": {"required": false}},
+  {"symbol": "game objects/box", "x": 940, "y": 230, "props": {"required": false}},
+  {
+    "symbol": "game objects/box computer",
+    "x": 1376,
+    "y": 1352,
+    "props": {"onDie": {"$trigger": "door1:open"}}
+  },
+  {"symbol": "game objects/box computer", "x": 1440, "y": 592, "props": {"onDie": {"$trigger": "door2:open"}}}
+]

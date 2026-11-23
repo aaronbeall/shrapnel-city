@@ -1,0 +1,173 @@
+[
+  {
+    "symbol": "game objects/message beacon",
+    "x": 800,
+    "y": 1650,
+    "props": {
+      "alertMessage": "Lab wings ahead. Their <strong>LAB HUNTERS</strong> roam each wing and come running when one of them sees you. The atrium bulkhead opens from the workshop terminal, east.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 800,
+    "y": 300,
+    "props": {"alertMessage": "Lift Hall sealed. The Drone Bay terminal, east, opens it.", "persistent": true}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 250,
+    "y": 1136,
+    "props": {
+      "type": "primary",
+      "item": "Pulse",
+      "quantity": 100,
+      "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 170,
+    "y": 1240,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1200,
+    "y": 1400,
+    "props": {
+      "type": "primary",
+      "item": "Pulse",
+      "quantity": 60,
+      "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1040,
+    "y": 1120,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 200,
+    "y": 470,
+    "props": {
+      "type": "secondary",
+      "item": "Splinter Bomb",
+      "quantity": 3,
+      "alertMessage": "SPLINTER BOMBS: one blast, twenty-five splinters. Roll one into a room and stand well back.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 170,
+    "y": 540,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1440,
+    "y": 420,
+    "props": {
+      "type": "secondary",
+      "item": "Splinter Bomb",
+      "quantity": 2,
+      "alertMessage": "SPLINTER BOMBS: one blast, twenty-five splinters. Roll one into a room and stand well back.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1430,
+    "y": 540,
+    "props": {
+      "type": "primary",
+      "item": "Pulse",
+      "quantity": 60,
+      "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 380,
+    "y": 1650,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1300,
+    "y": 1660,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 1150,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 250,
+    "y": 920,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 330,
+    "y": 860,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1320,
+    "y": 860,
+    "props": {
+      "type": "primary",
+      "item": "Pulse",
+      "quantity": 40,
+      "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1250,
+    "y": 840,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 476,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 560,
+    "y": 92,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1040,
+    "y": 92,
+    "props": {
+      "type": "primary",
+      "item": "Pulse",
+      "quantity": 60,
+      "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 1590,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 30}
+  }
+]

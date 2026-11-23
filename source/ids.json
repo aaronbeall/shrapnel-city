@@ -1101,5 +1101,9 @@
   "player assets/player ship/shape 4": 1100,
   "player assets/player ship": 1101,
   "player assets/player ship firing": 1102,
-  "enemy assets/enemy scout": 1103
+  "enemy assets/enemy scout": 1103,
+  "enemy assets/enemy lab hunter": 1900,
+  "enemy assets/enemy repair drone body/shape 1": 1901,
+  "enemy assets/enemy repair drone body": 1902,
+  "enemy assets/enemy repair drone": 1903
 }

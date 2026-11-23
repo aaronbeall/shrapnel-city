@@ -287,6 +287,18 @@
           "script": "#include \"as/shots/shot_mcEPurple.as\""
         },
         {
+          "place": "weapon assets/shot MC pea enemy",
+          "depth": 3909,
+          "x": -140,
+          "y": 425,
+          "scale": [0.850052, 0.850235],
+          "color": {"add": [-80, 140, 255, 0]},
+          "ratio": 0.000015259021896696422,
+          "name": "shot_mcEStun",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcEStun.as\""
+        },
+        {
           "place": "weapon assets/shot MC enemy missile",
           "depth": 3007,
           "x": -228,

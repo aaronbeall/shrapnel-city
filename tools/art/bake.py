@@ -209,6 +209,32 @@ def base_art(g, seed, opts):
     return img * (1 - wr[..., None]) + top * wr[..., None]
 
 
+# ---------------------------------------------------------------- metal rooms
+def metal_mask(g, art):
+    """Where art.metal's rooms are: their floor and walls inside each rectangle, plus a lining
+    of `metalLining` px into the walls round them (so the rooms read as metal set into the
+    rock). 1 = metal. Soft by under a pixel so the seam stays crisp."""
+    rects = art.get('metal') or []
+    lining = int(art.get('metalLining', 12))
+    m = np.zeros((g.H, g.W), bool)
+    for x0, y0, x1, y1 in rects:
+        m[max(0, int(y0)):int(y1), max(0, int(x0)):int(x1)] = True
+    if lining > 0:
+        m |= ndi.binary_dilation(m, iterations=lining) & g.wrb
+    return np.clip(blur(m, 0.6), 0, 1)
+
+
+def metal_rooms(img, g, seed, opts, art):
+    """art.metal (a list of [x0, y0, x1, y1]): lab rooms drawn with the metal (bridge) kit's
+    floor, walls and chasms over another kit's art, with a dark frame where the floors meet."""
+    m = metal_mask(g, art)
+    metal = np.clip(base_art(g, seed, opts), 0, 1)
+    out = img * (1 - m[..., None]) + metal * m[..., None]
+    floor = ~(g.wallb | g.chasmb)
+    seam = np.clip(np.abs(blur(m, 1.2) - 0.5) < 0.35, 0, 1) * floor
+    return out * (1 - 0.45 * blur(seam.astype(np.float32), 0.8))[..., None]
+
+
 # ---------------------------------------------------------------- decor sprites
 _sprites = {}
 
@@ -296,9 +322,10 @@ def place_panels(g, rng, opts, cats, surface, used, entrance):
     return out
 
 
-def place_decor(g, seed, opts, only=None, keep=(), entrance=None, kit='bridge', art=None):
+def place_decor(g, seed, opts, only=None, keep=(), entrance=None, kit='bridge', art=None, region=None, share=1.0):
     """New decor placements. With `only` (a set of categories) just those are placed, after
-    `keep` (the existing placements of the other categories, which they avoid)."""
+    `keep` (the existing placements of the other categories, which they avoid). `region` (a
+    mask) limits them to part of the map, `share` scales the counts to suit."""
     index = json.load(open(os.path.join(DECOR, 'index.json')))
     cats = {c: [it['file'] for it in items] for c, items in index.items()}
     cats['greebles'] = cats.get('greebles', []) + cats.get('greebles2', [])
@@ -317,6 +344,9 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None, kit='bridge', 
         ks, ko, kit_reach = kit_city.surfaces(g, art or {}, seed)
         surfaces.update(ks); orients.update(ko)
         passes = kit_city.PASSES
+    if region is not None:
+        surfaces = {k: v & region for k, v in surfaces.items()}
+        passes = [(c, max(1, int(round(n * share))), *rest) for c, n, *rest in passes]
     # one rail style per continuous chasm edge: each straight run of the lip band
     edge_ids = np.zeros((H, W), np.int32)
     for k in range(4):
@@ -335,6 +365,9 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None, kit='bridge', 
         if sx1 > sx0 and sy1 > sy0: used[y0 + sy0:y0 + sy1, x0 + sx0:x0 + sx1] |= a[sy0:sy1, sx0:sx1]
 
     if kit == 'bridge' and (only is None or 'panels' in only):
+        if region is not None and entrance and not region[entrance[1], entrance[0]]: entrance = None
+        po = opts['panels']
+        if region is not None: opts = dict(opts, panels=dict(po, count=max(1, int(round(po['count'] * share)))))
         out += place_panels(g, rng, opts, cats, surfaces['floor'], used, entrance)
     go = opts['greebles']
     # where an overhanging greeble may reach: near a wall, on open floor (not over a chasm)
@@ -404,6 +437,7 @@ def worn(h, w, seed):
 def bake(g, decor, seed, opts, kit='bridge', art=None):
     W, H = g.W, g.H
     img = np.clip(kit_city.base_art(g, seed, opts, art or {}) if kit == 'city' else base_art(g, seed, opts), 0, 1)
+    if (art or {}).get('metal') and kit != 'bridge': img = metal_rooms(img, g, seed, opts, art)
     shadow = np.zeros((H, W), np.float32)
     bloom = np.zeros((H, W, 3), np.float32)
     lighting = np.zeros((H, W, 3), np.float32)
@@ -495,12 +529,24 @@ def main():
                 if str(e.get('symbol', '')).endswith('entrance_mc'): entrance = (int(e['x']), int(e['y']))
         if args.only:
             only = {c.strip() for c in args.only.split(',') if c.strip()}
-            cats = kit_categories(art['kit'])
+            cats = list(kit_categories(art['kit'])) + (list(CATEGORIES) if art.get('metal') else [])
             bad = only - set(cats)
             if bad: sys.exit(f'unknown decor types: {", ".join(sorted(bad))}; known: {", ".join(cats)}')
             old = json.load(open(decor_path)) if os.path.exists(decor_path) else []
             keep = [e for e in old if category(e) not in only]
-        decor = place_decor(g, args.seed if args.seed is not None else seed, opts, only, keep, entrance, art['kit'], art)
+        s_ = args.seed if args.seed is not None else seed
+        if art.get('metal') and art['kit'] != 'bridge':
+            # the metal rooms get the metal kit's decor, the rest the level's own kit's, each
+            # in proportion to its share of the map
+            mm = metal_mask(g, art) > 0.5
+            share = float(mm.mean())
+            mine = {c for c in kit_categories(art['kit'])}
+            metal_only = None if only is None else (only & set(CATEGORIES)) or {'-'}
+            kit_only = None if only is None else (only & mine) or {'-'}
+            decor = place_decor(g, s_, opts, kit_only, keep, entrance, art['kit'], art, region=~mm, share=1.0)
+            decor = place_decor(g, s_ + 7, opts, metal_only, decor, entrance, 'bridge', art, region=mm, share=min(1.0, 2.2 * share))
+        else:
+            decor = place_decor(g, s_, opts, only, keep, entrance, art['kit'], art)
         write_decor(decor_path, decor)
         print(f'wrote levels/{args.level}/decor.json ({len(decor)} placements)')
     if args.step in ('bake', 'all'):

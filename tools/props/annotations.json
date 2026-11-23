@@ -13,6 +13,31 @@
     "other": "Other"
   },
   "settings": {
+    "healRange": {
+      "group": "behaviour",
+      "type": "number",
+      "desc": "Repair drone: how far (px) its repair beam reaches. Every healRate frames it repairs the most damaged robot in sight within this range."
+    },
+    "healAmount": {
+      "group": "behaviour",
+      "type": "number",
+      "desc": "Repair drone: health given back per repair, never above the robot's starting health."
+    },
+    "healRate": {
+      "group": "behaviour",
+      "type": "number",
+      "desc": "Repair drone: frames between repairs."
+    },
+    "followRange": {
+      "group": "movement",
+      "type": "number",
+      "desc": "Repair drone: with nothing to repair, it stays near the nearest robot in sight within this range (px)."
+    },
+    "beamColor": {
+      "group": "other",
+      "type": "number",
+      "desc": "Repair drone: the repair beam's colour (0xRRGGBB)."
+    },
     "chaser": {
       "group": "behaviour",
       "desc": "While attacking, drive toward the player until within chaseDistance. After losing sight, drive to where it last saw them."
