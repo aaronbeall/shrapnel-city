@@ -1,5 +1,6 @@
 // Build the runtime data from the readable source:
-//   source/movie.json, source/library/**, levels/**  ->  assets/swf.json, assets/symbols.json, assets/bitmaps/
+//   source/movie.json, source/library/**, levels/**  ->  assets/swf.json, assets/symbols.json, assets/bitmaps/,
+//                                                         assets/levels.json (the level data, for the editor)
 //
 // The level folders in levels/ are compiled into library symbols and screen_mc frames by
 // tools/levels/levels.mjs before everything is decoded.
@@ -10,10 +11,11 @@
 // Character ids come from source/ids.json; a new library file gets the next free id.
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { pathToName, decodeChar, decodeTimeline, decodeScript, hexToRgba } from './format.mjs';
 import { loadLevels, composeScreen } from '../levels/levels.mjs';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const SRC = path.join(ROOT, 'source');
 const ASSETS = path.join(ROOT, 'assets');
 const check = process.argv.includes('--check');
@@ -36,6 +38,26 @@ for (const f of files) {
   if (lib.has(name)) throw new Error(`two files for "${name}"`);
   lib.set(name, { file: f, ext });
 }
+
+// --- what the level editor can place, from the library -------------------------
+// A symbol is placeable on a layer when its frame script (inline, or the as2/frames file it
+// includes) includes that layer's class file: an enemy class makes it an enemy, and so on.
+const PLACE_CLASSES = {
+  enemies: ['enemyTurret', 'enemyVehicle', 'enemyObject'], boxes: ['box', 'boxReactor'], powerups: ['powerup'],
+  doors: ['door', 'gate'], features: ['entrance', 'exit'], pathNodes: ['pathNode'],
+};
+const palette = Object.fromEntries(Object.keys(PLACE_CLASSES).map((l) => [l, []]));
+for (const [name, { file, ext }] of lib) {
+  if (ext !== '.json') continue;
+  let text = fs.readFileSync(file, 'utf8');
+  for (const m of text.matchAll(/#include \\"as\/frames\/([^"\\]+\.as)\\"/g)) {
+    const f = path.join(ROOT, 'as2', 'frames', m[1]);
+    if (fs.existsSync(f)) text += fs.readFileSync(f, 'utf8');
+  }
+  const classes = new Set([...text.matchAll(/#include \\?"as\/(?:object|level)\/(\w+)\.as/g)].map((m) => m[1]));
+  for (const [layer, cls] of Object.entries(PLACE_CLASSES)) if (cls.some((c) => classes.has(c))) palette[layer].push(name);
+}
+for (const l of Object.values(palette)) l.sort();
 
 // --- add the levels --------------------------------------------------------------
 const levels = loadLevels(ROOT);
@@ -63,6 +85,7 @@ const chars = {};
 const symbols = {};
 const instances = {};
 const bitmaps = []; // [id, source file]
+let screenSource = null; // screen_mc.json before the levels are added
 
 function pngSize(file) {
   const b = fs.readFileSync(file);
@@ -81,7 +104,7 @@ for (const [name, { file, ext, obj }] of [...lib].sort((a, b) => id(a[0]) - id(b
   }
   let o;
   try { o = obj ?? JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { throw new Error(`${path.relative(ROOT, file)}: ${e.message}`); }
-  if (o.levels) o = composeScreen(o, levels.levels);
+  if (o.levels) { screenSource = o; o = composeScreen(o, levels.levels); }
   try {
     if (o.kind === 'sprite') {
       const t = decodeTimeline(o, id);
@@ -119,6 +142,28 @@ const swf = {
 };
 const sym = { symbols, instances };
 
+// --- file index for the asset explorer: every source file and the character it builds --
+const fileIndex = [['source/movie.json', 0], ['source/ids.json', null]];
+for (const f of files) {
+  const rel = path.relative(path.join(SRC, 'library'), f).split(path.sep).join('/');
+  fileIndex.push([`source/library/${rel}`, idOf.get(pathToName(rel.slice(0, -path.extname(rel).length)))]);
+}
+const LEVEL_FILE_SYMBOL = { collision: 'level', background: 'background', boxes: 'boxes', powerups: 'powerups', enemies: 'enemies', vision: 'vision' };
+for (const L of levels.levels) {
+  for (const f of fs.readdirSync(path.join(ROOT, 'levels', L.folder)).filter((n) => /\.(json|png)$/.test(n)).sort()) {
+    const base = f.replace(/\.\w+$/, '');
+    fileIndex.push([`levels/${L.folder}/${f}`, LEVEL_FILE_SYMBOL[base] ? idOf.get(`level assets/${LEVEL_FILE_SYMBOL[base]}${L.index}`) ?? null : null]);
+  }
+}
+// the art bake's parts (textures, decor sheets and sprites, their prompts): no symbols, shown as files
+(function walkParts(rel) {
+  for (const e of fs.readdirSync(path.join(ROOT, rel), { withFileTypes: true }).sort((x, y) => (x.name < y.name ? -1 : 1))) {
+    if (e.isDirectory()) walkParts(`${rel}/${e.name}`);
+    else if (/\.(json|png|txt|noref)$/.test(e.name)) fileIndex.push([`${rel}/${e.name}`, null]);
+  }
+})('tools/art/parts');
+fileIndex.sort((a, b) => (a[0] < b[0] ? -1 : 1));
+
 // --- write or compare ------------------------------------------------------------
 if (check) {
   const diffs = [];
@@ -142,6 +187,9 @@ if (check) {
   fs.mkdirSync(ASSETS, { recursive: true });
   fs.writeFileSync(path.join(ASSETS, 'swf.json'), JSON.stringify(swf));
   fs.writeFileSync(path.join(ASSETS, 'symbols.json'), JSON.stringify(sym, null, 1));
+  // the editor (src/editor/) recompiles levels in the browser from this
+  fs.writeFileSync(path.join(ASSETS, 'levels.json'), JSON.stringify({ ids: Object.fromEntries(idOf), screen: screenSource, palette, levels: levels.levels }));
+  fs.writeFileSync(path.join(ASSETS, 'files.json'), JSON.stringify({ files: fileIndex, levels: levels.levels.map((L) => L.folder) }));
   fs.rmSync(path.join(ASSETS, 'bitmaps'), { recursive: true, force: true });
   fs.mkdirSync(path.join(ASSETS, 'bitmaps'));
   for (const [cid, f] of bitmaps) fs.copyFileSync(f, path.join(ASSETS, 'bitmaps', cid + '.png'));

@@ -16,10 +16,11 @@
 //        writes src/generated/scripts.js)
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import * as acorn from 'acorn';
 import { generate } from 'astring';
 
-const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const AS_DIR = path.join(ROOT, 'as2');
 const symbols = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/symbols.json'), 'utf8'));
 

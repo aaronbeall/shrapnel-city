@@ -1,5 +1,4 @@
 [
-  {"symbol": "level assets/vision1", "x": 0, "y": 0, "scale": [0.999939, 1], "name": "vision_mc"},
   {"symbol": "game objects/entrance_mc", "x": 202.7, "y": 495.25, "matrix": [0, 1, -0.999939, 0], "name": "entrance_mc"},
   {"symbol": "game objects/exit_mc", "x": 355, "y": 501, "name": "exit_mc"}
 ]

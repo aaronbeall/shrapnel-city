@@ -118,7 +118,7 @@ if(!pickup){
 		
 		// messages and notifications
 		if(alertNotification) notify(this, alertNotification);
-		if(alertMessage) showMessage(alertMessage, alertKillTrigger||{onRollOut:this});
+		if(alertMessage) showMessage(alertMessage, alertKillTrigger||{onRollOut:this, linger:alertLinger});
 		
 		// remove powerup if its been used
 		if(pickedup){

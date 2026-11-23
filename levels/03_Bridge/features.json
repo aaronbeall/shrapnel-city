@@ -1,5 +1,4 @@
 [
-  {"symbol": "level assets/vision3", "x": 0, "y": 0, "scale": [0.999939, 1], "name": "vision_mc"},
   {
     "symbol": "game objects/entrance_mc",
     "x": 86.05,

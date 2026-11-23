@@ -918,6 +918,7 @@ function warpShape(c, tx, ty, fx, fy, sx, sy) {
       if (op === 'M') { out.moveTo(X(d[i]), Y(d[i + 1])); i += 2; }
       else if (op === 'L') { out.lineTo(X(d[i]), Y(d[i + 1])); i += 2; }
       else if (op === 'Q') { out.quadraticCurveTo(X(d[i]), Y(d[i + 1]), X(d[i + 2]), Y(d[i + 3])); i += 4; }
+      else if (op === 'C') { out.bezierCurveTo(X(d[i]), Y(d[i + 1]), X(d[i + 2]), Y(d[i + 3]), X(d[i + 4]), Y(d[i + 5])); i += 6; }
       else if (op === 'Z') out.closePath();
     }
     return { f: p.f, l: p.l, d: p.d, path: out };

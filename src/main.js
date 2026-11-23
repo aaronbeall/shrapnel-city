@@ -43,3 +43,10 @@ rt.attachInput(canvas);
 canvas.focus();
 rt.start();
 if (params.has('bench')) import('./bench.js').then((m) => m.run(rt));
+
+// level editor: backtick toggles it, ?edit (or ?edit=N for level N) opens it at start
+const editor = () => import('./editor/editor.js').then((m) => m.toggle(rt));
+window.addEventListener('keydown', (e) => {
+  if (e.key === '`' && !window.levelEditorOpen) { e.preventDefault(); e.stopImmediatePropagation(); editor(); }
+}, true);
+if (params.has('edit')) editor();

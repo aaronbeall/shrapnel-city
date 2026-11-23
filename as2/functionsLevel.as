@@ -1,33 +1,13 @@
 // LEVEL FUNCTIONS
 // functions for managing the level setup and progression
 
-// level definitions
-var levels = [
-	{name: "00_Training"},
-	{name: "01_DropZone"},
-	{name: "02_FirstBlock"},
-	{name: "03_Bridge"},
-	{name: "04_Urban"},
-	{name: "05_Gateway"},
-	{name: "06_Downtown"},
-	{name: "07_Shipyard"},
-	{name: "08_Bunker"},
-	{name: "09_Complex"},
-	{name: "10_Interface"},
-	{name: "11_Skyrise"},
-	{name: "12_Transit"},
-	{name: "13_Security"},
-	{name: "14_Core"}//,
-	/*{name: "15_Escape"},
-	{name: "16_Outskirts"},
-	{name: "17_Outpost"},
-	{name: "18_Docking"},
-	{name: "19_Deep Space"},
-	{name: "20_Station"},
-	{name: "21_Central"},
-	{name: "22_Source"},
-	{name: "23_Terminate"}*/
-]
+// level definitions: one {name} per folder in levels/, in folder order. The build generates
+// the array from the folders (tools/levels/levels.mjs), so a new level folder is a new level.
+// Names planned for later levels: 04_Urban, 05_Gateway, 06_Downtown, 07_Shipyard, 08_Bunker,
+// 09_Complex, 10_Interface, 11_Skyrise, 12_Transit, 13_Security, 14_Core, 15_Escape,
+// 16_Outskirts, 17_Outpost, 18_Docking, 19_Deep Space, 20_Station, 21_Central, 22_Source,
+// 23_Terminate
+#include "as/generated/levels.as"
 
 // vars
 var so = SharedObject.getLocal('shrapnel');
