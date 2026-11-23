@@ -1,0 +1,64 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy deck battery turret body",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#00000059",
+              "blurX": 4,
+              "blurY": 4,
+              "angle": 0.785398,
+              "distance": 4,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "_blank MC",
+          "depth": 7,
+          "x": -21,
+          "y": -22,
+          "name": "muzzle_mc1"
+        },
+        {
+          "place": "_blank MC",
+          "depth": 9,
+          "x": 21,
+          "y": -22,
+          "name": "muzzle_mc2"
+        },
+        {
+          "place": "enemy assets/enemy deck battery flash",
+          "depth": 11,
+          "x": 0,
+          "y": -22,
+          "name": "flash_mc",
+          "clipEvents": [
+            1
+          ],
+          "script": [
+            "onClipEvent (load) {",
+            "    _visible = false;",
+            "}",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}

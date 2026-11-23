@@ -1,0 +1,164 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 120,
+    "y": 1230,
+    "props": {
+      "type": "primary",
+      "item": "Auto Cannon",
+      "quantity": 120,
+      "alertMessage": "AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 60,
+    "y": 1250,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 575,
+    "y": 440,
+    "props": {
+      "type": "secondary",
+      "item": "Rocket Pod",
+      "quantity": 6,
+      "alertMessage": "ROCKET POD: dumb-fire rockets that fly straight over water. Ships are big. Aim anyway.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 530,
+    "y": 760,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 360,
+    "y": 400,
+    "props": {
+      "type": "primary",
+      "item": "Auto Cannon",
+      "quantity": 60,
+      "alertMessage": "AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 560,
+    "y": 112,
+    "props": {
+      "type": "secondary",
+      "item": "Rocket Pod",
+      "quantity": 4,
+      "alertMessage": "ROCKET POD: dumb-fire rockets that fly straight over water. Ships are big. Aim anyway.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 880,
+    "y": 160,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 880,
+    "y": 820,
+    "props": {"type": "primary", "item": "Plasma", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 760,
+    "y": 1330,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1360,
+    "y": 1330,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1330,
+    "y": 760,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1330,
+    "y": 980,
+    "props": {
+      "type": "secondary",
+      "item": "Rocket Pod",
+      "quantity": 4,
+      "alertMessage": "ROCKET POD: dumb-fire rockets that fly straight over water. Ships are big. Aim anyway.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1540,
+    "y": 500,
+    "props": {
+      "type": "primary",
+      "item": "Auto Cannon",
+      "quantity": 60,
+      "alertMessage": "AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1045,
+    "y": 910,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1150,
+    "y": 460,
+    "props": {"type": "secondary", "item": "Thermal Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1690,
+    "y": 190,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1740,
+    "y": 120,
+    "props": {
+      "type": "primary",
+      "item": "Auto Cannon",
+      "quantity": 40,
+      "alertMessage": "AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 170,
+    "y": 1310,
+    "props": {
+      "alertMessage": "Four warships, four <strong>DECK BATTERIES</strong> (the guns on the red and white rings). The launch pad on the lighthouse headland unlocks when all four are scrap.",
+      "persistent": true
+    }
+  },
+  {
+    "symbol": "game objects/message beacon",
+    "x": 1610,
+    "y": 150,
+    "props": {
+      "alertMessage": "Launch pad locked. It opens when every <strong>DECK BATTERY</strong> in the yard is destroyed.",
+      "persistent": true
+    }
+  }
+]

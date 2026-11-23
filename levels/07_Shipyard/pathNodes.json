@@ -1,0 +1,98 @@
+[
+  {
+    "symbol": "game objects/node",
+    "x": 200,
+    "y": 1110,
+    "name": "n1",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+    "props": {"connections": [{"$ref": "n2"}, {"$ref": "n8"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 701,
+    "y": 1110,
+    "name": "n2",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+    "props": {"connections": [{"$ref": "n3"}, {"$ref": "n1"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1200,
+    "y": 1110,
+    "name": "n3",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+    "props": {"connections": [{"$ref": "n4"}, {"$ref": "n2"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1431,
+    "y": 1110,
+    "name": "n4",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+    "props": {"connections": [{"$ref": "n5"}, {"$ref": "n3"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1430,
+    "y": 1215,
+    "name": "n5",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+    "props": {"connections": [{"$ref": "n6"}, {"$ref": "n4"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1201,
+    "y": 1215,
+    "name": "n6",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+    "props": {"connections": [{"$ref": "n7"}, {"$ref": "n5"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 700,
+    "y": 1215,
+    "name": "n7",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+    "props": {"connections": [{"$ref": "n8"}, {"$ref": "n6"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 201,
+    "y": 1215,
+    "name": "n8",
+    "color": {"multiply": [0, 0, 0, 1], "add": [255, 0, 0, 0]},
+    "props": {"connections": [{"$ref": "n1"}, {"$ref": "n7"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1398,
+    "y": 260,
+    "name": "n9",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+    "props": {"connections": [{"$ref": "n10"}, {"$ref": "n12"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1741,
+    "y": 260,
+    "name": "n10",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+    "props": {"connections": [{"$ref": "n11"}, {"$ref": "n9"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1740,
+    "y": 1000,
+    "name": "n11",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+    "props": {"connections": [{"$ref": "n12"}, {"$ref": "n10"}]}
+  },
+  {
+    "symbol": "game objects/node",
+    "x": 1399,
+    "y": 1000,
+    "name": "n12",
+    "color": {"multiply": [0, 0, 0, 1], "add": [0, 0, 255, 0]},
+    "props": {"connections": [{"$ref": "n9"}, {"$ref": "n11"}]}
+  }
+]

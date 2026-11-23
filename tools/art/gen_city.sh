@@ -9,8 +9,8 @@
 set -uo pipefail
 ART="$(cd "$(dirname "$0")" && pwd)"
 LV="$ART/../../levels"
-TEX=(road pavement roof roof2 roof3 chasm concrete)
-SHEETS=(roof roof2 street roadpaint plants lights rubble urban)
+TEX=(road pavement roof roof2 roof3 chasm concrete water deck)
+SHEETS=(roof roof2 street roadpaint plants lights rubble urban docks ships)
 names=("$@"); [ ${#names[@]} -eq 0 ] && names=("${TEX[@]}" "${SHEETS[@]/#/city-}")
 
 save() {  # response json -> png

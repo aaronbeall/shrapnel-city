@@ -1101,5 +1101,18 @@
   "player assets/player ship/shape 4": 1100,
   "player assets/player ship": 1101,
   "player assets/player ship firing": 1102,
-  "enemy assets/enemy scout": 1103
+  "enemy assets/enemy scout": 1103,
+  "enemy assets/enemy deck battery core/shape 1": 1700,
+  "enemy assets/enemy deck battery core": 1701,
+  "enemy assets/enemy deck battery turret body": 1702,
+  "enemy assets/enemy deck battery flash": 1703,
+  "enemy assets/enemy deck battery turret": 1704,
+  "enemy assets/enemy deck battery": 1705,
+  "enemy assets/enemy flak turret core/shape 1": 1706,
+  "enemy assets/enemy flak turret core": 1707,
+  "enemy assets/enemy flak turret turret body/shape 1": 1708,
+  "enemy assets/enemy flak turret turret body": 1709,
+  "enemy assets/enemy flak turret flash": 1710,
+  "enemy assets/enemy flak turret turret": 1711,
+  "enemy assets/enemy flak turret": 1712
 }

@@ -1,0 +1,26 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/designs/missile launcher blue",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "matrix": [
+            -1.45,
+            0,
+            0,
+            -1.45
+          ]
+        }
+      ]
+    }
+  ]
+}

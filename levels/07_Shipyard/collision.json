@@ -1,0 +1,444 @@
+[
+  {"name": "collision map", "pixels": "collision-base.png", "locked": true},
+  {
+    "name": "outer wall",
+    "mode": "wall",
+    "d": "M 0 0 L 1800 0 L 1800 1400 L 0 1400 Z M 20 20 L 20 1380 L 1780 1380 L 1780 20 Z"
+  },
+  {"name": "harbour", "mode": "chasm", "d": "M 20 20 L 1780 20 L 1780 1040 L 20 1040 Z", "group": "harbour"},
+  {
+    "name": "boat slip",
+    "mode": "chasm",
+    "d": "M 560 1038 L 690 1038 L 690 1104 L 670 1118 L 580 1118 L 560 1104 Z",
+    "group": "harbour"
+  },
+  {"name": "west pier", "mode": "open", "d": "M 300 330 L 420 330 L 420 1042 L 300 1042 Z", "group": "docks"},
+  {
+    "name": "central pier",
+    "mode": "open",
+    "d": "M 820 116 L 940 116 L 940 1042 L 820 1042 Z",
+    "group": "docks"
+  },
+  {"name": "breakwater", "mode": "open", "d": "M 560 56 L 1580 56 L 1580 116 L 560 116 Z", "group": "docks"},
+  {"name": "headland", "mode": "open", "d": "M 1560 19 L 1781 19 L 1781 260 L 1560 260 Z", "group": "docks"},
+  {
+    "name": "dockyard",
+    "mode": "open",
+    "d": "M 1300 220 L 1781 220 L 1781 1042 L 1300 1042 Z",
+    "group": "docks"
+  },
+  {
+    "name": "breakwater platform",
+    "mode": "open",
+    "d": "M 531.68 38 L 588.32 38 L 608 57.68 L 608 114.32 L 588.32 134 L 531.68 134 L 512 114.32 L 512 57.68 Z",
+    "group": "docks"
+  },
+  {
+    "name": "west pier head",
+    "mode": "open",
+    "d": "M 296 330 L 424 330 L 434 340 L 434 390 L 424 400 L 296 400 L 286 390 L 286 340 Z",
+    "group": "docks"
+  },
+  {
+    "name": "dry dock",
+    "mode": "chasm",
+    "d": "M 1444 300 L 1686 300 L 1700 314 L 1700 946 L 1686 960 L 1444 960 L 1430 946 L 1430 314 Z",
+    "group": "dry dock"
+  },
+  {
+    "name": "cruiser deck",
+    "mode": "open",
+    "d": "M 760 220 L 758.53 208.21 L 754.15 199.68 L 746.96 192.35 L 737.16 186.01 L 724.97 180.59 L 710.7 176.11 L 694.7 172.59 L 677.36 170.05 L 659.11 168.51 L 640.4 168 L 354 168 L 344.2 172.2 L 340 182 L 340 258 L 344.2 267.8 L 354 272 L 640.4 272 L 659.11 271.49 L 677.36 269.95 L 694.7 267.41 L 710.7 263.89 L 724.97 259.41 L 737.16 253.99 L 746.96 247.65 L 754.15 240.32 L 758.53 231.79 Z",
+    "group": "ships"
+  },
+  {
+    "name": "destroyer deck",
+    "mode": "open",
+    "d": "M 575 420 L 558 422.12 L 545.69 428.44 L 535.13 438.8 L 525.97 452.94 L 518.16 470.52 L 511.7 491.11 L 506.61 514.19 L 502.95 539.19 L 500.74 565.52 L 500 592.5 L 500 946 L 504.2 955.8 L 514 960 L 636 960 L 645.8 955.8 L 650 946 L 650 592.5 L 649.26 565.52 L 647.05 539.19 L 643.39 514.19 L 638.3 491.11 L 631.84 470.52 L 624.03 452.94 L 614.87 438.8 L 604.31 428.44 L 592 422.12 Z",
+    "group": "ships"
+  },
+  {
+    "name": "flagship deck",
+    "mode": "open",
+    "d": "M 1110 340 L 1089.6 342.55 L 1074.83 350.13 L 1062.15 362.56 L 1051.17 379.53 L 1041.79 400.63 L 1034.04 425.33 L 1027.94 453.02 L 1023.54 483.03 L 1020.89 514.62 L 1020 547 L 1020 956 L 1024.2 965.8 L 1034 970 L 1186 970 L 1195.8 965.8 L 1200 956 L 1200 547 L 1199.11 514.62 L 1196.46 483.03 L 1192.06 453.02 L 1185.96 425.33 L 1178.21 400.63 L 1168.83 379.53 L 1157.85 362.56 L 1145.17 350.13 L 1130.4 342.55 Z",
+    "group": "ships"
+  },
+  {
+    "name": "frigate deck",
+    "mode": "open",
+    "d": "M 1565 360 L 1551.4 361.7 L 1541.55 366.75 L 1533.1 375.04 L 1525.78 386.36 L 1519.53 400.42 L 1514.36 416.89 L 1510.29 435.35 L 1507.36 455.36 L 1505.59 476.41 L 1505 498 L 1505 886 L 1509.2 895.8 L 1519 900 L 1611 900 L 1620.8 895.8 L 1625 886 L 1625 498 L 1624.41 476.41 L 1622.64 455.36 L 1619.71 435.35 L 1615.64 416.89 L 1610.47 400.42 L 1604.22 386.36 L 1596.9 375.04 L 1588.45 366.75 L 1578.6 361.7 Z",
+    "group": "ships"
+  },
+  {
+    "name": "gunboat 1 deck",
+    "mode": "open",
+    "d": "M 136 430 L 126.93 430.86 L 120.37 433.43 L 114.73 437.63 L 109.85 443.37 L 105.69 450.5 L 102.24 458.86 L 99.53 468.22 L 97.57 478.37 L 96.39 489.05 L 96 500 L 96 636 L 100.2 645.8 L 110 650 L 162 650 L 171.8 645.8 L 176 636 L 176 500 L 175.61 489.05 L 174.43 478.37 L 172.47 468.22 L 169.76 458.86 L 166.31 450.5 L 162.15 443.37 L 157.27 437.63 L 151.63 433.43 L 145.07 430.86 Z",
+    "group": "ships"
+  },
+  {
+    "name": "gunboat 2 deck",
+    "mode": "open",
+    "d": "M 190 940 L 199.07 939.14 L 205.63 936.57 L 211.27 932.37 L 216.15 926.63 L 220.31 919.5 L 223.76 911.14 L 226.47 901.78 L 228.43 891.63 L 229.61 880.95 L 230 870 L 230 754 L 225.8 744.2 L 216 740 L 164 740 L 154.2 744.2 L 150 754 L 150 870 L 150.39 880.95 L 151.57 891.63 L 153.53 901.78 L 156.24 911.14 L 159.69 919.5 L 163.85 926.63 L 168.73 932.37 L 174.37 936.57 L 180.93 939.14 Z",
+    "group": "ships"
+  },
+  {
+    "name": "destroyer gangway",
+    "mode": "open",
+    "d": "M 418 676 L 514 676 L 514 730 L 418 730 Z",
+    "group": "gangways"
+  },
+  {
+    "name": "flagship west gangway",
+    "mode": "open",
+    "d": "M 938 826 L 1036 826 L 1036 880 L 938 880 Z",
+    "group": "gangways"
+  },
+  {
+    "name": "flagship east gangway",
+    "mode": "open",
+    "d": "M 1184 456 L 1302 456 L 1302 508 L 1184 508 Z",
+    "group": "gangways"
+  },
+  {
+    "name": "frigate west gantry",
+    "mode": "open",
+    "d": "M 1428 500 L 1517 500 L 1517 552 L 1428 552 Z",
+    "group": "gangways"
+  },
+  {
+    "name": "frigate east gantry",
+    "mode": "open",
+    "d": "M 1613 760 L 1702 760 L 1702 812 L 1613 812 Z",
+    "group": "gangways"
+  },
+  {
+    "name": "destroyer bridge",
+    "mode": "wall",
+    "d": "M 556 600 L 594 600 L 602 608 L 602 660 L 594 668 L 556 668 L 548 660 L 548 608 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "destroyer funnel",
+    "mode": "wall",
+    "d": "M 564.38 742 L 585.62 742 L 593 749.38 L 593 770.62 L 585.62 778 L 564.38 778 L 557 770.62 L 557 749.38 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "destroyer deckhouse",
+    "mode": "wall",
+    "d": "M 558 846 L 592 846 L 598 852 L 598 894 L 592 900 L 558 900 L 552 894 L 552 852 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "cruiser bridge",
+    "mode": "wall",
+    "d": "M 478 200 L 552 200 L 560 208 L 560 232 L 552 240 L 478 240 L 470 232 L 470 208 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "cruiser funnel",
+    "mode": "wall",
+    "d": "M 586.56 204 L 605.44 204 L 612 210.56 L 612 229.44 L 605.44 236 L 586.56 236 L 580 229.44 L 580 210.56 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "flagship bridge",
+    "mode": "wall",
+    "d": "M 1080 560 L 1140 560 L 1150 570 L 1150 640 L 1140 650 L 1080 650 L 1070 640 L 1070 570 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "flagship funnel 1",
+    "mode": "wall",
+    "d": "M 1098.2 690 L 1121.8 690 L 1130 698.2 L 1130 721.8 L 1121.8 730 L 1098.2 730 L 1090 721.8 L 1090 698.2 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "flagship funnel 2",
+    "mode": "wall",
+    "d": "M 1098.2 756 L 1121.8 756 L 1130 764.2 L 1130 787.8 L 1121.8 796 L 1098.2 796 L 1090 787.8 L 1090 764.2 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "flagship hangar",
+    "mode": "wall",
+    "d": "M 1074 880 L 1146 880 L 1154 888 L 1154 932 L 1146 940 L 1074 940 L 1066 932 L 1066 888 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "flagship mast",
+    "mode": "wall",
+    "d": "M 1104.1 460 L 1115.9 460 L 1120 464.1 L 1120 475.9 L 1115.9 480 L 1104.1 480 L 1100 475.9 L 1100 464.1 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "frigate bridge",
+    "mode": "wall",
+    "d": "M 1548 600 L 1582 600 L 1590 608 L 1590 652 L 1582 660 L 1548 660 L 1540 652 L 1540 608 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "frigate funnel",
+    "mode": "wall",
+    "d": "M 1556.15 705 L 1573.85 705 L 1580 711.15 L 1580 728.85 L 1573.85 735 L 1556.15 735 L 1550 728.85 L 1550 711.15 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "gunboat 1 wheelhouse",
+    "mode": "wall",
+    "d": "M 127 560 L 145 560 L 150 565 L 150 591 L 145 596 L 127 596 L 122 591 L 122 565 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "gunboat 2 wheelhouse",
+    "mode": "wall",
+    "d": "M 181 784 L 199 784 L 204 789 L 204 815 L 199 820 L 181 820 L 176 815 L 176 789 Z",
+    "group": "superstructures"
+  },
+  {
+    "name": "warehouse 1",
+    "mode": "wall",
+    "d": "M 308 1276 L 632 1276 L 640 1284 L 640 1376 L 632 1384 L 308 1384 L 300 1376 L 300 1284 Z",
+    "group": "landside"
+  },
+  {
+    "name": "warehouse 2",
+    "mode": "wall",
+    "d": "M 888 1276 L 1232 1276 L 1240 1284 L 1240 1376 L 1232 1384 L 888 1384 L 880 1376 L 880 1284 Z",
+    "group": "landside"
+  },
+  {
+    "name": "warehouse 3",
+    "mode": "wall",
+    "d": "M 1498 1236 L 1776 1236 L 1784 1244 L 1784 1376 L 1776 1384 L 1498 1384 L 1490 1376 L 1490 1244 Z",
+    "group": "landside"
+  },
+  {
+    "name": "harbour office",
+    "mode": "wall",
+    "d": "M 24 1080 L 142 1080 L 150 1088 L 150 1162 L 142 1170 L 24 1170 L 16 1162 L 16 1088 Z",
+    "group": "landside"
+  },
+  {
+    "name": "lighthouse",
+    "mode": "wall",
+    "d": "M 1702.3 40 L 1737.7 40 L 1750 52.3 L 1750 87.7 L 1737.7 100 L 1702.3 100 L 1690 87.7 L 1690 52.3 Z",
+    "group": "docks"
+  },
+  {
+    "name": "container stack 1",
+    "mode": "wall",
+    "d": "M 693 1146 L 747 1146 L 750 1149 L 750 1179 L 747 1182 L 693 1182 L 690 1179 L 690 1149 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 2",
+    "mode": "wall",
+    "d": "M 763 1146 L 817 1146 L 820 1149 L 820 1179 L 817 1182 L 763 1182 L 760 1179 L 760 1149 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 3",
+    "mode": "wall",
+    "d": "M 1223 1146 L 1327 1146 L 1330 1149 L 1330 1179 L 1327 1182 L 1223 1182 L 1220 1179 L 1220 1149 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 4",
+    "mode": "wall",
+    "d": "M 845 330 L 867 330 L 870 333 L 870 397 L 867 400 L 845 400 L 842 397 L 842 333 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 5",
+    "mode": "wall",
+    "d": "M 893 470 L 915 470 L 918 473 L 918 537 L 915 540 L 893 540 L 890 537 L 890 473 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 6",
+    "mode": "wall",
+    "d": "M 845 620 L 867 620 L 870 623 L 870 687 L 867 690 L 845 690 L 842 687 L 842 623 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 7",
+    "mode": "wall",
+    "d": "M 893 900 L 915 900 L 918 903 L 918 967 L 915 970 L 893 970 L 890 967 L 890 903 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 8",
+    "mode": "wall",
+    "d": "M 317 520 L 339 520 L 342 523 L 342 587 L 339 590 L 317 590 L 314 587 L 314 523 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 9",
+    "mode": "wall",
+    "d": "M 379 820 L 401 820 L 404 823 L 404 887 L 401 890 L 379 890 L 376 887 L 376 823 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 10",
+    "mode": "wall",
+    "d": "M 1319 640 L 1341 640 L 1344 643 L 1344 707 L 1341 710 L 1319 710 L 1316 707 L 1316 643 Z",
+    "group": "containers"
+  },
+  {
+    "name": "container stack 11",
+    "mode": "wall",
+    "d": "M 1593 212 L 1647 212 L 1650 215 L 1650 235 L 1647 238 L 1593 238 L 1590 235 L 1590 215 Z",
+    "group": "containers"
+  },
+  {
+    "name": "crane 1 leg",
+    "mode": "wall",
+    "d": "M 331 972 L 337 972 L 340 975 L 340 981 L 337 984 L 331 984 L 328 981 L 328 975 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 1 leg",
+    "mode": "wall",
+    "d": "M 383 972 L 389 972 L 392 975 L 392 981 L 389 984 L 383 984 L 380 981 L 380 975 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 1 leg",
+    "mode": "wall",
+    "d": "M 331 1016 L 337 1016 L 340 1019 L 340 1025 L 337 1028 L 331 1028 L 328 1025 L 328 1019 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 1 leg",
+    "mode": "wall",
+    "d": "M 383 1016 L 389 1016 L 392 1019 L 392 1025 L 389 1028 L 383 1028 L 380 1025 L 380 1019 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 2 leg",
+    "mode": "wall",
+    "d": "M 851 972 L 857 972 L 860 975 L 860 981 L 857 984 L 851 984 L 848 981 L 848 975 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 2 leg",
+    "mode": "wall",
+    "d": "M 903 972 L 909 972 L 912 975 L 912 981 L 909 984 L 903 984 L 900 981 L 900 975 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 2 leg",
+    "mode": "wall",
+    "d": "M 851 1016 L 857 1016 L 860 1019 L 860 1025 L 857 1028 L 851 1028 L 848 1025 L 848 1019 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 2 leg",
+    "mode": "wall",
+    "d": "M 903 1016 L 909 1016 L 912 1019 L 912 1025 L 909 1028 L 903 1028 L 900 1025 L 900 1019 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 3 leg",
+    "mode": "wall",
+    "d": "M 1331 962 L 1337 962 L 1340 965 L 1340 971 L 1337 974 L 1331 974 L 1328 971 L 1328 965 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 3 leg",
+    "mode": "wall",
+    "d": "M 1383 962 L 1389 962 L 1392 965 L 1392 971 L 1389 974 L 1383 974 L 1380 971 L 1380 965 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 3 leg",
+    "mode": "wall",
+    "d": "M 1331 1006 L 1337 1006 L 1340 1009 L 1340 1015 L 1337 1018 L 1331 1018 L 1328 1015 L 1328 1009 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 3 leg",
+    "mode": "wall",
+    "d": "M 1383 1006 L 1389 1006 L 1392 1009 L 1392 1015 L 1389 1018 L 1383 1018 L 1380 1015 L 1380 1009 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 4 leg",
+    "mode": "wall",
+    "d": "M 1711 272 L 1717 272 L 1720 275 L 1720 281 L 1717 284 L 1711 284 L 1708 281 L 1708 275 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 4 leg",
+    "mode": "wall",
+    "d": "M 1763 272 L 1769 272 L 1772 275 L 1772 281 L 1769 284 L 1763 284 L 1760 281 L 1760 275 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 4 leg",
+    "mode": "wall",
+    "d": "M 1711 316 L 1717 316 L 1720 319 L 1720 325 L 1717 328 L 1711 328 L 1708 325 L 1708 319 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 4 leg",
+    "mode": "wall",
+    "d": "M 1763 316 L 1769 316 L 1772 319 L 1772 325 L 1769 328 L 1763 328 L 1760 325 L 1760 319 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 5 leg",
+    "mode": "wall",
+    "d": "M 211 1052 L 217 1052 L 220 1055 L 220 1061 L 217 1064 L 211 1064 L 208 1061 L 208 1055 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 5 leg",
+    "mode": "wall",
+    "d": "M 263 1052 L 269 1052 L 272 1055 L 272 1061 L 269 1064 L 263 1064 L 260 1061 L 260 1055 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 5 leg",
+    "mode": "wall",
+    "d": "M 211 1096 L 217 1096 L 220 1099 L 220 1105 L 217 1108 L 211 1108 L 208 1105 L 208 1099 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "crane 5 leg",
+    "mode": "wall",
+    "d": "M 263 1096 L 269 1096 L 272 1099 L 272 1105 L 269 1108 L 263 1108 L 260 1105 L 260 1099 Z",
+    "group": "cranes"
+  },
+  {
+    "name": "bollard 1",
+    "mode": "wall",
+    "d": "M 57.05 1047 L 62.95 1047 L 65 1049.05 L 65 1054.95 L 62.95 1057 L 57.05 1057 L 55 1054.95 L 55 1049.05 Z",
+    "group": "bollards"
+  },
+  {
+    "name": "bollard 2",
+    "mode": "wall",
+    "d": "M 467.05 1047 L 472.95 1047 L 475 1049.05 L 475 1054.95 L 472.95 1057 L 467.05 1057 L 465 1054.95 L 465 1049.05 Z",
+    "group": "bollards"
+  },
+  {
+    "name": "bollard 3",
+    "mode": "wall",
+    "d": "M 757.05 1047 L 762.95 1047 L 765 1049.05 L 765 1054.95 L 762.95 1057 L 757.05 1057 L 755 1054.95 L 755 1049.05 Z",
+    "group": "bollards"
+  },
+  {
+    "name": "bollard 4",
+    "mode": "wall",
+    "d": "M 997.05 1047 L 1002.95 1047 L 1005 1049.05 L 1005 1054.95 L 1002.95 1057 L 997.05 1057 L 995 1054.95 L 995 1049.05 Z",
+    "group": "bollards"
+  },
+  {
+    "name": "bollard 5",
+    "mode": "wall",
+    "d": "M 1157.05 1047 L 1162.95 1047 L 1165 1049.05 L 1165 1054.95 L 1162.95 1057 L 1157.05 1057 L 1155 1054.95 L 1155 1049.05 Z",
+    "group": "bollards"
+  }
+]

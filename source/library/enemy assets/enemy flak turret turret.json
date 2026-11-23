@@ -1,0 +1,78 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy flak turret turret body",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "bevel",
+              "shadow": "#000000",
+              "highlight": "#9fb4c4",
+              "blurX": 1,
+              "blurY": 1,
+              "angle": 0.785385,
+              "distance": 3,
+              "strength": 0.5,
+              "inner": true,
+              "knockout": false,
+              "onTop": false,
+              "passes": 1
+            },
+            {
+              "type": "dropShadow",
+              "color": "#00000059",
+              "blurX": 4,
+              "blurY": 4,
+              "angle": 0.785398,
+              "distance": 4,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "_blank MC",
+          "depth": 7,
+          "x": -6.5,
+          "y": -35,
+          "name": "muzzle_mc1"
+        },
+        {
+          "place": "_blank MC",
+          "depth": 9,
+          "x": 6.5,
+          "y": -35,
+          "name": "muzzle_mc2"
+        },
+        {
+          "place": "enemy assets/enemy flak turret flash",
+          "depth": 11,
+          "x": 0,
+          "y": -35,
+          "name": "flash_mc",
+          "clipEvents": [
+            1
+          ],
+          "script": [
+            "onClipEvent (load) {",
+            "    _visible = false;",
+            "}",
+            ""
+          ]
+        }
+      ]
+    }
+  ]
+}

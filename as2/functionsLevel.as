@@ -284,3 +284,30 @@ function loadLevel(index){
 	
 	updateDisplay();
 }
+
+// DESTROY-TO-EXIT (first used by 07 Shipyard)
+// The exit opens once every required box is destroyed and every objective enemy is dead. An
+// enemy is an objective when its props set objective = true (objectiveName names it in the
+// notification). Levels without objectives open the exit on the boxes alone, as before.
+_global.checkExit = function(){
+	var i = _root.boxes.length;
+	while(i--)
+		if(_root.boxes[i].required != false)
+			return;
+	i = _root.enemies.length;
+	while(i--)
+		if(_root.enemies[i].objective)
+			return;
+	_screen.exit_mc.open();
+}
+
+// an objective enemy died: say how many are left, then see if the exit can open
+_global.objectiveDestroyed = function(mc){
+	var left = 0, i = _root.enemies.length;
+	while(i--)
+		if(_root.enemies[i].objective)
+			left++;
+	if(left)
+		notify(mc, (mc.objectiveName || "Target") + " destroyed! " + left + (left == 1 ? " target left" : " targets left"), frameRate * 3);
+	checkExit();
+}

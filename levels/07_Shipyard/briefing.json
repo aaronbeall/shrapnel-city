@@ -1,0 +1,59 @@
+{
+  "title": "SHIPYARD",
+  "body": "The navy was automated for efficiency. It is now very\nefficiently pointed at you. Four warships in this yard\ncarry Deck Batteries, and the harbour master's launch\npad stays locked until all four are scrap. Water stops\nyou; it does not stop bullets. Board what you can,\nshoot across what you can't, then get to the pad on\nthe lighthouse headland.",
+  "captions": [
+    {
+      "style": "name",
+      "text": "Deck Battery",
+      "x": 636.45,
+      "y": 209.89
+    },
+    {
+      "style": "note",
+      "text": "Target. Destroy all four.",
+      "x": 636.45,
+      "y": 316.6
+    },
+    {
+      "style": "name",
+      "text": "Flak Turret",
+      "x": 636.48,
+      "y": 359.89
+    },
+    {
+      "style": "note",
+      "text": "Fills the sky with regret.",
+      "x": 636.45,
+      "y": 426.6
+    }
+  ],
+  "graphics": [
+    {
+      "symbol": "enemy assets/enemy deck battery core",
+      "x": 636.5,
+      "y": 268,
+      "scale": 0.95
+    },
+    {
+      "symbol": "enemy assets/enemy deck battery turret",
+      "x": 636.5,
+      "y": 268,
+      "scale": 0.95
+    },
+    {
+      "symbol": "enemy assets/enemy flak turret core",
+      "x": 636.5,
+      "y": 400
+    },
+    {
+      "symbol": "enemy assets/enemy flak turret turret",
+      "x": 636.5,
+      "y": 400
+    },
+    {
+      "symbol": "screen_mc/shape 3",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}
