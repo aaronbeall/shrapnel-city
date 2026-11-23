@@ -394,11 +394,9 @@ def pickup(x, y, type_, item, q, **kw):
     pick.append(P('game objects/powerup', x, y, props=dict({'type': type_, 'item': item, 'quantity': q}, **kw)))
 
 
-pickup(yard_s_mid[0], yard_s_mid[1] - 30, 'primary', 'Vertigo', 120,
-       alertMessage='VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.')
+pickup(yard_s_mid[0], yard_s_mid[1] - 30, 'primary', 'Vertigo', 120)
 pickup(yard_s_mid[0] - 30, yard_s_mid[1] + 10, 'health', 'health', 50)
-pickup(yard_n_mid[0], yard_n_mid[1] - 20, 'secondary', 'Thermal Bomb', 4,
-       alertMessage='THERMAL BOMBS: lob one over a barrier and let it cook.')
+pickup(yard_n_mid[0], yard_n_mid[1] - 20, 'secondary', 'Thermal Bomb', 4)
 pickup(yard_n_mid[0] + 30, yard_n_mid[1] + 10, 'health', 'health', 50)
 pickup(150, 1080, 'primary', 'Bolter', 40)
 pickup(pcx, pcy + 62, 'primary', 'Bolter', 40)
@@ -520,7 +518,21 @@ def list_json(items):
     return '[\n' + ',\n'.join('  ' + pretty(x, '  ') for x in items) + '\n]\n'
 
 
+# this level's new weapons: an intro message on every copy (pickups and drops); alertOnce
+# shows it only for the first one the player picks up
+INTRO = {'Vertigo': 'VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.',
+         'Thermal Bomb': 'THERMAL BOMBS: lob one over a barrier and let it cook.'}
+
+
+def add_intros():
+    props = [o['props'] for o in pick] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
+    for pr in props:
+        if pr.get('type') in ('primary', 'secondary') and pr.get('item') in INTRO:
+            pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
+
+
 def main():
+    add_intros()
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(ROOT, 'levels', FOLDER))
     ap.add_argument('--preview')
