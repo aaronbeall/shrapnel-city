@@ -29,7 +29,7 @@
           "script": ["onClipEvent (load) {", "    _visible=false;", "}", ""]
         },
         {"place": "player assets/core_mc", "depth": 7, "x": -0.25, "y": -1.4, "name": "core_mc"},
-        {"place": "_shared/shape 217", "depth": 9, "x": 0, "y": 0},
+        {"place": "player assets/player ship", "depth": 9, "x": 0, "y": 0},
         {"place": "player assets/damage_mc", "depth": 11, "x": -0.45, "y": 1.85, "name": "damage_mc", "blend": "overlay"},
         {"place": "_shared/shape 220", "depth": 13, "x": 0, "y": 0, "clipDepth": 16},
         {"place": "_blank MC", "depth": 14, "x": 0, "y": 0, "name": "blasts_mc"},
@@ -42,7 +42,7 @@
       "frame": 5,
       "label": "attack",
       "changes": [
-        {"replace": "player assets/player MC/shape 1", "depth": 9},
+        {"replace": "player assets/player ship firing", "depth": 9},
         {
           "place": "player assets/fire_mc",
           "depth": 17,

@@ -1094,5 +1094,11 @@
   "level assets/vision3-16": 1093,
   "level assets/vision3-16/shape 1": 1094,
   "level assets/vision3-4": 1095,
-  "level assets/vision3-4/shape 1": 1096
+  "level assets/vision3-4/shape 1": 1096,
+  "player assets/player ship/shape 1": 1097,
+  "player assets/player ship/shape 2": 1098,
+  "player assets/player ship/shape 3": 1099,
+  "player assets/player ship/shape 4": 1100,
+  "player assets/player ship": 1101,
+  "player assets/player ship firing": 1102
 }
