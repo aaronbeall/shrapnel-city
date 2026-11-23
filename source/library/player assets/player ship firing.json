@@ -1,0 +1,71 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "player assets/player ship/shape 1",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "bevel",
+              "shadow": "#00000070",
+              "highlight": "#ffffff70",
+              "blurX": 2,
+              "blurY": 2,
+              "angle": 0.785398,
+              "distance": 1,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "onTop": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "player assets/player ship/shape 2",
+          "depth": 2,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "bevel",
+              "shadow": "#00000070",
+              "highlight": "#ffffff70",
+              "blurX": 2,
+              "blurY": 2,
+              "angle": 0.785398,
+              "distance": 1,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "onTop": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "player assets/player ship/shape 3",
+          "depth": 3,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "player assets/player ship/shape 4",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "blend": "add"
+        }
+      ]
+    }
+  ]
+}

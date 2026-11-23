@@ -2,5 +2,5 @@
   "kind": "sprite",
   "symbol": {"type": "graphic"},
   "frames": 1,
-  "timeline": [{"frame": 1, "changes": [{"place": "_shared/shape 217", "depth": 1, "x": 0, "y": 0}]}]
+  "timeline": [{"frame": 1, "changes": [{"place": "player assets/player ship", "depth": 1, "x": 0, "y": 0}]}]
 }
