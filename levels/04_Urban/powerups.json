@@ -1,0 +1,48 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 619,
+    "y": 851,
+    "props": {
+      "type": "primary",
+      "item": "Vertigo",
+      "quantity": 120,
+      "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick."
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 589,
+    "y": 891,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 619,
+    "y": 217,
+    "props": {
+      "type": "secondary",
+      "item": "Thermal Bomb",
+      "quantity": 4,
+      "alertMessage": "THERMAL BOMBS: lob one over a barrier and let it cook."
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 649,
+    "y": 247,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 257,
+    "y": 489,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 1042,
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 60}
+  }
+]

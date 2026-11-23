@@ -1,0 +1,45 @@
+[
+  {
+    "symbol": "enemy assets/enemy tank",
+    "x": 800,
+    "y": 398,
+    "matrix": [0, 1, -1, 0],
+    "props": {"pathID": 16711680}
+  },
+  {
+    "symbol": "enemy assets/enemy tank",
+    "x": 800,
+    "y": 720,
+    "matrix": [0, -1, 1, 0],
+    "props": {"pathID": 16711680}
+  },
+  {
+    "symbol": "enemy assets/enemy tank",
+    "x": 1524,
+    "y": 76,
+    "matrix": [-1, 0, 0, -1],
+    "props": {"pathID": 255}
+  },
+  {
+    "symbol": "enemy assets/enemy tank",
+    "x": 1524,
+    "y": 881,
+    "matrix": [-1, 0, 0, -1],
+    "props": {"pathID": 51200, "powerupDrop": {"type": "health", "item": "health", "quantity": 50}}
+  },
+  {"symbol": "enemy assets/enemy stinger", "x": 400, "y": 758},
+  {"symbol": "enemy assets/enemy stinger", "x": 1200, "y": 758},
+  {"symbol": "enemy assets/enemy stinger", "x": 1200, "y": 682},
+  {"symbol": "enemy assets/enemy stinger", "x": 1124, "y": 360},
+  {"symbol": "enemy assets/enemy stinger", "x": 400, "y": 360},
+  {"symbol": "enemy assets/enemy stinger", "x": 1200, "y": 436},
+  {"symbol": "enemy assets/enemy stinger", "x": 1124, "y": 114},
+  {"symbol": "enemy assets/enemy scout", "x": 569, "y": 861},
+  {"symbol": "enemy assets/enemy scout", "x": 669, "y": 861},
+  {"symbol": "enemy assets/enemy scout", "x": 197, "y": 499},
+  {"symbol": "enemy assets/enemy scout", "x": 317, "y": 619},
+  {"symbol": "enemy assets/enemy scout", "x": 569, "y": 237},
+  {"symbol": "enemy assets/enemy scout", "x": 669, "y": 237},
+  {"symbol": "enemy assets/enemy scout", "x": 1283, "y": 237},
+  {"symbol": "enemy assets/enemy scout", "x": 1403, "y": 237}
+]

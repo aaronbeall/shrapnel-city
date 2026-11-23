@@ -1,0 +1,63 @@
+{
+  "title": "URBAN",
+  "body": "Good news: the tanks now obey traffic laws. Bad news:\nyou are the traffic. The robots have rezoned downtown\nas one big patrol route: sentry tanks drive loops round\nthe blocks and scouts nest in the courtyards. Your way\nout is the checkpoint in the north-east. Find the\ncheckpoint terminal and destroy it -- the gate opens for\nanyone, as long as nobody is asking questions.",
+  "captions": [
+    {
+      "style": "name",
+      "text": "Sentry Tank",
+      "x": 636.45,
+      "y": 209.89
+    },
+    {
+      "style": "note",
+      "text": "Patrols the streets.",
+      "x": 636.45,
+      "y": 316.6
+    },
+    {
+      "style": "name",
+      "text": "Scout",
+      "x": 636.48,
+      "y": 359.89
+    },
+    {
+      "style": "note",
+      "text": "Fast. Fragile. Rude.",
+      "x": 636.45,
+      "y": 426.6
+    }
+  ],
+  "graphics": [
+    {
+      "symbol": "enemy assets/enemy tank treads",
+      "x": 636.5,
+      "y": 270.5
+    },
+    {
+      "symbol": "enemy assets/enemy tank core",
+      "x": 636.5,
+      "y": 271
+    },
+    {
+      "symbol": "enemy assets/enemy tank turret",
+      "x": 636.55,
+      "y": 272.55
+    },
+    {
+      "symbol": "enemy assets/designs/dart",
+      "x": 636.5,
+      "y": 396,
+      "matrix": [
+        -1.5,
+        0,
+        0,
+        -1.5
+      ]
+    },
+    {
+      "symbol": "screen_mc/shape 3",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}
