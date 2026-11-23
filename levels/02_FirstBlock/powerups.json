@@ -15,7 +15,7 @@
     "symbol": "game objects/powerup",
     "x": 376.1,
     "y": 256.85,
-    "props": {"type": "secondary", "item": "Shrapnel Bomb", "quantity": 1}
+    "props": {"type": "secondary", "item": "Shrapnel Bomb", "quantity": 1, "alertMessage": "SHRAPNEL BOMB: it bursts into a ring of shrapnel. Drop it in the middle of a crowd.", "alertOnce": true}
   },
   {
     "symbol": "game objects/powerup",
