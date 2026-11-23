@@ -456,12 +456,15 @@ def bake(g, decor, seed, opts, kit='bridge', art=None):
                     d2 = (g.xx[by0:by1, bx0:bx1] - cx) ** 2 + (g.yy[by0:by1, bx0:bx1] - cy) ** 2
                     lighting[by0:by1, bx0:bx1] += k * np.exp(-d2 / (2 * r * r))[..., None] * c
     img *= (1 - 0.5 * blur(np.clip(ndi.shift(shadow, (2, 2), order=0), 0, 1), 1.5))[..., None]
+    if kit == 'city':
+        img = kit_city.ambient(img, (art or {}).get('grade'))
+        lighting = kit_city.light(lighting, g, (art or {}).get('grade'))
     # lights: tinted brightening of what's under the pool (a "light" blend), then the bloom
     # (strongest on mid tones, so the dark floor picks up colour and bright walls don't wash out)
     img = img + lo['intensity'] * lighting * (0.12 + img) * (1 - np.clip(img, 0, 1))
     img += np.stack([blur(bloom[..., c], 4) for c in range(3)], -1) * lo['bloom']
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
-    if kit == 'city': img = kit_city.grade(img)
+    if kit == 'city': img = kit_city.grade(img, (art or {}).get('grade'))
     sh = opts['edges']['sharpen']
     if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)

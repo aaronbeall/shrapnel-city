@@ -255,8 +255,49 @@ def base_art(g, seed, opts, art):
     return img * (1 - g.wr[..., None]) + top * g.wr[..., None]
 
 
-def grade(img):
+def grey_day(img):
     """Grey day: colours muted, a cool cast, a soft overall haze."""
     img = grey(img, 0.3)
     img = img * np.array([0.97, 0.99, 1.03], np.float32)
     return img * 0.96 + 0.025
+
+
+def night_ambient(img):
+    """Night, before the lights go on: the daylight art dimmed to moonlight, cold and grey."""
+    img = grey(img, 0.45)
+    return img * np.array([0.30, 0.34, 0.44], np.float32)
+
+
+def night(img):
+    """Night, after the lights: deep blue shadows, a little contrast, the lit areas kept warm."""
+    lum = img.mean(-1, keepdims=True)
+    lift = np.array([0.012, 0.016, 0.03], np.float32) * (1 - np.clip(lum * 3, 0, 1))
+    return np.clip((img - 0.02) * 1.08 + lift, 0, 1)
+
+
+def night_light(lighting, g):
+    """Night: the light pools fall on the streets, hardly on the roofs, and many lamps
+    together saturate softly instead of washing out."""
+    lighting = 1 - np.exp(-lighting)
+    return lighting * (1 - 0.75 * g.wr)[..., None]
+
+
+# level.json art.grade picks one ("grey day" when not given). AMBIENT runs on the art and its
+# decor before the decor lights are added, LIGHT on the lights' pools, GRADES on the finished art.
+GRADES = {'grey day': grey_day, 'night': night}
+AMBIENT = {'night': night_ambient}
+LIGHT = {'night': night_light}
+
+
+def grade(img, name=None):
+    return GRADES[name or 'grey day'](img)
+
+
+def ambient(img, name=None):
+    f = AMBIENT.get(name or 'grey day')
+    return f(img) if f else img
+
+
+def light(lighting, g, name=None):
+    f = LIGHT.get(name or 'grey day')
+    return f(lighting, g) if f else lighting

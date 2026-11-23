@@ -1,0 +1,260 @@
+[
+  {"symbol": "game objects/box", "x": 110, "y": 1198},
+  {"symbol": "game objects/box", "x": 130, "y": 1198},
+  {"symbol": "game objects/box", "x": 150, "y": 1198},
+  {
+    "symbol": "game objects/box",
+    "x": 52,
+    "y": 790,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "health", "item": "health", "quantity": 25}}
+  },
+  {"symbol": "game objects/box", "x": 236, "y": 984},
+  {"symbol": "game objects/box", "x": 236, "y": 1004},
+  {"symbol": "game objects/box", "x": 256, "y": 984},
+  {"symbol": "game objects/box", "x": 256, "y": 1004},
+  {"symbol": "game objects/box", "x": 440, "y": 1012},
+  {"symbol": "game objects/box", "x": 460, "y": 1012},
+  {"symbol": "game objects/box", "x": 480, "y": 1012},
+  {"symbol": "game objects/box", "x": 140, "y": 716},
+  {"symbol": "game objects/box", "x": 160, "y": 716},
+  {
+    "symbol": "game objects/box",
+    "x": 180,
+    "y": 716,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {"symbol": "game objects/box", "x": 200, "y": 716},
+  {"symbol": "game objects/box", "x": 600, "y": 900},
+  {
+    "symbol": "game objects/box",
+    "x": 600,
+    "y": 920,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {"symbol": "game objects/box", "x": 600, "y": 940},
+  {"symbol": "game objects/box", "x": 470, "y": 1196},
+  {"symbol": "game objects/box", "x": 470, "y": 1216},
+  {"symbol": "game objects/box", "x": 490, "y": 1196},
+  {"symbol": "game objects/box", "x": 490, "y": 1216},
+  {"symbol": "game objects/box", "x": 420, "y": 716},
+  {"symbol": "game objects/box", "x": 440, "y": 716},
+  {"symbol": "game objects/box", "x": 820, "y": 1124},
+  {"symbol": "game objects/box", "x": 840, "y": 1124},
+  {"symbol": "game objects/box", "x": 860, "y": 1124},
+  {"symbol": "game objects/box", "x": 880, "y": 1124},
+  {"symbol": "game objects/box", "x": 1110, "y": 1124},
+  {"symbol": "game objects/box", "x": 1130, "y": 1124},
+  {"symbol": "game objects/box", "x": 1150, "y": 1124},
+  {"symbol": "game objects/box", "x": 712, "y": 1200},
+  {
+    "symbol": "game objects/box",
+    "x": 712,
+    "y": 1220,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Vertigo", "quantity": 30}}
+  },
+  {"symbol": "game objects/box", "x": 792, "y": 960},
+  {
+    "symbol": "game objects/box",
+    "x": 792,
+    "y": 980,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Vertigo", "quantity": 30}}
+  },
+  {"symbol": "game objects/box", "x": 792, "y": 1000},
+  {"symbol": "game objects/box", "x": 1014, "y": 774},
+  {"symbol": "game objects/box", "x": 1014, "y": 794},
+  {"symbol": "game objects/box", "x": 1034, "y": 774},
+  {"symbol": "game objects/box", "x": 1034, "y": 794},
+  {"symbol": "game objects/box", "x": 1060, "y": 944},
+  {
+    "symbol": "game objects/box",
+    "x": 1080,
+    "y": 944,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "secondary",
+        "item": "Pepper Bombs",
+        "quantity": 5,
+        "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
+        "alertOnce": true
+      }
+    }
+  },
+  {"symbol": "game objects/box", "x": 1100, "y": 944},
+  {"symbol": "game objects/box", "x": 1192, "y": 1206},
+  {"symbol": "game objects/box", "x": 1212, "y": 1206},
+  {"symbol": "game objects/box", "x": 1232, "y": 1206},
+  {"symbol": "game objects/box", "x": 1260, "y": 1206},
+  {"symbol": "game objects/box", "x": 1280, "y": 1206},
+  {
+    "symbol": "game objects/box",
+    "x": 1300,
+    "y": 1206,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Flamer",
+        "quantity": 60,
+        "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
+        "alertOnce": true
+      }
+    }
+  },
+  {"symbol": "game objects/box", "x": 1320, "y": 1206},
+  {"symbol": "game objects/box", "x": 1290, "y": 716},
+  {"symbol": "game objects/box", "x": 1310, "y": 716},
+  {
+    "symbol": "game objects/box",
+    "x": 1330,
+    "y": 716,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Carbon Bomb", "quantity": 1}}
+  },
+  {"symbol": "game objects/box", "x": 1350, "y": 716},
+  {"symbol": "game objects/box", "x": 1516, "y": 1012},
+  {
+    "symbol": "game objects/box",
+    "x": 1516,
+    "y": 1032,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 25}}
+  },
+  {"symbol": "game objects/box", "x": 1516, "y": 1052},
+  {"symbol": "game objects/box", "x": 1300, "y": 820},
+  {
+    "symbol": "game objects/box",
+    "x": 1300,
+    "y": 840,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 25}}
+  },
+  {"symbol": "game objects/box", "x": 1300, "y": 860},
+  {"symbol": "game objects/box", "x": 1440, "y": 1040},
+  {"symbol": "game objects/box", "x": 1440, "y": 1020},
+  {"symbol": "game objects/box", "x": 1440, "y": 1000},
+  {"symbol": "game objects/box", "x": 280, "y": 486},
+  {"symbol": "game objects/box", "x": 300, "y": 486},
+  {
+    "symbol": "game objects/box",
+    "x": 320,
+    "y": 486,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "secondary",
+        "item": "Pepper Bombs",
+        "quantity": 5,
+        "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
+        "alertOnce": true
+      }
+    }
+  },
+  {"symbol": "game objects/box", "x": 340, "y": 486},
+  {"symbol": "game objects/box", "x": 1000, "y": 486},
+  {"symbol": "game objects/box", "x": 1020, "y": 486},
+  {"symbol": "game objects/box", "x": 1040, "y": 486},
+  {"symbol": "game objects/box", "x": 1060, "y": 486},
+  {"symbol": "game objects/box", "x": 52, "y": 120},
+  {"symbol": "game objects/box", "x": 52, "y": 140},
+  {"symbol": "game objects/box", "x": 52, "y": 160},
+  {"symbol": "game objects/box", "x": 52, "y": 180},
+  {"symbol": "game objects/box", "x": 140, "y": 52},
+  {"symbol": "game objects/box", "x": 160, "y": 52},
+  {"symbol": "game objects/box", "x": 180, "y": 52},
+  {"symbol": "game objects/box", "x": 200, "y": 52},
+  {"symbol": "game objects/box", "x": 220, "y": 52},
+  {"symbol": "game objects/box", "x": 240, "y": 590},
+  {"symbol": "game objects/box", "x": 260, "y": 590},
+  {"symbol": "game objects/box", "x": 280, "y": 590},
+  {"symbol": "game objects/box", "x": 272, "y": 380},
+  {
+    "symbol": "game objects/box",
+    "x": 272,
+    "y": 400,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Bolter", "quantity": 25}}
+  },
+  {"symbol": "game objects/box", "x": 272, "y": 420},
+  {"symbol": "game objects/box", "x": 520, "y": 250},
+  {"symbol": "game objects/box", "x": 520, "y": 270},
+  {"symbol": "game objects/box", "x": 540, "y": 250},
+  {"symbol": "game objects/box", "x": 540, "y": 270},
+  {"symbol": "game objects/box", "x": 860, "y": 430},
+  {"symbol": "game objects/box", "x": 860, "y": 450},
+  {"symbol": "game objects/box", "x": 880, "y": 430},
+  {"symbol": "game objects/box", "x": 880, "y": 450},
+  {"symbol": "game objects/box", "x": 944, "y": 250},
+  {
+    "symbol": "game objects/box",
+    "x": 944,
+    "y": 270,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "primary",
+        "item": "Flamer",
+        "quantity": 60,
+        "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
+        "alertOnce": true
+      }
+    }
+  },
+  {"symbol": "game objects/box", "x": 944, "y": 290},
+  {"symbol": "game objects/box", "x": 1260, "y": 52},
+  {"symbol": "game objects/box", "x": 1280, "y": 52},
+  {"symbol": "game objects/box", "x": 1300, "y": 52},
+  {"symbol": "game objects/box", "x": 1320, "y": 52},
+  {"symbol": "game objects/box", "x": 1340, "y": 52},
+  {"symbol": "game objects/box", "x": 1540, "y": 360},
+  {
+    "symbol": "game objects/box",
+    "x": 1540,
+    "y": 340,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "health", "item": "health", "quantity": 50}}
+  },
+  {"symbol": "game objects/box", "x": 1540, "y": 320},
+  {"symbol": "game objects/box", "x": 1260, "y": 360},
+  {"symbol": "game objects/box", "x": 1260, "y": 380},
+  {"symbol": "game objects/box", "x": 1280, "y": 360},
+  {"symbol": "game objects/box", "x": 1280, "y": 380},
+  {"symbol": "game objects/box", "x": 1176, "y": 392},
+  {
+    "symbol": "game objects/box",
+    "x": 1196,
+    "y": 392,
+    "scale": 1.29,
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Vertigo", "quantity": 30}}
+  },
+  {"symbol": "game objects/box", "x": 1216, "y": 392},
+  {"symbol": "game objects/box", "x": 830, "y": 636},
+  {"symbol": "game objects/box", "x": 850, "y": 636},
+  {"symbol": "game objects/box", "x": 870, "y": 636},
+  {"symbol": "game objects/box", "x": 1392, "y": 600},
+  {
+    "symbol": "game objects/box",
+    "x": 1412,
+    "y": 600,
+    "scale": 1.29,
+    "props": {
+      "health": 25,
+      "powerupDrop": {
+        "type": "secondary",
+        "item": "Pepper Bombs",
+        "quantity": 8,
+        "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
+        "alertOnce": true
+      }
+    }
+  }
+]

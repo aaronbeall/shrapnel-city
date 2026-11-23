@@ -2045,5 +2045,289 @@
    "w": 223,
    "h": 223
   }
+ ],
+ "city-downtown": [
+  {
+   "file": "city-downtown/00.png",
+   "w": 257,
+   "h": 196
+  },
+  {
+   "file": "city-downtown/01.png",
+   "w": 223,
+   "h": 192
+  },
+  {
+   "file": "city-downtown/02.png",
+   "w": 235,
+   "h": 176
+  },
+  {
+   "file": "city-downtown/03.png",
+   "w": 195,
+   "h": 168
+  },
+  {
+   "file": "city-downtown/04.png",
+   "w": 181,
+   "h": 150
+  },
+  {
+   "file": "city-downtown/05.png",
+   "w": 174,
+   "h": 146
+  },
+  {
+   "file": "city-downtown/06.png",
+   "w": 169,
+   "h": 142
+  },
+  {
+   "file": "city-downtown/07.png",
+   "w": 166,
+   "h": 117
+  },
+  {
+   "file": "city-downtown/08.png",
+   "w": 153,
+   "h": 114
+  },
+  {
+   "file": "city-downtown/09.png",
+   "w": 169,
+   "h": 115
+  },
+  {
+   "file": "city-downtown/10.png",
+   "w": 280,
+   "h": 156
+  },
+  {
+   "file": "city-downtown/11.png",
+   "w": 236,
+   "h": 137
+  },
+  {
+   "file": "city-downtown/12.png",
+   "w": 209,
+   "h": 158
+  },
+  {
+   "file": "city-downtown/13.png",
+   "w": 181,
+   "h": 146
+  },
+  {
+   "file": "city-downtown/14.png",
+   "w": 174,
+   "h": 123
+  },
+  {
+   "file": "city-downtown/15.png",
+   "w": 43,
+   "h": 48
+  },
+  {
+   "file": "city-downtown/16.png",
+   "w": 216,
+   "h": 149
+  },
+  {
+   "file": "city-downtown/17.png",
+   "w": 208,
+   "h": 145
+  },
+  {
+   "file": "city-downtown/18.png",
+   "w": 164,
+   "h": 123
+  },
+  {
+   "file": "city-downtown/19.png",
+   "w": 134,
+   "h": 126
+  },
+  {
+   "file": "city-downtown/20.png",
+   "w": 140,
+   "h": 126
+  },
+  {
+   "file": "city-downtown/21.png",
+   "w": 157,
+   "h": 124
+  },
+  {
+   "file": "city-downtown/22.png",
+   "w": 156,
+   "h": 122
+  },
+  {
+   "file": "city-downtown/23.png",
+   "w": 377,
+   "h": 121
+  },
+  {
+   "file": "city-downtown/24.png",
+   "w": 293,
+   "h": 111
+  },
+  {
+   "file": "city-downtown/25.png",
+   "w": 37,
+   "h": 30
+  }
+ ],
+ "city-neon": [
+  {
+   "file": "city-neon/00.png",
+   "w": 128,
+   "h": 176
+  },
+  {
+   "file": "city-neon/01.png",
+   "w": 187,
+   "h": 140
+  },
+  {
+   "file": "city-neon/02.png",
+   "w": 175,
+   "h": 135
+  },
+  {
+   "file": "city-neon/03.png",
+   "w": 132,
+   "h": 144
+  },
+  {
+   "file": "city-neon/04.png",
+   "w": 148,
+   "h": 145
+  },
+  {
+   "file": "city-neon/05.png",
+   "w": 177,
+   "h": 120
+  },
+  {
+   "file": "city-neon/06.png",
+   "w": 149,
+   "h": 149
+  },
+  {
+   "file": "city-neon/07.png",
+   "w": 147,
+   "h": 146
+  },
+  {
+   "file": "city-neon/08.png",
+   "w": 145,
+   "h": 146
+  },
+  {
+   "file": "city-neon/09.png",
+   "w": 148,
+   "h": 143
+  },
+  {
+   "file": "city-neon/10.png",
+   "w": 155,
+   "h": 70
+  },
+  {
+   "file": "city-neon/11.png",
+   "w": 148,
+   "h": 69
+  },
+  {
+   "file": "city-neon/12.png",
+   "w": 145,
+   "h": 68
+  },
+  {
+   "file": "city-neon/13.png",
+   "w": 174,
+   "h": 72
+  },
+  {
+   "file": "city-neon/14.png",
+   "w": 165,
+   "h": 66
+  },
+  {
+   "file": "city-neon/15.png",
+   "w": 130,
+   "h": 64
+  },
+  {
+   "file": "city-neon/16.png",
+   "w": 45,
+   "h": 29
+  },
+  {
+   "file": "city-neon/17.png",
+   "w": 22,
+   "h": 29
+  },
+  {
+   "file": "city-neon/18.png",
+   "w": 38,
+   "h": 29
+  },
+  {
+   "file": "city-neon/19.png",
+   "w": 240,
+   "h": 136
+  },
+  {
+   "file": "city-neon/20.png",
+   "w": 243,
+   "h": 122
+  },
+  {
+   "file": "city-neon/21.png",
+   "w": 238,
+   "h": 120
+  },
+  {
+   "file": "city-neon/22.png",
+   "w": 276,
+   "h": 118
+  },
+  {
+   "file": "city-neon/23.png",
+   "w": 44,
+   "h": 107
+  },
+  {
+   "file": "city-neon/24.png",
+   "w": 40,
+   "h": 64
+  },
+  {
+   "file": "city-neon/25.png",
+   "w": 252,
+   "h": 113
+  },
+  {
+   "file": "city-neon/26.png",
+   "w": 270,
+   "h": 91
+  },
+  {
+   "file": "city-neon/27.png",
+   "w": 240,
+   "h": 84
+  },
+  {
+   "file": "city-neon/28.png",
+   "w": 43,
+   "h": 87
+  },
+  {
+   "file": "city-neon/29.png",
+   "w": 44,
+   "h": 81
+  }
  ]
 }

@@ -1,0 +1,4 @@
+[
+  {"symbol": "game objects/entrance_mc", "x": 70, "y": 1222, "matrix": [0, 1, -1, 0], "name": "entrance_mc"},
+  {"symbol": "game objects/exit_mc", "x": 1490, "y": 110, "name": "exit_mc"}
+]
