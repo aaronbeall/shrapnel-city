@@ -91,7 +91,8 @@ onClipEvent(load){
 		{name:"Synapse Bomb", shot:"shot_mcSynapse", ammo:0, max:1, refire:60, spread:10, key:7}, 
 		{name:"Shock Bomb", shot:"shot_mcShock", ammo:0, max:1, refire:60, spread:6, key:6}, 
 		{name:"Laser Bomb", shot:"shot_mcLaserBomb", ammo:0, max:5, refire:30, spread:2, key:0}, 
-		{name:"Laser Anhilator", shot:"shot_mcSuperLaserBomb", ammo:0, max:1, refire:30, spread:2, key:0}
+		{name:"Laser Anhilator", shot:"shot_mcSuperLaserBomb", ammo:0, max:1, refire:30, spread:2, key:0},
+		{name:"Bunker Buster", shot:"shot_mcBuster", ammo:0, max:4, refire:40, spread:2, key:8}
 	]
 	for(var i in weapons2) weapons2[i].id = int(i);
 	

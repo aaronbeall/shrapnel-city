@@ -1,0 +1,48 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy walker core/shape 1",
+          "depth": 1,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "place": "enemy assets/designs/spider/shape 3",
+          "depth": 2,
+          "x": 1,
+          "y": 3,
+          "matrix": [
+            -2.3,
+            0,
+            0,
+            -2.3
+          ],
+          "filters": [
+            {
+              "type": "bevel",
+              "shadow": "#00000040",
+              "highlight": "#ffffff40",
+              "blurX": 2,
+              "blurY": 2,
+              "angle": 0.785398,
+              "distance": 1,
+              "strength": 1,
+              "inner": true,
+              "knockout": false,
+              "onTop": false,
+              "passes": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

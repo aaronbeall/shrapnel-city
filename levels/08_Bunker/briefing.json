@@ -1,0 +1,63 @@
+{
+  "title": "BUNKER",
+  "body": "Command has moved underground for your safety.\nTheirs, specifically. The robots dug in under the\nbadlands and left mortars on the roof to discourage\nvisitors: hiding behind a rock will not help, so keep\nmoving. Find the door control in the north-east hut to\nopen the blast door, then knock out the generator to\nget into the command room. Mind the walkers.",
+  "captions": [
+    {
+      "style": "name",
+      "text": "Bunker Mortar",
+      "x": 636.45,
+      "y": 209.89
+    },
+    {
+      "style": "note",
+      "text": "Shells you over walls.",
+      "x": 636.45,
+      "y": 316.6
+    },
+    {
+      "style": "name",
+      "text": "Walker",
+      "x": 636.48,
+      "y": 359.89
+    },
+    {
+      "style": "note",
+      "text": "Patient. Armoured.",
+      "x": 636.45,
+      "y": 426.6
+    }
+  ],
+  "graphics": [
+    {
+      "symbol": "enemy assets/designs/carrier nuke",
+      "x": 636.5,
+      "y": 268,
+      "matrix": [
+        1.4,
+        0,
+        0,
+        1.4
+      ]
+    },
+    {
+      "symbol": "enemy assets/enemy walker legs",
+      "x": 636.5,
+      "y": 398
+    },
+    {
+      "symbol": "enemy assets/enemy walker core",
+      "x": 636.5,
+      "y": 398
+    },
+    {
+      "symbol": "enemy assets/enemy walker turret",
+      "x": 636.5,
+      "y": 398
+    },
+    {
+      "symbol": "screen_mc/shape 3",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}

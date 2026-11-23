@@ -138,7 +138,7 @@ def base_art(g, seed, opts, art):
     img *= np.where(r.inside, 1.0, sun)[..., None]
     # ---- pits: a crevasse outside, a dark pit inside
     ch = tiled(g, load('chasm'), 0.5, off=(37, 11))
-    ch = ch / max(ch.mean(), 1e-3) * 0.13 * (1.15 - 0.7 * np.clip(r.chasm_in / 50, 0, 1))[..., None]
+    ch = ch / max(ch.mean(), 1e-3) * 0.19 * (1.15 - 0.7 * np.clip(r.chasm_in / 50, 0, 1))[..., None]
     pitm = (g.chasm * r.pit)[..., None]
     img = img * (1 - pitm) + ch * pitm
     # the crevasse's broken lip: ragged darker earth and a light rim
@@ -177,11 +177,15 @@ def base_art(g, seed, opts, art):
     # ---- ambient occlusion where walls meet the floor
     ao = blur(np.maximum(g.side, g.wr), 5)
     img *= (1 - 0.45 * ao * (1 - g.wr) * (1 - g.side))[..., None]
+    # cast shadow: the sun is up and to the left, so every wall throws a soft shadow down-right
+    cast = blur(ndi.shift(np.maximum(g.wr, g.side), (7, 7), order=0), 3.5)
+    img *= (1 - 0.38 * cast * (1 - g.wr) * (1 - 0.6 * r.insidef))[..., None]
     # ---- wall tops: rock outside, bunker roof inside
     rock = tiled(g, load('rock'), 0.5, off=(3, 91))
     rock = rock / rock.mean() * 0.56
     roof = tiled(g, load('bunker'), 0.45, off=(57, 13))
     roof = roof / roof.mean() * 0.6
+    roof *= (1 - 0.18 * (r.concrete & ~r.inside))[..., None]     # pillboxes out in the sun: weathered darker
     # rock: rounded lumps (height grows with the distance into the rock), lit from the top-left
     hr = np.clip(g.dist / 16.0, 0, 1)
     hr = hr * hr * (3 - 2 * hr) + 0.15 * noise(H, W, 10, 4, rng) * np.clip(g.dist / 8, 0, 1)
