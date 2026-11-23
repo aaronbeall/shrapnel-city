@@ -258,6 +258,8 @@
         "secondary",
         "health",
         "trigger",
+        "key",
+        "lock",
         "zoneWarp"
       ],
       "desc": "What the pickup is."
@@ -265,7 +267,15 @@
     "item": {
       "group": "pickup",
       "type": "string",
-      "desc": "Weapon name (primary/secondary), health kind (health, superHealth, healthMax), or trigger name(s) for a trigger pad."
+      "desc": "Weapon name (primary/secondary), health kind (health, superHealth, healthMax), trigger name(s) for a trigger pad, or keycard (yellowKey, blueKey, redKey, greenKey, purpleKey, aquaKey) for a key or lock."
+    },
+    "unlock": {
+      "group": "pickup",
+      "type": "string",
+      "for": [
+        "powerup"
+      ],
+      "desc": "Lock pads: the trigger sent once the keycard is used, e.g. door1:open."
     },
     "quantity": {
       "group": "pickup",

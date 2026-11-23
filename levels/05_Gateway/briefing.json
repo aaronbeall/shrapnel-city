@@ -1,0 +1,58 @@
+{
+  "title": "GATEWAY",
+  "body": "Please have your keycard, your papers and your\nremaining dignity ready for inspection. The way into the\ninner city is a checkpoint: three walls, three locked\ndoors, and a Warden on patrol who will call the guards the\nmoment you look suspicious. You look suspicious. Wardens\ncarry keycards -- they won't need them where they're going.\nMissile Batteries can't be reached, only reasoned with.\nReason with them loudly.",
+  "captions": [
+    {
+      "style": "name",
+      "text": "Checkpoint Warden",
+      "x": 636.45,
+      "y": 209.89
+    },
+    {
+      "style": "note",
+      "text": "Calls the guards. Has your keys.",
+      "x": 636.45,
+      "y": 316.6
+    },
+    {
+      "style": "name",
+      "text": "Missile Battery",
+      "x": 636.48,
+      "y": 359.89
+    },
+    {
+      "style": "note",
+      "text": "Seekers. Stun it, then shoot it.",
+      "x": 636.45,
+      "y": 426.6
+    }
+  ],
+  "graphics": [
+    {
+      "symbol": "enemy assets/designs/beetle",
+      "x": 636.5,
+      "y": 270,
+      "matrix": [
+        -1.6,
+        0,
+        0,
+        -1.6
+      ]
+    },
+    {
+      "symbol": "enemy assets/enemy missile launcher core",
+      "x": 636.5,
+      "y": 400
+    },
+    {
+      "symbol": "enemy assets/enemy missile launcher turret",
+      "x": 636.5,
+      "y": 400
+    },
+    {
+      "symbol": "screen_mc/shape 3",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}
