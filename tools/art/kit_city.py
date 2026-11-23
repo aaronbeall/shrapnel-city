@@ -255,8 +255,16 @@ def base_art(g, seed, opts, art):
     return img * (1 - g.wr[..., None]) + top * g.wr[..., None]
 
 
-def grade(img):
-    """Grey day: colours muted, a cool cast, a soft overall haze."""
-    img = grey(img, 0.3)
-    img = img * np.array([0.97, 0.99, 1.03], np.float32)
-    return img * 0.96 + 0.025
+# colour grades, picked by level.json "art": {"grade": name}: (desaturation, channel gains, haze)
+GRADES = {
+    'grey day': (0.3, (0.97, 0.99, 1.03), 0.025),     # 04 Urban: muted, a cool cast
+    'olive': (0.42, (1.0, 1.0, 0.82), 0.03),          # 05 Gateway: olive drab checkpoint, warm khaki haze
+}
+
+
+def grade(img, name=None):
+    """The level's colour grade: colours muted toward grey, a cast, a soft overall haze."""
+    k, gain, haze = GRADES[name or 'grey day']
+    img = grey(img, k)
+    img = img * np.array(gain, np.float32)
+    return img * (1 - haze * 1.6) + haze

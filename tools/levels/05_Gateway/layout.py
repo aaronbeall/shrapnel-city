@@ -563,13 +563,12 @@ crates(1100, 282, 2, drop={'type': 'health', 'item': 'health', 'quantity': 50})
 BRIEFING = {
     'title': 'GATEWAY',
     'body': ("Please have your keycard, your papers and your\n"
-             "remaining dignity ready for inspection. The way into the\n"
-             "inner city is a checkpoint: three walls, three locked\n"
-             "doors, and a Warden on patrol who will call the guards the\n"
-             "moment you look suspicious. You look suspicious. Wardens\n"
-             "carry keycards -- they won't need them where they're going.\n"
-             "Missile Batteries can't be reached, only reasoned with.\n"
-             "Reason with them loudly."),
+             "remaining dignity ready for inspection. Three walls,\n"
+             "three locked doors, a Warden on every patrol. Wardens\n"
+             "call the guards the moment they spot you, and they\n"
+             "will spot you. They also carry the keycards -- they\n"
+             "won't be needing them. Missile Batteries can't be\n"
+             "reached, only reasoned with. Reason loudly."),
     'captions': [
         {'style': 'name', 'text': 'Checkpoint Warden', 'x': 636.45, 'y': 209.89},
         {'style': 'note', 'text': 'Calls the guards. Has your keys.', 'x': 636.45, 'y': 316.6},

@@ -15,6 +15,7 @@ baked, so the original backgrounds (levels 00-02) are never overwritten:
   and rooftops on a grey day, tools/art/kit_city.py with tools/art/parts/city/ and the
   decor sprites in tools/art/parts/decor/city-*/).
 - seed: the random seed for decor placement and the floor's light variation.
+- grade (city kit): the colour grade, one of kit_city.GRADES ("grey day" when left out).
 
 The kit's parts were generated with OpenAI gpt-image-2 using only the original levels
 (backgrounds 0-2) as style references; the prompts sit next to them. The bake lays them
@@ -461,7 +462,7 @@ def bake(g, decor, seed, opts, kit='bridge', art=None):
     img = img + lo['intensity'] * lighting * (0.12 + img) * (1 - np.clip(img, 0, 1))
     img += np.stack([blur(bloom[..., c], 4) for c in range(3)], -1) * lo['bloom']
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
-    if kit == 'city': img = kit_city.grade(img)
+    if kit == 'city': img = kit_city.grade(img, (art or {}).get('grade'))
     sh = opts['edges']['sharpen']
     if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
