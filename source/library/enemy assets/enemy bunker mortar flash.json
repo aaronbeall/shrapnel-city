@@ -1,0 +1,39 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "_glow",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "scale": [
+            1.6,
+            1.6
+          ],
+          "color": {
+            "multiply": [
+              0.8,
+              0.7,
+              0.4,
+              0.6
+            ],
+            "add": [
+              90,
+              60,
+              0,
+              0
+            ]
+          },
+          "blend": "add"
+        }
+      ]
+    }
+  ]
+}
