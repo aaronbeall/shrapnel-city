@@ -136,125 +136,131 @@
   {
     "name": "lot line 23",
     "mode": "chasm",
-    "d": "M 402 1026 L 407 1026 L 407 1185 L 402 1185 Z",
+    "d": "M 402 1026 L 407 1026 L 407 1097 L 402 1097 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 24",
     "mode": "chasm",
-    "d": "M 1423 483 L 1580 483 L 1580 488 L 1423 488 Z",
+    "d": "M 402 1140 L 407 1140 L 407 1185 L 402 1185 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 25",
     "mode": "chasm",
-    "d": "M 1440 623 L 1580 623 L 1580 628 L 1440 628 Z",
+    "d": "M 1423 483 L 1580 483 L 1580 488 L 1423 488 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 26",
     "mode": "chasm",
-    "d": "M 100 251 L 129 251 L 129 256 L 100 256 Z",
+    "d": "M 1440 623 L 1580 623 L 1580 628 L 1440 628 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 27",
     "mode": "chasm",
-    "d": "M 100 422 L 261 422 L 261 427 L 100 427 Z",
+    "d": "M 100 251 L 129 251 L 129 256 L 100 256 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 28",
     "mode": "chasm",
-    "d": "M 335 233 L 487 233 L 487 238 L 335 238 Z",
+    "d": "M 100 422 L 261 422 L 261 427 L 100 427 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 29",
     "mode": "chasm",
-    "d": "M 356 330 L 487 330 L 487 335 L 356 335 Z",
+    "d": "M 335 233 L 487 233 L 487 238 L 335 238 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 30",
     "mode": "chasm",
-    "d": "M 960 215 L 1101 215 L 1101 220 L 960 220 Z",
+    "d": "M 356 330 L 487 330 L 487 335 L 356 335 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 31",
     "mode": "chasm",
-    "d": "M 960 346 L 1101 346 L 1101 351 L 960 351 Z",
+    "d": "M 960 215 L 1101 215 L 1101 220 L 960 220 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 32",
     "mode": "chasm",
-    "d": "M 1160 231 L 1241 231 L 1241 236 L 1160 236 Z",
+    "d": "M 960 346 L 1101 346 L 1101 351 L 960 351 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 33",
     "mode": "chasm",
-    "d": "M 1103 567 L 1249 567 L 1249 572 L 1103 572 Z",
+    "d": "M 1160 231 L 1241 231 L 1241 236 L 1160 236 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 34",
     "mode": "chasm",
-    "d": "M 1252 562 L 1381 562 L 1381 567 L 1252 567 Z",
+    "d": "M 1103 567 L 1249 567 L 1249 572 L 1103 572 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 35",
     "mode": "chasm",
-    "d": "M 613 676 L 701 676 L 701 681 L 613 681 Z",
+    "d": "M 1252 562 L 1381 562 L 1381 567 L 1252 567 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 36",
     "mode": "chasm",
-    "d": "M 620 818 L 701 818 L 701 823 L 620 823 Z",
+    "d": "M 613 676 L 701 676 L 701 681 L 613 681 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 37",
     "mode": "chasm",
-    "d": "M 480 939 L 545 939 L 545 944 L 480 944 Z",
+    "d": "M 620 818 L 701 818 L 701 823 L 620 823 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 38",
     "mode": "chasm",
-    "d": "M 620 939 L 689 939 L 689 944 L 620 944 Z",
+    "d": "M 480 939 L 545 939 L 545 944 L 480 944 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 39",
     "mode": "chasm",
-    "d": "M 100 853 L 256 853 L 256 858 L 100 858 Z",
+    "d": "M 620 939 L 689 939 L 689 944 L 620 944 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 40",
     "mode": "chasm",
-    "d": "M 1240 893 L 1291 893 L 1291 898 L 1240 898 Z",
+    "d": "M 100 853 L 256 853 L 256 858 L 100 858 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 41",
     "mode": "chasm",
-    "d": "M 804 994 L 918 994 L 918 999 L 804 999 Z",
+    "d": "M 1240 893 L 1291 893 L 1291 898 L 1240 898 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 42",
     "mode": "chasm",
-    "d": "M 921 1019 L 1064 1019 L 1064 1024 L 921 1024 Z",
+    "d": "M 804 994 L 918 994 L 918 999 L 804 999 Z",
     "group": "lot lines"
   },
   {
     "name": "lot line 43",
+    "mode": "chasm",
+    "d": "M 921 1019 L 1064 1019 L 1064 1024 L 921 1024 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 44",
     "mode": "chasm",
     "d": "M 1460 1064 L 1501 1064 L 1501 1069 L 1460 1069 Z",
     "group": "lot lines"
@@ -443,6 +449,24 @@
     "mode": "open",
     "d": "M 1240 40 L 1560 40 L 1560 440 L 1240 440 Z",
     "group": "alleys"
+  },
+  {
+    "name": "start room",
+    "mode": "open",
+    "d": "M 284 1060 L 384 1060 L 384 1140 L 284 1140 Z",
+    "group": "start"
+  },
+  {
+    "name": "start passage",
+    "mode": "open",
+    "d": "M 384 1096 L 504 1096 L 504 1140 L 384 1140 Z",
+    "group": "start"
+  },
+  {
+    "name": "start stair",
+    "mode": "open",
+    "d": "M 460 1140 L 504 1140 L 504 1184 L 460 1184 Z",
+    "group": "start"
   },
   {
     "name": "doorway 1",

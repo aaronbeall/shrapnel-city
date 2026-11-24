@@ -131,6 +131,15 @@ OPEN = {
     'gate neck': (1160, 380, 1240, 440),
     'gate square': (1240, 40, 1560, 440),           # the final room: hive 4 and the exit
 }
+# the start: a small room off the market lane, through a bent passage, so the lane's enemies
+# can't see in (a couple may, for a hot start). Kept out of OPEN so the doorway recesses and
+# lot lines elsewhere don't move.
+START = {
+    'start room': (284, 1060, 384, 1140),
+    'start passage': (384, 1096, 504, 1140),
+    'start stair': (460, 1140, 504, 1184),          # down into the market lane
+}
+SPAWN = (312, 1100)
 SPIRE = (636, 250, 824, 384)                        # the building in the middle of the plaza
 SINKHOLE = (40, 634, 640, 704)                      # chasm: shoot across, don't cross
 DOOR1 = (660, 1130)
@@ -191,7 +200,7 @@ def raster(with_lots=()):
     d = ImageDraw.Draw(im)
     for x0, y0, x1, y1 in with_lots: d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=2)
     d.polygon(SINK_PTS, fill=2)
-    for r in OPEN.values(): d.polygon(pts_of(r), fill=0)
+    for r in list(OPEN.values()) + list(START.values()): d.polygon(pts_of(r), fill=0)
     for r in BAYS: d.rectangle([r[0], r[1], r[2] - 1, r[3] - 1], fill=0)
     d.rectangle([SPIRE[0], SPIRE[1], SPIRE[2] - 1, SPIRE[3] - 1], fill=1)
     for _, pts, _ in SMALL: d.polygon(pts, fill=1)
@@ -277,6 +286,8 @@ for k, r in enumerate(LOTS):
 add('sinkhole', poly_d(SINK_PTS), mode='chasm', group='sinkhole')
 for name, r in OPEN.items():
     add(name, poly_d(pts_of(r)), mode='open', group='alleys')
+for name, r in START.items():
+    add(name, poly_d(pts_of(r)), mode='open', group='start')
 for k, r in enumerate(BAYS):
     add(f'doorway {k + 1}', poly_d(rect(*r)), mode='open', group='doorways')
 add('the spire', poly_d(chamfer_rect(*SPIRE, 18)), group='city')
@@ -302,7 +313,7 @@ def centre(name):
 
 
 features = [
-    P('game objects/entrance_mc', 70, 1222, name='entrance_mc', rot=90),
+    P('game objects/entrance_mc', *SPAWN, name='entrance_mc', rot=90),
     P('game objects/exit_mc', 1490, 110, name='exit_mc'),
 ]
 
@@ -670,7 +681,7 @@ def preview(path):
         w, h = (30, 7) if horiz else (7, 30)
         d.rectangle([o['x'] - w, o['y'] - h, o['x'] + w, o['y'] + h], fill=(0, 220, 220))
     for f in features: d.ellipse([f['x'] - 22, f['y'] - 22, f['x'] + 22, f['y'] + 22], outline=(0, 200, 0), width=4)
-    labels = [('START', 30, 1150), ('MARKET', 120, 880), ('fish market: HIVE 1', 330, 745), ('noodle yard: FLAMER', 120, 1130),
+    labels = [('START', 284, 1046), ('MARKET', 120, 880), ('fish market: HIVE 1', 330, 745), ('noodle yard: FLAMER', 120, 1130),
               ('SINKHOLE (shoot across)', 160, 655), ('NEON STRIP', 712, 1060), ('shutter 1', 590, 1166), ('shutter 2', 790, 600),
               ('laundry yard: PEPPER BOMBS', 930, 735), ('arcade row', 900, 690), ('GARAGE: HIVE 2', 1300, 775),
               ('BACK ALLEYS', 1250, 1150), ('OLD TOWN', 120, 110), ('SPIRE PLAZA: HIVE 3', 560, 175), ('spire', 690, 310),
