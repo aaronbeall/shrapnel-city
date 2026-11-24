@@ -142,5 +142,19 @@
       "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.",
       "alertOnce": true
     }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 619,
+    "y": 1025,
+    "scale": [2.2, 1.8],
+    "props": {"type": "trigger", "item": "door2:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 619,
+    "y": 381,
+    "scale": [2.2, 1.8],
+    "props": {"type": "trigger", "item": "door3:open"}
   }
 ]

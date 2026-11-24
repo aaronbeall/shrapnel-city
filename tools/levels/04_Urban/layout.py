@@ -414,6 +414,14 @@ pickup(ex - 43, 280, 'health', 'health', 50)    # in the final room, if you get 
 pickup(ex + 43, 280, 'primary', 'Vertigo', 40)
 # the checkpoint gate, opened by the terminal in the north courtyard
 doors = [P('game objects/door', *gate, rot=90, props={'id': 'door1'})]
+# the courtyards' alleys have shutters that roll up as you walk up to them (like Bridge's
+# doors): a trigger pad on the street side opens them, so whatever is inside waits for you
+for k, (dx, dy) in enumerate((yard_s, yard_n)):
+    did = f'door{k + 2}'
+    d = P('game objects/door', dx, dy, props={'id': did})
+    d['matrix'] = [0, 1, num(-64 / 56), 0]          # turned across the alley, stretched to its 64 px
+    doors.insert(len(doors), d)
+    pick.append(P('game objects/powerup', dx, dy + 62, scale=[2.2, 1.8], props={'type': 'trigger', 'item': did + ':open'}))
 
 # boxes: crates in rows along the kerbs and in stacks, some carrying drops. Every box
 # except the terminal is required: the exit opens when they're all gone.
@@ -524,6 +532,31 @@ INTRO = {'Vertigo': 'VERTIGO CANNON: three-round plasma bursts. Tanks hate this 
          'Thermal Bomb': 'THERMAL BOMBS: lob one over a barrier and let it cook.'}
 
 
+def vision_zones():
+    """Turrets fire only at a player in a zone they're in (and in sight). One zone per street
+    crossing, reaching halfway to the next crossing each way, so a turret guards its own
+    corner and not the whole street; and one per open space (plaza, crater, courtyards, the
+    exit compound) so everything in it sees all of it."""
+    xs = [street_x(i) + S / 2 for i in range(COLS + 1)]
+    ys = [street_y(j) + S / 2 for j in range(ROWS + 1)]
+    xe = [B] + [(a + b) / 2 for a, b in zip(xs, xs[1:])] + [W - B]
+    ye = [B] + [(a + b) / 2 for a, b in zip(ys, ys[1:])] + [H - B]
+    rects = [(xe[i], ye[j], xe[i + 1], ye[j + 1]) for j in range(ROWS + 1) for i in range(COLS + 1)]
+    h = S / 2
+    for c, r in ((0, 1), (2, 2)):                        # plaza, crater: with the pavement round them
+        x0, y0, x1, y1 = block(c, r)
+        rects.append((x0 - h, y0 - h, x1 + h, y1 + h))
+    for c, r in ((1, 2), (1, 0)):                        # courtyards: the yard and its alley
+        x0, y0, x1, y1 = block(c, r)
+        rects.append((x0 + 46, y0 + 46, x1 - 46, y1))
+    rects.append((street_x(3) - 16, B, W - B, street_y(1) + 18))   # the exit compound
+    out = []
+    for x0, y0, x1, y1 in rects:
+        cx, cy, hw, hh = (x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2
+        out.append({'x': num(cx), 'y': num(cy), 'points': [[num(-hw), num(-hh)], [num(hw), num(-hh)], [num(hw), num(hh)], [num(-hw), num(hh)]]})
+    return out
+
+
 def add_intros():
     props = [o['props'] for o in pick] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
     for pr in props:
@@ -546,6 +579,7 @@ def main():
         'boxes.json': list_json(boxes),
         'powerups.json': list_json(pick),
         'doors.json': list_json(doors),
+        'vision.json': list_json(vision_zones()),
     }
     for name, text in files.items():
         with open(os.path.join(a.out, name), 'w', encoding='utf-8', newline='\n') as f: f.write(text)
