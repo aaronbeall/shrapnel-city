@@ -24,7 +24,7 @@ patrol the quay road and the dockyard round the dry dock. Crates are cargo, not 
 (required false): the exit ignores them.
 
 Writes collision.json (one vector shape per pier, hull, superstructure, container stack...),
-features, pathNodes, enemies, boxes, powerups, doors, vision zones, level.json and briefing.json.
+features, pathNodes, enemies, boxes, powerups, doors, an empty vision.json, level.json and briefing.json.
 collision.png is baked from collision.json by tools/levels/bake_collision.mjs and the art by
 tools/art/bake.py. Re-running overwrites hand edits in those files.
 """
@@ -444,18 +444,9 @@ for x, y in ((180, 1250), (1400, 1300), (1590, 120)):
 # the dock control terminal: opens both dry dock gantries. Not required: the exit only wants the targets
 boxes.append(P('game objects/box computer', 1350, 560, props={'required': False, 'onDie': {'$trigger': ['door1:open', 'door2:open']}}))
 
-# vision zones: water stops nobody's eyes, so without zones every gun in the harbour would see
-# you from everywhere. The map is split into its fights, overlapping where two areas look at
-# each other; an enemy in two zones watches both
-ZONES = {
-    'landside': (B, 1000, W - B, H - B),           # the quay road, the yards, the start
-    'west basin': (B, 280, 670, 1080),             # the gunboats, the west pier, the destroyer
-    'north': (B, B, 980, 420),                     # the cruiser, the breakwater's west half, the pier heads
-    'central': (640, 100, 1320, 1060),             # the central pier and the flagship
-    'dockyard': (1280, 200, W - B, 1080),          # round the dry dock, the frigate
-    'headland': (960, B, W - B, 320),              # the breakwater's east half, the lighthouse, the exit
-}
-vision = [{'x': 0, 'y': 0, 'points': [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]} for x0, y0, x1, y1 in ZONES.values()]
+# no vision zones: enemies see by sight range and line of sight (level.json "sightRange", PR #37).
+# Zones let you shoot in from outside them, and water hides nothing anyway
+vision = []
 
 
 INTRO = {'Auto Cannon': 'AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.',
@@ -503,6 +494,7 @@ def pretty(v, indent='', width=110):
 
 
 def list_json(items):
+    if not items: return '[]\n'
     return '[\n' + ',\n'.join('  ' + pretty(x, '  ') for x in items) + '\n]\n'
 
 
@@ -537,6 +529,7 @@ def main():
     lj = os.path.join(a.out, 'level.json')
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
+    settings['sightRange'] = 420
     settings.setdefault('art', {'kit': 'city', 'seed': 707})
     settings['art'].setdefault('paved', [[num(v) for v in r] for r in PAVED])
     # what kind of water, floor and wall each place is, for the city kit's docks (tools/art/docks.py)
