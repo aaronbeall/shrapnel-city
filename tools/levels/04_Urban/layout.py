@@ -532,31 +532,6 @@ INTRO = {'Vertigo': 'VERTIGO CANNON: three-round plasma bursts. Tanks hate this 
          'Thermal Bomb': 'THERMAL BOMBS: lob one over a barrier and let it cook.'}
 
 
-def vision_zones():
-    """Turrets fire only at a player in a zone they're in (and in sight). One zone per street
-    crossing, reaching halfway to the next crossing each way, so a turret guards its own
-    corner and not the whole street; and one per open space (plaza, crater, courtyards, the
-    exit compound) so everything in it sees all of it."""
-    xs = [street_x(i) + S / 2 for i in range(COLS + 1)]
-    ys = [street_y(j) + S / 2 for j in range(ROWS + 1)]
-    xe = [B] + [(a + b) / 2 for a, b in zip(xs, xs[1:])] + [W - B]
-    ye = [B] + [(a + b) / 2 for a, b in zip(ys, ys[1:])] + [H - B]
-    rects = [(xe[i], ye[j], xe[i + 1], ye[j + 1]) for j in range(ROWS + 1) for i in range(COLS + 1)]
-    h = S / 2
-    for c, r in ((0, 1), (2, 2)):                        # plaza, crater: with the pavement round them
-        x0, y0, x1, y1 = block(c, r)
-        rects.append((x0 - h, y0 - h, x1 + h, y1 + h))
-    for c, r in ((1, 2), (1, 0)):                        # courtyards: the yard and its alley
-        x0, y0, x1, y1 = block(c, r)
-        rects.append((x0 + 46, y0 + 46, x1 - 46, y1))
-    rects.append((street_x(3) - 16, B, W - B, street_y(1) + 18))   # the exit compound
-    out = []
-    for x0, y0, x1, y1 in rects:
-        cx, cy, hw, hh = (x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2
-        out.append({'x': num(cx), 'y': num(cy), 'points': [[num(-hw), num(-hh)], [num(hw), num(-hh)], [num(hw), num(hh)], [num(-hw), num(hh)]]})
-    return out
-
-
 def add_intros():
     props = [o['props'] for o in pick] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
     for pr in props:
@@ -579,13 +554,15 @@ def main():
         'boxes.json': list_json(boxes),
         'powerups.json': list_json(pick),
         'doors.json': list_json(doors),
-        'vision.json': list_json(vision_zones()),
+        # no vision zones: enemies see by level.json sightRange and line of sight
+        'vision.json': '[]\n',
     }
     for name, text in files.items():
         with open(os.path.join(a.out, name), 'w', encoding='utf-8', newline='\n') as f: f.write(text)
     lj = os.path.join(a.out, 'level.json')
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
+    settings.setdefault('sightRange', 420)          # how far enemies outside any vision zone can see
     # the city art kit; paved = areas with paving all over instead of road (plaza, courtyards, exit square)
     settings.setdefault('art', {'kit': 'city', 'seed': 404})
     settings['art'].setdefault('paved', [[num(v) for v in r] for r in PAVED])
