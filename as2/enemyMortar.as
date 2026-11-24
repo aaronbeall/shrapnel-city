@@ -4,6 +4,9 @@
 // closing ring on the ground where it will land (see enemyProjectileMortar.as).
 // Params (set before the #include): mortarRange, mortarMinRange (too close to fire),
 // mortarLead (0..1, how far ahead of a moving player it aims), mortarSpread (px of scatter).
+// With vision zones it also needs the player in one of its zones (the area it covers, sight
+// or not), so a pit outside doesn't shell rooms inside; with only its own auto zone (a level
+// without zones) range alone decides.
 
 #include "enemyTurret.as"
 
@@ -18,6 +21,15 @@ if(mortarFlightSpeed == undefined) mortarFlightSpeed = 6;
 var mortarRangeSquare = mortarRange * mortarRange;
 var mortarMinSquare = mortarMinRange * mortarMinRange;
 refire = random(refireRate);	// staggered, so a group of mortars doesn't fire in step
+
+function inMortarZone(){
+	if(visionMC || !vision.length)
+		return true;
+	for(var i in vision)
+		if(vision[i].active)
+			return true;
+	return false;
+}
 
 // mortar AI: replaces the turret's line-of-sight aiming
 update = function(time){
@@ -45,7 +57,7 @@ update = function(time){
 	if(!shot || refire < refireRate)
 		return;
 	var distance = getDistanceSquare(this, _player);
-	attacking = distance < mortarRangeSquare && distance > mortarMinSquare;
+	attacking = distance < mortarRangeSquare && distance > mortarMinSquare && inMortarZone();
 	if(!attacking)
 		return;
 	refire = 0;

@@ -23,7 +23,8 @@ The map, north to south:
 
 It writes collision.json (one vector shape per rock, crevasse, bunker room, pillbox and
 barrier, so each can be reshaped in the editor's shape stack), features.json,
-pathNodes.json, enemies.json, boxes.json, powerups.json, doors.json, level.json and
+pathNodes.json, enemies.json, boxes.json, powerups.json, doors.json, vision.json (one zone per
+room or field, see VISION), level.json and
 briefing.json. collision.png is then baked by tools/levels/bake_collision.mjs and the art by
 tools/art/bake.py (kit "rock"). Re-running this overwrites hand edits in those files.
 """
@@ -624,6 +625,69 @@ def add_intros():
             pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
 
 
+# vision zones (vision.json): an enemy attacks only when the player is in one of its zones and
+# in sight. Closed doors aren't walls to line of sight, so the bunker zones stop at each door
+# (nothing behind a sealed blast door wakes up), and the long views are cut into overlapping
+# parts: the badlands into six fields, the corridor into a west and an east half. A zone is a
+# union of rects, written as one outline. Mortars fire only into their own zones (any
+# distance in range, no sight needed): the mortar hall's zone takes in the corridor outside
+# it, so its mortar shells the corridor, while the badlands pits can't reach the rooms below.
+DOOR1_Y = SHELL_Y + 25           # door1 (horizontal) across the blast door gap
+DOOR2_Y, DOOR3_X = 1025, 1160    # door2 across the corridor-to-command gap, door3 between hall and command
+VISION = {
+    'badlands north-west': [(B, B, 740, 380)],
+    'badlands west': [(B, 300, 760, SHELL_Y)],
+    'badlands north': [(620, B, 1160, 420)],
+    'badlands trench': [(620, 360, 1160, SHELL_Y), (DOOR_X - 66, SHELL_Y, DOOR_X + 66, DOOR1_Y)],
+    'badlands north-east': [(1080, B, W - B, 360)],
+    'badlands east': [(1080, 280, W - B, SHELL_Y)],
+    'entry hall': [(740, 690, 1020, 860), (DOOR_X - 30, DOOR1_Y, DOOR_X + 30, 691), (520, 740, 1240, 810), (845, 859, 915, 921)],
+    'barracks': [(90, 690, 520, 880), (520, 740, 740, 810), (270, 879, 340, 921)],
+    'armory': [(1240, 690, 1670, 880), (1020, 740, 1240, 810), (1420, 879, 1490, 921)],
+    'corridor west': [(90, 920, 920, 1000), (270, 879, 340, 921), (845, 859, 915, 921), (290, 999, 360, 1051), (845, 999, 915, 1051)],
+    'corridor east': [(840, 920, 1670, 1000), (845, 859, 915, 921), (1420, 879, 1490, 921), (845, 999, 915, 1051), (1400, 999, 1470, DOOR2_Y)],
+    'generator room': [(90, 1050, 560, 1320), (290, 999, 360, 1051), (559, 1150, 641, 1220)],
+    'mortar hall': [(640, 1050, 1120, 1320), (845, 999, 915, 1051), (640, 920, 1120, 1000), (559, 1150, 641, 1220), (1119, 1150, DOOR3_X, 1220)],
+    'command room': [(1200, 1050, 1670, 1320), (1400, DOOR2_Y, 1470, 1051), (DOOR3_X, 1150, 1201, 1220)],
+}
+
+def rect_union_outline(rects):
+    """The outline of a union of axis-aligned rects, as one closed polygon (the rects must
+    join up into one piece with no holes)."""
+    xs = sorted({v for r in rects for v in (r[0], r[2])})
+    ys = sorted({v for r in rects for v in (r[1], r[3])})
+    inside = lambda i, j: 0 <= i < len(xs) - 1 and 0 <= j < len(ys) - 1 and any(
+        r[0] <= xs[i] and xs[i + 1] <= r[2] and r[1] <= ys[j] and ys[j + 1] <= r[3] for r in rects)
+    # directed boundary edges between grid corners, filled cells on the left (clockwise on screen)
+    nxt = {}
+    for i in range(len(xs) - 1):
+        for j in range(len(ys) - 1):
+            if not inside(i, j): continue
+            if not inside(i, j - 1): nxt[(i, j)] = (i + 1, j)
+            if not inside(i + 1, j): nxt[(i + 1, j)] = (i + 1, j + 1)
+            if not inside(i, j + 1): nxt[(i + 1, j + 1)] = (i, j + 1)
+            if not inside(i - 1, j): nxt[(i, j + 1)] = (i, j)
+    start = min(nxt); pts = [start]; cur = nxt[start]
+    while cur != start:
+        pts.append(cur); cur = nxt[cur]
+    if len(pts) != len(nxt): raise ValueError('vision zone rects must make one piece without holes')
+    # drop points in the middle of a straight edge
+    out = [p for k, p in enumerate(pts) if not (
+        (pts[k - 1][0] == p[0] == pts[(k + 1) % len(pts)][0]) or (pts[k - 1][1] == p[1] == pts[(k + 1) % len(pts)][1]))]
+    return [(xs[i], ys[j]) for i, j in out]
+
+def vision_zones():
+    zones = []
+    for name, rects in VISION.items():
+        pts = rect_union_outline(rects)
+        x0, y0 = min(p[0] for p in pts), min(p[1] for p in pts)
+        zones.append({'name': name, 'x': x0, 'y': y0, 'points': [[x - x0, y - y0] for x, y in pts]})
+    return zones
+
+def in_rects(x, y, rects):
+    return any(r[0] <= x <= r[2] and r[1] <= y <= r[3] for r in rects)
+
+
 def main():
     add_intros()
     ap = argparse.ArgumentParser()
@@ -639,6 +703,7 @@ def main():
         'boxes.json': list_json(boxes),
         'powerups.json': list_json(pick),
         'doors.json': list_json(doors),
+        'vision.json': list_json(vision_zones()),
     }
     for name, text in files.items():
         with open(os.path.join(a.out, name), 'w', encoding='utf-8', newline='\n') as f: f.write(text)
