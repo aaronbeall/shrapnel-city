@@ -342,10 +342,10 @@ def pack(sym, x, y, n=3, r=18):
 
 # the hives: what each spawns, how many at once, how often (frames). Their death opens a shutter.
 HIVES = [
-    ('hive 1', centre('fish market'), {'spawn': 'enemyDroneGnat', 'spawnMax': 4, 'spawnRate': 70, 'onDie': {'$trigger': 'door1:open'}}),
-    ('hive 2', (1375, 940), {'spawn': 'enemySwarmer', 'spawnMax': 3, 'spawnRate': 90, 'onDie': {'$trigger': 'door2:open'}}),
-    ('hive 3', (730, 205), {'spawn': 'enemyBarrelBot', 'spawnMax': 3, 'spawnRate': 80}),
-    ('hive 4', (1400, 120), {'spawn': 'enemySwarmer,enemyDroneGnat', 'spawnMax': 5, 'spawnRate': 55, 'health': 600,
+    ('hive 1', centre('fish market'), {'breed': 'enemyDroneGnat', 'breedMax': 4, 'breedRate': 70, 'onDie': {'$trigger': 'door1:open'}}),
+    ('hive 2', (1375, 940), {'breed': 'enemySwarmer', 'breedMax': 3, 'breedRate': 90, 'onDie': {'$trigger': 'door2:open'}}),
+    ('hive 3', (730, 205), {'breed': 'enemyBarrelBot', 'breedMax': 3, 'breedRate': 80}),
+    ('hive 4', (1400, 120), {'breed': 'enemySwarmer,enemyDroneGnat', 'breedMax': 5, 'breedRate': 55, 'health': 600,
                              'powerupDrop': {'type': 'health', 'item': 'health', 'quantity': 50}}),
 ]
 for name, (x, y), props in HIVES:

@@ -3,28 +3,28 @@
     "symbol": "enemy assets/enemy hive",
     "x": 446,
     "y": 850,
-    "props": {"spawn": "enemyDroneGnat", "spawnMax": 4, "spawnRate": 70, "onDie": {"$trigger": "door1:open"}}
+    "props": {"breed": "enemyDroneGnat", "breedMax": 4, "breedRate": 70, "onDie": {"$trigger": "door1:open"}}
   },
   {
     "symbol": "enemy assets/enemy hive",
     "x": 1375,
     "y": 940,
-    "props": {"spawn": "enemySwarmer", "spawnMax": 3, "spawnRate": 90, "onDie": {"$trigger": "door2:open"}}
+    "props": {"breed": "enemySwarmer", "breedMax": 3, "breedRate": 90, "onDie": {"$trigger": "door2:open"}}
   },
   {
     "symbol": "enemy assets/enemy hive",
     "x": 730,
     "y": 205,
-    "props": {"spawn": "enemyBarrelBot", "spawnMax": 3, "spawnRate": 80}
+    "props": {"breed": "enemyBarrelBot", "breedMax": 3, "breedRate": 80}
   },
   {
     "symbol": "enemy assets/enemy hive",
     "x": 1400,
     "y": 120,
     "props": {
-      "spawn": "enemySwarmer,enemyDroneGnat",
-      "spawnMax": 5,
-      "spawnRate": 55,
+      "breed": "enemySwarmer,enemyDroneGnat",
+      "breedMax": 5,
+      "breedRate": 55,
       "health": 600,
       "powerupDrop": {"type": "health", "item": "health", "quantity": 50}
     }
