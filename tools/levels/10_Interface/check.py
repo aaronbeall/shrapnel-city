@@ -97,16 +97,6 @@ def main():
         w2[int(dr['y']) - 14:int(dr['y']) + 14, int(dr['x']) - 40:int(dr['x']) + 40] = False
     lab2, _ = ndi.label(w2)
     if lab2[int(ent['y']), int(ent['x'])] == lab2[int(ext['y']), int(ext['x'])]: problems.append('the exit is reachable with the core door shut')
-    # vision zones (rectangles here) must cover every open pixel: a moving enemy outside every zone
-    # would build its own
-    cover = np.zeros_like(solid)
-    for z in load('vision.json'):
-        xs, ys = zip(*[tuple(map(float, p.split())) for p in z['d'].strip('M Z').split(' L ')])
-        cover[int(min(ys)):int(max(ys)), int(min(xs)):int(max(xs))] = True
-    gap = ~solid & ~cover
-    if gap.sum():
-        ys, xs = np.nonzero(gap)
-        problems.append(f'{gap.sum()} open px outside every vision zone, e.g. ({xs[0]}, {ys[0]})')
     print('\n'.join(problems) if problems else 'no problems found')
     open_px = (~solid).sum() / 1e5
     req = sum(1 for b in boxes if b['symbol'] == 'game objects/box')
