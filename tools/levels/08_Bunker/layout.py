@@ -132,6 +132,14 @@ for name, cx, cy, rx, ry, rot in ROCKS:
 for name, pts, w in (('ridge west', [(150, 400), (210, 380), (270, 395)], 30),
                      ('ridge north-east', [(1460, 50), (1480, 110), (1470, 160)], 30)):
     add(name, poly_d(ridge(pts, w, 0.2)), group='rocks')
+# the landing pocket: two short ridges close the north-west corner round the drop point, with
+# a way out to the south-east, so the player lands with nothing in sight (Aaron: a quiet spawn).
+# Their own seed, so the shapes after them don't change.
+_rng, rng = rng, random.Random(8081)
+for name, pts, w in (('ridge by the drop east', [(215, 20), (222, 110), (212, 185)], 34),
+                     ('ridge by the drop south', [(20, 215), (85, 222), (150, 212)], 34)):
+    add(name, poly_d(ridge(pts, w, 0.2)), group='rocks')
+rng = _rng
 # boulder fields: little rocks to duck behind (from the guns; the mortars don't care)
 for k, (cx, cy) in enumerate(((600, 500), (1150, 250), (260, 620), (1000, 520), (860, 330))):
     for j in range(3):
@@ -203,7 +211,7 @@ CONCRETE.append([HUT[0] - 66, HUT[1] - 68, HUT[0] + 72, HUT[1] + 62])
 add('door control hut doorway', poly_d(rect(HUT[0] - 65, HUT[1] - 12, HUT[0] - 49, HUT[1] + 46)), mode='open', group='hut')
 
 # low cover out in the open
-sandbags('sandbags by the drop', 170, 200, 230, 230)
+sandbags('sandbags by the drop', 395, 125, 450, 112)
 sandbags('sandbags mid', 560, 200, 610, 170)
 sandbags('sandbags south', 560, 560, 640, 560)
 sandbags('sandbags east', 1420, 400, 1470, 380)
@@ -360,10 +368,10 @@ def grid(x, y, cols, rows, s=30):
 
 
 # --- the drop zone (north-west): a gentle start, the first look at a mortar across the crevasse
-E(STINGER, 230, 140)
+E(STINGER, 290, 80)
 tri(200, 330)
 tri(90, 440, down=True)
-E(STINGER, 140, 210)
+E(STINGER, 340, 60)
 grid(330, 230, 2, 2)
 E(BARREL, 250, 280)
 # the west pillbox (Flak behind it, in the nook by the south-west rock) and the green walker
