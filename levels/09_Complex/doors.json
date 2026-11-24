@@ -1,4 +1,8 @@
 [
   {"symbol": "game objects/door", "x": 800, "y": 1066, "matrix": [0, 1, -1, 0], "props": {"id": "door1"}},
-  {"symbol": "game objects/door", "x": 800, "y": 270, "matrix": [0, 1, -1, 0], "props": {"id": "door2"}}
+  {"symbol": "game objects/door", "x": 800, "y": 270, "matrix": [0, 1, -1, 0], "props": {"id": "door2"}},
+  {"symbol": "game objects/door", "x": 800, "y": 1510, "matrix": [0, 0.8, -1.44, 0], "props": {"id": "door3"}},
+  {"symbol": "game objects/door", "x": 800, "y": 1430, "matrix": [0, 0.8, -1.44, 0], "props": {"id": "door4"}},
+  {"symbol": "game objects/door", "x": 428, "y": 622, "matrix": [0, 0.8, -1.24, 0], "props": {"id": "door5"}},
+  {"symbol": "game objects/door", "x": 1172, "y": 622, "matrix": [0, 0.8, -1.24, 0], "props": {"id": "door6"}}
 ]

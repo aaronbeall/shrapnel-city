@@ -12,6 +12,8 @@ Reads the level files (so it checks hand edits too) and reports:
 - path nodes: each node sees at least one node of its colour, every network is one connected
   piece (as the game links them, by line of sight), and every hunter starts in sight of a
   node of its own colour
+- vision zones: every enemy starts inside one, and every bit of open floor is in one
+- every door has a trigger that opens it (a terminal or a trigger pad)
 - density per 100k px of open floor, to compare with the earlier levels
 """
 import json
@@ -20,7 +22,7 @@ import os
 from collections import Counter, defaultdict
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 from scipy import ndimage as ndi
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
@@ -48,9 +50,11 @@ def main():
             if not (0 <= x < c.shape[1] and 0 <= y < c.shape[0]): problems.append(name + ': off the map'); continue
             if clear[int(y), int(x)] < need: problems.append(name + f': {clear[int(y), int(x)]:.0f} px from a wall (needs {need})')
             things.append((x, y, name, need, kind))
+    pads = {(o['x'], o['y']) for o in pick if o.get('props', {}).get('type') == 'trigger'}  # stacked pads are fine
     for i, (x, y, n, r, _) in enumerate(things):
         for x2, y2, n2, r2, _ in things[i + 1:]:
-            if math.hypot(x - x2, y - y2) < 14: problems.append(f'{n} overlaps {n2}')
+            if math.hypot(x - x2, y - y2) < 14 and not (n.startswith('pickup') and n2.startswith('pickup') and (x, y) in pads):
+                problems.append(f'{n} overlaps {n2}')
 
     # reachability with the doors open / shut
     walk = clear >= PLAYER_R
@@ -107,7 +111,29 @@ def main():
         if isinstance(pid, int):
             ns = groups.get(col.get(pid), [])
             if not any(los((e['x'], e['y']), (x, y)) for x, y, _ in ns): problems.append(f"{e['symbol'].split('/')[-1]} at ({e['x']}, {e['y']}) sees no node of its path colour")
+
+    # vision zones (vision.py)
+    zm = Image.new('L', (c.shape[1], c.shape[0]), 0)
+    zones = load('vision.json')
+    for z in zones:
+        ImageDraw.Draw(zm).polygon([(z['x'] + x, z['y'] + y) for x, y in z['points']], fill=255)
+    zm = np.array(zm) > 0
+    for e in enemies:
+        if not zm[int(e['y']), int(e['x'])]: problems.append(f"{e['symbol'].split('/')[-1]} at ({e['x']}, {e['y']}) is in no vision zone")
+    bare = ~solid & ~zm
+    if bare.sum() > 50: problems.append(f'{bare.sum()} px of open floor in no vision zone')
+
+    # doors: each opened by something
+    sent = set()
+    for o in boxes + pick + enemies:
+        pr = o.get('props', {})
+        if pr.get('type') == 'trigger': sent.add(pr['item'])
+        t = pr.get('onDie', {}).get('$trigger') if isinstance(pr.get('onDie'), dict) else None
+        if t: sent.update([t] if isinstance(t, str) else t)
+    for dr in doors:
+        if dr['props']['id'] + ':open' not in sent: problems.append(f"{dr['props']['id']}: nothing opens it")
     print('\n'.join(problems) if problems else 'no problems found')
+    print(f'{len(zones)} vision zones, {len(doors)} doors')
     open_px = (~solid).sum() / 1e5
     print(f'\nopen floor {open_px * 100:.0f}k px: {len(enemies)} enemies ({len(enemies) / open_px:.1f} per 100k), '
           f'{len(boxes)} boxes ({len(boxes) / open_px:.1f}), {len(pick)} pickups')

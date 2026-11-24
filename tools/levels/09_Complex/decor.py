@@ -10,7 +10,7 @@ editor), using the metal kit's light and panel sprites:
 - the server racks get rows of blue status lights, the workshop presses a work lamp each
 - the lift platform is a big floor plate with red warning lamps at its corners, and the lift
   hall's columns carry red lamps
-- the bulkheads get a lamp either side of the door
+- every door (doors.json) gets a lamp either side
 
 Entries with "of": "complex" are this tool's: running it again replaces them (and drops any
 kit decor sitting where they go) and leaves the rest of decor.json alone. A full bake.py
@@ -73,9 +73,12 @@ def main():
             for fx in (-1, 1):
                 for fy in (-1, 1):
                     put(out, RED_ROUND, cx + fx * ((x1 - x0) / 2 - 10), cy + fy * ((y1 - y0) / 2 - 10), 12, strength=0.9)
-        elif name.startswith('bulkhead') and name.endswith('throat'):
-            for fx in (-1, 1):
-                put(out, BLUE_SQUARE, cx + fx * ((x1 - x0) / 2 + 9), cy, 11, strength=0.8)
+    for dr in json.load(open(os.path.join(D, 'doors.json'))):
+        a, b, c, d = dr.get('matrix', [1, 0, 0, 1])
+        hx, hy = 25 * -c, 25 * d  # the door's span (local y, 50 px) in level space
+        L = math.hypot(hx, hy)
+        for f in (-1, 1):
+            put(out, BLUE_SQUARE, dr['x'] + f * hx * (1 + 9 / L), dr['y'] + f * hy * (1 + 9 / L), 11, strength=0.8)
     p = os.path.join(D, 'decor.json')
     old = json.load(open(p)) if os.path.exists(p) else []
     mine = [(e['x'], e['y']) for e in out]

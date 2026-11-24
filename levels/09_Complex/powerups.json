@@ -181,5 +181,54 @@
     "x": 800,
     "y": 1590,
     "props": {"type": "primary", "item": "Bolter", "quantity": 30}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 1556,
+    "scale": [2.69, 1.2],
+    "props": {"type": "trigger", "item": "door3:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 1462,
+    "scale": [2.69, 1.2],
+    "props": {"type": "trigger", "item": "door4:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 1462,
+    "scale": [2.69, 1.2],
+    "props": {"type": "trigger", "item": "door3:close"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 428,
+    "y": 664,
+    "scale": [2.31, 1.2],
+    "props": {"type": "trigger", "item": "door5:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 428,
+    "y": 582,
+    "scale": [2.31, 1.2],
+    "props": {"type": "trigger", "item": "door5:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1172,
+    "y": 664,
+    "scale": [2.31, 1.2],
+    "props": {"type": "trigger", "item": "door6:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1172,
+    "y": 582,
+    "scale": [2.31, 1.2],
+    "props": {"type": "trigger", "item": "door6:open"}
   }
 ]

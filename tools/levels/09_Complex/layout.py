@@ -263,10 +263,10 @@ BLUE = net('blue', [(966, 1256), (1030, 1262), (1170, 1262), (1310, 1262), (1450
                     (1030, 1116), (1240, 1116), (1450, 1116), (1240, 1196), (1030, 1196), (1450, 1196),
                     (1106, 1350), (1040, 1380), (1180, 1390), (1242, 1374), (1300, 1390), (1426, 1350), (1450, 1394)])
 # server vault (green): the cross aisles and every aisle between the racks
-GREEN = net('green', [(170, 362), (170, 470), (170, 590), (428, 590), (428, 630)]
+GREEN = net('green', [(170, 362), (170, 470), (170, 590), (428, 590)]
             + [(x, y) for x in (270, 350, 430, 510, 590, 660) for y in (362, 470, 590)] + [(700, 476), (760, 476)])
 # drone bay (purple): round the pit and the cargo, plus the spine
-PURPLE = net('purple', [(1172, 630), (1172, 590), (950, 590), (950, 470), (950, 370), (1100, 362), (1300, 362), (1430, 370),
+PURPLE = net('purple', [(1172, 590), (950, 590), (950, 470), (950, 370), (1100, 362), (1300, 362), (1430, 370),
                         (1430, 480), (1430, 590), (1300, 590), (1100, 500), (1300, 500), (1100, 590), (900, 476), (840, 476)])
 # lift hall (cyan): both flanks and the strip south of the shaft
 CYAN = net('cyan', [(360, 60), (360, 146), (360, 228), (560, 70), (560, 146), (560, 228), (700, 228), (800, 228), (900, 228),
@@ -434,6 +434,26 @@ pickup(800, 1590, 'primary', 'Bolter', 30)
 # the bulkheads, opened by the terminals
 doors = [P('game objects/door', *DOOR1, rot=90, props={'id': 'door1'}),
          P('game objects/door', *DOOR2, rot=90, props={'id': 'door2'})]
+
+
+def lab_door(id_, x, y, width, pads):
+    """A door across a vertical passage `width` px wide (the door is drawn 50 wide, so it's
+    stretched to fit) that opens as the player comes up to it, as the Bridge's doors do: a
+    trigger pad (an invisible pickup) at each (y, triggers) in `pads`."""
+    s = (width + 2) / 50
+    doors.append({'symbol': 'game objects/door', 'x': num(x), 'y': num(y), 'matrix': [0, 0.8, num(-s * 1e4) / 1e4, 0], 'props': {'id': id_}})
+    for py, trig in pads:
+        for t in ([trig] if isinstance(trig, str) else trig):
+            pick.append(P('game objects/powerup', x, py, scale=[num(width / 26 * 1e3) / 1e3, 1.2], props={'type': 'trigger', 'item': t}))
+
+
+# the airlock from the dig site into the labs cycles: the outer door opens as you come up to
+# it and shuts behind you once you're inside, then the inner door opens
+lab_door('door3', 800, 1510, 70, [(1556, 'door3:open')])
+lab_door('door4', 800, 1430, 70, [(1462, ['door4:open', 'door3:close'])])
+# the upper wings are sealed from the caves: their doors open as you come up from the tunnels
+lab_door('door5', 428, 622, 60, [(664, 'door5:open'), (582, 'door5:open')])
+lab_door('door6', 1172, 622, 60, [(664, 'door6:open'), (582, 'door6:open')])
 
 # boxes: lab crates against the walls, specimen and parts stacks. Not required for the exit (the
 # lift is the goal), so the crates are just cover and loot.
