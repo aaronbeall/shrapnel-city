@@ -1453,6 +1453,7 @@ class Editor {
   knownTriggers() {
     const out = new Set();
     for (const d of this.list('doors')) if (d.props && d.props.id) { out.add(d.props.id + ':open'); out.add(d.props.id + ':close'); }
+    for (const f of this.list('features')) if (f.props && typeof f.props.lock === 'string' && f.props.lock) out.add(f.props.lock);
     for (const l of PLACE_LAYERS) for (const e of this.list(l)) {
       for (const n of sentTriggers(e)) out.add(n);
       for (const m of [].concat(e.script || []).join('\n').matchAll(/registerTrigger\(\s*this\s*,\s*["']([^"']+)["']/g)) out.add(m[1]);
@@ -1694,6 +1695,9 @@ class Editor {
       const labels = [];
       ctx.lineWidth = 1.5 * px;
       for (const [id, [d]] of doors) labels.push([d.x, d.y, id, '#9cf']);
+      // a locked exit (features prop lock): opens on that trigger
+      const locks = new Map(this.list('features').filter((f) => f.props && typeof f.props.lock === 'string' && f.props.lock).map((f) => [f.props.lock, f]));
+      for (const [n, f] of locks) labels.push([f.x, f.y, 'locked until ' + n, '#9cf']);
       // independent of the layers: every trigger in the level shows while this is on
       for (const l of ['powerups', 'boxes', 'enemies']) {
         this.list(l).forEach((e) => {
@@ -1703,9 +1707,11 @@ class Editor {
           for (const n of sent) {
             const m = /^(.+):(open|close)$/.exec(n);
             const d = m && doors.get(m[1]);
-            if (!d) continue;
-            ctx.strokeStyle = m[2] === 'open' ? 'rgba(120,255,140,0.9)' : 'rgba(255,120,120,0.9)';
-            ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(d[0].x, d[0].y); ctx.stroke();
+            const lk = locks.get(n);
+            if (!d && !lk) continue;
+            const to = d ? d[0] : lk;
+            ctx.strokeStyle = !m || m[2] === 'open' ? 'rgba(120,255,140,0.9)' : 'rgba(255,120,120,0.9)';
+            ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(to.x, to.y); ctx.stroke();
           }
           labels.push([e.x, e.y, '→ ' + sent.join(', '), '#fd6']);
         });
@@ -2539,6 +2545,12 @@ class Editor {
       const from = PLACE_LAYERS.flatMap((l) => this.list(l)).filter((o) => sentTriggers(o).some((n) => n === id + ':open' || n === id + ':close')).length;
       rows.push(el('div', { class: 'le-tip' }, `Opens on "${id}:open" and closes on "${id}:close"; ${from || 'nothing'} in this level sends ${from === 1 ? 'one' : 'them'}. Set a pickup, trigger pad, box or enemy to send one.`));
     }
+    if (layer === 'features' && /exit_mc$/.test(e.symbol)) {
+      const lock = e.props && typeof e.props.lock === 'string' ? e.props.lock : '';
+      const from = lock ? PLACE_LAYERS.flatMap((l) => this.list(l)).filter((o) => sentTriggers(o).includes(lock)).length : 0;
+      rows.push(el('div', { class: 'le-row' }, 'Locked until ', input(lock, (n) => { e.props = e.props || {}; if (n[0]) e.props.lock = n[0]; else delete e.props.lock; }, 'a trigger name: the exit stays shut, whatever happens to the boxes, until something sends it')));
+      rows.push(el('div', { class: 'le-tip' }, lock ? `Opens on "${lock}"; ${from || 'nothing'} in this level sends it.` : 'Not locked: the exit opens when every required box is destroyed.'));
+    }
     if (layer === 'powerups' && e.props && e.props.type === 'trigger') {
       rows.push(el('div', { class: 'le-row' }, 'Trigger pad sends ', input(e.props.item || '', (n) => { e.props.item = n[0] || ''; }, 'sent when the player walks over it')));
     }
@@ -2683,6 +2695,10 @@ class Editor {
     this.list('doors').forEach((d, k) => {
       if (!d.props || !d.props.id) return;
       rows.push(el('div', { class: 'le-trig', onclick: pick('doors', k), title: 'select this door' }, el('b', {}, d.props.id), ` ${d.symbol.split('/').pop()} ${where(d)} listens for ${d.props.id}:open / :close`));
+    });
+    this.list('features').forEach((f, k) => {
+      if (!f.props || typeof f.props.lock !== 'string' || !f.props.lock) return;
+      rows.push(el('div', { class: 'le-trig', onclick: pick('features', k), title: 'select it' }, el('b', {}, 'exit'), ` ${where(f)} locked until `, el('b', {}, f.props.lock)));
     });
     const names = { powerups: 'pickup', boxes: 'box', enemies: 'enemy' };
     for (const l of ['powerups', 'boxes', 'enemies']) this.list(l).forEach((e, k) => {
