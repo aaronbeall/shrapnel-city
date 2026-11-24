@@ -12,14 +12,14 @@
     "x": 72,
     "y": 600,
     "matrix": [0, 1, -1, 0],
-    "props": {"alarm": "hall:alarm"}
+    "props": {"alarm": ["hall:alarm", "door2:close"], "alarmClear": "door2:open"}
   },
   {
     "symbol": "enemy assets/enemy alarm sentinel",
     "x": 340,
     "y": 330,
     "matrix": [0, 1, -1, 0],
-    "props": {"pathID": 16711680, "alarm": "hall:alarm"}
+    "props": {"pathID": 16711680, "alarm": ["hall:alarm", "door2:close"], "alarmClear": "door2:open"}
   },
   {"symbol": "enemy assets/enemy stinger", "x": 160, "y": 360},
   {"symbol": "enemy assets/enemy stinger", "x": 400, "y": 740},
@@ -119,13 +119,18 @@
     "y": 1120,
     "props": {"powerupDrop": {"type": "health", "item": "health", "quantity": 25}}
   },
-  {"symbol": "enemy assets/enemy alarm panel", "x": 1440, "y": 1088, "props": {"alarm": "yard:alarm"}},
+  {
+    "symbol": "enemy assets/enemy alarm panel",
+    "x": 1440,
+    "y": 1088,
+    "props": {"alarm": ["yard:alarm", "door3:close"], "alarmClear": "door3:open"}
+  },
   {
     "symbol": "enemy assets/enemy alarm sentinel",
     "x": 1360,
     "y": 660,
     "matrix": [0, 1, -1, 0],
-    "props": {"pathID": 16762880, "alarm": "yard:alarm"}
+    "props": {"pathID": 16762880, "alarm": ["yard:alarm", "door3:close"], "alarmClear": "door3:open"}
   },
   {"symbol": "enemy assets/enemy laser turret", "x": 1610, "y": 1060, "props": {"refireRate": 52}},
   {"symbol": "enemy assets/enemy scout", "x": 1200, "y": 652, "props": {"hunter": true, "pathID": 51200}},
@@ -176,6 +181,6 @@
     "x": 1232,
     "y": 380,
     "matrix": [0, 1, -1, 0],
-    "props": {"alarm": "core:alarm", "alarmRange": 280}
+    "props": {"alarmRange": 280}
   }
 ]

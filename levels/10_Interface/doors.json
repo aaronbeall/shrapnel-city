@@ -1,5 +1,13 @@
 [
   {"symbol": "game objects/door", "x": 1360, "y": 582, "matrix": [0, 1, -1, 0], "props": {"id": "door1"}},
+  {
+    "symbol": "game objects/door",
+    "x": 140,
+    "y": 210,
+    "matrix": [0, 1, -1, 0],
+    "props": {"id": "door2", "status": "open"}
+  },
+  {"symbol": "game objects/door", "x": 1140, "y": 1060, "props": {"id": "door3", "status": "open"}},
   {"symbol": "game objects/trap tile", "x": 300, "y": 860, "props": {"onTime": 1.2, "offTime": 2}},
   {"symbol": "game objects/trap tile", "x": 340, "y": 860, "props": {"onTime": 1.2, "offTime": 2}},
   {

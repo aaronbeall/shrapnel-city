@@ -5,7 +5,9 @@
 // hunter paths to the player ("playerDetected", the trigger an alerter sends) and the triggers in
 // `alarm` are sent, e.g. "west:alarm" to wake a group of trap tiles or "door3:close" for a
 // lockdown. While it still sees the player it keeps the hunters posted every alarmRepeat
-// seconds; once it has lost the player for alarmCooldown seconds it can sound again.
+// seconds; once it has lost the player for alarmCooldown seconds the alarm stands down: the
+// triggers in `alarmClear` are sent (e.g. "door3:open" to end the lockdown) and it can sound
+// again. If it dies with the alarm up, the alarm stands down then.
 // Kill it before it sees you (or sneak up behind a sentinel) and nothing happens.
 //
 // Its own sight replaces the vision-zone check, so `attacking` means "sees the player" (a
@@ -14,6 +16,7 @@
 
 // params
 if(alarm == undefined) alarm = "";
+if(alarmClear == undefined) alarmClear = "";
 if(alarmRange == undefined) alarmRange = 260;
 if(alarmCone == undefined) alarmCone = 180;
 if(alarmCooldown == undefined) alarmCooldown = 8;
@@ -46,24 +49,44 @@ function alarmSees(){
 	return lineOfSight(this, _player, 12);
 }
 
+function sendAll(list){
+	var a = list instanceof Array ? list : (list ? [list] : []);
+	for(var i = 0; i < a.length; i++)
+		trigger(a[i]);
+}
+
 function soundAlarm(){
 	alarmUp = true;
 	alarmTime = alarmLost = 0;
 	trigger(ALARM_DETECTED);
-	var a = alarm instanceof Array ? alarm : (alarm ? [alarm] : []);
-	for(var i = 0; i < a.length; i++)
-		trigger(a[i]);
+	sendAll(alarm);
 	if(alarmNotice)
 		notify(this, alarmNotice, frameRate * 2);
 	if(onAlarm)
 		onAlarm();
 }
 
+function standDown(){
+	alarmUp = false;
+	sendAll(alarmClear);
+}
+
+// a dead unit leaves the update loop, so its alarm stands down as it dies
+_alarmDie = onDie;
+onDie = function(){
+	if(alarmUp)
+		standDown();
+	_alarmDie();
+}
+
 _alarmUpdate = update;
 update = function(time){
 	_alarmUpdate(time);
-	if(dying || _currentframe != 1)
+	if(dying || _currentframe != 1){
+		if(alarmUp)
+			standDown();
 		return beacon_mc._visible = false;
+	}
 	if(!stunned && --alarmCheck <= 0){
 		alarmCheck = 5;
 		attacking = alarmSees();
@@ -79,7 +102,7 @@ update = function(time){
 		}
 		alarmLost = 0;
 	}else if(alarmUp && ++alarmLost >= alarmCooldown * frameRate){
-		alarmUp = false;
+		standDown();
 	}
 	// beacon: a turning red strobe while the alarm is up
 	if(beacon_mc){

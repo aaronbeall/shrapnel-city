@@ -29,7 +29,7 @@ be seen.
 
 It writes collision.json (one vector shape per room, rack, cabinet and moat, so the editor can
 move any of them), features, pathNodes, enemies, boxes, powerups, doors (the core door and
-every trap tile), vision (one zone over the whole map: every enemy checks line of sight),
+the hall and yard lockdown doors, every trap tile), vision (one zone per room),
 level.json and briefing.json. collision.png is baked from collision.json by
 tools/levels/bake_collision.mjs, background.png by tools/art/bake.py.
 Re-running overwrites hand edits in those files.
@@ -138,6 +138,11 @@ for k, r in enumerate(CABS):
 # --- the core door's jambs (the door spans the 56 px between them)
 add('core door jamb west', rect(1320, 572, 1332, 592), 'wall', 'core')
 add('core door jamb east', rect(1388, 572, 1400, 592), 'wall', 'core')
+# --- the lockdown doors' jambs: the hall's way up to the bus, the trench's way into the yard
+add('hall lockdown jamb west', rect(100, 200, 112, 220), 'wall', 'data bus')
+add('hall lockdown jamb east', rect(168, 200, 180, 220), 'wall', 'data bus')
+add('yard lockdown jamb north', rect(1130, 1020, 1150, 1032), 'wall', 'switching yard')
+add('yard lockdown jamb south', rect(1130, 1088, 1150, 1100), 'wall', 'switching yard')
 
 # --- the core: the Interface (a wall octagon) inside its cooling moat (a chasm ring)
 CORE_C = (1430, 300)
@@ -270,8 +275,9 @@ tri(300, 1080)
 E(BARREL, 360, 1120)
 # --- server hall: the west panel watches aisle 1 and the bottom aisle; the sentinel walks
 # its loop; stingers on the rack ends; scurge filling the aisles
-E(PANEL, 72, 600, rot=90, props={'alarm': 'hall:alarm'})
-E(SENTINEL, 340, 330, props={'pathID': red, 'alarm': 'hall:alarm'}, rot=90)
+HALL_LOCK = {'alarm': ['hall:alarm', 'door2:close'], 'alarmClear': 'door2:open'}
+E(PANEL, 72, 600, rot=90, props=dict(HALL_LOCK))
+E(SENTINEL, 340, 330, props={'pathID': red, **HALL_LOCK}, rot=90)
 E(STINGER, 160, 360)
 E(STINGER, 400, 740)
 E(STINGER2, 520, 360)
@@ -309,8 +315,9 @@ line(820, 170, 960, 170, 3)
 E(STINGER3, 1100, 1120, props={'powerupDrop': {'type': 'health', 'item': 'health', 'quantity': 25}})
 # --- switching yard: a panel on the south wall, the sentinel's loop, a laser turret down the
 # bottom lane, hunters in the north-west corner, guns at lane ends
-E(PANEL, 1440, 1088, props={'alarm': 'yard:alarm'})
-E(SENTINEL, 1360, 660, props={'pathID': yellow, 'alarm': 'yard:alarm'}, rot=90)
+YARD_LOCK = {'alarm': ['yard:alarm', 'door3:close'], 'alarmClear': 'door3:open'}
+E(PANEL, 1440, 1088, props=dict(YARD_LOCK))
+E(SENTINEL, 1360, 660, props={'pathID': yellow, **YARD_LOCK}, rot=90)
 E(LASER, 1610, 1060, props={'refireRate': 52})
 E(SCOUT, 1200, 652, props=dict(HUNTER))
 E(SCOUT, 1240, 680, props=dict(HUNTER))
@@ -336,7 +343,7 @@ grid(1300, 230, 2, 2, s=24)
 grid(1560, 290, 2, 2, s=24)
 grid(1430, 470, 3, 2, s=24)
 tri(1350, 110, s=24)
-E(PANEL, 1232, 380, rot=90, props={'alarm': 'core:alarm', 'alarmRange': 280})
+E(PANEL, 1232, 380, rot=90, props={'alarmRange': 280})
 
 # ---------------------------------------------------------------- pickups and messages
 pick = []
@@ -374,7 +381,11 @@ pickup(1270, 500, 'health', 'health', 50)
 pickup(1590, 320, 'primary', 'Arc Caster', 40)
 
 # ---------------------------------------------------------------- doors and floor grids
-doors = [P('game objects/door', 1360, 582, rot=90, props={'id': 'door1'})]
+# door1 seals the core until the uplink terminal dies; door2 and door3 stand open and slam shut
+# while an alarm in their room is up (the hall's way to the bus, the trench's way into the yard)
+doors = [P('game objects/door', 1360, 582, rot=90, props={'id': 'door1'}),
+         P('game objects/door', 140, 210, rot=90, props={'id': 'door2', 'status': 'open'}),
+         P('game objects/door', 1140, 1060, props={'id': 'door3', 'status': 'open'})]
 TILE = 'game objects/trap tile'
 
 
@@ -472,7 +483,23 @@ stack(1540, 150)
 boxes.append(P('game objects/box computer', 1610, 860, props={'onDie': {'$trigger': 'door1:open'}}))
 boxes.append(P('game objects/box computer', 1180, 1076, props={'onDie': {'$trigger': 'yard:off'}}))
 
-vision = [{'x': 0, 'y': 0, 'points': [[20, 20], [W - 20, 20], [W - 20, H - 20], [20, H - 20]]}]
+# vision: one zone per room, overlapping where rooms meet, so an enemy fights you in its own room
+# and the doorways belong to both sides. Together they cover every floor pixel, because a moving
+# enemy re-registers its zones as it goes (one outside every zone would make its own).
+def zone(name, x0, y0, x1, y1):
+    return {'name': name, 'x': 0, 'y': 0, 'd': f'M {x0} {y0} L {x1} {y0} L {x1} {y1} L {x0} {y1} Z'}
+
+
+vision = [
+    zone('intake', 40, 780, 400, 1160),            # with its corridor up into the hall
+    zone('server hall', 40, 260, 640, 840),
+    zone('hunter dock', 400, 150, 640, 300),
+    zone('hall stair', 80, 100, 200, 320),         # the way up to the bus (door2)
+    zone('data bus', 40, 10, 1200, 200),
+    zone('cooling trench', 660, 120, 1140, 1160),
+    zone('switching yard', 1100, 600, 1660, 1120),  # with the trench door (door3)
+    zone('core', 1200, 40, 1660, 660),              # with its corridor and door (door1)
+]
 
 BRIEFING = {
     'title': 'INTERFACE',

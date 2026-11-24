@@ -212,6 +212,30 @@
     "group": "core"
   },
   {
+    "name": "hall lockdown jamb west",
+    "mode": "wall",
+    "d": "M 100 200 L 112 200 L 112 220 L 100 220 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "hall lockdown jamb east",
+    "mode": "wall",
+    "d": "M 168 200 L 180 200 L 180 220 L 168 220 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "yard lockdown jamb north",
+    "mode": "wall",
+    "d": "M 1130 1020 L 1150 1020 L 1150 1032 L 1130 1032 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "yard lockdown jamb south",
+    "mode": "wall",
+    "d": "M 1130 1088 L 1150 1088 L 1150 1100 L 1130 1100 Z",
+    "group": "switching yard"
+  },
+  {
     "name": "core moat",
     "mode": "chasm",
     "d": "M 1373.36 204 L 1486.64 204 L 1526 243.36 L 1526 356.64 L 1486.64 396 L 1373.36 396 L 1334 356.64 L 1334 243.36 Z",

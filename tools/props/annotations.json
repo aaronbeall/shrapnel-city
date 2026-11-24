@@ -393,8 +393,13 @@
     },
     "alarm": {
       "group": "alarm",
-      "type": "json",
+      "type": "trigger",
       "desc": "Triggers sent when it spots the player, e.g. \"hall:alarm\" or [\"hall:alarm\", \"door3:close\"]. Every hunter is also sent after the player."
+    },
+    "alarmClear": {
+      "group": "alarm",
+      "type": "trigger",
+      "desc": "Triggers sent when the alarm stands down (alarmCooldown seconds after it lost the player, or when it dies with the alarm up), e.g. \"door2:open\" to end a lockdown."
     },
     "alarmRange": {
       "group": "alarm",
