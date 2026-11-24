@@ -2102,5 +2102,172 @@
    "w": 34,
    "h": 30
   }
+ ],
+ "city-gateway": [
+  {
+   "file": "city-gateway/00.png",
+   "w": 1065,
+   "h": 59
+  },
+  {
+   "file": "city-gateway/01.png",
+   "w": 150,
+   "h": 72
+  },
+  {
+   "file": "city-gateway/02.png",
+   "w": 40,
+   "h": 39
+  },
+  {
+   "file": "city-gateway/03.png",
+   "w": 42,
+   "h": 31
+  },
+  {
+   "file": "city-gateway/04.png",
+   "w": 1066,
+   "h": 56
+  },
+  {
+   "file": "city-gateway/05.png",
+   "w": 150,
+   "h": 74
+  },
+  {
+   "file": "city-gateway/06.png",
+   "w": 41,
+   "h": 40
+  },
+  {
+   "file": "city-gateway/07.png",
+   "w": 42,
+   "h": 31
+  },
+  {
+   "file": "city-gateway/08.png",
+   "w": 1066,
+   "h": 57
+  },
+  {
+   "file": "city-gateway/09.png",
+   "w": 156,
+   "h": 74
+  },
+  {
+   "file": "city-gateway/10.png",
+   "w": 40,
+   "h": 37
+  },
+  {
+   "file": "city-gateway/11.png",
+   "w": 1067,
+   "h": 60
+  },
+  {
+   "file": "city-gateway/12.png",
+   "w": 42,
+   "h": 30
+  },
+  {
+   "file": "city-gateway/13.png",
+   "w": 150,
+   "h": 74
+  },
+  {
+   "file": "city-gateway/14.png",
+   "w": 1067,
+   "h": 59
+  },
+  {
+   "file": "city-gateway/15.png",
+   "w": 40,
+   "h": 38
+  },
+  {
+   "file": "city-gateway/16.png",
+   "w": 42,
+   "h": 30
+  },
+  {
+   "file": "city-gateway/17.png",
+   "w": 412,
+   "h": 140
+  },
+  {
+   "file": "city-gateway/18.png",
+   "w": 400,
+   "h": 142
+  },
+  {
+   "file": "city-gateway/19.png",
+   "w": 373,
+   "h": 141
+  },
+  {
+   "file": "city-gateway/20.png",
+   "w": 29,
+   "h": 34
+  },
+  {
+   "file": "city-gateway/21.png",
+   "w": 23,
+   "h": 31
+  },
+  {
+   "file": "city-gateway/22.png",
+   "w": 22,
+   "h": 30
+  },
+  {
+   "file": "city-gateway/23.png",
+   "w": 23,
+   "h": 30
+  },
+  {
+   "file": "city-gateway/24.png",
+   "w": 23,
+   "h": 29
+  },
+  {
+   "file": "city-gateway/25.png",
+   "w": 23,
+   "h": 29
+  },
+  {
+   "file": "city-gateway/26.png",
+   "w": 22,
+   "h": 29
+  },
+  {
+   "file": "city-gateway/27.png",
+   "w": 23,
+   "h": 30
+  },
+  {
+   "file": "city-gateway/28.png",
+   "w": 174,
+   "h": 138
+  },
+  {
+   "file": "city-gateway/29.png",
+   "w": 160,
+   "h": 136
+  },
+  {
+   "file": "city-gateway/30.png",
+   "w": 134,
+   "h": 134
+  },
+  {
+   "file": "city-gateway/31.png",
+   "w": 158,
+   "h": 109
+  },
+  {
+   "file": "city-gateway/32.png",
+   "w": 162,
+   "h": 109
+  }
  ]
 }

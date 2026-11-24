@@ -15,6 +15,8 @@ baked, so the original backgrounds (levels 00-02) are never overwritten:
   and rooftops on a grey day, tools/art/kit_city.py with tools/art/parts/city/ and the
   decor sprites in tools/art/parts/decor/city-*/).
 - seed: the random seed for decor placement and the floor's light variation.
+- grade: the colour grade, one of the kit's grades in tools/art/kits.json (its defaultGrade when
+  left out). kits.json also lists each kit's area lists (city: paved), which the editor draws.
 
 The kit's parts were generated with OpenAI gpt-image-2 using only the original levels
 (backgrounds 0-2) as style references; the prompts sit next to them. The bake lays them
@@ -49,7 +51,7 @@ import kit_city  # noqa: E402
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..'))
 PARTS = os.path.join(os.path.dirname(__file__), 'parts')
 DECOR = os.path.join(PARTS, 'decor')
-KITS = ('bridge', 'city')
+KITS = tuple(json.load(open(os.path.join(os.path.dirname(__file__), 'kits.json'))))  # tools/art/kits.json
 
 
 def blur(a, s): return ndi.gaussian_filter(a.astype(np.float32), s, mode='nearest')
@@ -461,7 +463,7 @@ def bake(g, decor, seed, opts, kit='bridge', art=None):
     img = img + lo['intensity'] * lighting * (0.12 + img) * (1 - np.clip(img, 0, 1))
     img += np.stack([blur(bloom[..., c], 4) for c in range(3)], -1) * lo['bloom']
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
-    if kit == 'city': img = kit_city.grade(img)
+    if kit == 'city': img = kit_city.grade(img, (art or {}).get('grade'))
     elif (art or {}).get('grade'): img = grade_metal(img, art['grade'])
     sh = opts['edges']['sharpen']
     if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))
@@ -469,15 +471,15 @@ def bake(g, decor, seed, opts, kit='bridge', art=None):
 
 
 # colour grades for the metal kit, picked by level.json art.grade (none: the Bridge's own look)
-METAL_GRADES = {
-    # emergency lighting: colours drained, a hard red cast, deeper shadows, a red haze in the dark
-    'red alert': dict(sat=0.55, mul=(1.0, 0.8, 0.78), gamma=1.18, lift=(0.03, 0.0, 0.0)),
-}
+# the bridge (metal) kit's colour grades, from tools/art/kits.json (which the editor reads too):
+# saturation, a gamma, a colour multiply and a lift in the shadows; "none" leaves the art alone
+METAL_GRADES = json.load(open(os.path.join(os.path.dirname(__file__), 'kits.json')))['bridge']['grades']
 
 
 def grade_metal(img, name):
-    if name not in METAL_GRADES: sys.exit(f'unknown art grade {name!r} for the metal kit; known: {", ".join(METAL_GRADES)}')
+    if name not in METAL_GRADES: sys.exit(f'unknown art grade {name!r} for the bridge kit; known: {", ".join(METAL_GRADES)}')
     g = METAL_GRADES[name]
+    if 'sat' not in g: return img
     lum = img.mean(-1, keepdims=True)
     img = lum + (img - lum) * g['sat']
     img = np.clip(img, 0, None) ** g['gamma']

@@ -1135,5 +1135,6 @@
   "weapon assets/shot MC arc": 2030,
   "weapon assets/shot MC enemy laser": 2031,
   "weapon assets/wep icons arc caster/shape 1": 2032,
-  "weapon assets/wep icons arc caster": 2033
+  "weapon assets/wep icons arc caster": 2033,
+  "enemy assets/enemy warden": 1500
 }

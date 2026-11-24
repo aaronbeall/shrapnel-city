@@ -1,0 +1,29 @@
+{
+  "bridge": {
+    "label": "bridge",
+    "tip": "metal decks, cables and lights over the chasm (levels 00-03)",
+    "grades": {
+      "none": { "tip": "no grade: the kit's own colours (00-03 Bridge)" },
+      "red alert": { "sat": 0.55, "mul": [1.0, 0.8, 0.78], "gamma": 1.18, "lift": [0.03, 0.0, 0.0], "tip": "10 Interface: emergency lighting, colours drained, a hard red cast and a red haze in the dark" }
+    },
+    "defaultGrade": "none",
+    "areas": {}
+  },
+  "city": {
+    "label": "city",
+    "tip": "streets, pavements, plazas and buildings (levels 04-)",
+    "grades": {
+      "grey day": { "grey": 0.3, "gain": [0.97, 0.99, 1.03], "haze": 0.025, "tip": "04 Urban: muted, a cool cast" },
+      "olive": { "grey": 0.42, "gain": [1.0, 1.0, 0.82], "haze": 0.03, "tip": "05 Gateway: olive drab checkpoint, warm khaki haze" }
+    },
+    "defaultGrade": "grey day",
+    "areas": {
+      "paved": {
+        "label": "Paved areas",
+        "shape": "rect",
+        "colour": "#e0b040",
+        "tip": "open floor inside these boxes is paved all over (plazas, courtyards, yards) instead of road with pavement round it"
+      }
+    }
+  }
+}
