@@ -1,0 +1,48 @@
+{
+  "bridge": {
+    "label": "bridge",
+    "tip": "metal decks, cables and lights over the chasm (levels 00-03)",
+    "grades": {},
+    "areas": {}
+  },
+  "city": {
+    "label": "city",
+    "tip": "streets, pavements, plazas and buildings (levels 04-)",
+    "grades": {
+      "grey day": { "grey": 0.3, "gain": [0.97, 0.99, 1.03], "haze": 0.025, "tip": "04 Urban: muted, a cool cast" },
+      "olive": { "grey": 0.42, "gain": [1.0, 1.0, 0.82], "haze": 0.03, "tip": "05 Gateway: olive drab checkpoint, warm khaki haze" }
+    },
+    "defaultGrade": "grey day",
+    "areas": {
+      "paved": {
+        "label": "Paved areas",
+        "shape": "rect",
+        "colour": "#e0b040",
+        "tip": "open floor inside these boxes is paved all over (plazas, courtyards, yards) instead of road with pavement round it"
+      }
+    }
+  },
+  "rock": {
+    "label": "rock",
+    "tip": "badlands of dirt, gravel and rock over a concrete bunker (levels 08-)",
+    "grades": {
+      "ochre": { "grey": 0.12, "gain": [1.04, 0.99, 0.9], "haze": 0.02, "tip": "08 Bunker: warm hazy daylight" },
+      "dusk": { "grey": 0.05, "gain": [0.972, 0.837, 0.756], "haze": 0.015, "tip": "a lower, redder evening light" }
+    },
+    "defaultGrade": "ochre",
+    "areas": {
+      "interior": {
+        "label": "Bunker interior",
+        "shape": "rect",
+        "colour": "#60a0e0",
+        "tip": "inside these boxes the floor is bunker concrete and the walls bunker walls with a coped roof; outside is badlands ground and rock"
+      },
+      "concrete": {
+        "label": "Concrete walls",
+        "shape": "rect",
+        "colour": "#e07040",
+        "tip": "walls inside these boxes out in the badlands are drawn as concrete (pillboxes, huts) instead of rock"
+      }
+    }
+  }
+}
