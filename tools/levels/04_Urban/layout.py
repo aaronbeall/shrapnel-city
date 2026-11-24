@@ -315,13 +315,14 @@ def grid(x, y, cols, rows, s=30):
             E(SCURGE, x + (i - (cols - 1) / 2) * s, y + (j - (rows - 1) / 2) * s)
 
 
-# --- the start (south-west): a gentle first fight
+# --- the start (south-west): a hot start but not a crowd. Only the scurge below the
+# collapsed avenue can see the spawn; the rest wait round the corner or out of range.
 E(STINGER, *corner(0, 2, 'ne'))
-E(STINGER, *corner(0, 2, 'nw'))
-tri(76, 860)                                  # below the collapsed avenue
-tri(260, 1042)                                # along the south street
-tri(cross(1, 3)[0], 1042 - 4, down=True)
-E(BARREL, 330, 1010)
+E(STINGER, *corner(0, 1, 'nw'))
+tri(76, 860)                                  # below the collapsed avenue: the hot start
+tri(250, 720)                                 # round the corner, in the street north of the first block
+tri(335, 720, down=True)
+E(BARREL, 180, 700)
 # the south courtyard (Vertigo): scouts and a stinger2 over the prize
 E(SCOUT, yard_s_mid[0] - 50, yard_s_mid[1] - 20)
 E(SCOUT, yard_s_mid[0] + 50, yard_s_mid[1] - 20)

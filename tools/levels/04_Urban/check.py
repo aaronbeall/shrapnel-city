@@ -9,6 +9,8 @@ Reads the level files (so it checks hand edits too) and reports:
 - anything the player can't reach from the entrance (with the checkpoint gate open), and
   whether the exit is shut off while the gate is closed
 - density per 100k px of open floor, to compare with the earlier levels
+- how many enemies can see the spawn (within level.json sightRange, line of sight over
+  chasms): a couple is a hot start, more is a crowd
 """
 import json
 import math
@@ -77,7 +79,17 @@ def main():
         w2[int(dr['y']) - 14:int(dr['y']) + 14, int(dr['x']) - 32:int(dr['x']) + 32] = False
     lab2, _ = ndi.label(w2)
     if lab2[int(ent['y']), int(ent['x'])] == lab2[int(ext['y']), int(ext['x'])]: problems.append('the exit is reachable with the gate shut')
+    # the spawn: a couple of enemies in sight is a hot start, more is a crowd
+    rng_ = json.load(open(os.path.join(D, 'level.json'))).get('sightRange', 420)
+    wall = c <= 0x10   # chasm doesn't block sight
+
+    def sees(x, y):
+        n = int(math.hypot(x - ent['x'], y - ent['y']) / 3) + 1
+        return not any(wall[int(ent['y'] + (y - ent['y']) * i / n), int(ent['x'] + (x - ent['x']) * i / n)] for i in range(n + 1))
+    seen = [e for e in enemies if math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) <= rng_ and sees(e['x'], e['y'])]
+    if len(seen) > 3: problems.append(f'{len(seen)} enemies can see the spawn (a couple is a hot start): ' + ', '.join(f"{e['symbol'].split('/')[-1]} ({e['x']}, {e['y']})" for e in seen))
     print('\n'.join(problems) if problems else 'no problems found')
+    print(f'{len(seen)} enemies can see the spawn')
     # density
     open_px = (~solid).sum() / 1e5
     req = sum(1 for b in boxes if b['symbol'] == 'game objects/box')
