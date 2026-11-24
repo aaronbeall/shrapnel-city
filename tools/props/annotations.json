@@ -147,6 +147,31 @@
       "group": "combat",
       "desc": "Frames between bursts."
     },
+    "mortarRange": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: farthest the player can be for it to fire (px). It needs no line of sight and lobs over walls."
+    },
+    "mortarMinRange": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: closest the player can be for it to fire (px). Inside this the player is safe from its shells."
+    },
+    "mortarLead": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: how far ahead of a moving player it aims, as a fraction of the shell's flight time (0 = where the player is now)."
+    },
+    "mortarSpread": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: random scatter of the landing point (px)."
+    },
+    "mortarFlightSpeed": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: shell speed along the ground (px per frame); slower gives the player more time to leave the landing ring."
+    },
     "visionRange": {
       "group": "vision",
       "type": "number",
