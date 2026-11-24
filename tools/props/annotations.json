@@ -178,6 +178,31 @@
       "group": "combat",
       "desc": "Frames between bursts."
     },
+    "mortarRange": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: farthest the player can be for it to fire (px). It needs no line of sight and lobs over walls."
+    },
+    "mortarMinRange": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: closest the player can be for it to fire (px). Inside this the player is safe from its shells."
+    },
+    "mortarLead": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: how far ahead of a moving player it aims, as a fraction of the shell's flight time (0 = where the player is now)."
+    },
+    "mortarSpread": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: random scatter of the landing point (px)."
+    },
+    "mortarFlightSpeed": {
+      "group": "combat",
+      "type": "number",
+      "desc": "Mortar: shell speed along the ground (px per frame); slower gives the player more time to leave the landing ring."
+    },
     "visionRange": {
       "group": "vision",
       "type": "number",
@@ -289,6 +314,8 @@
         "secondary",
         "health",
         "trigger",
+        "key",
+        "lock",
         "zoneWarp"
       ],
       "desc": "What the pickup is."
@@ -296,7 +323,15 @@
     "item": {
       "group": "pickup",
       "type": "string",
-      "desc": "Weapon name (primary/secondary), health kind (health, superHealth, healthMax), or trigger name(s) for a trigger pad."
+      "desc": "Weapon name (primary/secondary), health kind (health, superHealth, healthMax), trigger name(s) for a trigger pad, or keycard (yellowKey, blueKey, redKey, greenKey, purpleKey, aquaKey) for a key or lock."
+    },
+    "unlock": {
+      "group": "pickup",
+      "type": "string",
+      "for": [
+        "powerup"
+      ],
+      "desc": "Lock pads: the trigger sent once the keycard is used, e.g. door1:open."
     },
     "quantity": {
       "group": "pickup",

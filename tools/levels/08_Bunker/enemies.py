@@ -314,7 +314,7 @@ def mortar_shell():
                           'script': '#include "as/shots/shot_mcEMortar.as"'})
     # and the level's new bomb, the Bunker Buster (player.as weapons2): the unused "shot MC bomb3"
     # art (a black ball with a ring of charges), a bit bigger, params in as2/shots/shot_mcBuster.as
-    f2['changes'].append({'place': f'{WA}/shot MC bomb3', 'depth': 3243, 'x': -320, 'y': 425, 'scale': 1.3, 'name': 'shot_mcBuster',
+    f2['changes'].append({'place': f'{WA}/shot MC bomb3', 'depth': 3245, 'x': -320, 'y': 425, 'scale': 1.3, 'name': 'shot_mcBuster',
                           'clipEvents': [1], 'script': '#include "as/shots/shot_mcBuster.as"'})
     with open(p, 'w', encoding='utf-8', newline='\n') as fh:
         fh.write(json.dumps(scr, indent=2) + '\n')

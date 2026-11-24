@@ -43,7 +43,7 @@ for (const f of files) {
 // A symbol is placeable on a layer when its frame script (inline, or the as2/frames file it
 // includes) includes that layer's class file: an enemy class makes it an enemy, and so on.
 const PLACE_CLASSES = {
-  enemies: ['enemyTurret', 'enemyVehicle', 'enemyObject'], boxes: ['box', 'boxReactor'], powerups: ['powerup'],
+  enemies: ['enemyTurret', 'enemyMortar', 'enemyVehicle', 'enemyObject'], boxes: ['box', 'boxReactor'], powerups: ['powerup'],
   doors: ['door', 'gate'], features: ['entrance', 'exit'], pathNodes: ['pathNode'],
 };
 const palette = Object.fromEntries(Object.keys(PLACE_CLASSES).map((l) => [l, []]));

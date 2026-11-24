@@ -251,8 +251,9 @@ function saveLevel(index){
 	lvl.wep1ID = p.weapon1.id;
 	lvl.wep2ID = p.weapon2.id;
 	lvl.inventory = [];
-	for(var i in _inventory.items)
-		lvl.inventory[i] = {name:_inventory.items[i].name, label:_inventory.items[i].label};
+	for(var i = 0; i < _inventory.items.length; i++)
+		if(_inventory.items[i].name.substr(-3) != "Key") // keycards belong to the level they were found in
+			lvl.inventory.push({name:_inventory.items[i].name, label:_inventory.items[i].label});
 	if(!d.level || d.level < index)
 		d.level = index;
 	so.flush();

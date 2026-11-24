@@ -1,0 +1,58 @@
+{
+  "title": "GATEWAY",
+  "body": "Please have your keycard, your papers and your\nremaining dignity ready for inspection. Three walls,\nthree locked doors, a Warden on every patrol. Wardens\ncall the guards the moment they spot you, and they\nwill spot you. They also carry the keycards -- they\nwon't be needing them. Missile Batteries can't be\nreached, only reasoned with. Reason loudly.",
+  "captions": [
+    {
+      "style": "name",
+      "text": "Checkpoint Warden",
+      "x": 636.45,
+      "y": 209.89
+    },
+    {
+      "style": "note",
+      "text": "Calls the guards. Has your keys.",
+      "x": 636.45,
+      "y": 316.6
+    },
+    {
+      "style": "name",
+      "text": "Missile Battery",
+      "x": 636.48,
+      "y": 359.89
+    },
+    {
+      "style": "note",
+      "text": "Seekers. Stun it, then shoot it.",
+      "x": 636.45,
+      "y": 426.6
+    }
+  ],
+  "graphics": [
+    {
+      "symbol": "enemy assets/designs/beetle",
+      "x": 636.5,
+      "y": 270,
+      "matrix": [
+        -1.6,
+        0,
+        0,
+        -1.6
+      ]
+    },
+    {
+      "symbol": "enemy assets/enemy missile launcher core",
+      "x": 636.5,
+      "y": 400
+    },
+    {
+      "symbol": "enemy assets/enemy missile launcher turret",
+      "x": 636.5,
+      "y": 400
+    },
+    {
+      "symbol": "screen_mc/shape 3",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}
