@@ -1,12 +1,10 @@
 [
-  {"symbol": "enemy assets/enemy stinger", "x": 350, "y": 930},
-  {"symbol": "enemy assets/enemy scurge", "x": 250, "y": 918.76},
-  {"symbol": "enemy assets/enemy scurge", "x": 236, "y": 943.12},
-  {"symbol": "enemy assets/enemy scurge", "x": 264, "y": 943.12},
-  {"symbol": "enemy assets/enemy scurge", "x": 300, "y": 1063.76},
-  {"symbol": "enemy assets/enemy scurge", "x": 286, "y": 1088.12},
-  {"symbol": "enemy assets/enemy scurge", "x": 314, "y": 1088.12},
-  {"symbol": "enemy assets/enemy object fire barrel", "x": 360, "y": 1120},
+  {"symbol": "enemy assets/enemy scurge", "x": 300, "y": 1064},
+  {"symbol": "enemy assets/enemy scurge", "x": 314, "y": 1094},
+  {"symbol": "enemy assets/enemy stinger", "x": 400, "y": 800},
+  {"symbol": "enemy assets/enemy scurge", "x": 250, "y": 783.76},
+  {"symbol": "enemy assets/enemy scurge", "x": 236, "y": 808.12},
+  {"symbol": "enemy assets/enemy scurge", "x": 264, "y": 808.12},
   {
     "symbol": "enemy assets/enemy alarm panel",
     "x": 72,

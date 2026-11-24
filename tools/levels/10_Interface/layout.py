@@ -268,11 +268,12 @@ def line(x0, y0, x1, y1, n):
 
 HUNTER = {'hunter': True, 'pathID': GREEN}
 
-# --- intake: a gentle start
-E(STINGER, 350, 930)
-tri(250, 935)
-tri(300, 1080)
-E(BARREL, 360, 1120)
+# --- intake: the drop-off bay is nearly quiet, a pair of scurge for a hot start; the rest of its
+# welcome party waits where the corridor comes up into the hall
+E(SCURGE, 300, 1064)
+E(SCURGE, 314, 1094)
+E(STINGER, 400, 800)
+tri(250, 800)
 # --- server hall: the west panel watches aisle 1 and the bottom aisle; the sentinel walks
 # its loop; stingers on the rack ends; scurge filling the aisles
 HALL_LOCK = {'alarm': ['hall:alarm', 'door2:close'], 'alarmClear': 'door2:open'}
