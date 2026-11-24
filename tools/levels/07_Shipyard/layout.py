@@ -24,7 +24,7 @@ patrol the quay road and the dockyard round the dry dock. Crates are cargo, not 
 (required false): the exit ignores them.
 
 Writes collision.json (one vector shape per pier, hull, superstructure, container stack...),
-features, pathNodes, enemies, boxes, powerups, doors, level.json and briefing.json.
+features, pathNodes, enemies, boxes, powerups, doors, vision zones, level.json and briefing.json.
 collision.png is baked from collision.json by tools/levels/bake_collision.mjs and the art by
 tools/art/bake.py. Re-running overwrites hand edits in those files.
 """
@@ -393,7 +393,19 @@ pickup(1740, 120, 'primary', 'Auto Cannon', 40)
 BEACON = 'game objects/message beacon'
 pick.append(P(BEACON, 170, 1310, props={'alertMessage': 'Four warships, four <strong>DECK BATTERIES</strong> (the guns on the red and white rings). The launch pad on the lighthouse headland unlocks when all four are scrap.', 'persistent': True}))
 pick.append(P(BEACON, 1610, 150, props={'alertMessage': 'Launch pad locked. It opens when every <strong>DECK BATTERY</strong> in the yard is destroyed.', 'persistent': True}))
-doors = []
+# doors: blast gates on the gangways (a door is 50 px tall, a gangway 52 px wide)
+# - the dry dock's two gantries stay shut until the dock control terminal in the dockyard is shot,
+#   so the frigate is a two-step job
+# - the flagship's long east gangway is shut from the dockyard side: you board over the short
+#   west gangway from the central pier, and stepping on deck opens the east gate as a way out
+GATE_SCALE = [1, 1.1]
+doors = [
+    P('game objects/door', 1442, 526, scale=GATE_SCALE, props={'id': 'door1'}),      # frigate west gantry, dockyard end
+    P('game objects/door', 1690, 786, scale=GATE_SCALE, props={'id': 'door2'}),      # frigate east gantry, dockyard end
+    P('game objects/door', 1290, 482, scale=GATE_SCALE, props={'id': 'door3'}),      # flagship east gangway, dockyard end
+]
+# a trigger pad across the flagship's deck just inboard of its west gangway
+pick.append(P('game objects/powerup', 1060, 853, scale=[2.2, 2.2], props={'type': 'trigger', 'item': 'door3:open'}))
 
 # crates: cargo on the quay, the piers and the decks. None is required: the exit only cares
 # about the Deck Batteries. Some carry drops.
@@ -429,6 +441,21 @@ for args in (
     crates(*args)
 for x, y in ((180, 1250), (1400, 1300), (1590, 120)):
     stack(x, y)
+# the dock control terminal: opens both dry dock gantries. Not required: the exit only wants the targets
+boxes.append(P('game objects/box computer', 1350, 560, props={'required': False, 'onDie': {'$trigger': ['door1:open', 'door2:open']}}))
+
+# vision zones: water stops nobody's eyes, so without zones every gun in the harbour would see
+# you from everywhere. The map is split into its fights, overlapping where two areas look at
+# each other; an enemy in two zones watches both
+ZONES = {
+    'landside': (B, 1000, W - B, H - B),           # the quay road, the yards, the start
+    'west basin': (B, 280, 670, 1080),             # the gunboats, the west pier, the destroyer
+    'north': (B, B, 980, 420),                     # the cruiser, the breakwater's west half, the pier heads
+    'central': (640, 100, 1320, 1060),             # the central pier and the flagship
+    'dockyard': (1280, 200, W - B, 1080),          # round the dry dock, the frigate
+    'headland': (960, B, W - B, 320),              # the breakwater's east half, the lighthouse, the exit
+}
+vision = [{'x': 0, 'y': 0, 'points': [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]} for x0, y0, x1, y1 in ZONES.values()]
 
 
 INTRO = {'Auto Cannon': 'AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.',
@@ -503,6 +530,7 @@ def main():
         'boxes.json': list_json(boxes),
         'powerups.json': list_json(pick),
         'doors.json': list_json(doors),
+        'vision.json': list_json(vision),
     }
     for name, text in files.items():
         with open(os.path.join(a.out, name), 'w', encoding='utf-8', newline='\n') as f: f.write(text)

@@ -160,5 +160,12 @@
       "alertMessage": "Launch pad locked. It opens when every <strong>DECK BATTERY</strong> in the yard is destroyed.",
       "persistent": true
     }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1060,
+    "y": 853,
+    "scale": [2.2, 2.2],
+    "props": {"type": "trigger", "item": "door3:open"}
   }
 ]

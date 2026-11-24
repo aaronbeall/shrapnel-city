@@ -150,5 +150,11 @@
   {"symbol": "game objects/box", "x": 1590, "y": 120, "props": {"required": false}},
   {"symbol": "game objects/box", "x": 1590, "y": 140, "props": {"required": false}},
   {"symbol": "game objects/box", "x": 1610, "y": 120, "props": {"required": false}},
-  {"symbol": "game objects/box", "x": 1610, "y": 140, "props": {"required": false}}
+  {"symbol": "game objects/box", "x": 1610, "y": 140, "props": {"required": false}},
+  {
+    "symbol": "game objects/box computer",
+    "x": 1350,
+    "y": 560,
+    "props": {"required": false, "onDie": {"$trigger": ["door1:open", "door2:open"]}}
+  }
 ]
