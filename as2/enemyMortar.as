@@ -4,9 +4,8 @@
 // closing ring on the ground where it will land (see enemyProjectileMortar.as).
 // Params (set before the #include): mortarRange, mortarMinRange (too close to fire),
 // mortarLead (0..1, how far ahead of a moving player it aims), mortarSpread (px of scatter).
-// With vision zones it also needs the player in one of its zones (the area it covers, sight
-// or not), so a pit outside doesn't shell rooms inside; with only its own auto zone (a level
-// without zones) range alone decides.
+// On a level with vision zones it also needs the player in one of its zones (sight or not);
+// outside every zone range alone decides.
 
 #include "enemyTurret.as"
 

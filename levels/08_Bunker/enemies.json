@@ -57,7 +57,7 @@
   {"symbol": "enemy assets/enemy scurge", "x": 1155, "y": 55.3},
   {"symbol": "enemy assets/enemy stinger", "x": 1320, "y": 60},
   {"symbol": "enemy assets/enemy object fire barrel", "x": 1060, "y": 240},
-  {"symbol": "enemy assets/enemy bunker mortar", "x": 1380, "y": 300},
+  {"symbol": "enemy assets/enemy bunker mortar", "x": 1380, "y": 300, "props": {"mortarRange": 370}},
   {
     "symbol": "enemy assets/enemy walker",
     "x": 1430,
@@ -173,7 +173,7 @@
   {"symbol": "enemy assets/enemy scurge", "x": 713, "y": 1267},
   {"symbol": "enemy assets/enemy scurge", "x": 713, "y": 1293},
   {"symbol": "enemy assets/enemy double battery", "x": 1600, "y": 1100, "matrix": [-1, 0, 0, -1]},
-  {"symbol": "enemy assets/enemy bunker mortar", "x": 1630, "y": 1290, "props": {"mortarRange": 330}},
+  {"symbol": "enemy assets/enemy bunker mortar", "x": 1630, "y": 1290, "props": {"mortarRange": 270}},
   {"symbol": "enemy assets/enemy stinger3", "x": 1300, "y": 1080},
   {"symbol": "enemy assets/enemy stinger3", "x": 1300, "y": 1300},
   {"symbol": "enemy assets/enemy wolfgun", "x": 1400, "y": 1195},

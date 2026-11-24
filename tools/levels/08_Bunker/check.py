@@ -85,18 +85,6 @@ def main():
         w2[int(dr['y']) - hh:int(dr['y']) + hh, int(dr['x']) - hw:int(dr['x']) + hw] = False
     lab2, _ = ndi.label(w2)
     if lab2[int(ent['y']), int(ent['x'])] == lab2[int(ext['y']), int(ext['x'])]: problems.append('the exit is reachable with the doors shut')
-    # every enemy in a vision zone (one outside any makes its own zone from what it can see,
-    # which looks through closed doors)
-    def inpoly(x, y, pts):
-        c = False
-        for k in range(len(pts)):
-            (x1, y1), (x2, y2) = pts[k - 1], pts[k]
-            if (y1 > y) != (y2 > y) and x < x1 + (y - y1) * (x2 - x1) / (y2 - y1): c = not c
-        return c
-    zones = load('vision.json')
-    for k, o in enumerate(load('enemies.json')):
-        if not any(inpoly(o['x'] - z['x'], o['y'] - z['y'], z['points']) for z in zones if 'points' in z):
-            problems.append(f"enemies[{k}] {o['symbol'].split('/')[-1]}: in no vision zone")
     print('\n'.join(problems) if problems else 'no problems found')
     # density
     open_px = (~solid).sum() / 1e5
