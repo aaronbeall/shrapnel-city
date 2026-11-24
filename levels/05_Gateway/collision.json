@@ -1,0 +1,494 @@
+[
+  {"name": "collision map", "pixels": "collision-base.png", "locked": true},
+  {
+    "name": "outer wall",
+    "mode": "wall",
+    "d": "M 0 0 L 1440 0 L 1440 1660 L 0 1660 Z M 20 20 L 20 1640 L 1420 1640 L 1420 20 Z"
+  },
+  {
+    "name": "inner wall west",
+    "mode": "wall",
+    "d": "M 0 300 L 144 300 L 144 340 L 0 340 Z",
+    "group": "inner wall"
+  },
+  {
+    "name": "inner wall east",
+    "mode": "wall",
+    "d": "M 200 300 L 1440 300 L 1440 340 L 200 340 Z",
+    "group": "inner wall"
+  },
+  {
+    "name": "inner wall tower 1",
+    "mode": "wall",
+    "d": "M 441 334 L 499 334 L 504 339 L 504 357 L 499 362 L 441 362 L 436 357 L 436 339 Z",
+    "group": "inner wall"
+  },
+  {
+    "name": "inner wall tower 2",
+    "mode": "wall",
+    "d": "M 941 334 L 999 334 L 1004 339 L 1004 357 L 999 362 L 941 362 L 936 357 L 936 339 Z",
+    "group": "inner wall"
+  },
+  {
+    "name": "customs wall west",
+    "mode": "wall",
+    "d": "M 0 680 L 1222 680 L 1222 720 L 0 720 Z",
+    "group": "customs wall"
+  },
+  {
+    "name": "customs wall east",
+    "mode": "wall",
+    "d": "M 1278 680 L 1440 680 L 1440 720 L 1278 720 Z",
+    "group": "customs wall"
+  },
+  {
+    "name": "customs hall west",
+    "mode": "wall",
+    "d": "M 0 1100 L 692 1100 L 692 1180 L 0 1180 Z",
+    "group": "customs hall"
+  },
+  {
+    "name": "customs hall east",
+    "mode": "wall",
+    "d": "M 748 1100 L 1440 1100 L 1440 1180 L 748 1180 Z",
+    "group": "customs hall"
+  },
+  {
+    "name": "inspection lane kerb west north",
+    "mode": "wall",
+    "d": "M 677 1077 L 689 1077 L 692 1080 L 692 1098 L 689 1101 L 677 1101 L 674 1098 L 674 1080 Z",
+    "group": "customs hall"
+  },
+  {
+    "name": "inspection lane kerb west south",
+    "mode": "wall",
+    "d": "M 677 1179 L 689 1179 L 692 1182 L 692 1200 L 689 1203 L 677 1203 L 674 1200 L 674 1182 Z",
+    "group": "customs hall"
+  },
+  {
+    "name": "inspection lane kerb east north",
+    "mode": "wall",
+    "d": "M 751 1077 L 763 1077 L 766 1080 L 766 1098 L 763 1101 L 751 1101 L 748 1098 L 748 1080 Z",
+    "group": "customs hall"
+  },
+  {
+    "name": "inspection lane kerb east south",
+    "mode": "wall",
+    "d": "M 751 1179 L 763 1179 L 766 1182 L 766 1200 L 763 1203 L 751 1203 L 748 1200 L 748 1182 Z",
+    "group": "customs hall"
+  },
+  {
+    "name": "gate tower 1",
+    "mode": "wall",
+    "d": "M 1112 16 L 1152 16 L 1160 24 L 1160 164 L 1152 172 L 1112 172 L 1104 164 L 1104 24 Z",
+    "group": "gate"
+  },
+  {
+    "name": "gate tower 2",
+    "mode": "wall",
+    "d": "M 1328 16 L 1368 16 L 1376 24 L 1376 164 L 1368 172 L 1328 172 L 1320 164 L 1320 24 Z",
+    "group": "gate"
+  },
+  {
+    "name": "hall pillar 1",
+    "mode": "wall",
+    "d": "M 369.38 100 L 390.62 100 L 398 107.38 L 398 128.62 L 390.62 136 L 369.38 136 L 362 128.62 L 362 107.38 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "hall pillar 2",
+    "mode": "wall",
+    "d": "M 569.38 100 L 590.62 100 L 598 107.38 L 598 128.62 L 590.62 136 L 569.38 136 L 562 128.62 L 562 107.38 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "hall pillar 3",
+    "mode": "wall",
+    "d": "M 769.38 100 L 790.62 100 L 798 107.38 L 798 128.62 L 790.62 136 L 769.38 136 L 762 128.62 L 762 107.38 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "hall pillar 4",
+    "mode": "wall",
+    "d": "M 949.38 100 L 970.62 100 L 978 107.38 L 978 128.62 L 970.62 136 L 949.38 136 L 942 128.62 L 942 107.38 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "hall pillar 5",
+    "mode": "wall",
+    "d": "M 369.38 200 L 390.62 200 L 398 207.38 L 398 228.62 L 390.62 236 L 369.38 236 L 362 228.62 L 362 207.38 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "hall pillar 6",
+    "mode": "wall",
+    "d": "M 569.38 200 L 590.62 200 L 598 207.38 L 598 228.62 L 590.62 236 L 569.38 236 L 562 228.62 L 562 207.38 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "hall pillar 7",
+    "mode": "wall",
+    "d": "M 769.38 200 L 790.62 200 L 798 207.38 L 798 228.62 L 790.62 236 L 769.38 236 L 762 228.62 L 762 207.38 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "hall pillar 8",
+    "mode": "wall",
+    "d": "M 949.38 200 L 970.62 200 L 978 207.38 L 978 228.62 L 970.62 236 L 949.38 236 L 942 228.62 L 942 207.38 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "red door screen",
+    "mode": "wall",
+    "d": "M 122 214 L 226 214 L 230 218 L 230 226 L 226 230 L 122 230 L 118 226 L 118 218 Z",
+    "group": "gate hall"
+  },
+  {
+    "name": "ditch 1",
+    "mode": "chasm",
+    "d": "M 20 485 L 50 480.05 L 84 484.91 L 118 480.96 L 152 483.91 L 186 481.06 L 220 484.57 L 254 483.51 L 290 484 L 290 528 L 260 526.42 L 226 532.71 L 192 531.9 L 158 528.83 L 124 529.75 L 90 531.05 L 56 531.22 L 20 527 Z",
+    "group": "ditch"
+  },
+  {
+    "name": "ditch 2",
+    "mode": "chasm",
+    "d": "M 372 485 L 402 484.89 L 436 485.78 L 470 485.53 L 504 480.74 L 538 479.14 L 572 480.96 L 606 480.49 L 640 484.34 L 674 484.4 L 690 484 L 690 528 L 660 532.84 L 626 532 L 592 531.44 L 558 532.94 L 524 531.19 L 490 528.67 L 456 531.57 L 422 531.76 L 388 528.18 L 372 527 Z",
+    "group": "ditch"
+  },
+  {
+    "name": "ditch 3",
+    "mode": "chasm",
+    "d": "M 772 485 L 802 480.73 L 836 480.3 L 870 479.51 L 904 484.11 L 938 485.98 L 972 484.63 L 1006 483.07 L 1040 485.36 L 1074 481.82 L 1108 481.61 L 1120 484 L 1120 528 L 1090 526.05 L 1056 527.19 L 1022 530.74 L 988 528.93 L 954 532.78 L 920 526.07 L 886 532.09 L 852 531.69 L 818 530.37 L 784 530.34 L 772 527 Z",
+    "group": "ditch"
+  },
+  {
+    "name": "ditch 4",
+    "mode": "chasm",
+    "d": "M 1202 485 L 1232 483.48 L 1266 479.48 L 1300 481.75 L 1334 485.73 L 1368 482.54 L 1402 479.79 L 1420 484 L 1420 528 L 1390 529.13 L 1356 526.58 L 1322 530.73 L 1288 528.37 L 1254 532.86 L 1220 532.52 L 1202 527 Z",
+    "group": "ditch"
+  },
+  {
+    "name": "ditch pit 1",
+    "mode": "chasm",
+    "d": "M 570.22 506 L 566.59 519.68 L 562.06 533.03 L 553.47 544.63 L 540.14 550.09 L 526.98 554.55 L 512.95 555.03 L 498.72 552.6 L 488.09 542.82 L 478.68 532.56 L 470.72 520.47 L 470.89 506 L 471.17 491.66 L 479.38 479.89 L 487.29 468.25 L 499.86 461.9 L 512.86 456.33 L 526.93 457.8 L 540.13 461.93 L 553.83 466.96 L 562.82 478.48 L 568.04 491.89 Z",
+    "group": "ditch"
+  },
+  {
+    "name": "ditch island 1",
+    "mode": "open",
+    "d": "M 541 506 L 539.4 514.04 L 534.85 520.85 L 528.04 525.4 L 520 527 L 511.96 525.4 L 505.15 520.85 L 500.6 514.04 L 499 506 L 500.6 497.96 L 505.15 491.15 L 511.96 486.6 L 520 485 L 528.04 486.6 L 534.85 491.15 L 539.4 497.96 Z",
+    "group": "ditch"
+  },
+  {
+    "name": "ditch pit 2",
+    "mode": "chasm",
+    "d": "M 978.52 506 L 977.54 519.96 L 973.29 533.82 L 961.82 542.72 L 950.93 551.83 L 937.2 556.11 L 923.07 554.23 L 909.4 551.11 L 898.1 542.82 L 889.48 532.04 L 882.16 520.05 L 881.96 506 L 883.32 492.29 L 887.89 478.94 L 897.19 468.14 L 909.54 461.21 L 923.01 457.37 L 937.06 456.89 L 951.48 458.97 L 964.02 466.74 L 970.72 479.83 L 978.75 491.69 Z",
+    "group": "ditch"
+  },
+  {
+    "name": "ditch island 2",
+    "mode": "open",
+    "d": "M 951 506 L 949.4 514.04 L 944.85 520.85 L 938.04 525.4 L 930 527 L 921.96 525.4 L 915.15 520.85 L 910.6 514.04 L 909 506 L 910.6 497.96 L 915.15 491.15 L 921.96 486.6 L 930 485 L 938.04 486.6 L 944.85 491.15 L 949.4 497.96 Z",
+    "group": "ditch"
+  },
+  {
+    "name": "tank trap 1",
+    "mode": "wall",
+    "d": "M 116.69 471.15 L 110.09 465.46 L 107.35 464.77 L 105.32 462.81 L 97 460.22 L 105.23 457.35 L 107.19 455.32 L 109.91 454.54 L 116.31 448.63 L 114.68 457.19 L 115.46 459.91 L 114.77 462.65 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 2",
+    "mode": "wall",
+    "d": "M 244.57 467.31 L 235.88 467.84 L 233.44 469.27 L 230.61 469.28 L 222.85 473.23 L 226.73 465.44 L 226.72 462.61 L 228.12 460.16 L 228.58 451.46 L 233.39 458.72 L 235.84 460.12 L 237.27 462.56 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 3",
+    "mode": "wall",
+    "d": "M 432.27 466.29 L 423.56 466.14 L 421.02 467.36 L 418.2 467.15 L 410.15 470.48 L 414.64 463.02 L 414.85 460.2 L 416.44 457.86 L 417.58 449.23 L 421.8 456.85 L 424.14 458.44 L 425.36 460.98 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 4",
+    "mode": "wall",
+    "d": "M 647.75 470.44 L 640.63 465.42 L 637.83 465.01 L 635.62 463.25 L 627.09 461.49 L 634.99 457.83 L 636.75 455.62 L 639.37 454.58 L 645.17 448.07 L 644.38 456.75 L 645.42 459.37 L 645.01 462.17 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 5",
+    "mode": "wall",
+    "d": "M 869.68 472.68 L 861.7 469.19 L 858.87 469.34 L 856.35 468.06 L 847.64 468.04 L 854.66 462.87 L 855.94 460.35 L 858.3 458.81 L 862.68 451.28 L 863.65 459.94 L 865.19 462.3 L 865.34 465.13 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 6",
+    "mode": "wall",
+    "d": "M 1072.91 461.52 L 1064.38 463.26 L 1062.16 465.02 L 1059.36 465.42 L 1052.23 470.42 L 1054.98 462.16 L 1054.58 459.36 L 1055.62 456.74 L 1054.86 448.06 L 1060.64 454.58 L 1063.26 455.62 L 1065.02 457.84 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 7",
+    "mode": "wall",
+    "d": "M 1290.75 471.31 L 1282.37 468.92 L 1279.6 469.45 L 1276.93 468.51 L 1268.29 469.65 L 1274.55 463.6 L 1275.49 460.93 L 1277.63 459.08 L 1280.96 451.04 L 1283.07 459.49 L 1284.92 461.63 L 1285.45 464.4 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 8",
+    "mode": "wall",
+    "d": "M 167.47 562.64 L 160.48 557.44 L 157.7 556.95 L 155.53 555.14 L 147.05 553.15 L 155.05 549.7 L 156.86 547.53 L 159.52 546.56 L 165.48 540.21 L 164.47 548.86 L 165.44 551.52 L 164.95 554.3 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 9",
+    "mode": "wall",
+    "d": "M 451.17 556.65 L 442.66 554.77 L 439.92 555.46 L 437.21 554.69 L 428.65 556.34 L 434.54 549.92 L 435.31 547.21 L 437.34 545.23 L 440.18 537 L 442.79 545.31 L 444.77 547.34 L 445.46 550.08 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 10",
+    "mode": "wall",
+    "d": "M 632.54 557.45 L 623.84 557.89 L 621.38 559.28 L 618.55 559.26 L 610.75 563.13 L 614.72 555.38 L 614.74 552.55 L 616.16 550.11 L 616.72 541.42 L 621.45 548.74 L 623.89 550.16 L 625.28 552.62 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 11",
+    "mode": "wall",
+    "d": "M 840.51 559.64 L 832.22 556.99 L 829.43 557.43 L 826.79 556.42 L 818.12 557.28 L 824.57 551.43 L 825.58 548.79 L 827.78 547.01 L 831.36 539.07 L 833.21 547.58 L 834.99 549.78 L 835.43 552.57 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 12",
+    "mode": "wall",
+    "d": "M 1048.04 564.22 L 1040.78 559.4 L 1037.97 559.07 L 1035.71 557.38 L 1027.13 555.85 L 1034.93 551.97 L 1036.62 549.71 L 1039.22 548.6 L 1044.83 541.93 L 1044.29 550.62 L 1045.4 553.22 L 1045.07 556.03 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 13",
+    "mode": "wall",
+    "d": "M 1272.97 552.94 L 1264.52 555.07 L 1262.38 556.91 L 1259.6 557.45 L 1252.7 562.76 L 1255.09 554.38 L 1254.55 551.6 L 1255.48 548.93 L 1254.33 540.3 L 1260.4 546.55 L 1263.07 547.48 L 1264.91 549.62 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "tank trap 14",
+    "mode": "wall",
+    "d": "M 1383 550.15 L 1374.7 552.78 L 1372.68 554.76 L 1369.94 555.46 L 1363.37 561.18 L 1365.24 552.68 L 1364.54 549.94 L 1365.3 547.22 L 1363.63 538.67 L 1370.06 544.54 L 1372.78 545.3 L 1374.76 547.32 Z",
+    "group": "tank traps"
+  },
+  {
+    "name": "office east wall north",
+    "mode": "wall",
+    "d": "M 560 720 L 582 720 L 582 996 L 560 996 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office east wall south",
+    "mode": "wall",
+    "d": "M 560 1060 L 582 1060 L 582 1100 L 560 1100 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office wall lobby",
+    "mode": "wall",
+    "d": "M 20 912 L 268 912 L 268 932 L 20 932 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office wall lobby east",
+    "mode": "wall",
+    "d": "M 330 912 L 420 912 L 420 932 L 330 932 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office corridor wall",
+    "mode": "wall",
+    "d": "M 400 720 L 420 720 L 420 750 L 400 750 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office back room door jamb",
+    "mode": "wall",
+    "d": "M 400 820 L 420 820 L 420 912 L 400 912 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office filing wall",
+    "mode": "wall",
+    "d": "M 292 932 L 312 932 L 312 990 L 292 990 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office filing wall south",
+    "mode": "wall",
+    "d": "M 292 1050 L 312 1050 L 312 1100 L 292 1100 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office desk 1",
+    "mode": "wall",
+    "d": "M 123 800 L 197 800 L 200 803 L 200 817 L 197 820 L 123 820 L 120 817 L 120 803 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office desk 2",
+    "mode": "wall",
+    "d": "M 243 760 L 317 760 L 320 763 L 320 777 L 317 780 L 243 780 L 240 777 L 240 763 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office desk 3",
+    "mode": "wall",
+    "d": "M 243 850 L 327 850 L 330 853 L 330 863 L 327 866 L 243 866 L 240 863 L 240 853 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office desk 4",
+    "mode": "wall",
+    "d": "M 443 1000 L 517 1000 L 520 1003 L 520 1015 L 517 1018 L 443 1018 L 440 1015 L 440 1003 Z",
+    "group": "records office"
+  },
+  {
+    "name": "office desk 5",
+    "mode": "wall",
+    "d": "M 363 1060 L 437 1060 L 440 1063 L 440 1073 L 437 1076 L 363 1076 L 360 1073 L 360 1063 Z",
+    "group": "records office"
+  },
+  {
+    "name": "scanner pillar 1",
+    "mode": "wall",
+    "d": "M 641 1010 L 659 1010 L 664 1015 L 664 1045 L 659 1050 L 641 1050 L 636 1045 L 636 1015 Z",
+    "group": "inspection yard"
+  },
+  {
+    "name": "scanner pillar 2",
+    "mode": "wall",
+    "d": "M 781 1010 L 799 1010 L 804 1015 L 804 1045 L 799 1050 L 781 1050 L 776 1045 L 776 1015 Z",
+    "group": "inspection yard"
+  },
+  {
+    "name": "inspection kiosk",
+    "mode": "wall",
+    "d": "M 696 860 L 744 860 L 750 866 L 750 894 L 744 900 L 696 900 L 690 894 L 690 866 Z",
+    "group": "inspection yard"
+  },
+  {
+    "name": "impound fence north",
+    "mode": "wall",
+    "d": "M 930 720 L 940 720 L 940 810 L 930 810 Z",
+    "group": "impound lot"
+  },
+  {
+    "name": "impound fence mid",
+    "mode": "wall",
+    "d": "M 930 880 L 940 880 L 940 980 L 930 980 Z",
+    "group": "impound lot"
+  },
+  {
+    "name": "impound fence south",
+    "mode": "wall",
+    "d": "M 930 1050 L 940 1050 L 940 1100 L 930 1100 Z",
+    "group": "impound lot"
+  },
+  {
+    "name": "queue rail 1",
+    "mode": "wall",
+    "d": "M 86 1292 L 558 1292 L 560 1294 L 560 1298 L 558 1300 L 86 1300 L 84 1298 L 84 1294 Z",
+    "group": "queue pen"
+  },
+  {
+    "name": "queue rail 2",
+    "mode": "wall",
+    "d": "M 22 1358 L 494 1358 L 496 1360 L 496 1364 L 494 1366 L 22 1366 L 20 1364 L 20 1360 Z",
+    "group": "queue pen"
+  },
+  {
+    "name": "queue rail 3",
+    "mode": "wall",
+    "d": "M 86 1424 L 558 1424 L 560 1426 L 560 1430 L 558 1432 L 86 1432 L 84 1430 L 84 1426 Z",
+    "group": "queue pen"
+  },
+  {
+    "name": "queue rail 4",
+    "mode": "wall",
+    "d": "M 22 1490 L 494 1490 L 496 1492 L 496 1496 L 494 1498 L 22 1498 L 20 1496 L 20 1492 Z",
+    "group": "queue pen"
+  },
+  {
+    "name": "queue rail 5",
+    "mode": "wall",
+    "d": "M 126 1556 L 558 1556 L 560 1558 L 560 1562 L 558 1564 L 126 1564 L 124 1562 L 124 1558 Z",
+    "group": "queue pen"
+  },
+  {
+    "name": "queue fence east north",
+    "mode": "wall",
+    "d": "M 558 1292 L 562 1292 L 564 1294 L 564 1368 L 562 1370 L 558 1370 L 556 1368 L 556 1294 Z",
+    "group": "queue pen"
+  },
+  {
+    "name": "queue fence east south",
+    "mode": "wall",
+    "d": "M 558 1422 L 562 1422 L 564 1424 L 564 1562 L 562 1564 L 558 1564 L 556 1562 L 556 1424 Z",
+    "group": "queue pen"
+  },
+  {
+    "name": "toll booth 1",
+    "mode": "wall",
+    "d": "M 584 1210 L 596 1210 L 602 1216 L 602 1268 L 596 1274 L 584 1274 L 578 1268 L 578 1216 Z",
+    "group": "toll plaza"
+  },
+  {
+    "name": "toll booth 2",
+    "mode": "wall",
+    "d": "M 646 1210 L 658 1210 L 664 1216 L 664 1268 L 658 1274 L 646 1274 L 640 1268 L 640 1216 Z",
+    "group": "toll plaza"
+  },
+  {
+    "name": "toll booth 3",
+    "mode": "wall",
+    "d": "M 782 1210 L 794 1210 L 800 1216 L 800 1268 L 794 1274 L 782 1274 L 776 1268 L 776 1216 Z",
+    "group": "toll plaza"
+  },
+  {
+    "name": "toll booth 4",
+    "mode": "wall",
+    "d": "M 844 1210 L 856 1210 L 862 1216 L 862 1268 L 856 1274 L 844 1274 L 838 1268 L 838 1216 Z",
+    "group": "toll plaza"
+  },
+  {
+    "name": "barracks",
+    "mode": "wall",
+    "d": "M 1130 1360 L 1422 1360 L 1422 1642 L 1130 1642 Z M 1164 1394 L 1390 1394 L 1390 1610 L 1164 1610 Z",
+    "group": "barracks"
+  },
+  {
+    "name": "barracks door",
+    "mode": "open",
+    "d": "M 1129 1470 L 1166 1470 L 1166 1560 L 1129 1560 Z",
+    "group": "barracks"
+  },
+  {
+    "name": "barrier 1",
+    "mode": "wall",
+    "d": "M 676 1413 L 724 1413 L 728 1417 L 728 1423 L 724 1427 L 676 1427 L 672 1423 L 672 1417 Z",
+    "group": "boulevard"
+  },
+  {
+    "name": "barrier 2",
+    "mode": "wall",
+    "d": "M 1007 1232 L 1013 1232 L 1017 1236 L 1017 1284 L 1013 1288 L 1007 1288 L 1003 1284 L 1003 1236 Z",
+    "group": "boulevard"
+  },
+  {
+    "name": "barrier 3",
+    "mode": "wall",
+    "d": "M 856 1513 L 904 1513 L 908 1517 L 908 1523 L 904 1527 L 856 1527 L 852 1523 L 852 1517 Z",
+    "group": "boulevard"
+  },
+  {
+    "name": "barrier 4",
+    "mode": "wall",
+    "d": "M 1007 1435 L 1013 1435 L 1017 1439 L 1017 1481 L 1013 1485 L 1007 1485 L 1003 1481 L 1003 1439 Z",
+    "group": "boulevard"
+  }
+]
