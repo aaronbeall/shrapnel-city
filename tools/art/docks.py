@@ -1,15 +1,14 @@
 """Docks for the city art kit (first used by 07 Shipyard): harbour water, ship decks, gangways,
-a dry dock and shipping containers. Opt-in through level.json:
+a dry dock and shipping containers. Opt-in through these area lists in level.json's "art"
+(declared in tools/art/kits.json, so the editor's Art tab draws and edits them):
 
-    "art": {"kit": "city", ..., "docks": {
-        "pits": [[x0, y0, x1, y1], ...],        chasm inside these is a dry dock pit, not water
-        "decks": [[[x, y], ...], ...],          ship hull outlines: open floor inside is deck
-        "gangways": [[x0, y0, x1, y1], ...],    open floor inside is a steel gangway or gantry
-        "containers": [[x0, y0, x1, y1], ...]   walls inside are shipping containers
-    }}
+    "dockPits": [[x0, y0, x1, y1], ...],       chasm inside these is a dry dock pit, not water
+    "shipDecks": [[[x, y], ...], ...],         ship hull outlines: open floor inside is deck
+    "gangways": [[x0, y0, x1, y1], ...],       open floor inside is a steel gangway or gantry
+    "containers": [[x0, y0, x1, y1], ...]      walls inside are shipping containers
 
-Without "docks" the city kit draws chasms as collapsed road (04 Urban). With it, every chasm is
-water except the pits. Like the rest of the kit it reads the collision map for what is wall,
+Without any of them the city kit draws chasms as collapsed road (04 Urban). With them, every
+chasm is water except the pits. Like the rest of the kit it reads the collision map for what is wall,
 chasm and floor; the lists above only say what kind of floor or wall a place is, so editing
 the collision shapes in the editor and re-baking keeps working (move a hull and its outline
 here with it).
@@ -35,11 +34,20 @@ def raster(W, H, polys=(), rects=()):
     return np.array(im) > 127
 
 
+KEYS = ('dockPits', 'shipDecks', 'gangways', 'containers')
+
+
+def wanted(art):
+    """Whether a level uses the docks: any of its area lists is set."""
+    return any(art.get(k) for k in KEYS)
+
+
 class Docks:
     def __init__(self, g, art):
-        d = art.get('docks') or {}
+        d = {'pits': art.get('dockPits') or [], 'decks': art.get('shipDecks') or [],
+             'gangways': art.get('gangways') or [], 'containers': art.get('containers') or []}
         W, H = g.W, g.H
-        self.on = bool(art.get('docks'))
+        self.on = wanted(art)
         self.pit = raster(W, H, rects=d.get('pits', [])) & g.chasmb
         self.water = g.chasmb & ~self.pit
         self.waterf = g.chasm * (1 - ndi.binary_dilation(self.pit, iterations=2))

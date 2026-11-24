@@ -540,12 +540,13 @@ def main():
     settings.setdefault('art', {'kit': 'city', 'seed': 707})
     settings['art'].setdefault('paved', [[num(v) for v in r] for r in PAVED])
     # what kind of water, floor and wall each place is, for the city kit's docks (tools/art/docks.py)
-    settings['art']['docks'] = {
-        'pits': [list(DOCK)],
-        'decks': [[[num(x), num(y)] for x, y in pts] for pts in HULLS.values()],
+    settings['art'].pop('docks', None)
+    settings['art'].update({
+        'dockPits': [list(DOCK)],
+        'shipDecks': [[[num(x), num(y)] for x, y in pts] for pts in HULLS.values()],
         'gangways': [[num(v) for v in r] for r in GANGWAYS.values()],
         'containers': [list(r) for r in CONTAINERS],
-    }
+    })
     with open(lj, 'w', encoding='utf-8', newline='\n') as f:
         f.write('{\n' + ',\n'.join(f'  {json.dumps(k)}: {pretty(v, "  ")}' for k, v in settings.items()) + '\n}\n')
     bj = os.path.join(a.out, 'briefing.json')

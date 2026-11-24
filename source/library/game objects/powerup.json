@@ -1,7 +1,10 @@
 {
   "kind": "sprite",
-  "symbol": {"type": "movie clip", "linkage": "powerup"},
-  "frames": 29,
+  "symbol": {
+    "type": "movie clip",
+    "linkage": "powerup"
+  },
+  "frames": 41,
   "timeline": [
     {
       "frame": 1,
@@ -13,9 +16,19 @@
           "x": 0,
           "y": 0,
           "scale": 0.5,
-          "color": {"alpha": 0.25},
-          "clipEvents": [1],
-          "script": ["onClipEvent (load) {", "    _parent.hitArea = this;", "    _visible = false;", "}", ""]
+          "color": {
+            "alpha": 0.25
+          },
+          "clipEvents": [
+            1
+          ],
+          "script": [
+            "onClipEvent (load) {",
+            "    _parent.hitArea = this;",
+            "    _visible = false;",
+            "}",
+            ""
+          ]
         }
       ]
     },
@@ -23,17 +36,29 @@
       "frame": 2,
       "label": "health",
       "changes": [
-        {"place": "game objects/powerup/shape 1", "depth": 3, "x": 0, "y": 0},
+        {
+          "place": "game objects/powerup/shape 1",
+          "depth": 3,
+          "x": 0,
+          "y": 0
+        },
         {
           "place": "graphic assets/crosshairs anim",
           "depth": 34,
           "x": -0.05,
           "y": 0.15,
-          "ratio": 0.000015259021896696422
+          "ratio": 1.5259021896696422e-05
         }
       ]
     },
-    {"frame": 9, "changes": [{"remove": 3}]},
+    {
+      "frame": 9,
+      "changes": [
+        {
+          "remove": 3
+        }
+      ]
+    },
     {
       "frame": 10,
       "label": "primary",
@@ -48,7 +73,14 @@
         }
       ]
     },
-    {"frame": 19, "changes": [{"remove": 3}]},
+    {
+      "frame": 19,
+      "changes": [
+        {
+          "remove": 3
+        }
+      ]
+    },
     {
       "frame": 20,
       "label": "secondary",
@@ -60,6 +92,306 @@
           "y": 0,
           "ratio": 0.000289921416037232,
           "name": "icons_mc"
+        }
+      ]
+    },
+    {
+      "frame": 30,
+      "label": "yellowKey",
+      "changes": [
+        {
+          "remove": 3
+        },
+        {
+          "place": "_glow",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 0.62,
+          "blend": "add",
+          "color": {
+            "multiply": [
+              0,
+              0,
+              0,
+              0.55
+            ],
+            "add": [
+              255,
+              210,
+              40,
+              0
+            ]
+          }
+        },
+        {
+          "place": "interface/game ui/inventory item_mc/shape 1",
+          "depth": 3,
+          "x": -12,
+          "y": -7.5,
+          "scale": 1.5
+        },
+        {
+          "place": "graphic assets/crosshairs anim",
+          "depth": 34,
+          "x": 0,
+          "y": 0,
+          "ratio": 1.5259021896696422e-05
+        }
+      ]
+    },
+    {
+      "frame": 32,
+      "label": "blueKey",
+      "changes": [
+        {
+          "remove": 3
+        },
+        {
+          "remove": 4
+        },
+        {
+          "remove": 34
+        },
+        {
+          "place": "_glow",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 0.62,
+          "blend": "add",
+          "color": {
+            "multiply": [
+              0,
+              0,
+              0,
+              0.55
+            ],
+            "add": [
+              40,
+              140,
+              255,
+              0
+            ]
+          }
+        },
+        {
+          "place": "interface/game ui/inventory item_mc/shape 2",
+          "depth": 3,
+          "x": -12,
+          "y": -7.5,
+          "scale": 1.5
+        },
+        {
+          "place": "graphic assets/crosshairs anim",
+          "depth": 34,
+          "x": 0,
+          "y": 0,
+          "ratio": 1.5259021896696422e-05
+        }
+      ]
+    },
+    {
+      "frame": 34,
+      "label": "redKey",
+      "changes": [
+        {
+          "remove": 3
+        },
+        {
+          "remove": 4
+        },
+        {
+          "remove": 34
+        },
+        {
+          "place": "_glow",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 0.62,
+          "blend": "add",
+          "color": {
+            "multiply": [
+              0,
+              0,
+              0,
+              0.55
+            ],
+            "add": [
+              240,
+              40,
+              40,
+              0
+            ]
+          }
+        },
+        {
+          "place": "interface/game ui/inventory item_mc/shape 3",
+          "depth": 3,
+          "x": -12,
+          "y": -7.5,
+          "scale": 1.5
+        },
+        {
+          "place": "graphic assets/crosshairs anim",
+          "depth": 34,
+          "x": 0,
+          "y": 0,
+          "ratio": 1.5259021896696422e-05
+        }
+      ]
+    },
+    {
+      "frame": 36,
+      "label": "greenKey",
+      "changes": [
+        {
+          "remove": 3
+        },
+        {
+          "remove": 4
+        },
+        {
+          "remove": 34
+        },
+        {
+          "place": "_glow",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 0.62,
+          "blend": "add",
+          "color": {
+            "multiply": [
+              0,
+              0,
+              0,
+              0.55
+            ],
+            "add": [
+              40,
+              220,
+              80,
+              0
+            ]
+          }
+        },
+        {
+          "place": "interface/game ui/inventory item_mc/shape 4",
+          "depth": 3,
+          "x": -12,
+          "y": -7.5,
+          "scale": 1.5
+        },
+        {
+          "place": "graphic assets/crosshairs anim",
+          "depth": 34,
+          "x": 0,
+          "y": 0,
+          "ratio": 1.5259021896696422e-05
+        }
+      ]
+    },
+    {
+      "frame": 38,
+      "label": "purpleKey",
+      "changes": [
+        {
+          "remove": 3
+        },
+        {
+          "remove": 4
+        },
+        {
+          "remove": 34
+        },
+        {
+          "place": "_glow",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 0.62,
+          "blend": "add",
+          "color": {
+            "multiply": [
+              0,
+              0,
+              0,
+              0.55
+            ],
+            "add": [
+              190,
+              60,
+              255,
+              0
+            ]
+          }
+        },
+        {
+          "place": "interface/game ui/inventory item_mc/shape 5",
+          "depth": 3,
+          "x": -12,
+          "y": -7.5,
+          "scale": 1.5
+        },
+        {
+          "place": "graphic assets/crosshairs anim",
+          "depth": 34,
+          "x": 0,
+          "y": 0,
+          "ratio": 1.5259021896696422e-05
+        }
+      ]
+    },
+    {
+      "frame": 40,
+      "label": "aquaKey",
+      "changes": [
+        {
+          "remove": 3
+        },
+        {
+          "remove": 4
+        },
+        {
+          "remove": 34
+        },
+        {
+          "place": "_glow",
+          "depth": 4,
+          "x": 0,
+          "y": 0,
+          "scale": 0.62,
+          "blend": "add",
+          "color": {
+            "multiply": [
+              0,
+              0,
+              0,
+              0.55
+            ],
+            "add": [
+              40,
+              230,
+              230,
+              0
+            ]
+          }
+        },
+        {
+          "place": "interface/game ui/inventory item_mc/shape 6",
+          "depth": 3,
+          "x": -12,
+          "y": -7.5,
+          "scale": 1.5
+        },
+        {
+          "place": "graphic assets/crosshairs anim",
+          "depth": 34,
+          "x": 0,
+          "y": 0,
+          "ratio": 1.5259021896696422e-05
         }
       ]
     }

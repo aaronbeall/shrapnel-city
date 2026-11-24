@@ -1,0 +1,49 @@
+{
+  "bridge": {
+    "label": "bridge",
+    "tip": "metal decks, cables and lights over the chasm (levels 00-03)",
+    "grades": {},
+    "areas": {}
+  },
+  "city": {
+    "label": "city",
+    "tip": "streets, pavements, plazas and buildings (levels 04-)",
+    "grades": {
+      "grey day": { "grey": 0.3, "gain": [0.97, 0.99, 1.03], "haze": 0.025, "tip": "04 Urban: muted, a cool cast" },
+      "olive": { "grey": 0.42, "gain": [1.0, 1.0, 0.82], "haze": 0.03, "tip": "05 Gateway: olive drab checkpoint, warm khaki haze" }
+    },
+    "defaultGrade": "grey day",
+    "areas": {
+      "paved": {
+        "label": "Paved areas",
+        "shape": "rect",
+        "colour": "#e0b040",
+        "tip": "open floor inside these boxes is paved all over (plazas, courtyards, yards) instead of road with pavement round it"
+      },
+      "dockPits": {
+        "label": "Dry docks",
+        "shape": "rect",
+        "colour": "#8a7f72",
+        "tip": "chasm inside these is a stepped dry dock pit, not water. With any docks list set, every other chasm is harbour water (07 Shipyard)"
+      },
+      "shipDecks": {
+        "label": "Ship decks",
+        "shape": "polygon",
+        "colour": "#7fa6c8",
+        "tip": "hull outlines: open floor inside is a warship deck with its hull side below, walls on it are the ship's superstructure. Move a hull's collision shapes and its outline together (07 Shipyard)"
+      },
+      "gangways": {
+        "label": "Gangways",
+        "shape": "rect",
+        "colour": "#c89050",
+        "tip": "open floor inside these is a steel gangway or gantry, with handrails and a shadow on the water (07 Shipyard)"
+      },
+      "containers": {
+        "label": "Container stacks",
+        "shape": "rect",
+        "colour": "#c05a40",
+        "tip": "walls inside these are shipping container stacks with corrugated tops (07 Shipyard)"
+      }
+    }
+  }
+}

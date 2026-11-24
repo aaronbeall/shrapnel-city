@@ -8,6 +8,7 @@ import { LevelApplier, restartLevel, showBriefing } from './apply.js';
 import { CollisionMap, COLOURS } from './collision.js';
 import { ShapeStack, isPixels, MODES, gameClass, greyOf } from './shapes.js';
 import { renderPreview } from './preview.js';
+import { areaMethods } from './areas.js';
 import { parsePath, pathString, fromPoints, isPolygon, clone, curveCount, segEnds, nearestSeg, insertNode, removeNodes, nodeHandles, isSmooth, toggleSmooth, oppositeHandle, moveNodes } from './path.js';
 import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour, briefingJSON } from '../../tools/levels/compile.mjs';
 import { pretty } from '../../tools/flash-source/format.mjs';
@@ -35,7 +36,12 @@ const VIEW_LAYERS = [
 const TRIGGER_EVENTS = { powerups: ['onPickup', 'when picked up'], boxes: ['onDie', 'when destroyed'], enemies: ['onDie', 'when killed'] };
 // ready-made placements offered in the palette beside the symbols
 const PRESETS = {
-  powerups: [{ label: 'trigger pad', symbol: 'game objects/powerup', props: { type: 'trigger', item: '' } }],
+  powerups: [
+    { label: 'trigger pad', symbol: 'game objects/powerup', props: { type: 'trigger', item: '' } },
+    // keycards: a key goes into the inventory; its lock pad (by a door) uses it up and sends unlock
+    { label: 'keycard', symbol: 'game objects/powerup', props: { type: 'key', item: 'yellowKey' } },
+    { label: 'keycard lock pad', symbol: 'game objects/powerup', props: { type: 'lock', item: 'yellowKey', unlock: 'door1:open' } },
+  ],
 };
 const AUTO_VISION_ANGLES = 90, LOS_SAMPLE_SIZE = 15; // as2/enemyTurret.as
 const NODE_LOS_SAMPLE = 10; // as2/pathNode.as
@@ -483,6 +489,7 @@ class Editor {
     }
     if (mod) return;
     if (e.key === 'Shift') this.shiftDown = true;
+    if (this.areaKey(e)) { e.preventDefault(); return; }
     const arrow = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
     if (arrow && this.selPoints().length) { e.preventDefault(); this.nudgePoints(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
     if (arrow) { e.preventDefault(); if (this.sel) this.nudge(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
@@ -563,6 +570,7 @@ class Editor {
       this.drag = { kind: 'pan', sx, sy, ox: this.view.ox, oy: this.view.oy };
       return;
     }
+    if (this.areaMouseDown(e, x, y)) return; // a kit area list picked in the Art tab takes the map
     const t = this.tool;
     if (t !== 'select' && !this.toolReady()) return;
     if (t === 'select') {
@@ -642,6 +650,7 @@ class Editor {
     const d = this.drag;
     if (!d) return;
     if (d.kind === 'pan') { this.view.ox = d.ox + sx - d.sx; this.view.oy = d.oy + sy - d.sy; }
+    else if (this.areaMouseMove(e, x, y)) return;
     else if (d.kind === 'move') {
       const p0 = d.starts[d.starts.length - 1]; // the primary (the one clicked)
       let nx = p0.x + x - d.x, ny = p0.y + y - d.y;
@@ -688,6 +697,7 @@ class Editor {
     const d = this.drag;
     this.drag = null;
     if (!d) return;
+    if (this.areaMouseUp(d)) return;
     if ((d.kind === 'points' || d.kind === 'handle') && d.moved) {
       this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files: [d.file] });
       this.markDirty(d.file);
@@ -1810,6 +1820,7 @@ class Editor {
       }
     }
     this.drawZonePoints(ctx, px);
+    this.drawAreas(ctx, px);
     // tool previews
     const m = this.mouse;
     const fillCol = (c, a) => `rgba(${COLOURS[c].join(',')},${a})`;
@@ -2195,6 +2206,7 @@ class Editor {
         num('rotation', t.rot, (v) => setTransform(e, v, t.sx, t.sy))),
       el('label', { class: 'le-set' }, el('span', { class: 'le-set-name' }, 'name'), el('input', { value: e.name || '', placeholder: 'none', onchange: (ev) => this.change([file], () => { if (ev.target.value) e.name = ev.target.value; else delete e.name; }) })));
     if (layer === 'pathNodes') box.append(this.nodeRows(k));
+    else box.append(this.tintRow(e, file));
     box.append(...this.triggerRows(layer, e));
     {
       const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
@@ -2281,11 +2293,31 @@ class Editor {
     }
     const only = this.placeOnly ||= new Set(DECOR_TYPES);
     const all = only.size === DECOR_TYPES.length;
+    // the kits, their grades and their area lists (tools/art/kits.json)
+    const kits = this.kitSchema() || { [art.kit]: {} }, kit = kits[art.kit] || {};
+    const grades = Object.entries(kit.grades || {}), areas = Object.entries(kit.areas || {});
     box.append(
-      el('div', { class: 'le-row' }, 'Kit ', el('select', { title: 'the tile set: floor, wall and chasm textures and the decor sheets (tools/art/parts)', onchange: (ev) => setArt({ kit: ev.target.value }) },
-        ...['bridge', 'city'].map((kit) => el('option', { value: kit, selected: art.kit === kit }, kit))),
+      el('div', { class: 'le-row' }, 'Kit ', el('select', { title: 'the tile set: floor, wall and chasm textures and the decor sheets (tools/art/parts, kits listed in tools/art/kits.json)', onchange: (ev) => { this.setAreaEdit(null); setArt({ kit: ev.target.value }); } },
+        ...Object.entries(kits).map(([key, k]) => el('option', { value: key, selected: art.kit === key, title: k.tip || '' }, k.label || key))),
         ' Seed ', el('input', { type: 'number', step: 1, value: art.seed, style: 'width: 6em', title: 'picks the decor layout and the floor grain', onchange: (ev) => { const v = Math.round(+ev.target.value); if (isFinite(v)) setArt({ seed: v }); } }),
         el('button', { title: 'a new random seed (then Re-place decor to use it)', onclick: () => setArt({ seed: 1 + Math.floor(Math.random() * 9999) }) }, '🎲')),
+      grades.length ? el('div', { class: 'le-row' }, 'Grade ', el('select', { title: 'the colour grade over the finished art (level.json art.grade); takes effect on the next Bake art', onchange: (ev) => setArt({ grade: ev.target.value || undefined }) },
+        el('option', { value: '', selected: !art.grade }, `default (${kit.defaultGrade})`),
+        ...grades.map(([g, o]) => el('option', { value: g, selected: art.grade === g, title: o.tip || '' }, g)),
+        ...(art.grade && !(kit.grades || {})[art.grade] ? [el('option', { value: art.grade, selected: true }, art.grade + ' (unknown)')] : [])),
+        art.grade && (kit.grades || {})[art.grade] && kit.grades[art.grade].tip ? el('small', {}, ' ' + kit.grades[art.grade].tip) : '') : '',
+      ...areas.map(([key, a]) => {
+        const n = Array.isArray(art[key]) ? art[key].length : 0, on = this.areaEdit === key;
+        return el('div', { class: 'le-row', title: (a.tip || '') + ` (level.json art.${key}, ${a.shape === 'polygon' ? 'polygons' : 'rectangles'}; the bake reads them)` },
+          el('label', {}, el('input', { type: 'checkbox', checked: on, onchange: (ev) => this.setAreaEdit(ev.target.checked ? key : null) }), ` ${a.label || key} `),
+          el('span', { style: `display:inline-block;width:.8em;height:.8em;background:${a.colour || '#e0b040'};margin-right:.4em` }),
+          el('small', {}, `${n} ${a.shape === 'polygon' ? (n === 1 ? 'polygon' : 'polygons') : n === 1 ? 'box' : 'boxes'}`),
+          on && this.areaSel != null && art[key] && art[key][this.areaSel] ? el('button', { onclick: () => { this.writeAreas(key, art[key].filter((_, i) => i !== this.areaSel)); this.areaSel = null; this.refreshPanel(); } }, 'Delete') : '');
+      }),
+      this.areaEdit && areas.some(([k]) => k === this.areaEdit) ? el('div', { class: 'le-tip' }, (kit.areas[this.areaEdit].shape === 'polygon'
+        ? 'On the map: click corners on empty floor to draw one (click the first corner or Enter to close), drag one to move it, drag a corner to move it, Alt+click a corner to remove it.'
+        : 'On the map: drag on empty floor to draw one, drag one to move it, drag a corner to resize it.') + ' Delete removes the selected one, Esc stops editing, Shift snaps. Takes effect on the next Bake art.') : '',
+      this.areaRows(el, art),
       el('div', { class: 'le-row' },
         btn('Bake art', 'bake', 'Save, then redraw background.png from collision.png and decor.json as they are (collision shapes aren\'t re-baked)'),
         this.shapesAhead ? el('button', { disabled: off, class: 'le-hot', title: 'the collision shapes changed since collision.png was baked: bake them into it first, then the art', onclick: () => { if (this.bakeCollision()) this.runArt('bake'); } }, 'Bake collision + art') : ''),
@@ -2515,6 +2547,26 @@ class Editor {
 
   layerCount(key) {
     return (this.L[key] || []).length;
+  }
+
+  // the instance's colour tint (its Flash colour transform: multiply by 1 - amount, add colour × amount),
+  // e.g. 05 Gateway's keycard doors in their key's colour
+  tintRow(e, file) {
+    const c = e.color, m = c && c.multiply, a = c && c.add;
+    const plain = !c || (m && m.slice(0, 3).every((v) => v === m[0]) && m[3] === 1 && (!a || a[3] === 0));
+    const amt = c && plain ? round2(1 - (m ? m[0] : 1)) : 0;
+    const rgb = c && plain && a && amt > 0 ? a.slice(0, 3).map((v) => Math.max(0, Math.min(255, Math.round(v / amt)))) : [255, 255, 255];
+    const hex = '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
+    const set = (h, t) => this.change([file], () => {
+      if (!(t > 0)) { delete e.color; return; }
+      const col = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+      e.color = { multiply: [round2(1 - t), round2(1 - t), round2(1 - t), 1], add: col.map((v) => Math.round(v * t)).concat(0) };
+    });
+    if (c && !plain) return el('div', { class: 'le-row', title: 'a colour transform the tint row can\'t show; edit it in the level\'s JSON' }, 'Tint: custom colour transform ', el('button', { onclick: () => set(hex, 0) }, 'Clear'));
+    return el('div', { class: 'le-row', title: 'tints it toward a colour (its colour transform); amount 0 is none' }, 'Tint ',
+      el('input', { type: 'color', value: hex, onchange: (ev) => set(ev.target.value, amt || 0.45) }),
+      ' amount ', el('input', { type: 'number', min: 0, max: 1, step: 0.05, value: amt, style: 'width: 5em', onchange: (ev) => { const t = +ev.target.value; if (isFinite(t)) set(hex, Math.max(0, Math.min(1, t))); } }),
+      c ? el('button', { onclick: () => set(hex, 0) }, 'Clear') : '');
   }
 
   nodeRows(k) {
@@ -2773,6 +2825,8 @@ class Editor {
 }
 
 // ---------------------------------------------------------------------------- helpers
+Object.assign(Editor.prototype, areaMethods);
+
 function round2(v) { return Math.round(v * 100) / 100; }
 // an enemy the exit waits for (props objective = true; first used by 07 Shipyard)
 function isObjective(e) { return !!(e && e.props && e.props.objective === true); }
