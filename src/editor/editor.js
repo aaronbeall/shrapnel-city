@@ -1742,6 +1742,21 @@ class Editor {
         if (this.linkFrom === k) { ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(e.x, e.y, 9 * px, 0, Math.PI * 2); ctx.stroke(); }
       });
     }
+    // sight range of each selected enemy: how far it sees the player when it's outside every vision
+    // zone (its visionRange, else the level's sightRange; none = unlimited, no ring)
+    for (const it of this.selItems()) {
+      if (it.layer !== 'enemies') continue;
+      const e = this.list('enemies')[it.k], r = this.sightRange(e);
+      if (!r) continue;
+      ctx.setLineDash([8 * px, 5 * px]);
+      ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.lineWidth = 3 * px;
+      ctx.beginPath(); ctx.arc(e.x, e.y, r, 0, Math.PI * 2); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,170,60,0.9)'; ctx.lineWidth = 1.5 * px;
+      ctx.beginPath(); ctx.arc(e.x, e.y, r, 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = `${11 * px}px system-ui, sans-serif`; ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(255,170,60,0.95)'; ctx.fillText(`sight ${r}`, e.x + 4 * px, e.y - r - 8 * px);
+    }
     // selection: solid cyan with a dark edge, a tint and corner handles (the primary's are white),
     // so it stands out from the thin dashed outlines of everything else
     {
@@ -1921,6 +1936,16 @@ class Editor {
   setTab(t) { this.tab = t; this.refreshPanel(); }
 
   // a collapsible section whose open state survives refreshes
+  // an enemy's sight range outside vision zones: its visionRange (props, else its symbol's default;
+  // 0 = unlimited), else level.json's sightRange. 0 when it can see any distance
+  sightRange(e) {
+    const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
+    const own = spec ? effectiveSettings(spec.settings, e.props || {}).visionRange : e.props && e.props.visionRange;
+    if (typeof own === 'number') return own > 0 ? own : 0;
+    const lvl = this.L.settings && this.L.settings.sightRange;
+    return typeof lvl === 'number' && lvl > 0 ? lvl : 0;
+  }
+
   section(key, title, kids, { open = false, badge = '', cls = '' } = {}) {
     const id = '$' + key;
     if (!this.openGroups.has(id) && !this.openGroups.has('!' + id) && open) this.openGroups.add(id);
@@ -2079,6 +2104,12 @@ class Editor {
       this.sizePanel(),
       this.newLevelPanel(),
       this.section('settings', 'Level settings', [
+        el('label', { class: 'le-set', title: 'How far enemies outside every vision zone can see the player (px), unless they set their own visionRange. Empty = unlimited. Select an enemy to see its range on the map.' },
+          el('span', { class: 'le-set-name' + (L.settings && L.settings.sightRange ? ' on' : '') }, 'sight range'),
+          el('input', { type: 'number', min: 0, step: 10, value: (L.settings && L.settings.sightRange) || '', placeholder: 'unlimited', onchange: (e) => {
+            const v = Math.round(+e.target.value);
+            this.change(['level.json'], () => { L.settings = { ...(L.settings || {}) }; if (v > 0) L.settings.sightRange = v; else delete L.settings.sightRange; }, { reload: false });
+          } })),
         el('div', { class: 'le-tip' }, 'level.json as JSON. The size changes with Resize level, above.'),
         el('textarea', { rows: 6, spellcheck: false, onchange: (e) => {
           try {

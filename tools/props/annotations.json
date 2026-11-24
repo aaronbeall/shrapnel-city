@@ -150,11 +150,11 @@
     "visionRange": {
       "group": "vision",
       "type": "number",
-      "desc": "Max distance it can see the player (px). Empty = unlimited."
+      "desc": "Max distance it can see the player (px). Empty = the level's sight range (level.json sightRange, unlimited if none); 0 = unlimited."
     },
     "autoVision": {
       "group": "vision",
-      "desc": "Ignore vision zones and make its own zone from 90 rays when the level starts."
+      "desc": "Ignore vision zones and make its own zone from 90 rays when the level starts (fires whenever the player is inside it; no range or line of sight check). Off = zones, or range and line of sight outside every zone."
     },
     "health": {
       "group": "health",

@@ -78,14 +78,12 @@ function registerVision(){
 			vision.push(_screen.vision_mc[i]);
 	}
 	
-	// if no maps available, make one
-	if(!vision.length)
-		vision.push(makeVision());
+	// no zone here: it sees by range and line of sight instead (see the vision check in update)
 }
 if(!autoVision)
 	registerVision();
 
-// automatic vision mapping
+// automatic vision mapping (only for autoVision: a turret outside every zone sees by range and line of sight)
 function makeVision(){
 	var i = AUTO_VISION_ANGLES, points = [];
 	while(i--){
@@ -113,7 +111,7 @@ function makeVision(){
 	
 	return mc;
 }
-if(autoVision || !vision.length){
+if(autoVision){
 	
 	trace("auto vision map creation for " + _name);
 	
@@ -184,6 +182,14 @@ update = function(time){
 			attacking = false
 			if(movable && speed > speedMin)
 				registerVision();
+			// outside every zone: its visionRange, else the level's sight range (level.json "sightRange",
+			// none = unlimited), then line of sight. The player cloaked and not firing can't be seen
+			if(!vision.length){
+				var range = visionRange == null ? levelSightRange : visionRange; // 0 = unlimited
+				if(!_player.dying && (!_player.invisible || _player.firing1 || _player.firing2))
+					if(!range || getDistanceSquare(this, _player) < range * range)
+						attacking = lineOfSight(this, _player, LOS_SAMPLE_SIZE);
+			}
 			for(var i in vision){
 				if(vision[i].active){
 					if(!visionRange || getDistanceSquare(this, _player) < visionRangeSquare){
