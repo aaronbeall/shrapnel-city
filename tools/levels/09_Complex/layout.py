@@ -128,6 +128,12 @@ for k, (x, y, rx, ry) in enumerate(((560, 1660, 30, 24), (1010, 1596, 38, 28), (
     add(f'boulder {k + 1}', blob(x, y, rx, ry, 9, 0.25), 'wall', G)
 # the airlock up into the lower labs
 opening('airlock', 765, 1412, 835, 1545, 'lower labs')
+# rock spurs either side of the entry, so the drop-in point is a quiet pocket that only looks
+# north at the airlock and a gun or two, not out across the whole cavern (fixed points, so the
+# shapes above keep their random outlines)
+for name, sx in (('entry spur west', 690), ('entry spur east', 910)):
+    add(name, [(sx + math.cos(2 * math.pi * i / 10) * 38 * (1, 0.86, 1.08, 0.92, 1.04)[i % 5],
+                1702 + math.sin(2 * math.pi * i / 10) * 40 * (1, 0.86, 1.08, 0.92, 1.04)[i % 5]) for i in range(10)], 'wall', G)
 ENTRANCE = (800, 1700)
 
 # ---- LOWER LABS (y 1080-1430)
@@ -484,8 +490,8 @@ crates(470, 1678, 4)
 crates(1050, 1566, 4, drop={'type': 'health', 'item': 'health', 'quantity': 25})
 stack(400, 1540)
 stack(1270, 1615)
-crates(640, 1700, 3)
-crates(950, 1702, 3)
+crates(588, 1708, 3)
+crates(972, 1706, 3)
 # atrium: decon lockers along the walls
 crates(688, 1250, 4, 0, 20)
 crates(912, 1250, 4, 0, 20)
