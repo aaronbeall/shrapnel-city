@@ -15,7 +15,7 @@
     "symbol": "enemy assets/enemy hive",
     "x": 730,
     "y": 205,
-    "props": {"breed": "enemyBarrelBot", "breedMax": 3, "breedRate": 80}
+    "props": {"breed": "enemyBarrelBot", "breedMax": 3, "breedRate": 80, "onDie": {"$trigger": "door3:open"}}
   },
   {
     "symbol": "enemy assets/enemy hive",

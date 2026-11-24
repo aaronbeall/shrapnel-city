@@ -1,4 +1,6 @@
 [
   {"symbol": "game objects/door", "x": 660, "y": 1130, "props": {"id": "door1"}},
-  {"symbol": "game objects/door", "x": 752, "y": 612, "matrix": [0, 1, -1, 0], "props": {"id": "door2"}}
+  {"symbol": "game objects/door", "x": 752, "y": 612, "matrix": [0, 1, -1, 0], "props": {"id": "door2"}},
+  {"symbol": "game objects/door", "x": 1200, "y": 410, "props": {"id": "door3"}},
+  {"symbol": "game objects/door", "x": 1200, "y": 70, "props": {"id": "door3"}}
 ]
