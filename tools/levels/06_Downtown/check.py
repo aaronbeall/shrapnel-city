@@ -74,12 +74,6 @@ def main():
     l4 = shut({'door3'})
     if l4[int(ent['y']), int(ent['x'])] != l4[int(hive[2]['y']), int(hive[2]['x'])]: problems.append('hive 3 is not reachable with the gate square shut')
     if l4[int(ent['y']), int(ent['x'])] == l4[int(ext['y']), int(ext['x'])]: problems.append('the exit is reachable with the gate square shut')
-    # vision zones: every enemy should stand in one (or it makes its own from rays, seeing too far)
-    zones = load('vision.json')
-    def zoned(x, y): return any(z['x'] <= x <= z['x'] + z['points'][2][0] and z['y'] <= y <= z['y'] + z['points'][2][1] for z in zones)
-    for e in enemies:
-        if not zoned(e['x'], e['y']): problems.append(f"{e['symbol'].split('/')[-1]} at {e['x']:.0f},{e['y']:.0f}: in no vision zone")
-    if not zoned(ent['x'], ent['y']): problems.append('the entrance is in no vision zone')
     print('\n'.join(problems) if problems else 'no problems found')
     # density
     open_px = (~solid).sum() / 1e5

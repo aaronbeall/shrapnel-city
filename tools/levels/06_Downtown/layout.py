@@ -137,34 +137,8 @@ DOOR1 = (660, 1130)
 DOOR2 = (752, 612)
 DOOR3 = ((1200, 410), (1200, 70))                   # both ways into the gate square, opened by hive 3
 
-# vision zones: an enemy attacks only while the player is in a zone it stands in (and it can see
-# them), so each zone is one street, yard or square, reaching a little into the alleys off it.
-# Zones overlap where streets meet. Hive prints take the zone of their hive.
-VISION = {
-    'start': (20, 1170, 190, 1260),                 # its own zone: the lane's scurge wake as you leave it
-    'market lane': (170, 1170, 660, 1260),
-    'west alley': (30, 750, 110, 1194),
-    'stall lane': (90, 956, 630, 1132),
-    'fish market': (226, 750, 630, 976),
-    'east market alley': (550, 760, 630, 1194),
-    'sinkhole': (30, 570, 650, 770),                # both edges: shoot across the sinkhole
-    'neon strip': (690, 650, 814, 1260),
-    'pawn alley': (794, 1100, 1190, 1180),
-    'laundry yard': (794, 750, 1190, 970),
-    'back alley': (1170, 690, 1250, 1254),
-    'garage': (1230, 790, 1510, 1140),
-    'rail lane': (1230, 550, 1570, 770),
-    'east alley': (1490, 690, 1570, 1254),
-    'loading lane': (1230, 1180, 1570, 1254),
-    'arcade row': (712, 510, 1250, 690),
-    'high street': (250, 460, 1190, 590),
-    'west lane': (30, 30, 246, 590),
-    'north lane': (90, 30, 1250, 110),
-    'tea alley': (250, 90, 366, 480),
-    'spire plaza': (490, 150, 970, 480),
-    'clock alley': (1090, 90, 1250, 450),
-    'gate square': (1230, 30, 1570, 450),
-}
+# no vision zones: enemies see the player within level.json "sightRange" when they have line of
+# sight (as2 visionRange). Zones let the player shoot in through openings, so this level has none.
 
 shapes = []
 
@@ -514,7 +488,6 @@ pickup(1540, 70, 'secondary', 'Pepper Bombs', 10)
 
 doors = [P('game objects/door', *DOOR1, props={'id': 'door1'}), P('game objects/door', *DOOR2, rot=90, props={'id': 'door2'})] + \
     [P('game objects/door', *xy, props={'id': 'door3'}) for xy in DOOR3]
-vision = [{'x': x0, 'y': y0, 'points': [[0, 0], [x1 - x0, 0], [x1 - x0, y1 - y0], [0, y1 - y0]]} for x0, y0, x1, y1 in VISION.values()]
 
 # boxes: crates stacked against the walls of the lanes, some carrying drops
 boxes = []
@@ -642,13 +615,14 @@ def main():
         'boxes.json': list_json(boxes),
         'powerups.json': list_json(pick),
         'doors.json': list_json(doors),
-        'vision.json': list_json(vision),
+        'vision.json': '[]\n',
     }
     for name, text in files.items():
         with open(os.path.join(a.out, name), 'w', encoding='utf-8', newline='\n') as f: f.write(text)
     lj = os.path.join(a.out, 'level.json')
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
+    settings['sightRange'] = 420                    # how far enemies see (no vision zones)
     # the city art kit at night: dimmed to moonlight, then lit by the lamps, neon and lanterns
     # (tools/levels/06_Downtown/decor.py), with bigger, stronger light pools than by day
     settings.setdefault('art', {'kit': 'city', 'seed': 606, 'grade': 'night', 'lights': {'radius': 2.6, 'intensity': 1.1, 'bloom': 1.2}})
@@ -678,9 +652,6 @@ def preview(path):
         big = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 22)
     except OSError:
         font = big = ImageFont.load_default()
-    for k, (x0, y0, x1, y1) in enumerate(VISION.values()):
-        hue = [(90, 200, 90), (90, 140, 230), (220, 160, 60), (200, 90, 200)][k % 4]
-        d.rectangle([x0 + 2, y0 + 2, x1 - 2, y1 - 2], outline=hue, width=2)
     for e in enemies:
         s = e['symbol']
         if s == HIVE:
@@ -711,7 +682,7 @@ def preview(path):
     leg = [('ellipse', (160, 0, 200), 'drone hive (new spawner)'), ('ellipse', (255, 120, 0), 'Swarmer drone'), ('ellipse', (255, 200, 120), 'gnat'),
            ('ellipse', (220, 0, 120), 'Barrel Bot'), ('ellipse', (255, 30, 30), 'fire barrel'), ('ellipse', (120, 120, 0), 'scurge'),
            ('ellipse', (230, 190, 0), 'turret (stinger/2/3, wolfgun, battery)'), ('rect', (0, 255, 255), 'Flamer / Pepper Bombs'),
-           ('rect', (0, 140, 255), 'other pickup'), ('fill', (150, 110, 60), 'crate'), ('fill', (0, 220, 220), 'shutter (door)'), ('rect', (90, 140, 230), 'vision zone'),
+           ('rect', (0, 140, 255), 'other pickup'), ('fill', (150, 110, 60), 'crate'), ('fill', (0, 220, 220), 'shutter (door)'),
            ('ellipse2', (0, 200, 0), 'entrance / exit'), ('fill', (130, 130, 130), 'chasm / lot gap')]
     for kind, col, text in leg:
         if kind == 'ellipse': d.ellipse([lx, ly, lx + 16, ly + 16], fill=col)
