@@ -6,9 +6,7 @@
     "props": {
       "type": "primary",
       "item": "Spreader",
-      "quantity": 60,
-      "alertMessage": "SPREADER CANNON: six shots in a fan. Queue-jumping, now with crowd control.",
-      "alertOnce": true
+      "quantity": 60
     }
   },
   {
@@ -24,9 +22,7 @@
     "props": {
       "type": "primary",
       "item": "Spreader",
-      "quantity": 40,
-      "alertMessage": "SPREADER CANNON: six shots in a fan. Queue-jumping, now with crowd control.",
-      "alertOnce": true
+      "quantity": 40
     }
   },
   {
@@ -66,9 +62,7 @@
     "props": {
       "type": "secondary",
       "item": "Stun Bomb",
-      "quantity": 4,
-      "alertMessage": "STUN BOMBS: freeze anything electric for a few seconds. Everything here is electric.",
-      "alertOnce": true
+      "quantity": 4
     }
   },
   {
@@ -84,9 +78,7 @@
     "props": {
       "type": "primary",
       "item": "Spreader",
-      "quantity": 40,
-      "alertMessage": "SPREADER CANNON: six shots in a fan. Queue-jumping, now with crowd control.",
-      "alertOnce": true
+      "quantity": 40
     }
   },
   {
@@ -108,9 +100,7 @@
     "props": {
       "type": "secondary",
       "item": "Stun Bomb",
-      "quantity": 3,
-      "alertMessage": "STUN BOMBS: freeze anything electric for a few seconds. Everything here is electric.",
-      "alertOnce": true
+      "quantity": 3
     }
   },
   {
@@ -120,9 +110,7 @@
     "props": {
       "type": "primary",
       "item": "Spreader",
-      "quantity": 40,
-      "alertMessage": "SPREADER CANNON: six shots in a fan. Queue-jumping, now with crowd control.",
-      "alertOnce": true
+      "quantity": 40
     }
   },
   {
@@ -138,9 +126,7 @@
     "props": {
       "type": "primary",
       "item": "Spreader",
-      "quantity": 50,
-      "alertMessage": "SPREADER CANNON: six shots in a fan. Queue-jumping, now with crowd control.",
-      "alertOnce": true
+      "quantity": 50
     }
   },
   {

@@ -45,8 +45,7 @@
         "type": "key",
         "item": "yellowKey",
         "quantity": 1,
-        "alertMessage": "KEYCARD: it opens the door marked in its colour. Drive up to the door to use it.",
-        "alertOnce": true
+        "alertMessage": "KEYCARD: it opens the door marked in its colour. Drive up to the door to use it."
       }
     }
   },

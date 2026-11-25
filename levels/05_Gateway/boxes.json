@@ -112,9 +112,7 @@
       "powerupDrop": {
         "type": "primary",
         "item": "Spreader",
-        "quantity": 25,
-        "alertMessage": "SPREADER CANNON: six shots in a fan. Queue-jumping, now with crowd control.",
-        "alertOnce": true
+        "quantity": 25
       }
     }
   },
@@ -142,9 +140,7 @@
       "powerupDrop": {
         "type": "secondary",
         "item": "Stun Bomb",
-        "quantity": 1,
-        "alertMessage": "STUN BOMBS: freeze anything electric for a few seconds. Everything here is electric.",
-        "alertOnce": true
+        "quantity": 1
       }
     }
   },
@@ -164,9 +160,7 @@
       "powerupDrop": {
         "type": "secondary",
         "item": "Stun Bomb",
-        "quantity": 2,
-        "alertMessage": "STUN BOMBS: freeze anything electric for a few seconds. Everything here is electric.",
-        "alertOnce": true
+        "quantity": 2
       }
     }
   },
@@ -224,9 +218,7 @@
       "powerupDrop": {
         "type": "primary",
         "item": "Spreader",
-        "quantity": 25,
-        "alertMessage": "SPREADER CANNON: six shots in a fan. Queue-jumping, now with crowd control.",
-        "alertOnce": true
+        "quantity": 25
       }
     }
   },
