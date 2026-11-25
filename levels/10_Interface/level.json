@@ -1,5 +1,4 @@
 {
   "size": {"w": 1680, "h": 1200},
-  "art": {"kit": "bridge", "seed": 1010, "grade": "red alert"},
-  "sightRange": 420
+  "art": {"kit": "bridge", "seed": 1010, "grade": "red alert"}
 }

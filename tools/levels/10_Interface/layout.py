@@ -29,7 +29,7 @@ be seen.
 
 It writes collision.json (one vector shape per room, rack, cabinet and moat, so the editor can
 move any of them), features, pathNodes, enemies, boxes, powerups, doors (the core door and
-the hall and yard lockdown doors, every trap tile), vision (none: enemies see by sightRange and line of sight),
+the hall and yard lockdown doors, every trap tile), vision (none: enemies see by their visionRange and line of sight),
 level.json and briefing.json. collision.png is baked from collision.json by
 tools/levels/bake_collision.mjs, background.png by tools/art/bake.py.
 Re-running overwrites hand edits in those files.
@@ -484,7 +484,7 @@ stack(1540, 150)
 boxes.append(P('game objects/box computer', 1610, 860, props={'onDie': {'$trigger': 'door1:open'}}))
 boxes.append(P('game objects/box computer', 1180, 1076, props={'onDie': {'$trigger': 'yard:off'}}))
 
-# vision: no zones. Enemies see by the level's sightRange (level.json) and line of sight, so a
+# vision: no zones. Enemies see by their visionRange and line of sight, so a
 # turret sees exactly what it could shoot at, wherever the player stands.
 vision = []
 
@@ -581,7 +581,6 @@ def main():
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
     settings.setdefault('art', {'kit': 'bridge', 'seed': 1010, 'grade': 'red alert'})
-    settings.setdefault('sightRange', 420)
     with open(lj, 'w', encoding='utf-8', newline='\n') as f:
         f.write('{\n' + ',\n'.join(f'  {json.dumps(k)}: {pretty(v, "  ")}' for k, v in settings.items()) + '\n}\n')
     bj = os.path.join(a.out, 'briefing.json')
