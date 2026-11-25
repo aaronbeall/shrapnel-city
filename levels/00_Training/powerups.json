@@ -27,7 +27,6 @@
       "item": "Plasma",
       "quantity": 30,
       "alertMessage": "You got the PLASMA CANNON! Slow, heavy plasma bolts that hit hard. Press <strong>INSERT</strong> and <strong>SHIFT+INSERT</strong> to change your primary weapon, <strong>DELETE</strong> and <strong>SHIFT+DELETE</strong> to change your secondary weapon.",
-      "alertOnce": true,
       "alertLinger": 8
     }
   },
