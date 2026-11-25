@@ -116,16 +116,14 @@ _global.showMessage = function(msg, killTriggers){
 		// through, so attach the new one regardless (it takes the same depth)
 		_root.message_mc.hide();
 	}
-	{
-		var init = {
-			text:msg,
-			_x:screenWidth / 2,
-			_y:screenHeight / 2,
-			killTriggers:killTriggers
-		}
-		// one below the screen layer: flashScreen() attaches at screenDepth and would replace it
-		_root.attachMovie("message", "message_mc", _root.screenDepth - 1, init);
+	var init = {
+		text:msg,
+		_x:screenWidth / 2,
+		_y:screenHeight / 2,
+		killTriggers:killTriggers
 	}
+	// one below the screen layer: flashScreen() attaches at screenDepth and would replace it
+	_root.attachMovie("message", "message_mc", _root.screenDepth - 1, init);
 }
 
 // register a trigger response

@@ -231,6 +231,15 @@ _global.quit = function(){
 	_root.gotoAndPlay('main');
 }
 
+// a weapon's intro has been shown (powerup.as): mark it in the player's weapon and in the
+// current level's saved state, so it isn't shown again after a restart or reload
+_global.introShown = function(wep){
+	wep.introShown = true;
+	if(!currentLevel.intros) currentLevel.intros = {};
+	currentLevel.intros[wep.name] = true;
+	so.flush();
+}
+
 // save/load level state
 function saveLevel(index){
 	trace("[SAVE LEVEL] " + index);
@@ -249,6 +258,10 @@ function saveLevel(index){
 		lvl.weapons2[w] = p.weapons2[w].ammo;
 	lvl.wep1ID = p.weapon1.id;
 	lvl.wep2ID = p.weapon2.id;
+	// weapons whose intro the player has seen
+	lvl.intros = {};
+	for(var w in p.weapons1) if(p.weapons1[w].introShown) lvl.intros[p.weapons1[w].name] = true;
+	for(var w in p.weapons2) if(p.weapons2[w].introShown) lvl.intros[p.weapons2[w].name] = true;
 	lvl.inventory = [];
 	for(var i in _inventory.items)
 		lvl.inventory[i] = {name:_inventory.items[i].name, label:_inventory.items[i].label};
@@ -277,6 +290,8 @@ function loadLevel(index){
 		p.weapons2[w].ammo = lvl.weapons2[w];
 	p.weapon1 = p.weapons1[lvl.wep1ID];
 	p.weapon2 = p.weapons2[lvl.wep2ID];
+	for(var w in p.weapons1) p.weapons1[w].introShown = !!(lvl.intros && lvl.intros[p.weapons1[w].name]);
+	for(var w in p.weapons2) p.weapons2[w].introShown = !!(lvl.intros && lvl.intros[p.weapons2[w].name]);
 	_inventory.reset(lvl.inventory);
 	
 	currentLevel = lvl;
