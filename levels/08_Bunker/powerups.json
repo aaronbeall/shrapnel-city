@@ -1,0 +1,110 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 110,
+    "y": 520,
+    "props": {"type": "primary", "item": "Flak", "quantity": 30}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 150,
+    "y": 470,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1380,
+    "y": 370,
+    "props": {"type": "secondary", "item": "Bunker Buster", "quantity": 3}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1420,
+    "y": 380,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 70,
+    "y": 160,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 560,
+    "y": 120,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1000,
+    "y": 90,
+    "props": {"type": "primary", "item": "Flak", "quantity": 20}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1350,
+    "y": 625,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1620,
+    "y": 130,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 820,
+    "y": 760,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 130,
+    "y": 740,
+    "props": {"type": "primary", "item": "Flak", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1630,
+    "y": 700,
+    "props": {"type": "secondary", "item": "Bunker Buster", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1640,
+    "y": 850,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 940,
+    "y": 1260,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 130,
+    "y": 1300,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 370,
+    "y": 1230,
+    "props": {"type": "primary", "item": "Plasma", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1060,
+    "y": 1240,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1250,
+    "y": 1100,
+    "props": {"type": "primary", "item": "Flak", "quantity": 25}
+  }
+]

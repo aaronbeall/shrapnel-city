@@ -13,8 +13,12 @@ baked, so the original backgrounds (levels 00-02) are never overwritten:
 - kit: the art kit, i.e. which textures and decor sprites to use: "bridge" (metal decks,
   tools/art/parts/: floor, wall and chasm textures plus the decor sprites) or "city" (streets
   and rooftops on a grey day, tools/art/kit_city.py with tools/art/parts/city/ and the
-  decor sprites in tools/art/parts/decor/city-*/).
+  decor sprites in tools/art/parts/decor/city-*/) or "rock" (badlands over a concrete bunker,
+  tools/art/kit_rock.py with tools/art/parts/rock/ and tools/art/parts/decor/rock-*/; level.json
+  art.interior lists the rects drawn as bunker).
 - seed: the random seed for decor placement and the floor's light variation.
+- grade: the colour grade, one of the kit's grades in tools/art/kits.json (its defaultGrade when
+  left out). kits.json also lists each kit's area lists (city: paved), which the editor draws.
 
 The kit's parts were generated with OpenAI gpt-image-2 using only the original levels
 (backgrounds 0-2) as style references; the prompts sit next to them. The bake lays them
@@ -45,11 +49,12 @@ from scipy import ndimage as ndi
 sys.path.insert(0, os.path.dirname(__file__))
 from collision import coverage  # noqa: E402
 import kit_city  # noqa: E402
+import kit_rock  # noqa: E402
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', '..'))
 PARTS = os.path.join(os.path.dirname(__file__), 'parts')
 DECOR = os.path.join(PARTS, 'decor')
-KITS = ('bridge', 'city')
+KITS = tuple(json.load(open(os.path.join(os.path.dirname(__file__), 'kits.json'))))  # tools/art/kits.json
 
 
 def blur(a, s): return ndi.gaussian_filter(a.astype(np.float32), s, mode='nearest')
@@ -243,6 +248,7 @@ CATEGORIES = ('panels', 'floorpaint', 'rails', 'greebles', 'vents', 'wallmarks',
 
 
 def kit_categories(kit):
+    if kit == 'rock': return kit_rock.CATEGORIES
     return kit_city.CATEGORIES if kit == 'city' else CATEGORIES
 
 
@@ -317,6 +323,10 @@ def place_decor(g, seed, opts, only=None, keep=(), entrance=None, kit='bridge', 
         ks, ko, kit_reach = kit_city.surfaces(g, art or {}, seed)
         surfaces.update(ks); orients.update(ko)
         passes = kit_city.PASSES
+    if kit == 'rock':
+        ks, ko, kit_reach = kit_rock.surfaces(g, art or {}, seed)
+        surfaces.update(ks); orients.update(ko)
+        passes = kit_rock.PASSES
     # one rail style per continuous chasm edge: each straight run of the lip band
     edge_ids = np.zeros((H, W), np.int32)
     for k in range(4):
@@ -403,7 +413,8 @@ def worn(h, w, seed):
 
 def bake(g, decor, seed, opts, kit='bridge', art=None):
     W, H = g.W, g.H
-    img = np.clip(kit_city.base_art(g, seed, opts, art or {}) if kit == 'city' else base_art(g, seed, opts), 0, 1)
+    if kit == 'rock': img = np.clip(kit_rock.base_art(g, seed, opts, art or {}), 0, 1)
+    else: img = np.clip(kit_city.base_art(g, seed, opts, art or {}) if kit == 'city' else base_art(g, seed, opts), 0, 1)
     shadow = np.zeros((H, W), np.float32)
     bloom = np.zeros((H, W, 3), np.float32)
     lighting = np.zeros((H, W, 3), np.float32)
@@ -460,8 +471,9 @@ def bake(g, decor, seed, opts, kit='bridge', art=None):
     # (strongest on mid tones, so the dark floor picks up colour and bright walls don't wash out)
     img = img + lo['intensity'] * lighting * (0.12 + img) * (1 - np.clip(img, 0, 1))
     img += np.stack([blur(bloom[..., c], 4) for c in range(3)], -1) * lo['bloom']
+    if kit == 'rock': img = kit_rock.grade(img, art or {})
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
-    if kit == 'city': img = kit_city.grade(img)
+    if kit == 'city': img = kit_city.grade(img, (art or {}).get('grade'))
     sh = opts['edges']['sharpen']
     if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
@@ -479,7 +491,7 @@ def main():
     ap.add_argument('level', help='level folder, e.g. 03_Bridge')
     ap.add_argument('step', choices=['place', 'bake', 'all'])
     ap.add_argument('--seed', type=int, help='seed for decor placement (default: level.json art.seed)')
-    ap.add_argument('--only', help='place only these decor types, comma separated (bridge: ' + ', '.join(CATEGORIES) + '; city: ' + ', '.join(kit_city.CATEGORIES) + '); the others in decor.json are kept')
+    ap.add_argument('--only', help='place only these decor types, comma separated (bridge: ' + ', '.join(CATEGORIES) + '; city: ' + ', '.join(kit_city.CATEGORIES) + '; rock: ' + ', '.join(kit_rock.CATEGORIES) + '); the others in decor.json are kept')
     args = ap.parse_args()
     d, art, size = level_paths(args.level)
     opts = options(art)

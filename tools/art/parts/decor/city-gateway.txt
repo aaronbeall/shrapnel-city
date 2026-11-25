@@ -1,0 +1,8 @@
+A sprite sheet for a top-down 2D game. CAMERA LOOKS STRAIGHT DOWN (orthographic plan view, like a map or a satellite photo): no perspective, no isometric angle, no side faces or fronts of objects visible, only their tops. Items for a fortified robot border CHECKPOINT on a city street, olive drab and worn concrete, muted colours. Mostly FLAT markings painted on asphalt, seen from directly above:
+- 4 long thin horizontal floor bands of painted diagonal hazard stripes, alternating near-black and very pale grey stripes, worn and scuffed
+- 4 white painted floor arrows for a queue lane, each a single arrow pointing right, with two small painted footprint marks in front of it
+- 3 vehicle inspection bays painted on the ground: a rectangle outline in white paint with diagonal hatching inside, worn
+- 4 long horizontal coils of razor wire seen from directly above (a row of overlapping loops), dark steel
+- 3 round searchlight heads seen from directly above: a round lens in an olive drab ring housing
+- 2 painted floor symbols of a keycard: a rounded rectangle with a chip square and a stripe, white paint, worn
+Absolutely no text, letters, numbers or words anywhere.

@@ -1,0 +1,1 @@
+Create a seamless tileable texture of a tightly packed wall of military SANDBAGS seen straight down from above, filling the whole image edge to edge: rows of plump khaki and olive-tan burlap sandbags laid in a staggered brick-like bond, stitched seams, folded ends, dust in the gaps, soft rounded shading on each bag. No borders. It must tile seamlessly left-right and top-bottom.

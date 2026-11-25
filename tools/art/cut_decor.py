@@ -18,7 +18,7 @@ D = os.path.join(os.path.dirname(__file__), 'parts', 'decor')
 # keep categories that aren't cut from a sheet (panels, from make_panels.py)
 ip = os.path.join(D, 'index.json')
 index = json.load(open(ip)) if os.path.exists(ip) else {}
-PAINT = ('floorpaint', 'city-roadpaint')  # painted on a patch of floor: keep only the paint
+PAINT = ('floorpaint', 'city-roadpaint', 'rock-groundpaint', 'rock-floorpaint')  # painted on a patch of floor: keep only the paint
 only = set(sys.argv[1:])
 for sheet in sorted(glob.glob(os.path.join(D, 'sheet_*.png'))):
     cat = os.path.basename(sheet)[6:-4]
@@ -36,7 +36,7 @@ for sheet in sorted(glob.glob(os.path.join(D, 'sheet_*.png'))):
     # despill: pull magenta fringe back toward neutral
     spill = np.clip(np.minimum(r, b) - g, 0, None) * np.clip(key * 3, 0, 1)
     a2 = a.copy(); a2[..., 0] -= spill * 0.8; a2[..., 2] -= spill * 0.8
-    if cat.startswith('city-'):  # newer sheets: no magenta cast anywhere (dark soot over magenta keys as opaque)
+    if cat.startswith(('city-', 'rock-')):  # newer sheets: no magenta cast anywhere (dark soot over magenta keys as opaque)
         full = np.clip(np.minimum(r, b) - g, 0, None)
         a2[..., 0] -= full; a2[..., 2] -= full
     items = []

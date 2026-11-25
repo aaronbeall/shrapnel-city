@@ -1,0 +1,106 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip"
+  },
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy walker turret/shape 1",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#00000059",
+              "blurX": 3,
+              "blurY": 3,
+              "angle": 0.785398,
+              "distance": 4,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "enemy assets/designs/spider/shape 2",
+          "depth": 2,
+          "x": 0,
+          "y": 0,
+          "matrix": [
+            -1.35,
+            0,
+            0,
+            -1.35
+          ],
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#00000059",
+              "blurX": 3,
+              "blurY": 3,
+              "angle": 0.785398,
+              "distance": 4,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        },
+        {
+          "place": "_glow",
+          "depth": 3,
+          "x": 0,
+          "y": -25,
+          "scale": [
+            0.9,
+            0.9
+          ],
+          "name": "flash_mc",
+          "color": {
+            "multiply": [
+              0.75,
+              0.75,
+              0.75,
+              0.3984375
+            ],
+            "add": [
+              64,
+              40,
+              90,
+              0
+            ]
+          },
+          "blend": "add",
+          "script": [
+            "onClipEvent (load) {",
+            "    _visible = false;",
+            "}",
+            ""
+          ]
+        },
+        {
+          "place": "_blank MC",
+          "depth": 4,
+          "x": -3.7,
+          "y": -24,
+          "name": "muzzle_mc1"
+        },
+        {
+          "place": "_blank MC",
+          "depth": 5,
+          "x": 3.7,
+          "y": -24,
+          "name": "muzzle_mc2"
+        }
+      ]
+    }
+  ]
+}

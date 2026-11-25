@@ -43,18 +43,18 @@ onClipEvent(load){
 	weapons1 = [
 		{name:"Energizer", shot:"shot_mcEnergizer", ammo:Infinity, max:Infinity, refire:4, spread:12, fullname:"Energizer Gun", fire:1, key:1}, 
 		{name:"Bolter", shot:"shot_mc", ammo:200, max:999, refire:2, spread:8, fullname:"Bolter Cannon", fire:1, key:1}, 
-		{name:"Plasma", shot:"shot_mcPlasma", ammo:0, max:200, refire:10, spread:6, fullname:"Plasma Cannon", fire:2, key:2}, 
-		{name:"Vertigo", shot:"shot_mcBurstPlasma", ammo:0, max:300, refire:2, spread:7, fullname:"Vertigo Cannon", burst:3, burstReload:6, fire:2, key:2}, 
+		{name:"Plasma", shot:"shot_mcPlasma", ammo:0, max:200, refire:10, spread:6, fullname:"Plasma Cannon", fire:2, key:2, intro:"PLASMA CANNON: slow, heavy plasma bolts that hit hard."}, 
+		{name:"Vertigo", shot:"shot_mcBurstPlasma", ammo:0, max:300, refire:2, spread:7, fullname:"Vertigo Cannon", burst:3, burstReload:6, fire:2, key:2, intro:"VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick."}, 
 		{name:"Phoenix", shot:"shot_mcPhoenix", ammo:0, max:200, refire:4, spread:7, fullname:"Phoenix Cannon", fire:4, key:2}, 
 		{name:"Gatling", shot:"shot_mcEnergizer", ammo:0, max:Infinity, refire:1, spread:16, fullname:"Gatling Gun", fire:1, key:1}, 
-		{name:"Banshee", shot:"shot_mcBanshee", ammo:0, max:600, refire:1, spread:24, fullname:"Banshee Cannon", fire:1, key:1}, 
+		{name:"Banshee", shot:"shot_mcBanshee", ammo:0, max:600, refire:1, spread:24, fullname:"Banshee Cannon", fire:1, key:1, intro:"BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep."}, 
 		{name:"Spreader", shot:"shot_mcSpreader", ammo:0, max:150, refire:8, spread:6, fullname:"Spreader Cannon", fire:6, key:2}, 
 		{name:"Hailstorm", shot:"shot_mcStorm", ammo:0, max:150, refire:1, spread:6, fullname:"Hailstorm Cannon", burst:3, burstReload:15, fire:6, key:2}, 
 		{name:"Hydra", shot:"shot_mcHydra", ammo:0, max:250, refire:5, spread:8, fullname:"Hydra Cannon", fire:6, key:2}, 
 		{name:"Pulse", shot:"shot_mcPulse", ammo:0, max:200, refire:4, spread:8, fullname:"Pulse Cannon", fire:6, key:2}, 
 		{name:"Vendetta", shot:"shot_mcVendetta", ammo:0, max:250, refire:5, spread:8, fullname:"Vendetta Cannon", fire:5, key:2}, 
 		{name:"Auto Cannon", shot:"shot_mcAuto", ammo:0, max:250, refire:3, spread:8, fullname:"Auto Cannon", fire:5, key:2}, 
-		{name:"Flak", shot:"shot_mcFlak", ammo:0, max:50, refire:10, spread:4, fullname:"Flak Cannon", fire:5, key:3}, 
+		{name:"Flak", shot:"shot_mcFlak", ammo:0, max:50, refire:10, spread:4, fullname:"Flak Cannon", fire:5, key:3, intro:"FLAK CANNON: a burst of shrapnel at arm's length. Get close and personal."}, 
 		{name:"Shredder", shot:"shrap_mc", ammo:0, max:null, refire:1, spread:16, fullname:"Shredder", fire:5, key:3}, 
 		{name:"Stinger", shot:"frag_mc", ammo:0, max:null, refire:1, spread:6, fullname:"Stinger", fire:5, key:3}, 
 		{name:"Railgun", shot:"shot_mcRail", ammo:0, max:75, refire:10, spread:2, fullname:"Railgun", fire:5, key:3}, 
@@ -68,11 +68,11 @@ onClipEvent(load){
 	for(var i in weapons1) weapons1[i].id = int(i);
 	weapons2 = [
 		{name:"Carbon Bomb", shot:"shot_mcBomb", ammo:2, max:20, refire:15, spread:4, key:6}, 
-		{name:"Thermal Bomb", shot:"shot_mcGrenade", ammo:0, max:10, refire:25, spread:4, key:6}, 
-		{name:"Impact Mortar", shot:"shot_mcMort", ammo:0, max:5, refire:15, spread:4, key:7}, 
+		{name:"Thermal Bomb", shot:"shot_mcGrenade", ammo:0, max:10, refire:25, spread:4, key:6, intro:"THERMAL BOMBS: lob one over a barrier and let it cook."}, 
+		{name:"Impact Mortar", shot:"shot_mcMort", ammo:0, max:5, refire:15, spread:4, key:7, intro:"IMPACT MORTAR: a slow rocket that speeds up and blows on impact. Big blast, so keep your distance."}, 
 		{name:"Stun Bomb", shot:"shot_mcStun", ammo:0, max:12, refire:15, spread:4, key:6}, 
-		{name:"Shrapnel Bomb", shot:"shot_mcFrag", ammo:0, max:5, refire:35, spread:0, key:8}, 
-		{name:"Splinter Bomb", shot:"shot_mcSplinter", ammo:0, max:5, refire:10, spread:4, key:8}, 
+		{name:"Shrapnel Bomb", shot:"shot_mcFrag", ammo:0, max:5, refire:35, spread:0, key:8, intro:"SHRAPNEL BOMB: it bursts into a ring of shrapnel. Drop it in the middle of a crowd."}, 
+		{name:"Splinter Bomb", shot:"shot_mcSplinter", ammo:0, max:5, refire:10, spread:4, key:8, intro:"SPLINTER BOMB: explodes and sprays splinters of Banshee fire in every direction."}, 
 		{name:"Plasma Bomb", shot:"shot_mcPlasmaBomb", ammo:0, max:5, refire:25, spread:4, key:8}, 
 		{name:"Pulse Bomb", shot:"shot_mcPulseBomb", ammo:0, max:5, refire:25, spread:4, key:8}, 
 		{name:"Spikey Bomb", shot:"shot_mcSpikey", ammo:0, max:5, refire:25, spread:4, key:8}, 
@@ -91,7 +91,8 @@ onClipEvent(load){
 		{name:"Synapse Bomb", shot:"shot_mcSynapse", ammo:0, max:1, refire:60, spread:10, key:7}, 
 		{name:"Shock Bomb", shot:"shot_mcShock", ammo:0, max:1, refire:60, spread:6, key:6}, 
 		{name:"Laser Bomb", shot:"shot_mcLaserBomb", ammo:0, max:5, refire:30, spread:2, key:0}, 
-		{name:"Laser Anhilator", shot:"shot_mcSuperLaserBomb", ammo:0, max:1, refire:30, spread:2, key:0}
+		{name:"Laser Anhilator", shot:"shot_mcSuperLaserBomb", ammo:0, max:1, refire:30, spread:2, key:0},
+		{name:"Bunker Buster", shot:"shot_mcBuster", ammo:0, max:4, refire:40, spread:2, key:8, intro:"BUNKER BUSTER: one heavy bomb, one very large hole. Returns the favour to the mortar crews."}
 	]
 	for(var i in weapons2) weapons2[i].id = int(i);
 	
