@@ -146,7 +146,7 @@ DOOR1 = (660, 1130)
 DOOR2 = (752, 612)
 DOOR3 = ((1200, 410), (1200, 70))                   # both ways into the gate square, opened by hive 3
 
-# no vision zones: enemies see the player within their visionRange (420 by default) when they
+# no vision zones: enemies see the player within their visionRange, or on screen without one, when they
 # have line of sight. Zones let the player shoot in through openings, so this level has none.
 
 shapes = []
@@ -633,7 +633,7 @@ def main():
     lj = os.path.join(a.out, 'level.json')
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
-    settings.pop('sightRange', None)                # sight is an enemy setting now (visionRange, default 420)
+    settings.pop('sightRange', None)                # sight is an enemy setting now (visionRange, else on screen)
     # the city art kit at night: dimmed to moonlight, then lit by the lamps, neon and lanterns
     # (tools/levels/06_Downtown/decor.py), with bigger, stronger light pools than by day
     settings.setdefault('art', {'kit': 'city', 'seed': 606, 'grade': 'night', 'lights': {'radius': 2.6, 'intensity': 1.1, 'bloom': 1.2}})

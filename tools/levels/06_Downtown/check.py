@@ -29,6 +29,8 @@ def load(name):
     return json.load(open(p, encoding='utf-8')) if os.path.exists(p) else []
 
 
+VIEW = (800, 600)     # the game's screen
+SIGHT_MARGIN = 100    # enemyTurret.as: no visionRange sees on screen or this near its edge
 MAX_WATCHERS = 2   # Aaron: a couple in sight of the spawn is a hot start; more is too many
 
 
@@ -77,14 +79,22 @@ def main():
     l4 = shut({'door3'})
     if l4[int(ent['y']), int(ent['x'])] != l4[int(hive[2]['y']), int(hive[2]['x'])]: problems.append('hive 3 is not reachable with the gate square shut')
     if l4[int(ent['y']), int(ent['x'])] == l4[int(ext['y']), int(ext['x'])]: problems.append('the exit is reachable with the gate square shut')
-    # a quiet spawn: within sight range, at most a couple of enemies see the entrance (line of
-    # sight through anything but black wall, as the game's wallHitTest)
-    sight = 420  # enemyTurret.as visionRange default
+    # a quiet spawn: at most a couple of enemies see the entrance. An enemy with a visionRange sees
+    # that far; one without sees while it's on screen or within SIGHT_MARGIN of its edge
+    # (enemyTurret.as): the 800x600 view centred on the spawn, clamped to the level, grown by 100.
+    # Line of sight passes anything but black wall, as the game's wallHitTest.
+    lh, lw = c.shape
+    vx0 = min(max(ent['x'] - VIEW[0] / 2, 0), max(lw - VIEW[0], 0)) - SIGHT_MARGIN
+    vy0 = min(max(ent['y'] - VIEW[1] / 2, 0), max(lh - VIEW[1], 0)) - SIGHT_MARGIN
+    vx1, vy1 = vx0 + VIEW[0] + 2 * SIGHT_MARGIN, vy0 + VIEW[1] + 2 * SIGHT_MARGIN
     wall = c == 0
     def seen(x0, y0, x1, y1):
         n = int(math.hypot(x1 - x0, y1 - y0) / 3) + 1
         return not any(wall[int(y0 + (y1 - y0) * k / n), int(x0 + (x1 - x0) * k / n)] for k in range(n + 1))
-    watchers = [e for e in enemies if not e['symbol'].endswith('fire barrel') and math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) < (e.get('props') or {}).get('visionRange', sight) and seen(e['x'], e['y'], ent['x'], ent['y'])]
+    def in_range(e):
+        r = (e.get('props') or {}).get('visionRange')
+        return math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) < r if r else vx0 <= e['x'] <= vx1 and vy0 <= e['y'] <= vy1
+    watchers = [e for e in enemies if not e['symbol'].endswith('fire barrel') and in_range(e) and seen(e['x'], e['y'], ent['x'], ent['y'])]
     print(f"spawn: {len(watchers)} enemies see it: " + ', '.join(f"{e['symbol'].split('/')[-1]} ({e['x']:.0f}, {e['y']:.0f})" for e in watchers))
     if len(watchers) > MAX_WATCHERS: problems.append(f'{len(watchers)} enemies see the spawn (at most {MAX_WATCHERS})')
     print('\n'.join(problems) if problems else 'no problems found')
