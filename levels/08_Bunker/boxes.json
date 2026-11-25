@@ -59,16 +59,7 @@
     "x": 1440,
     "y": 220,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Bunker Buster",
-        "quantity": 1,
-        "alertMessage": "BUNKER BUSTER: one heavy bomb, one very large hole. Returns the favour to the mortar crews.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Bunker Buster", "quantity": 1}}
   },
   {"symbol": "game objects/box", "x": 1460, "y": 220},
   {"symbol": "game objects/box", "x": 1660, "y": 400},
@@ -85,16 +76,7 @@
     "x": 1150,
     "y": 350,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Bunker Buster",
-        "quantity": 1,
-        "alertMessage": "BUNKER BUSTER: one heavy bomb, one very large hole. Returns the favour to the mortar crews.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Bunker Buster", "quantity": 1}}
   },
   {"symbol": "game objects/box", "x": 1150, "y": 370},
   {"symbol": "game objects/box", "x": 520, "y": 615},
@@ -114,16 +96,7 @@
     "x": 1680,
     "y": 100,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Bunker Buster",
-        "quantity": 1,
-        "alertMessage": "BUNKER BUSTER: one heavy bomb, one very large hole. Returns the favour to the mortar crews.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Bunker Buster", "quantity": 1}}
   },
   {"symbol": "game objects/box", "x": 200, "y": 700},
   {"symbol": "game objects/box", "x": 220, "y": 700},

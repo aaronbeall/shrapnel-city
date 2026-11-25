@@ -3,13 +3,7 @@
     "symbol": "game objects/powerup",
     "x": 110,
     "y": 520,
-    "props": {
-      "type": "primary",
-      "item": "Flak",
-      "quantity": 30,
-      "alertMessage": "FLAK CANNON: a burst of shrapnel at arm's length. Get close and personal.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Flak", "quantity": 30}
   },
   {
     "symbol": "game objects/powerup",
@@ -21,13 +15,7 @@
     "symbol": "game objects/powerup",
     "x": 1380,
     "y": 370,
-    "props": {
-      "type": "secondary",
-      "item": "Bunker Buster",
-      "quantity": 3,
-      "alertMessage": "BUNKER BUSTER: one heavy bomb, one very large hole. Returns the favour to the mortar crews.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Bunker Buster", "quantity": 3}
   },
   {
     "symbol": "game objects/powerup",
@@ -51,13 +39,7 @@
     "symbol": "game objects/powerup",
     "x": 1000,
     "y": 90,
-    "props": {
-      "type": "primary",
-      "item": "Flak",
-      "quantity": 20,
-      "alertMessage": "FLAK CANNON: a burst of shrapnel at arm's length. Get close and personal.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Flak", "quantity": 20}
   },
   {
     "symbol": "game objects/powerup",
@@ -81,25 +63,13 @@
     "symbol": "game objects/powerup",
     "x": 130,
     "y": 740,
-    "props": {
-      "type": "primary",
-      "item": "Flak",
-      "quantity": 25,
-      "alertMessage": "FLAK CANNON: a burst of shrapnel at arm's length. Get close and personal.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Flak", "quantity": 25}
   },
   {
     "symbol": "game objects/powerup",
     "x": 1630,
     "y": 700,
-    "props": {
-      "type": "secondary",
-      "item": "Bunker Buster",
-      "quantity": 2,
-      "alertMessage": "BUNKER BUSTER: one heavy bomb, one very large hole. Returns the favour to the mortar crews.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Bunker Buster", "quantity": 2}
   },
   {
     "symbol": "game objects/powerup",
@@ -135,12 +105,6 @@
     "symbol": "game objects/powerup",
     "x": 1250,
     "y": 1100,
-    "props": {
-      "type": "primary",
-      "item": "Flak",
-      "quantity": 25,
-      "alertMessage": "FLAK CANNON: a burst of shrapnel at arm's length. Get close and personal.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Flak", "quantity": 25}
   }
 ]

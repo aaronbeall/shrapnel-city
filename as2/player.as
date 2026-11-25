@@ -54,7 +54,7 @@ onClipEvent(load){
 		{name:"Pulse", shot:"shot_mcPulse", ammo:0, max:200, refire:4, spread:8, fullname:"Pulse Cannon", fire:6, key:2}, 
 		{name:"Vendetta", shot:"shot_mcVendetta", ammo:0, max:250, refire:5, spread:8, fullname:"Vendetta Cannon", fire:5, key:2}, 
 		{name:"Auto Cannon", shot:"shot_mcAuto", ammo:0, max:250, refire:3, spread:8, fullname:"Auto Cannon", fire:5, key:2}, 
-		{name:"Flak", shot:"shot_mcFlak", ammo:0, max:50, refire:10, spread:4, fullname:"Flak Cannon", fire:5, key:3}, 
+		{name:"Flak", shot:"shot_mcFlak", ammo:0, max:50, refire:10, spread:4, fullname:"Flak Cannon", fire:5, key:3, intro:"FLAK CANNON: a burst of shrapnel at arm's length. Get close and personal."}, 
 		{name:"Shredder", shot:"shrap_mc", ammo:0, max:null, refire:1, spread:16, fullname:"Shredder", fire:5, key:3}, 
 		{name:"Stinger", shot:"frag_mc", ammo:0, max:null, refire:1, spread:6, fullname:"Stinger", fire:5, key:3}, 
 		{name:"Railgun", shot:"shot_mcRail", ammo:0, max:75, refire:10, spread:2, fullname:"Railgun", fire:5, key:3}, 
@@ -92,7 +92,7 @@ onClipEvent(load){
 		{name:"Shock Bomb", shot:"shot_mcShock", ammo:0, max:1, refire:60, spread:6, key:6}, 
 		{name:"Laser Bomb", shot:"shot_mcLaserBomb", ammo:0, max:5, refire:30, spread:2, key:0}, 
 		{name:"Laser Anhilator", shot:"shot_mcSuperLaserBomb", ammo:0, max:1, refire:30, spread:2, key:0},
-		{name:"Bunker Buster", shot:"shot_mcBuster", ammo:0, max:4, refire:40, spread:2, key:8}
+		{name:"Bunker Buster", shot:"shot_mcBuster", ammo:0, max:4, refire:40, spread:2, key:8, intro:"BUNKER BUSTER: one heavy bomb, one very large hole. Returns the favour to the mortar crews."}
 	]
 	for(var i in weapons2) weapons2[i].id = int(i);
 	

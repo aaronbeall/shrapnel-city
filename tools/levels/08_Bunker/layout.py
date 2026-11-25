@@ -620,24 +620,13 @@ def list_json(items):
     return '[\n' + ',\n'.join('  ' + pretty(x, '  ') for x in items) + '\n]\n'
 
 
-# this level's new weapons: an intro message on every copy (pickups and drops); alertOnce
-# shows it only for the first one the player picks up
-INTRO = {'Flak': 'FLAK CANNON: a burst of shrapnel at arm\'s length. Get close and personal.',
-         'Bunker Buster': 'BUNKER BUSTER: one heavy bomb, one very large hole. Returns the favour to the mortar crews.'}
-
-
-def add_intros():
-    props = [o['props'] for o in pick] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
-    for pr in props:
-        if pr.get('type') in ('primary', 'secondary') and pr.get('item') in INTRO:
-            pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
-
+# this level's new weapons (Flak, Bunker Buster) carry their intro on their definitions in
+# as2/player.as (intro:"..."), shown on the first pickup, so the pickups here need none
 
 # no vision zones: enemies see by their visionRange (420 by default) and line of sight, and the
 # mortars by their mortarRange
 
 def main():
-    add_intros()
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(ROOT, 'levels', FOLDER))
     ap.add_argument('--preview')
