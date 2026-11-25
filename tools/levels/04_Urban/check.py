@@ -9,7 +9,8 @@ Reads the level files (so it checks hand edits too) and reports:
 - anything the player can't reach from the entrance (with the checkpoint gate open), and
   whether the exit is shut off while the gate is closed
 - density per 100k px of open floor, to compare with the earlier levels
-- how many enemies can see the spawn (within the turrets' default visionRange, line of sight over
+- how many enemies can see the spawn (while on screen, or within 100 px of it, with
+  the camera centred on the spawn (the turrets' default sight), line of sight over
   chasms): a couple is a hot start, more is a crowd
 """
 import json
@@ -80,13 +81,20 @@ def main():
     lab2, _ = ndi.label(w2)
     if lab2[int(ent['y']), int(ent['x'])] == lab2[int(ext['y']), int(ext['x'])]: problems.append('the exit is reachable with the gate shut')
     # the spawn: a couple of enemies in sight is a hot start, more is a crowd
-    rng_ = 420   # enemyTurret.as's default visionRange
+    # an enemy with no visionRange sees while on screen or within SIGHT_MARGIN of it
+    # (enemyTurret.as); the camera is centred on the spawn, clamped to the level
+    VW, VH, MARGIN = 800, 600, 100
+    vx = min(max(ent['x'] - VW / 2, 0), c.shape[1] - VW)
+    vy = min(max(ent['y'] - VH / 2, 0), c.shape[0] - VH)
+
+    def in_view(x, y):
+        return vx - MARGIN <= x <= vx + VW + MARGIN and vy - MARGIN <= y <= vy + VH + MARGIN
     wall = c <= 0x10   # chasm doesn't block sight
 
     def sees(x, y):
         n = int(math.hypot(x - ent['x'], y - ent['y']) / 3) + 1
         return not any(wall[int(ent['y'] + (y - ent['y']) * i / n), int(ent['x'] + (x - ent['x']) * i / n)] for i in range(n + 1))
-    seen = [e for e in enemies if math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) <= rng_ and sees(e['x'], e['y'])]
+    seen = [e for e in enemies if in_view(e['x'], e['y']) and sees(e['x'], e['y'])]
     if len(seen) > 3: problems.append(f'{len(seen)} enemies can see the spawn (a couple is a hot start): ' + ', '.join(f"{e['symbol'].split('/')[-1]} ({e['x']}, {e['y']})" for e in seen))
     print('\n'.join(problems) if problems else 'no problems found')
     print(f'{len(seen)} enemies can see the spawn')

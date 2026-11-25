@@ -201,6 +201,15 @@ for k, (px, py) in enumerate(((x0 + 34, y0 + 34), (x1 - 34, y0 + 34))):
 sx = street_x(0)
 cy0 = street_y(2) - 8
 add('collapsed west avenue', poly_d([(sx, cy0 + 4), (sx + 40, cy0 - 6), (sx + 80, cy0 + 2), (sx + S, cy0 - 4), (sx + S, cy0 + S * 0.55), (sx + 70, cy0 + S * 0.6), (sx + 30, cy0 + S * 0.5), (sx, cy0 + S * 0.58)]), mode='chasm', group='collapsed streets')
+# The spawn bay: the drop zone in the south-west corner is walled off from the two long
+# streets it sits on, with a dog-leg out each way, so nothing down the streets can see you
+# land. (Aaron: spawn somewhere quiet, a couple of enemies in sight at most.)
+for name, (x0_, y0_, x1_, y1_) in (
+        ('spawn bay avenue wall', (B - 4, street_y(3) - 94, B + 60, street_y(3) - 78)),             # gap on the east
+        ('spawn bay avenue baffle', (B + 56, street_y(3) - 174, street_x(0) + S + 4, street_y(3) - 158)),  # gap on the west
+        ('spawn bay street wall', (street_x(0) + S + 38, street_y(3) - 4, street_x(0) + S + 54, street_y(3) + 54)),  # gap on the south
+        ('spawn bay street baffle', (street_x(0) + S + 118, street_y(3) + 58, street_x(0) + S + 134, H - B + 4))):   # gap on the north
+    add(name, poly_d(chamfer_rect(x0_, y0_, x1_, y1_, 3)), group='spawn bay')
 sy = street_y(0)
 cx0 = street_x(1) + 6
 add('collapsed north street', poly_d([(cx0, sy), (cx0 + S - 12, sy), (cx0 + S - 2, sy + 40), (cx0 + S - 14, sy + S), (cx0 + 8, sy + S), (cx0 - 4, sy + 60)]), mode='chasm', group='collapsed streets')
@@ -315,11 +324,11 @@ def grid(x, y, cols, rows, s=30):
             E(SCURGE, x + (i - (cols - 1) / 2) * s, y + (j - (rows - 1) / 2) * s)
 
 
-# --- the start (south-west): a hot start but not a crowd. Only the scurge below the
-# collapsed avenue can see the spawn; the rest wait round the corner or out of range.
+# --- the start (south-west): a hot start but not a crowd. Only the scurge in the
+# spawn bay can see the spawn; the rest wait round its dog-legs.
 E(STINGER, *corner(0, 2, 'ne'))
 E(STINGER, *corner(0, 1, 'nw'))
-tri(76, 860)                                  # below the collapsed avenue: the hot start
+tri(92, 948, s=26)                            # in the spawn bay: the hot start
 tri(250, 720)                                 # round the corner, in the street north of the first block
 tri(335, 720, down=True)
 E(BARREL, 180, 700)
@@ -462,7 +471,7 @@ def kerb_row(c, r, side, n, at=0.5, off=12):
 
 
 for c, r, side, n, at in (
-        (0, 2, 'e', 4, 0.5), (0, 2, 'n', 5, 0.5), (0, 2, 's', 4, 0.3),
+        (0, 2, 'e', 4, 0.5), (0, 2, 'n', 5, 0.5), (0, 2, 's', 4, 0.8),
         (1, 2, 'w', 4, 0.5), (1, 2, 'n', 4, 0.3), (1, 2, 's', 3, 0.15),
         (3, 2, 'w', 4, 0.4), (3, 2, 'e', 4, 0.8),
         (0, 0, 'e', 4, 0.6), (0, 0, 's', 5, 0.5), (0, 0, 'n', 4, 0.4),

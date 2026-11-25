@@ -180,6 +180,30 @@
     "group": "collapsed streets"
   },
   {
+    "name": "spawn bay avenue wall",
+    "mode": "wall",
+    "d": "M 19 892 L 77 892 L 80 895 L 80 905 L 77 908 L 19 908 L 16 905 L 16 895 Z",
+    "group": "spawn bay"
+  },
+  {
+    "name": "spawn bay avenue baffle",
+    "mode": "wall",
+    "d": "M 79 812 L 133 812 L 136 815 L 136 825 L 133 828 L 79 828 L 76 825 L 76 815 Z",
+    "group": "spawn bay"
+  },
+  {
+    "name": "spawn bay street wall",
+    "mode": "wall",
+    "d": "M 173 982 L 183 982 L 186 985 L 186 1037 L 183 1040 L 173 1040 L 170 1037 L 170 985 Z",
+    "group": "spawn bay"
+  },
+  {
+    "name": "spawn bay street baffle",
+    "mode": "wall",
+    "d": "M 253 1044 L 263 1044 L 266 1047 L 266 1101 L 263 1104 L 253 1104 L 250 1101 L 250 1047 Z",
+    "group": "spawn bay"
+  },
+  {
     "name": "collapsed north street",
     "mode": "chasm",
     "d": "M 388 20 L 488 20 L 498 60 L 486 132 L 396 132 L 384 80 Z",
