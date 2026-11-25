@@ -123,7 +123,8 @@ _global.showMessage = function(msg, killTriggers){
 			_y:screenHeight / 2,
 			killTriggers:killTriggers
 		}
-		_root.attachMovie("message", "message_mc", _root.screenDepth, init);
+		// one below the screen layer: flashScreen() attaches at screenDepth and would replace it
+		_root.attachMovie("message", "message_mc", _root.screenDepth - 1, init);
 	}
 }
 
