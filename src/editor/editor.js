@@ -1850,6 +1850,27 @@ class Editor {
         if (this.linkFrom === k) { ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(e.x, e.y, 9 * px, 0, Math.PI * 2); ctx.stroke(); }
       });
     }
+    // sight range of each selected enemy: a ring for its visionRange, or with none, the box the player
+    // is in while the enemy is on screen (+ the margin) with the camera centred on the player.
+    // Unlimited (0) or not an enemy that looks: nothing
+    for (const it of this.selItems()) {
+      if (it.layer !== 'enemies') continue;
+      const e = this.list('enemies')[it.k], r = this.sightRange(e);
+      if (r === 0) continue;
+      const shape = () => {
+        ctx.beginPath();
+        if (r === 'screen') ctx.rect(e.x - 400 - SIGHT_MARGIN, e.y - 300 - SIGHT_MARGIN, 800 + 2 * SIGHT_MARGIN, 600 + 2 * SIGHT_MARGIN);
+        else ctx.arc(e.x, e.y, r, 0, Math.PI * 2);
+      };
+      ctx.setLineDash([8 * px, 5 * px]);
+      ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.lineWidth = 3 * px; shape(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,170,60,0.9)'; ctx.lineWidth = 1.5 * px; shape(); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = `${11 * px}px system-ui, sans-serif`; ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(255,170,60,0.95)';
+      if (r === 'screen') ctx.fillText('sight: on screen', e.x - 400 - SIGHT_MARGIN + 4 * px, e.y - 300 - SIGHT_MARGIN - 8 * px);
+      else ctx.fillText(`sight ${r}`, e.x + 4 * px, e.y - r - 8 * px);
+    }
     // selection: solid cyan with a dark edge, a tint and corner handles (the primary's are white),
     // so it stands out from the thin dashed outlines of everything else
     {
@@ -2029,6 +2050,15 @@ class Editor {
   setTab(t) { this.tab = t; this.refreshPanel(); }
 
   // a collapsible section whose open state survives refreshes
+  // an enemy's sight range: its visionRange (props, else its type's default) in px, 'screen' when it
+  // has none (it sees while on screen), 0 when it sees any distance or isn't an enemy that looks
+  sightRange(e) {
+    const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
+    if (!spec || !spec.settings.some((s) => s.name === 'visionRange')) return 0;
+    const r = effectiveSettings(spec.settings, e.props || {}).visionRange;
+    return typeof r === 'number' ? (r > 0 ? r : 0) : 'screen';
+  }
+
   section(key, title, kids, { open = false, badge = '', cls = '' } = {}) {
     const id = '$' + key;
     if (!this.openGroups.has(id) && !this.openGroups.has('!' + id) && open) this.openGroups.add(id);
@@ -2970,6 +3000,9 @@ function nodeColour(e) {
 
 // the value every setting ends up with: props, else what the symbol forces, else its default
 // (expressions such as "hunter || patroller" are worked out when they only use other settings)
+// as2/enemyTurret.as SIGHT_MARGIN: an enemy with no visionRange sees the player while it's this close to the screen
+const SIGHT_MARGIN = 100;
+
 function effectiveSettings(settings, props) {
   const lit = (x) => { try { return x === undefined ? undefined : JSON.parse(x.replace(/^\./, '0.').replace(/^-\./, '-0.')); } catch { return undefined; } };
   const vals = {}, defaults = {};
