@@ -1,6 +1,6 @@
 {
   "kind": "sprite",
-  "symbol": {"type": "movie clip"},
+  "symbol": {"type": "movie clip", "linkage": "enemySwarmer"},
   "frames": 15,
   "timeline": [
     {

@@ -11,7 +11,7 @@
     "x": 39.4,
     "y": 38.9,
     "matrix": [-0.707108, 0.707108, -0.707108, -0.707108],
-    "props": {"powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 100}}
+    "props": {"powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 100, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}}
   },
   {"symbol": "enemy assets/enemy stinger", "x": 323.9, "y": 351.5, "matrix": [0, -1, 1, 0]},
   {
@@ -34,7 +34,7 @@
     "x": 284.35,
     "y": 44.9,
     "matrix": [-0.707108, -0.707108, 0.707108, -0.707108],
-    "props": {"powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 50, "probability": 0.5}}
+    "props": {"powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 50, "probability": 0.5, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}}
   },
   {"symbol": "enemy assets/enemy stinger", "x": 430.8, "y": 48.5, "matrix": [-0.965927, -0.25882, 0.258835, -0.965927]},
   {"symbol": "enemy assets/enemy stinger", "x": 429.8, "y": 555.45, "matrix": [0.986404, -0.154556, 0.154556, 0.986404]},
@@ -70,7 +70,7 @@
       "refireRate": 3,
       "burstCount": 5,
       "burstReload": 12,
-      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 50}
+      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 50, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}
     }
   },
   {"symbol": "enemy assets/enemy scurge", "x": 1116.15, "y": 129.4},
@@ -87,7 +87,7 @@
       "refireRate": 3,
       "burstCount": 5,
       "burstReload": 12,
-      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 50}
+      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 50, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}
     }
   },
   {
@@ -160,7 +160,7 @@
       "refireRate": 3,
       "burstCount": 5,
       "burstReload": 12,
-      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 25, "probability": 0.5}
+      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 25, "probability": 0.5, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}
     }
   },
   {
@@ -172,7 +172,7 @@
       "refireRate": 3,
       "burstCount": 5,
       "burstReload": 12,
-      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 25, "probability": 0.5}
+      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 25, "probability": 0.5, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}
     }
   },
   {
@@ -184,7 +184,7 @@
       "refireRate": 3,
       "burstCount": 5,
       "burstReload": 12,
-      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 25, "probability": 0.5}
+      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 25, "probability": 0.5, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}
     }
   },
   {
@@ -196,7 +196,7 @@
       "refireRate": 3,
       "burstCount": 5,
       "burstReload": 12,
-      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 25, "probability": 0.5}
+      "powerupDrop": {"type": "primary", "item": "Banshee", "quantity": 25, "probability": 0.5, "alertMessage": "BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep.", "alertOnce": true}
     }
   },
   {"symbol": "enemy assets/enemy stinger", "x": 1550, "y": 200, "matrix": [-0.5, -0.866028, 0.866043, -0.499985]},

@@ -1,0 +1,49 @@
+{
+  "title": "DOWNTOWN",
+  "body": "Downtown revitalization is complete. Every barrel is now\nexplosive and every drone is now judgmental. The robots\nhave installed drone hives in the old town: they print\nSwarmers and Barrel Bots faster than you can be rude\nabout them. Burn the hives out, one district at a time --\neach one you kill shuts down a street lock. The exit is\nin the gate square, behind the last hive. Mind the barrels.",
+  "captions": [
+    {
+      "style": "name",
+      "text": "Swarmer",
+      "x": 636.45,
+      "y": 209.89
+    },
+    {
+      "style": "note",
+      "text": "Comes in packs.",
+      "x": 636.45,
+      "y": 316.6
+    },
+    {
+      "style": "name",
+      "text": "Barrel Bot",
+      "x": 636.48,
+      "y": 359.89
+    },
+    {
+      "style": "note",
+      "text": "Hugs. Explodes.",
+      "x": 636.45,
+      "y": 426.6
+    }
+  ],
+  "graphics": [
+    {
+      "symbol": "enemy assets/enemy drone core",
+      "x": 636.5,
+      "y": 271,
+      "scale": 1.4
+    },
+    {
+      "symbol": "enemy assets/designs/tentacle mine",
+      "x": 636.5,
+      "y": 396,
+      "scale": 1.4
+    },
+    {
+      "symbol": "screen_mc/shape 3",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}

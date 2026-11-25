@@ -256,15 +256,47 @@ def base_art(g, seed, opts, art):
     return img * (1 - g.wr[..., None]) + top * g.wr[..., None]
 
 
-# colour grades, picked by level.json "art": {"grade": name}: (desaturation, channel gains, haze).
-# They live in tools/art/kits.json (with the kit's area lists), which the editor reads too.
+# colour grades, picked by level.json "art": {"grade": name}. They live in tools/art/kits.json
+# (with the kit's area lists), which the editor reads too. A grade is:
+#   grey, gain, haze: colours muted toward grey, a per-channel cast, a soft overall haze
+#   ambient {grey, gain}: optional, run on the art and its decor BEFORE the decor lights are
+#       added (night: the daylight art dimmed to moonlight)
+#   light {soft, roofs}: optional, on the light pools: soft saturates many lamps together
+#       instead of washing out; roofs is how much light falls on rooftops (1: all of it)
+#   contrast, black, shadowLift: optional, last: (img - black) * contrast, plus a colour lift in
+#       the shadows (night: deep blue shadows, lit areas kept warm)
 KIT = json.load(open(os.path.join(os.path.dirname(__file__), 'kits.json')))['city']
-GRADES = {name: (g['grey'], tuple(g['gain']), g['haze']) for name, g in KIT['grades'].items()}
+GRADES = KIT['grades']
+
+
+def _grade(name):
+    return GRADES[name or KIT['defaultGrade']]
 
 
 def grade(img, name=None):
-    """The level's colour grade: colours muted toward grey, a cast, a soft overall haze."""
-    k, gain, haze = GRADES[name or KIT['defaultGrade']]
-    img = grey(img, k)
-    img = img * np.array(gain, np.float32)
-    return img * (1 - haze * 1.6) + haze
+    """The level's colour grade, on the finished art."""
+    g = _grade(name)
+    img = grey(img, g.get('grey', 0))
+    img = img * np.array(g.get('gain', [1, 1, 1]), np.float32)
+    haze = g.get('haze', 0)
+    img = img * (1 - haze * 1.6) + haze
+    if 'contrast' in g or 'black' in g or 'shadowLift' in g:
+        lum = img.mean(-1, keepdims=True)
+        lift = np.array(g.get('shadowLift', [0, 0, 0]), np.float32) * (1 - np.clip(lum * 3, 0, 1))
+        img = np.clip((img - g.get('black', 0)) * g.get('contrast', 1) + lift, 0, 1)
+    return img
+
+
+def ambient(img, name=None):
+    """The grade's ambient pass, before the decor lights are added (none for a day grade)."""
+    a = _grade(name).get('ambient')
+    if not a: return img
+    return grey(img, a.get('grey', 0)) * np.array(a.get('gain', [1, 1, 1]), np.float32)
+
+
+def light(lighting, g, name=None):
+    """The grade's pass on the light pools (none for a day grade)."""
+    o = _grade(name).get('light')
+    if not o: return lighting
+    if o.get('soft'): lighting = 1 - np.exp(-lighting)
+    return lighting * (1 - (1 - o.get('roofs', 1)) * g.wr)[..., None]

@@ -136,14 +136,23 @@ function onHit(damage, angle){
 	stunned = Math.max(int(damage * .5), stunned);
 }
 
-// die
-function onDie(){
+// die (kept off onDie itself so an onDie set on the instance, e.g. {"$trigger": "door1:open"}, still runs)
+var turretDie = function(){
 	flashMC._visible = false;
 	makeShrapnel(this, "scrap_mc", random(6));
 	makeShrapnel(this, "frag_mc", random(6));
 	makeShrapnel(this, particleType, Math.min(50, int(initHealth * .25)));
 	if(visionMC)
 		visionMC.kill();
+}
+if(onDie){
+	var __instanceDie = onDie;
+	onDie = function(){
+		turretDie();
+		__instanceDie();
+	}
+}else{
+	onDie = turretDie;
 }
 
 // turret AI

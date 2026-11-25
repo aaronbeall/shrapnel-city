@@ -10,6 +10,7 @@
     "pickup": "Pickup",
     "message": "Message",
     "door": "Door",
+    "breed": "Breeding (drone hive)",
     "other": "Other"
   },
   "settings": {
@@ -250,6 +251,35 @@
       "type": "string",
       "desc": "Stay hidden and inactive until this trigger is sent, then warp in."
     },
+    "breed": {
+      "group": "breed",
+      "type": "string",
+      "desc": "Linkage id of the enemy it breeds, e.g. enemyDroneGnat, enemySwarmer, enemyBarrelBot. Several, comma separated: one at random each time."
+    },
+    "breedMax": {
+      "group": "breed",
+      "desc": "Most of its brood alive at once; it waits while this many are still flying."
+    },
+    "breedRate": {
+      "group": "breed",
+      "desc": "Frames between breeds (30 a second)."
+    },
+    "breedTotal": {
+      "group": "breed",
+      "desc": "How many it breeds in all before it runs dry. 0: no limit."
+    },
+    "breedRange": {
+      "group": "breed",
+      "desc": "Breeds while the player is within this many px, or while it can see the player from further away."
+    },
+    "breedSpeed": {
+      "group": "breed",
+      "desc": "How fast a new enemy leaves its bay."
+    },
+    "breedOffset": {
+      "group": "breed",
+      "desc": "How far from the middle a new enemy appears (the three bays: up, lower right, lower left)."
+    },
     "type": {
       "group": "pickup",
       "type": "string",
@@ -302,6 +332,11 @@
       "group": "message",
       "type": "string",
       "desc": "Message shown while the player is over it."
+    },
+    "alertOnce": {
+      "group": "message",
+      "type": "boolean",
+      "desc": "Show the message only the first time in the level. Put it on every copy of a new weapon (pickups and drops) with the same intro message."
     },
     "alertLinger": {
       "group": "message",

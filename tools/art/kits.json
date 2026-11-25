@@ -10,7 +10,14 @@
     "tip": "streets, pavements, plazas and buildings (levels 04-)",
     "grades": {
       "grey day": { "grey": 0.3, "gain": [0.97, 0.99, 1.03], "haze": 0.025, "tip": "04 Urban: muted, a cool cast" },
-      "olive": { "grey": 0.42, "gain": [1.0, 1.0, 0.82], "haze": 0.03, "tip": "05 Gateway: olive drab checkpoint, warm khaki haze" }
+      "olive": { "grey": 0.42, "gain": [1.0, 1.0, 0.82], "haze": 0.03, "tip": "05 Gateway: olive drab checkpoint, warm khaki haze" },
+      "night": {
+        "grey": 0, "gain": [1, 1, 1], "haze": 0,
+        "ambient": { "grey": 0.45, "gain": [0.30, 0.34, 0.44] },
+        "light": { "soft": true, "roofs": 0.25 },
+        "contrast": 1.08, "black": 0.02, "shadowLift": [0.012, 0.016, 0.03],
+        "tip": "06 Downtown: moonlit blue-grey, lit by the lamps, neon and lanterns in decor (turn the lights up: radius 2.6, intensity 1.1, bloom 1.2)"
+      }
     },
     "defaultGrade": "grey day",
     "areas": {

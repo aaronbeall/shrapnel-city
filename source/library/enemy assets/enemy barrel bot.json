@@ -1,0 +1,414 @@
+{
+  "kind": "sprite",
+  "symbol": {
+    "type": "movie clip",
+    "linkage": "enemyBarrelBot"
+  },
+  "frames": 15,
+  "timeline": [
+    {
+      "frame": 1,
+      "script": [
+        "// barrel bot: a rolling mine that chases you down and detonates (level 06 Downtown).",
+        "// Art: the tentacle mine design from enemies.fw.png, spinning as it rolls.",
+        "",
+        "if(health == undefined) health = 30;",
+        "if(turnSpeed == undefined) turnSpeed = 7;",
+        "if(speedMax == undefined) speedMax = 3.4;",
+        "if(accel == undefined) accel = .4;",
+        "if(resistence == undefined) resistence = 2;",
+        "if(blastRange == undefined) blastRange = 100;",
+        "if(damage == undefined) damage = 70;",
+        "if(frag == undefined) frag = \"frag_mc\";",
+        "if(fragCount == undefined) fragCount = 10;",
+        "if(chaser == undefined) chaser = true;",
+        "if(suicidal == undefined) suicidal = true;",
+        "if(suicideDamage == undefined) suicideDamage = 20;",
+        "if(suicideTimeLimit == undefined) suicideTimeLimit = 8 * frameRate;",
+        "if(shakeStrength == undefined) shakeStrength = 6;",
+        "",
+        "#include \"as/object/enemyVehicle.as\"",
+        "",
+        "// roll: the body spins with its speed, and the warning light blinks faster as it closes in",
+        "__rollUpdate = update;",
+        "update = function(time){",
+        "    __rollUpdate(time);",
+        "    if(_currentframe != 1) return;",
+        "    core_mc._rotation += speed * 9 * time;",
+        "    var near = attacking ? Math.max(.15, Math.min(1, getDistance(this, _player) / 250)) : 1;",
+        "    blink += time / (near * 8);",
+        "    light_mc._alpha = 40 + 60 * (Math.sin(blink * Math.PI) > 0);",
+        "}",
+        "var blink = 0;"
+      ],
+      "changes": [
+        {
+          "place": "enemy assets/designs/tentacle mine",
+          "x": 0,
+          "y": 0,
+          "scale": 0.6,
+          "depth": 1,
+          "name": "core_mc",
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#00000040",
+              "blurX": 4,
+              "blurY": 4,
+              "angle": 0.785398,
+              "distance": 7,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 1
+            }
+          ]
+        },
+        {
+          "place": "_glow",
+          "depth": 3,
+          "x": 0,
+          "y": 0,
+          "scale": 0.8,
+          "name": "light_mc",
+          "blend": "add",
+          "color": {
+            "multiply": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "add": [
+              255,
+              40,
+              20,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "changes": [
+        {
+          "remove": 1
+        },
+        {
+          "place": "enemy assets/designs/tentacle mine",
+          "x": 0,
+          "y": 0,
+          "scale": 0.6,
+          "depth": 1,
+          "color": {
+            "multiply": [
+              0.25,
+              0.2325,
+              0.2325,
+              1
+            ],
+            "add": [
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "remove": 3
+        },
+        {
+          "place": "graphic assets/explosion",
+          "depth": 3,
+          "x": 1.12,
+          "y": -4.64,
+          "scale": 1.192554
+        },
+        {
+          "place": "_shared/shape tween 239",
+          "depth": 4,
+          "x": 1.12,
+          "y": -4.64,
+          "scale": 1.192554
+        },
+        {
+          "place": "_glow",
+          "depth": 5,
+          "x": 1.41,
+          "y": -3.76,
+          "scale": 3.423214,
+          "filters": [
+            {
+              "type": "blur",
+              "blurX": 34,
+              "blurY": 34,
+              "passes": 1
+            }
+          ],
+          "blend": "add",
+          "ratio": 1.5259021896696422e-05
+        },
+        {
+          "place": "_shared/shape tween 240",
+          "depth": 6,
+          "x": 1.12,
+          "y": -4.64,
+          "scale": 1.192554
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "changes": [
+        {
+          "update": 3,
+          "ratio": 0.11111619745174334
+        },
+        {
+          "update": 4,
+          "ratio": 0.5555504692149233
+        },
+        {
+          "update": 5,
+          "x": 1.31,
+          "y": -3.76,
+          "scale": 3.423214,
+          "color": {
+            "alpha": 0.97265625
+          }
+        },
+        {
+          "update": 6,
+          "ratio": 0.5555504692149233
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "changes": [
+        {
+          "update": 3,
+          "ratio": 0.44446478980697335
+        },
+        {
+          "update": 4,
+          "ratio": 0.8888990615701533
+        },
+        {
+          "update": 5,
+          "color": {
+            "alpha": 0.890625
+          }
+        },
+        {
+          "update": 6,
+          "ratio": 0.8888990615701533
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "changes": [
+        {
+          "replace": "_shared/shape tween 241",
+          "depth": 3,
+          "ratio": 0
+        },
+        {
+          "replace": "_shared/shape tween 242",
+          "depth": 4,
+          "ratio": 0
+        },
+        {
+          "update": 5,
+          "color": {
+            "alpha": 0.75
+          }
+        },
+        {
+          "replace": "_shared/shape tween 243",
+          "depth": 6,
+          "ratio": 0
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "changes": [
+        {
+          "update": 3,
+          "ratio": 0.2653086137178607
+        },
+        {
+          "update": 4,
+          "ratio": 0.2
+        },
+        {
+          "update": 5,
+          "color": {
+            "alpha": 0.5546875
+          }
+        },
+        {
+          "update": 6,
+          "ratio": 0.5555504692149233
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "changes": [
+        {
+          "update": 3,
+          "ratio": 0.4898146028839551
+        },
+        {
+          "update": 4,
+          "ratio": 0.4
+        },
+        {
+          "update": 5,
+          "color": {
+            "alpha": 0.3046875
+          }
+        },
+        {
+          "update": 6,
+          "ratio": 0.8888990615701533
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "changes": [
+        {
+          "update": 3,
+          "ratio": 0.67348744945449
+        },
+        {
+          "update": 4,
+          "ratio": 0.6000152590218967
+        },
+        {
+          "update": 5,
+          "x": 1.41,
+          "y": -3.76,
+          "scale": 3.423214,
+          "color": {
+            "alpha": 0
+          }
+        },
+        {
+          "remove": 6
+        },
+        {
+          "place": "_shared/shape 244",
+          "depth": 6,
+          "x": 1.12,
+          "y": -4.64,
+          "scale": 1.192554
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "changes": [
+        {
+          "remove": 5
+        },
+        {
+          "remove": 6
+        },
+        {
+          "update": 3,
+          "ratio": 0.8163424124513619
+        },
+        {
+          "update": 4,
+          "ratio": 0.8000152590218967
+        }
+      ]
+    },
+    {
+      "frame": 10,
+      "changes": [
+        {
+          "update": 3,
+          "ratio": 0.9183794918745708
+        },
+        {
+          "replace": "_shared/shape tween 245",
+          "depth": 4,
+          "ratio": 0
+        }
+      ]
+    },
+    {
+      "frame": 11,
+      "changes": [
+        {
+          "update": 3,
+          "ratio": 0.9796139467460135
+        },
+        {
+          "update": 4,
+          "ratio": 0.2
+        }
+      ]
+    },
+    {
+      "frame": 12,
+      "changes": [
+        {
+          "remove": 3
+        },
+        {
+          "place": "_shared/shape 246",
+          "depth": 3,
+          "x": 1.12,
+          "y": -4.64,
+          "scale": 1.192554
+        },
+        {
+          "update": 4,
+          "ratio": 0.4
+        }
+      ]
+    },
+    {
+      "frame": 13,
+      "changes": [
+        {
+          "remove": 3
+        },
+        {
+          "update": 4,
+          "ratio": 0.6000152590218967
+        }
+      ]
+    },
+    {
+      "frame": 14,
+      "changes": [
+        {
+          "update": 4,
+          "ratio": 0.8000152590218967
+        }
+      ]
+    },
+    {
+      "frame": 15,
+      "script": [
+        "makeCorpse(this);",
+        "this.kill();"
+      ],
+      "changes": [
+        {
+          "remove": 4
+        }
+      ]
+    }
+  ]
+}

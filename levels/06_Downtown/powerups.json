@@ -1,0 +1,170 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 210,
+    "y": 1056,
+    "props": {
+      "type": "primary",
+      "item": "Flamer",
+      "quantity": 200,
+      "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 70,
+    "y": 1110,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 140,
+    "y": 1222,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 450,
+    "y": 948,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 590,
+    "y": 1150,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 70,
+    "y": 740,
+    "props": {
+      "type": "primary",
+      "item": "Flamer",
+      "quantity": 100,
+      "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1090,
+    "y": 900,
+    "props": {
+      "type": "secondary",
+      "item": "Pepper Bombs",
+      "quantity": 15,
+      "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1075,
+    "y": 795,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 780,
+    "y": 1236,
+    "props": {"type": "primary", "item": "Plasma", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1530,
+    "y": 1220,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1420,
+    "y": 1100,
+    "props": {
+      "type": "primary",
+      "item": "Flamer",
+      "quantity": 120,
+      "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1270,
+    "y": 730,
+    "props": {
+      "type": "secondary",
+      "item": "Pepper Bombs",
+      "quantity": 10,
+      "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1410,
+    "y": 640,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 182,
+    "y": 300,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 182,
+    "y": 360,
+    "props": {
+      "type": "secondary",
+      "item": "Pepper Bombs",
+      "quantity": 10,
+      "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 600,
+    "y": 190,
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 60}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1130,
+    "y": 440,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1130,
+    "y": 200,
+    "props": {
+      "type": "primary",
+      "item": "Flamer",
+      "quantity": 120,
+      "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
+      "alertOnce": true
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1270,
+    "y": 300,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1540,
+    "y": 70,
+    "props": {
+      "type": "secondary",
+      "item": "Pepper Bombs",
+      "quantity": 10,
+      "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
+      "alertOnce": true
+    }
+  }
+]

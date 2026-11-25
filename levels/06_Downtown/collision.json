@@ -1,0 +1,897 @@
+[
+  {"name": "collision map", "pixels": "collision-base.png", "locked": true},
+  {"name": "city mass", "mode": "wall", "d": "M 0 0 L 1600 0 L 1600 1280 L 0 1280 Z", "group": "city"},
+  {
+    "name": "lot line 1",
+    "mode": "chasm",
+    "d": "M 808 530 L 813 530 L 813 621 L 808 621 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 2",
+    "mode": "chasm",
+    "d": "M 808 1170 L 813 1170 L 813 1260 L 808 1260 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 3",
+    "mode": "chasm",
+    "d": "M 954 530 L 959 530 L 959 621 L 954 621 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 4",
+    "mode": "chasm",
+    "d": "M 954 1170 L 959 1170 L 959 1260 L 954 1260 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 5",
+    "mode": "chasm",
+    "d": "M 1099 530 L 1104 530 L 1104 609 L 1099 609 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 6",
+    "mode": "chasm",
+    "d": "M 1099 1170 L 1104 1170 L 1104 1260 L 1099 1260 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 7",
+    "mode": "chasm",
+    "d": "M 1248 440 L 1253 440 L 1253 701 L 1248 701 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 8",
+    "mode": "chasm",
+    "d": "M 1419 440 L 1424 440 L 1424 561 L 1419 561 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 9",
+    "mode": "chasm",
+    "d": "M 260 246 L 265 246 L 265 351 L 260 351 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 10",
+    "mode": "chasm",
+    "d": "M 260 530 L 265 530 L 265 581 L 260 581 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 11",
+    "mode": "chasm",
+    "d": "M 486 100 L 491 100 L 491 471 L 486 471 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 12",
+    "mode": "chasm",
+    "d": "M 617 100 L 622 100 L 622 161 L 617 161 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 13",
+    "mode": "chasm",
+    "d": "M 770 100 L 775 100 L 775 161 L 770 161 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 14",
+    "mode": "chasm",
+    "d": "M 926 100 L 931 100 L 931 161 L 926 161 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 15",
+    "mode": "chasm",
+    "d": "M 594 530 L 599 530 L 599 581 L 594 581 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 16",
+    "mode": "chasm",
+    "d": "M 942 680 L 947 680 L 947 831 L 942 831 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 17",
+    "mode": "chasm",
+    "d": "M 1056 680 L 1061 680 L 1061 761 L 1056 761 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 18",
+    "mode": "chasm",
+    "d": "M 1345 760 L 1350 760 L 1350 801 L 1345 801 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 19",
+    "mode": "chasm",
+    "d": "M 917 890 L 922 890 L 922 1111 L 917 1111 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 20",
+    "mode": "chasm",
+    "d": "M 1063 960 L 1068 960 L 1068 1111 L 1063 1111 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 21",
+    "mode": "chasm",
+    "d": "M 1374 1130 L 1379 1130 L 1379 1191 L 1374 1191 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 22",
+    "mode": "chasm",
+    "d": "M 233 1122 L 238 1122 L 238 1173 L 233 1173 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 23",
+    "mode": "chasm",
+    "d": "M 402 1026 L 407 1026 L 407 1097 L 402 1097 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 24",
+    "mode": "chasm",
+    "d": "M 402 1140 L 407 1140 L 407 1185 L 402 1185 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 25",
+    "mode": "chasm",
+    "d": "M 1423 483 L 1580 483 L 1580 488 L 1423 488 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 26",
+    "mode": "chasm",
+    "d": "M 1440 623 L 1580 623 L 1580 628 L 1440 628 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 27",
+    "mode": "chasm",
+    "d": "M 100 251 L 129 251 L 129 256 L 100 256 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 28",
+    "mode": "chasm",
+    "d": "M 100 422 L 261 422 L 261 427 L 100 427 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 29",
+    "mode": "chasm",
+    "d": "M 335 233 L 487 233 L 487 238 L 335 238 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 30",
+    "mode": "chasm",
+    "d": "M 356 330 L 487 330 L 487 335 L 356 335 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 31",
+    "mode": "chasm",
+    "d": "M 960 215 L 1101 215 L 1101 220 L 960 220 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 32",
+    "mode": "chasm",
+    "d": "M 960 346 L 1101 346 L 1101 351 L 960 351 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 33",
+    "mode": "chasm",
+    "d": "M 1160 231 L 1241 231 L 1241 236 L 1160 236 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 34",
+    "mode": "chasm",
+    "d": "M 1103 567 L 1249 567 L 1249 572 L 1103 572 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 35",
+    "mode": "chasm",
+    "d": "M 1252 562 L 1381 562 L 1381 567 L 1252 567 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 36",
+    "mode": "chasm",
+    "d": "M 613 676 L 701 676 L 701 681 L 613 681 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 37",
+    "mode": "chasm",
+    "d": "M 620 818 L 701 818 L 701 823 L 620 823 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 38",
+    "mode": "chasm",
+    "d": "M 480 939 L 545 939 L 545 944 L 480 944 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 39",
+    "mode": "chasm",
+    "d": "M 620 939 L 689 939 L 689 944 L 620 944 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 40",
+    "mode": "chasm",
+    "d": "M 100 853 L 256 853 L 256 858 L 100 858 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 41",
+    "mode": "chasm",
+    "d": "M 1240 893 L 1291 893 L 1291 898 L 1240 898 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 42",
+    "mode": "chasm",
+    "d": "M 804 994 L 918 994 L 918 999 L 804 999 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 43",
+    "mode": "chasm",
+    "d": "M 921 1019 L 1064 1019 L 1064 1024 L 921 1024 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "lot line 44",
+    "mode": "chasm",
+    "d": "M 1460 1064 L 1501 1064 L 1501 1069 L 1460 1069 Z",
+    "group": "lot lines"
+  },
+  {
+    "name": "sinkhole",
+    "mode": "chasm",
+    "d": "M 644.35 669 L 613.22 677.43 L 612.01 686.7 L 575.86 694.42 L 516.43 698.9 L 468.04 704.93 L 403.21 706.42 L 340 710.9 L 272.91 708.72 L 218.99 702.96 L 149.88 701.22 L 110.99 693.68 L 86.2 685.52 L 55.24 677.78 L 47.01 669 L 35.73 659.62 L 87.1 652.54 L 116.51 644.92 L 149.37 636.7 L 210.62 632.7 L 276.95 631.67 L 340 629.34 L 406.75 629.48 L 465.71 633.72 L 530.13 636.78 L 561.12 645.17 L 619.11 650.84 L 631.2 660.02 Z",
+    "group": "sinkhole"
+  },
+  {
+    "name": "market lane",
+    "mode": "open",
+    "d": "M 20 1184 L 640 1184 L 640 1260 L 20 1260 Z",
+    "group": "alleys"
+  },
+  {"name": "west alley", "mode": "open", "d": "M 40 760 L 100 760 L 100 1184 L 40 1184 Z", "group": "alleys"},
+  {
+    "name": "stall lane",
+    "mode": "open",
+    "d": "M 100 966 L 620 966 L 620 1026 L 100 1026 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "noodle yard",
+    "mode": "open",
+    "d": "M 176 1026 L 244 1026 L 244 1122 L 176 1122 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "lantern alley",
+    "mode": "open",
+    "d": "M 260 760 L 320 760 L 320 850 L 296 874 L 296 966 L 236 966 L 236 874 L 260 850 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "fish market link",
+    "mode": "open",
+    "d": "M 300 816 L 352 816 L 352 876 L 300 876 Z",
+    "group": "alleys"
+  },
+  {"name": "fish market", "mode": "open", "d": "M 352 770 L 540 770 L 540 930 L 352 930 Z", "group": "alleys"},
+  {
+    "name": "fish market steps",
+    "mode": "open",
+    "d": "M 420 930 L 480 930 L 480 966 L 420 966 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "east market alley",
+    "mode": "open",
+    "d": "M 560 770 L 620 770 L 620 1184 L 560 1184 Z",
+    "group": "alleys"
+  },
+  {"name": "canal walk", "mode": "open", "d": "M 40 704 L 620 704 L 620 760 L 40 760 Z", "group": "alleys"},
+  {
+    "name": "shutter 1",
+    "mode": "open",
+    "d": "M 620 1100 L 700 1100 L 700 1160 L 620 1160 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "neon strip",
+    "mode": "open",
+    "d": "M 700 660 L 804 660 L 804 1260 L 700 1260 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "pawn alley",
+    "mode": "open",
+    "d": "M 804 1110 L 1180 1110 L 1180 1170 L 804 1170 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "noodle alley",
+    "mode": "open",
+    "d": "M 804 830 L 1000 830 L 1000 890 L 804 890 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "laundry yard",
+    "mode": "open",
+    "d": "M 1000 760 L 1130 760 L 1130 960 L 1000 960 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "yard link",
+    "mode": "open",
+    "d": "M 1130 880 L 1180 880 L 1180 940 L 1130 940 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "back alley",
+    "mode": "open",
+    "d": "M 1180 700 L 1240 700 L 1240 1244 L 1180 1244 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "rail lane",
+    "mode": "open",
+    "d": "M 1240 700 L 1500 700 L 1500 760 L 1240 760 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "east alley",
+    "mode": "open",
+    "d": "M 1500 700 L 1560 700 L 1560 1190 L 1500 1190 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "loading lane",
+    "mode": "open",
+    "d": "M 1240 1190 L 1560 1190 L 1560 1244 L 1240 1244 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "garage",
+    "mode": "open",
+    "d": "M 1290 800 L 1460 800 L 1460 1130 L 1290 1130 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "garage ramp east",
+    "mode": "open",
+    "d": "M 1460 900 L 1500 900 L 1500 960 L 1460 960 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "garage ramp west",
+    "mode": "open",
+    "d": "M 1240 1050 L 1290 1050 L 1290 1110 L 1240 1110 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "arcade row",
+    "mode": "open",
+    "d": "M 804 620 L 1180 620 L 1180 680 L 804 680 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "arcade link",
+    "mode": "open",
+    "d": "M 1180 620 L 1240 620 L 1240 700 L 1180 700 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "pigeon alley",
+    "mode": "open",
+    "d": "M 1380 560 L 1440 560 L 1440 700 L 1380 700 Z",
+    "group": "alleys"
+  },
+  {"name": "shutter 2", "mode": "open", "d": "M 722 520 L 782 520 L 782 660 L 722 660 Z", "group": "alleys"},
+  {
+    "name": "high street",
+    "mode": "open",
+    "d": "M 260 470 L 1180 470 L 1180 530 L 260 530 Z",
+    "group": "alleys"
+  },
+  {"name": "stair alley", "mode": "open", "d": "M 400 530 L 460 530 L 460 580 L 400 580 Z", "group": "alleys"},
+  {"name": "sinkhole edge", "mode": "open", "d": "M 40 580 L 640 580 L 640 634 L 40 634 Z", "group": "alleys"},
+  {"name": "west lane", "mode": "open", "d": "M 40 40 L 100 40 L 100 580 L 40 580 Z", "group": "alleys"},
+  {"name": "shrine link", "mode": "open", "d": "M 100 290 L 128 290 L 128 350 L 100 350 Z", "group": "alleys"},
+  {"name": "shrine yard", "mode": "open", "d": "M 128 240 L 236 240 L 236 400 L 128 400 Z", "group": "alleys"},
+  {"name": "north lane", "mode": "open", "d": "M 100 40 L 1240 40 L 1240 100 L 100 100 Z", "group": "alleys"},
+  {
+    "name": "tea alley",
+    "mode": "open",
+    "d": "M 260 100 L 320 100 L 320 220 L 356 256 L 356 340 L 320 376 L 320 470 L 260 470 L 260 352 L 296 316 L 296 280 L 260 244 Z",
+    "group": "alleys"
+  },
+  {"name": "spire plaza", "mode": "open", "d": "M 500 160 L 960 160 L 960 470 L 500 470 Z", "group": "alleys"},
+  {
+    "name": "clock alley",
+    "mode": "open",
+    "d": "M 1100 100 L 1160 100 L 1160 470 L 1100 470 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "gate neck",
+    "mode": "open",
+    "d": "M 1160 380 L 1240 380 L 1240 440 L 1160 440 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "gate square",
+    "mode": "open",
+    "d": "M 1240 40 L 1560 40 L 1560 440 L 1240 440 Z",
+    "group": "alleys"
+  },
+  {
+    "name": "start room",
+    "mode": "open",
+    "d": "M 284 1060 L 384 1060 L 384 1140 L 284 1140 Z",
+    "group": "start"
+  },
+  {
+    "name": "start passage",
+    "mode": "open",
+    "d": "M 384 1096 L 504 1096 L 504 1140 L 384 1140 Z",
+    "group": "start"
+  },
+  {
+    "name": "start stair",
+    "mode": "open",
+    "d": "M 460 1140 L 504 1140 L 504 1184 L 460 1184 Z",
+    "group": "start"
+  },
+  {
+    "name": "doorway 1",
+    "mode": "open",
+    "d": "M 212.09 1172 L 236.09 1172 L 236.09 1184 L 212.09 1184 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 2",
+    "mode": "open",
+    "d": "M 406.2 1172 L 430.2 1172 L 430.2 1184 L 406.2 1184 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 3",
+    "mode": "open",
+    "d": "M 30 816.93 L 40 816.93 L 40 840.93 L 30 840.93 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 4",
+    "mode": "open",
+    "d": "M 28 917.65 L 40 917.65 L 40 941.65 L 28 941.65 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 5",
+    "mode": "open",
+    "d": "M 24 1031.88 L 40 1031.88 L 40 1055.88 L 24 1055.88 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 6",
+    "mode": "open",
+    "d": "M 151.54 950 L 195.54 950 L 195.54 966 L 151.54 966 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 7",
+    "mode": "open",
+    "d": "M 544 935.11 L 560 935.11 L 560 959.11 L 544 959.11 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 8",
+    "mode": "open",
+    "d": "M 684 734.53 L 700 734.53 L 700 764.53 L 684 764.53 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 9",
+    "mode": "open",
+    "d": "M 688 934.71 L 700 934.71 L 700 964.71 L 688 964.71 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 10",
+    "mode": "open",
+    "d": "M 867.81 1094 L 897.81 1094 L 897.81 1110 L 867.81 1110 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 11",
+    "mode": "open",
+    "d": "M 978.27 1094 L 1014.27 1094 L 1014.27 1110 L 978.27 1110 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 12",
+    "mode": "open",
+    "d": "M 842.15 814 L 878.15 814 L 878.15 830 L 842.15 830 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 13",
+    "mode": "open",
+    "d": "M 1168 785.91 L 1180 785.91 L 1180 829.91 L 1168 829.91 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 14",
+    "mode": "open",
+    "d": "M 1170 1011.44 L 1180 1011.44 L 1180 1055.44 L 1170 1055.44 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 15",
+    "mode": "open",
+    "d": "M 1325.79 690 L 1349.79 690 L 1349.79 700 L 1325.79 700 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 16",
+    "mode": "open",
+    "d": "M 1490 771.78 L 1500 771.78 L 1500 815.78 L 1490 815.78 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 17",
+    "mode": "open",
+    "d": "M 1328.53 1174 L 1358.53 1174 L 1358.53 1190 L 1328.53 1190 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 18",
+    "mode": "open",
+    "d": "M 1274 851.74 L 1290 851.74 L 1290 881.74 L 1274 881.74 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 19",
+    "mode": "open",
+    "d": "M 875.23 610 L 919.23 610 L 919.23 620 L 875.23 620 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 20",
+    "mode": "open",
+    "d": "M 1084.05 608 L 1128.05 608 L 1128.05 620 L 1084.05 620 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 21",
+    "mode": "open",
+    "d": "M 1364 612.68 L 1380 612.68 L 1380 636.68 L 1364 636.68 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 22",
+    "mode": "open",
+    "d": "M 710 589.02 L 722 589.02 L 722 633.02 L 710 633.02 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 23",
+    "mode": "open",
+    "d": "M 1003.68 454 L 1039.68 454 L 1039.68 470 L 1003.68 470 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 24",
+    "mode": "open",
+    "d": "M 227.75 568 L 257.75 568 L 257.75 580 L 227.75 580 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 25",
+    "mode": "open",
+    "d": "M 486.63 568 L 522.63 568 L 522.63 580 L 486.63 580 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 26",
+    "mode": "open",
+    "d": "M 30 120.28 L 40 120.28 L 40 164.28 L 30 164.28 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 27",
+    "mode": "open",
+    "d": "M 28 265.52 L 40 265.52 L 40 289.52 L 28 289.52 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 28",
+    "mode": "open",
+    "d": "M 24 377.86 L 40 377.86 L 40 413.86 L 24 413.86 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 29",
+    "mode": "open",
+    "d": "M 163.08 30 L 207.08 30 L 207.08 40 L 163.08 40 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 30",
+    "mode": "open",
+    "d": "M 396.17 30 L 420.17 30 L 420.17 40 L 396.17 40 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 31",
+    "mode": "open",
+    "d": "M 567.5 24 L 603.5 24 L 603.5 40 L 567.5 40 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 32",
+    "mode": "open",
+    "d": "M 700.67 30 L 736.67 30 L 736.67 40 L 700.67 40 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 33",
+    "mode": "open",
+    "d": "M 822.94 30 L 858.94 30 L 858.94 40 L 822.94 40 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 34",
+    "mode": "open",
+    "d": "M 981.55 24 L 1005.55 24 L 1005.55 40 L 981.55 40 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 35",
+    "mode": "open",
+    "d": "M 1115.67 24 L 1145.67 24 L 1145.67 40 L 1115.67 40 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 36",
+    "mode": "open",
+    "d": "M 535.84 148 L 559.84 148 L 559.84 160 L 535.84 160 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 37",
+    "mode": "open",
+    "d": "M 683.93 144 L 727.93 144 L 727.93 160 L 683.93 160 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 38",
+    "mode": "open",
+    "d": "M 1090 169.7 L 1100 169.7 L 1100 193.7 L 1090 193.7 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 39",
+    "mode": "open",
+    "d": "M 1084 289.83 L 1100 289.83 L 1100 319.83 L 1084 319.83 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 40",
+    "mode": "open",
+    "d": "M 1224 119.4 L 1240 119.4 L 1240 143.4 L 1224 143.4 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "doorway 41",
+    "mode": "open",
+    "d": "M 1228 288.35 L 1240 288.35 L 1240 318.35 L 1228 318.35 Z",
+    "group": "doorways"
+  },
+  {
+    "name": "the spire",
+    "mode": "wall",
+    "d": "M 654 250 L 806 250 L 824 268 L 824 366 L 806 384 L 654 384 L 636 366 L 636 268 Z",
+    "group": "city"
+  },
+  {
+    "name": "stall 1",
+    "mode": "wall",
+    "d": "M 282 966 L 318 966 L 322 970 L 322 976 L 318 980 L 282 980 L 278 976 L 278 970 Z",
+    "group": "market stalls"
+  },
+  {
+    "name": "stall 2",
+    "mode": "wall",
+    "d": "M 362 1012 L 398 1012 L 402 1016 L 402 1022 L 398 1026 L 362 1026 L 358 1022 L 358 1016 Z",
+    "group": "market stalls"
+  },
+  {
+    "name": "stall 3",
+    "mode": "wall",
+    "d": "M 502 966 L 538 966 L 542 970 L 542 976 L 538 980 L 502 980 L 498 976 L 498 970 Z",
+    "group": "market stalls"
+  },
+  {
+    "name": "fish stall 1",
+    "mode": "wall",
+    "d": "M 380 797 L 404 797 L 408 801 L 408 811 L 404 815 L 380 815 L 376 811 L 376 801 Z",
+    "group": "market stalls"
+  },
+  {
+    "name": "fish stall 2",
+    "mode": "wall",
+    "d": "M 488 797 L 512 797 L 516 801 L 516 811 L 512 815 L 488 815 L 484 811 L 484 801 Z",
+    "group": "market stalls"
+  },
+  {
+    "name": "fish stall 3",
+    "mode": "wall",
+    "d": "M 380 885 L 404 885 L 408 889 L 408 899 L 404 903 L 380 903 L 376 899 L 376 889 Z",
+    "group": "market stalls"
+  },
+  {
+    "name": "fish stall 4",
+    "mode": "wall",
+    "d": "M 488 885 L 512 885 L 516 889 L 516 899 L 512 903 L 488 903 L 484 899 L 484 889 Z",
+    "group": "market stalls"
+  },
+  {
+    "name": "kiosk 1",
+    "mode": "wall",
+    "d": "M 745 744 L 759 744 L 764 749 L 764 771 L 759 776 L 745 776 L 740 771 L 740 749 Z",
+    "group": "strip kiosks"
+  },
+  {
+    "name": "kiosk 2",
+    "mode": "wall",
+    "d": "M 745 944 L 759 944 L 764 949 L 764 971 L 759 976 L 745 976 L 740 971 L 740 949 Z",
+    "group": "strip kiosks"
+  },
+  {
+    "name": "kiosk 3",
+    "mode": "wall",
+    "d": "M 745 1164 L 759 1164 L 764 1169 L 764 1191 L 759 1196 L 745 1196 L 740 1191 L 740 1169 Z",
+    "group": "strip kiosks"
+  },
+  {
+    "name": "wreck 1",
+    "mode": "wall",
+    "d": "M 723 1052 L 735 1052 L 742 1059 L 742 1093 L 735 1100 L 723 1100 L 716 1093 L 716 1059 Z",
+    "group": "strip kiosks"
+  },
+  {
+    "name": "wreck 2",
+    "mode": "wall",
+    "d": "M 715 846 L 727 846 L 734 853 L 734 887 L 727 894 L 715 894 L 708 887 L 708 853 Z",
+    "group": "strip kiosks"
+  },
+  {
+    "name": "dumpster 1",
+    "mode": "wall",
+    "d": "M 1229 797 L 1237 797 L 1240 800 L 1240 824 L 1237 827 L 1229 827 L 1226 824 L 1226 800 Z",
+    "group": "dumpsters"
+  },
+  {
+    "name": "dumpster 2",
+    "mode": "wall",
+    "d": "M 1183 995 L 1191 995 L 1194 998 L 1194 1022 L 1191 1025 L 1183 1025 L 1180 1022 L 1180 998 Z",
+    "group": "dumpsters"
+  },
+  {
+    "name": "dumpster 3",
+    "mode": "wall",
+    "d": "M 1549 805 L 1557 805 L 1560 808 L 1560 832 L 1557 835 L 1549 835 L 1546 832 L 1546 808 Z",
+    "group": "dumpsters"
+  },
+  {
+    "name": "dumpster 4",
+    "mode": "wall",
+    "d": "M 1549 1065 L 1557 1065 L 1560 1068 L 1560 1092 L 1557 1095 L 1549 1095 L 1546 1092 L 1546 1068 Z",
+    "group": "dumpsters"
+  },
+  {
+    "name": "dumpster 5",
+    "mode": "wall",
+    "d": "M 1346 1230 L 1374 1230 L 1377 1233 L 1377 1241 L 1374 1244 L 1346 1244 L 1343 1241 L 1343 1233 Z",
+    "group": "dumpsters"
+  },
+  {
+    "name": "dumpster 6",
+    "mode": "wall",
+    "d": "M 966 1110 L 994 1110 L 997 1113 L 997 1121 L 994 1124 L 966 1124 L 963 1121 L 963 1113 Z",
+    "group": "dumpsters"
+  },
+  {
+    "name": "garage pillar 1",
+    "mode": "wall",
+    "d": "M 1334 871 L 1346 871 L 1349 874 L 1349 886 L 1346 889 L 1334 889 L 1331 886 L 1331 874 Z",
+    "group": "garage"
+  },
+  {
+    "name": "garage pillar 2",
+    "mode": "wall",
+    "d": "M 1404 871 L 1416 871 L 1419 874 L 1419 886 L 1416 889 L 1404 889 L 1401 886 L 1401 874 Z",
+    "group": "garage"
+  },
+  {
+    "name": "garage pillar 3",
+    "mode": "wall",
+    "d": "M 1334 991 L 1346 991 L 1349 994 L 1349 1006 L 1346 1009 L 1334 1009 L 1331 1006 L 1331 994 Z",
+    "group": "garage"
+  },
+  {
+    "name": "garage pillar 4",
+    "mode": "wall",
+    "d": "M 1404 991 L 1416 991 L 1419 994 L 1419 1006 L 1416 1009 L 1404 1009 L 1401 1006 L 1401 994 Z",
+    "group": "garage"
+  },
+  {
+    "name": "plaza planter 1",
+    "mode": "wall",
+    "d": "M 530.56 184 L 549.44 184 L 556 190.56 L 556 209.44 L 549.44 216 L 530.56 216 L 524 209.44 L 524 190.56 Z",
+    "group": "plaza"
+  },
+  {
+    "name": "plaza planter 2",
+    "mode": "wall",
+    "d": "M 910.56 184 L 929.44 184 L 936 190.56 L 936 209.44 L 929.44 216 L 910.56 216 L 904 209.44 L 904 190.56 Z",
+    "group": "plaza"
+  },
+  {
+    "name": "plaza planter 3",
+    "mode": "wall",
+    "d": "M 530.56 414 L 549.44 414 L 556 420.56 L 556 439.44 L 549.44 446 L 530.56 446 L 524 439.44 L 524 420.56 Z",
+    "group": "plaza"
+  },
+  {
+    "name": "plaza planter 4",
+    "mode": "wall",
+    "d": "M 910.56 414 L 929.44 414 L 936 420.56 L 936 439.44 L 929.44 446 L 910.56 446 L 904 439.44 L 904 420.56 Z",
+    "group": "plaza"
+  },
+  {
+    "name": "gate barricade 1",
+    "mode": "wall",
+    "d": "M 1304 193 L 1356 193 L 1360 197 L 1360 203 L 1356 207 L 1304 207 L 1300 203 L 1300 197 Z",
+    "group": "gate square"
+  },
+  {
+    "name": "gate barricade 2",
+    "mode": "wall",
+    "d": "M 1467 230 L 1473 230 L 1477 234 L 1477 286 L 1473 290 L 1467 290 L 1463 286 L 1463 234 Z",
+    "group": "gate square"
+  },
+  {
+    "name": "gate barricade 3",
+    "mode": "wall",
+    "d": "M 1304 323 L 1356 323 L 1360 327 L 1360 333 L 1356 337 L 1304 337 L 1300 333 L 1300 327 Z",
+    "group": "gate square"
+  }
+]

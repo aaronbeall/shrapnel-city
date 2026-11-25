@@ -1102,5 +1102,12 @@
   "player assets/player ship": 1101,
   "player assets/player ship firing": 1102,
   "enemy assets/enemy scout": 1103,
+  "enemy assets/enemy hive blade": 1600,
+  "enemy assets/enemy hive iris": 1601,
+  "enemy assets/enemy hive body": 1602,
+  "enemy assets/enemy hive vents": 1603,
+  "enemy assets/enemy hive core": 1604,
+  "enemy assets/enemy hive": 1605,
+  "enemy assets/enemy barrel bot": 1606,
   "enemy assets/enemy warden": 1500
 }

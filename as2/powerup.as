@@ -154,7 +154,12 @@ if(!pickup){
 		
 		// messages and notifications
 		if(alertNotification) notify(this, alertNotification);
-		if(alertMessage) showMessage(alertMessage, alertKillTrigger||{onRollOut:this, linger:alertLinger});
+		// alertOnce: show this message only the first time in the level (a new weapon's intro,
+		// set on every copy of it so whichever the player reaches first shows it)
+		if(alertMessage && !(alertOnce && _root.alertsShown[alertMessage])){
+			if(alertOnce) _root.alertsShown[alertMessage] = true;
+			showMessage(alertMessage, alertKillTrigger||{onRollOut:this, linger:alertLinger});
+		}
 		
 		// remove powerup if its been used
 		if(pickedup){
