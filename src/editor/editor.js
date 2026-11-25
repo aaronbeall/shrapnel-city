@@ -475,6 +475,7 @@ class Editor {
     if (mod && k === 'y') { e.preventDefault(); this.undo(true); return; }
     if (mod && k === 's') { e.preventDefault(); this.save(); return; }
     if (mod && k === 'd') { e.preventDefault(); this.duplicate(); return; }
+    if (mod && k === 'g') { e.preventDefault(); if (e.shiftKey) this.ungroupShapes(); else this.groupShapes(); return; }
     if (mod && (e.code === 'BracketRight' || e.code === 'BracketLeft')) { // collision shapes up / down the stack
       e.preventDefault();
       const up = e.code === 'BracketRight';
@@ -1153,14 +1154,106 @@ class Editor {
       if (dir > 0) for (let i = idx.length - 1; i >= 0; i--) { if (order[i].on) step(i); }
       else for (let i = 0; i < idx.length; i++) { if (order[i].on) step(i); }
     }
+    this.applyShapeOrder(order);
+  }
+
+  // put the stack in a new order (entries {e: shape, k: its old index}), running fn in the same
+  // undo step, and keep the same shapes selected
+  applyShapeOrder(order, fn) {
+    const list = this.list('collision');
     const primary = this.sel;
-    this.change(['collision.json'], () => { list.splice(0, list.length, ...order.map((x) => x.e)); }, { reload: false });
     const at = new Map(order.map((x, i) => [x.k, i]));
+    this.change(['collision.json'], () => { list.splice(0, list.length, ...order.map((x) => x.e)); if (fn) fn(); }, { reload: false });
     this.selection = this.selection.map((s) => (s.layer === 'collision' ? { layer: 'collision', k: at.get(s.k) } : s));
     if (primary && primary.layer === 'collision') { // keep the primary last
       const p = this.selection.findIndex((s) => s.layer === 'collision' && s.k === at.get(primary.k));
       if (p >= 0) this.selection.push(...this.selection.splice(p, 1));
     }
+    this.refreshPanel();
+  }
+
+  // ------------------------------------------------------------------ shape groups
+  // A group is a name on its shapes ("group"); the stack folds each run of consecutive shapes
+  // with the same name into one row. Grouping, joining and leaving move shapes so each group
+  // stays one run: they gather just above the topmost picked shape (above the rest of its own
+  // group, if it's in one), so the paint order changes no more than that.
+  pickedShapes() { return [...new Set(this.selItems().filter((s) => s.layer === 'collision').map((s) => s.k))].sort((a, b) => a - b); }
+  shapeGroups() { return [...new Set(this.list('collision').map((s) => s.group).filter(Boolean))]; }
+  // the indices of the run of same-group shapes that k is in, bottom first
+  groupRun(k) {
+    const list = this.list('collision'), g = list[k] && list[k].group;
+    if (!g) return [k];
+    let a = k, b = k;
+    while (a > 0 && list[a - 1].group === g) a--;
+    while (b < list.length - 1 && list[b + 1].group === g) b++;
+    return Array.from({ length: b - a + 1 }, (_, i) => a + i);
+  }
+  newGroupName() {
+    const used = new Set(this.shapeGroups());
+    let n = 1;
+    while (used.has(`group ${n}`)) n++;
+    return `group ${n}`;
+  }
+
+  // move the shapes ks to just above index top (and above the rest of top's group), then name
+  // their group g (or none)
+  gatherShapes(ks, top, g) {
+    const list = this.list('collision'), on = new Set(ks);
+    const run = this.groupRun(top);
+    const end = Math.max(top, ...run.filter((j) => !on.has(j)));
+    const entries = list.map((e, k) => ({ e, k }));
+    const order = [...entries.filter((x) => x.k <= end && !on.has(x.k)), ...entries.filter((x) => on.has(x.k)), ...entries.filter((x) => x.k > end && !on.has(x.k))];
+    const moved = ks.map((k) => list[k]);
+    this.applyShapeOrder(order, () => { for (const s of moved) { if (g) s.group = g; else delete s.group; } });
+  }
+
+  // Ctrl+G: the selected shapes become a new group
+  groupShapes() {
+    const ks = this.pickedShapes();
+    if (!ks.length) { this.status('Select the shapes to group first.', true); return; }
+    const g = this.newGroupName();
+    this.gatherShapes(ks, ks[ks.length - 1], g);
+    this.renamingGroup = g; // its row opens for a name
+    this.refreshPanel();
+    this.status(`Grouped ${ks.length} shape${ks.length === 1 ? '' : 's'} as "${g}".`);
+  }
+
+  // Ctrl+Shift+G: the selected shapes leave their groups; any that leave part of a group behind
+  // move just above it, so what's left stays together
+  ungroupShapes() {
+    const list = this.list('collision'), on = new Set(this.pickedShapes().filter((k) => list[k].group));
+    if (!on.size) { this.status('None of the selected shapes are in a group.', true); return; }
+    const order = [];
+    for (let k = 0; k < list.length;) {
+      const run = this.groupRun(k);
+      order.push(...run.filter((j) => !on.has(j)), ...run.filter((j) => on.has(j)));
+      k = run[run.length - 1] + 1;
+    }
+    const left = [...on].map((k) => list[k]);
+    this.applyShapeOrder(order.map((k) => ({ e: list[k], k })), () => { for (const s of left) delete s.group; });
+    this.status(`Took ${on.size} shape${on.size === 1 ? '' : 's'} out of ${on.size === 1 ? 'its group' : 'their groups'}.`);
+  }
+
+  // put shape k in group g ('' for none): it joins the topmost run of that name
+  setShapeGroup(k, g) {
+    const list = this.list('collision');
+    g = (g || '').trim();
+    if ((list[k].group || '') === g) return;
+    if (!g) { this.selection = [{ layer: 'collision', k }]; this.ungroupShapes(); return; }
+    let top = -1;
+    for (let j = list.length - 1; j >= 0; j--) if (j !== k && list[j].group === g) { top = j; break; }
+    if (top < 0) this.change(['collision.json'], () => { list[k].group = g; }, { reload: false });
+    else this.gatherShapes([k], top, g);
+  }
+
+  // rename the run ks
+  renameGroup(ks, name) {
+    const list = this.list('collision'), old = list[ks[0]].group;
+    name = (name || '').trim();
+    this.renamingGroup = null;
+    if (!name || name === old) { this.refreshPanel(); return; }
+    this.change(['collision.json'], () => { for (const k of ks) list[k].group = name; }, { reload: false });
+    if (this.openShapeGroups.has(old)) this.openShapeGroups.add(name);
     this.refreshPanel();
   }
 
@@ -1196,6 +1289,7 @@ class Editor {
       el('button', { class: 'le-icon' + (s.locked ? ' on' : ''), title: s.locked ? 'unlock' : 'lock: can\'t be selected on the map or edited', onclick: () => this.setShapeFlag([k], 'locked', !s.locked) }, s.locked ? ICON.lock : ICON.unlock),
       swatch(s), el('span', { class: 'le-name', onclick: (e) => pick([k], e) }, s.name || `shape ${k + 1}`));
     // top first
+    let renaming = 0;
     for (let k = list.length - 1; k >= 0;) {
       const g = list[k].group;
       if (!g) { rows.append(row(list[k], k, false)); k--; continue; }
@@ -1205,10 +1299,16 @@ class Editor {
       rows.append(el('div', { class: 'le-shape group' + (ks.every((j) => selected.has(j)) ? ' on' : '') },
         el('button', { class: 'le-icon' + (shown ? ' on' : ''), title: shown ? 'hide them all' : 'show them all', onclick: () => this.setShapeFlag(ks, 'hidden', !!shown) }, shown ? ICON.eye : ICON.eyeOff),
         el('button', { class: 'le-icon', title: open ? 'fold' : 'unfold', onclick: () => { this.openShapeGroups[open ? 'delete' : 'add'](g); this.refreshPanel(); } }, open ? '▾' : '▸'),
-        el('span', { class: 'le-name', title: 'click to select them all', onclick: (e) => pick(ks, e) }, `${g} `, el('small', {}, `${shown}/${ks.length} shown`))));
+        this.renamingGroup === g && !renaming++
+          ? el('input', { class: 'le-name le-rename', value: g, title: 'Enter renames the group, Esc keeps its name',
+            onkeydown: (ev) => { if (ev.key === 'Enter') ev.target.blur(); if (ev.key === 'Escape') { ev.target.value = g; ev.target.blur(); } },
+            onblur: (ev) => { if (this.renamingGroup === g) this.renameGroup(ks, ev.target.value); } })
+          : el('span', { class: 'le-name', title: 'click to select them all, double-click to rename', onclick: (e) => pick(ks, e), ondblclick: () => { this.renamingGroup = g; this.refreshPanel(); } }, `${g} `, el('small', {}, `${shown}/${ks.length} shown`))));
       if (open) for (const j of ks) rows.append(row(list[j], j, true));
     }
-    const any = selected.size > 0;
+    const field = rows.querySelector('input.le-rename');
+    if (field) setTimeout(() => { if (field.isConnected) { field.focus(); field.select(); } });
+    const any = selected.size > 0, grouped = [...selected].some((k) => list[k] && list[k].group);
     box.append(rows,
       el('div', { class: 'le-row' },
         el('button', { disabled: !any, title: 'to the top (Ctrl+Shift+])', onclick: () => this.reorderShapes(Infinity) }, '⤒'),
@@ -1218,6 +1318,10 @@ class Editor {
         el('button', { disabled: !any, title: 'delete the selected shapes', onclick: () => this.deleteSel() }, '✕'),
         el('span', { class: 'le-grow' }),
         el('button', { title: 'a new empty pixel layer on top for Pencil, Eraser and Fill', onclick: () => { this.sel = null; this.pixelTarget(); } }, '+ Pixels')),
+      el('div', { class: 'le-row' },
+        el('button', { disabled: !any, title: 'make the selected shapes a new group, gathered at the topmost one (Ctrl+G)', onclick: () => this.groupShapes() }, 'Group'),
+        el('button', { disabled: !grouped, title: 'take the selected shapes out of their groups (Ctrl+Shift+G)', onclick: () => this.ungroupShapes() }, 'Ungroup'),
+        el('span', { class: 'le-tip' }, 'double-click a group to rename it')),
       el('div', { class: 'le-row' },
         el('label', { title: 'bake the shapes into collision.png as you edit them; off, the map only changes when you press Bake collision' },
           el('input', { type: 'checkbox', checked: this.autoBake, onchange: (ev) => { this.autoBake = ev.target.checked; if (this.autoBake && this.shapesAhead) this.bakeCollision(); else this.refreshPanel(); } }), ' Bake as I edit'),
@@ -1241,7 +1345,11 @@ class Editor {
       el('div', { class: 'le-row' },
         el('label', {}, el('input', { type: 'checkbox', checked: !s.hidden, onchange: (ev) => this.setShapeFlag([k], 'hidden', !ev.target.checked) }), ' baked'),
         el('label', {}, el('input', { type: 'checkbox', checked: !!s.locked, onchange: (ev) => this.setShapeFlag([k], 'locked', ev.target.checked) }), ' locked'),
-        s.group ? el('small', {}, ` in "${s.group}"`) : ''),
+        ''),
+      el('label', { class: 'le-set', title: 'pick or type a group to move it into (it joins the top of that group), or clear it to take it out' }, el('span', { class: 'le-set-name' }, 'group'),
+        el('input', { value: s.group || '', list: 'le-shape-groups', placeholder: 'none', onchange: (ev) => this.setShapeGroup(k, ev.target.value), onkeydown: (ev) => { if (ev.key === 'Enter') ev.target.blur(); } }),
+        el('datalist', { id: 'le-shape-groups' }, ...this.shapeGroups().map((g) => el('option', { value: g }))),
+        s.group ? el('button', { title: 'take it out of the group', onclick: () => this.setShapeGroup(k, '') }, '✕') : ''),
       isPixels(s) || s.locked ? '' : this.zonePointsPanel(s));
   }
 
@@ -1742,6 +1850,27 @@ class Editor {
         if (this.linkFrom === k) { ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(e.x, e.y, 9 * px, 0, Math.PI * 2); ctx.stroke(); }
       });
     }
+    // sight range of each selected enemy: a ring for its visionRange, or with none, the box the player
+    // is in while the enemy is on screen (+ the margin) with the camera centred on the player.
+    // Unlimited (0) or not an enemy that looks: nothing
+    for (const it of this.selItems()) {
+      if (it.layer !== 'enemies') continue;
+      const e = this.list('enemies')[it.k], r = this.sightRange(e);
+      if (r === 0) continue;
+      const shape = () => {
+        ctx.beginPath();
+        if (r === 'screen') ctx.rect(e.x - 400 - SIGHT_MARGIN, e.y - 300 - SIGHT_MARGIN, 800 + 2 * SIGHT_MARGIN, 600 + 2 * SIGHT_MARGIN);
+        else ctx.arc(e.x, e.y, r, 0, Math.PI * 2);
+      };
+      ctx.setLineDash([8 * px, 5 * px]);
+      ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.lineWidth = 3 * px; shape(); ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,170,60,0.9)'; ctx.lineWidth = 1.5 * px; shape(); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = `${11 * px}px system-ui, sans-serif`; ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'rgba(255,170,60,0.95)';
+      if (r === 'screen') ctx.fillText('sight: on screen', e.x - 400 - SIGHT_MARGIN + 4 * px, e.y - 300 - SIGHT_MARGIN - 8 * px);
+      else ctx.fillText(`sight ${r}`, e.x + 4 * px, e.y - r - 8 * px);
+    }
     // selection: solid cyan with a dark edge, a tint and corner handles (the primary's are white),
     // so it stands out from the thin dashed outlines of everything else
     {
@@ -1921,6 +2050,15 @@ class Editor {
   setTab(t) { this.tab = t; this.refreshPanel(); }
 
   // a collapsible section whose open state survives refreshes
+  // an enemy's sight range: its visionRange (props, else its type's default) in px, 'screen' when it
+  // has none (it sees while on screen), 0 when it sees any distance or isn't an enemy that looks
+  sightRange(e) {
+    const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
+    if (!spec || !spec.settings.some((s) => s.name === 'visionRange')) return 0;
+    const r = effectiveSettings(spec.settings, e.props || {}).visionRange;
+    return typeof r === 'number' ? (r > 0 ? r : 0) : 'screen';
+  }
+
   section(key, title, kids, { open = false, badge = '', cls = '' } = {}) {
     const id = '$' + key;
     if (!this.openGroups.has(id) && !this.openGroups.has('!' + id) && open) this.openGroups.add(id);
@@ -2862,6 +3000,9 @@ function nodeColour(e) {
 
 // the value every setting ends up with: props, else what the symbol forces, else its default
 // (expressions such as "hunter || patroller" are worked out when they only use other settings)
+// as2/enemyTurret.as SIGHT_MARGIN: an enemy with no visionRange sees the player while it's this close to the screen
+const SIGHT_MARGIN = 100;
+
 function effectiveSettings(settings, props) {
   const lit = (x) => { try { return x === undefined ? undefined : JSON.parse(x.replace(/^\./, '0.').replace(/^-\./, '-0.')); } catch { return undefined; } };
   const vals = {}, defaults = {};
@@ -2998,6 +3139,7 @@ const CSS = `
 #level-editor .le-shape.on { background: rgba(46,230,255,0.18); }
 #level-editor .le-shape.hidden .le-name { opacity: 0.5; }
 #level-editor .le-shape.group .le-name { font-style: italic; }
+#level-editor .le-shape input.le-rename { min-width: 0; font: inherit; font-style: italic; padding: 0 2px; }
 #level-editor .le-shape .le-name { flex: 1; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #level-editor .le-mode { width: 14px; text-align: center; color: var(--c, #9ab); text-shadow: 0 0 1px #8aa; }
 #level-editor .le-hot { border-color: #fc6 !important; color: #fc6; }

@@ -17,7 +17,7 @@ if(shotSpread == undefined) shotSpread = 4;
 if(refireRate == undefined) refireRate = 25;
 if(burstCount == undefined) burstCount = 0;
 if(burstReload == undefined) burstReload = 25;
-if(visionRange == undefined) visionRange = null;
+if(visionRange == undefined) visionRange = null; // how far it can see the player, px (0 = unlimited); none = while it's on screen (see SIGHT_MARGIN)
 if(debrisType == undefined) debrisType = "gray";
 if(debrisCount == undefined) debrisCount = Math.min(1 + random(health * .05), 15);
 if(particleType == undefined) particleType = "particle_mcFire";
@@ -53,6 +53,7 @@ var visionMC = null;
 var AUTO_VISION_ANGLES = 90;
 var targetRotation;
 var visionRangeSquare = visionRange * visionRange;
+var SIGHT_MARGIN = 100; // with no visionRange it sees the player while it's on screen or this close to the screen's edge (px)
 
 // vision registration
 function registerVision(){
@@ -78,14 +79,12 @@ function registerVision(){
 			vision.push(_screen.vision_mc[i]);
 	}
 	
-	// if no maps available, make one
-	if(!vision.length)
-		vision.push(makeVision());
+	// no zone here: it sees by range and line of sight instead (see the vision check in update)
 }
 if(!autoVision)
 	registerVision();
 
-// automatic vision mapping
+// automatic vision mapping (only for autoVision: a turret outside every zone sees by range and line of sight)
 function makeVision(){
 	var i = AUTO_VISION_ANGLES, points = [];
 	while(i--){
@@ -113,7 +112,7 @@ function makeVision(){
 	
 	return mc;
 }
-if(autoVision || !vision.length){
+if(autoVision){
 	
 	trace("auto vision map creation for " + _name);
 	
@@ -184,9 +183,19 @@ update = function(time){
 			attacking = false
 			if(movable && speed > speedMin)
 				registerVision();
+			// in range: within visionRange (0 = any distance), or with none, on screen (+ SIGHT_MARGIN)
+			var seeX = _x + _screen._x, seeY = _y + _screen._y;
+			var inRange = visionRange == null
+				? (seeX > -SIGHT_MARGIN && seeX < screenWidth + SIGHT_MARGIN && seeY > -SIGHT_MARGIN && seeY < screenHeight + SIGHT_MARGIN)
+				: (!visionRange || getDistanceSquare(this, _player) < visionRangeSquare);
+			// outside every zone: in range, then line of sight. The player cloaked and not firing can't be seen
+			if(!vision.length){
+				if(inRange && !_player.dying && (!_player.invisible || _player.firing1 || _player.firing2))
+					attacking = lineOfSight(this, _player, LOS_SAMPLE_SIZE);
+			}
 			for(var i in vision){
 				if(vision[i].active){
-					if(!visionRange || getDistanceSquare(this, _player) < visionRangeSquare){
+					if(inRange){
 						if(lineOfSight(this, _player, LOS_SAMPLE_SIZE)){
 							attacking = true;
 							break;
