@@ -24,7 +24,7 @@ The map, north to south:
 It writes collision.json (one vector shape per rock, crevasse, bunker room, pillbox and
 barrier, so each can be reshaped in the editor's shape stack), features.json,
 pathNodes.json, enemies.json, boxes.json, powerups.json, doors.json, vision.json (empty: enemies
-see by sightRange), level.json and
+see by visionRange), level.json and
 briefing.json. collision.png is then baked by tools/levels/bake_collision.mjs and the art by
 tools/art/bake.py (kit "rock"). Re-running this overwrites hand edits in those files.
 """
@@ -633,9 +633,8 @@ def add_intros():
             pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
 
 
-# no vision zones: enemies see by the level's sight range (level.json "sightRange") and line of
-# sight, and the mortars by their mortarRange
-SIGHT_RANGE = 420
+# no vision zones: enemies see by their visionRange (420 by default) and line of sight, and the
+# mortars by their mortarRange
 
 def main():
     add_intros()
@@ -659,7 +658,7 @@ def main():
     lj = os.path.join(a.out, 'level.json')
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
-    settings['sightRange'] = SIGHT_RANGE
+    settings.pop('sightRange', None)
     settings.setdefault('art', {'kit': 'rock', 'seed': 808})
     settings['art']['interior'] = [[num(v) for v in r] for r in INTERIOR]
     settings['art']['concrete'] = [[num(v) for v in r] for r in CONCRETE]
