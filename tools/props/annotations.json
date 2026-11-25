@@ -150,7 +150,7 @@
     "visionRange": {
       "group": "vision",
       "type": "number",
-      "desc": "Max distance it can see the player (px). Empty = the level's sight range (level.json sightRange, unlimited if none); 0 = unlimited."
+      "desc": "Max distance it can see the player (px); 0 = unlimited. The default (420) keeps enemies from firing from off screen; an enemy type can set its own default in its symbol script."
     },
     "autoVision": {
       "group": "vision",

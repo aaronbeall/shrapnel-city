@@ -17,7 +17,7 @@ if(shotSpread == undefined) shotSpread = 4;
 if(refireRate == undefined) refireRate = 25;
 if(burstCount == undefined) burstCount = 0;
 if(burstReload == undefined) burstReload = 25;
-if(visionRange == undefined) visionRange = null;
+if(visionRange == undefined) visionRange = 420; // how far it can see the player, px (0 = unlimited): about half the 800x600 screen, so nothing fires from off screen
 if(debrisType == undefined) debrisType = "gray";
 if(debrisCount == undefined) debrisCount = Math.min(1 + random(health * .05), 15);
 if(particleType == undefined) particleType = "particle_mcFire";
@@ -182,12 +182,11 @@ update = function(time){
 			attacking = false
 			if(movable && speed > speedMin)
 				registerVision();
-			// outside every zone: its visionRange, else the level's sight range (level.json "sightRange",
-			// none = unlimited), then line of sight. The player cloaked and not firing can't be seen
+			// outside every zone: within visionRange, then line of sight. The player cloaked and not
+			// firing can't be seen
 			if(!vision.length){
-				var range = visionRange == null ? levelSightRange : visionRange; // 0 = unlimited
 				if(!_player.dying && (!_player.invisible || _player.firing1 || _player.firing2))
-					if(!range || getDistanceSquare(this, _player) < range * range)
+					if(!visionRange || getDistanceSquare(this, _player) < visionRangeSquare)
 						attacking = lineOfSight(this, _player, LOS_SAMPLE_SIZE);
 			}
 			for(var i in vision){

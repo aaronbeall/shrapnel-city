@@ -33,7 +33,6 @@ _global.startLevel = function(){
 	
 	// init
 	currentLevel.name = name;
-	_global.levelSightRange = levels[currentIndex].sightRange; // level.json "sightRange": how far enemies outside every vision zone can see
 	_root.HUD_mc._visible = true;
 	_root.HUD_mc.level_txt.text = name.toUpperCase();
 	_screen.vision_mc._visible = false;

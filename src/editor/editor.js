@@ -1742,8 +1742,7 @@ class Editor {
         if (this.linkFrom === k) { ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(e.x, e.y, 9 * px, 0, Math.PI * 2); ctx.stroke(); }
       });
     }
-    // sight range of each selected enemy: how far it sees the player when it's outside every vision
-    // zone (its visionRange, else the level's sightRange; none = unlimited, no ring)
+    // sight range of each selected enemy: its visionRange (0 = unlimited, no ring)
     for (const it of this.selItems()) {
       if (it.layer !== 'enemies') continue;
       const e = this.list('enemies')[it.k], r = this.sightRange(e);
@@ -1936,14 +1935,12 @@ class Editor {
   setTab(t) { this.tab = t; this.refreshPanel(); }
 
   // a collapsible section whose open state survives refreshes
-  // an enemy's sight range outside vision zones: its visionRange (props, else its symbol's default;
-  // 0 = unlimited), else level.json's sightRange. 0 when it can see any distance
+  // an enemy's sight range: its visionRange (props, else its type's or enemyTurret.as's default).
+  // 0 when it can see any distance or isn't an enemy that looks for the player
   sightRange(e) {
     const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
-    const own = spec ? effectiveSettings(spec.settings, e.props || {}).visionRange : e.props && e.props.visionRange;
-    if (typeof own === 'number') return own > 0 ? own : 0;
-    const lvl = this.L.settings && this.L.settings.sightRange;
-    return typeof lvl === 'number' && lvl > 0 ? lvl : 0;
+    const r = spec ? effectiveSettings(spec.settings, e.props || {}).visionRange : e.props && e.props.visionRange;
+    return typeof r === 'number' && r > 0 ? r : 0;
   }
 
   section(key, title, kids, { open = false, badge = '', cls = '' } = {}) {
@@ -2104,12 +2101,6 @@ class Editor {
       this.sizePanel(),
       this.newLevelPanel(),
       this.section('settings', 'Level settings', [
-        el('label', { class: 'le-set', title: 'How far enemies outside every vision zone can see the player (px), unless they set their own visionRange. Empty = unlimited. Select an enemy to see its range on the map.' },
-          el('span', { class: 'le-set-name' + (L.settings && L.settings.sightRange ? ' on' : '') }, 'sight range'),
-          el('input', { type: 'number', min: 0, step: 10, value: (L.settings && L.settings.sightRange) || '', placeholder: 'unlimited', onchange: (e) => {
-            const v = Math.round(+e.target.value);
-            this.change(['level.json'], () => { L.settings = { ...(L.settings || {}) }; if (v > 0) L.settings.sightRange = v; else delete L.settings.sightRange; }, { reload: false });
-          } })),
         el('div', { class: 'le-tip' }, 'level.json as JSON. The size changes with Resize level, above.'),
         el('textarea', { rows: 6, spellcheck: false, onchange: (e) => {
           try {
