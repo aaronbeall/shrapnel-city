@@ -110,9 +110,13 @@ _global.notify = function(targetMC, msg, duration){
 
 // show a message (a different message replaces one that's still lingering)
 _global.showMessage = function(msg, killTriggers){
-	if(_root.message_mc && _root.message_mc.text != msg)
+	if(_root.message_mc){
+		if(_root.message_mc.text == msg) return;
+		// hide() removes the clip, but the name can still resolve until the removal goes
+		// through, so attach the new one regardless (it takes the same depth)
 		_root.message_mc.hide();
-	if(!_root.message_mc){
+	}
+	{
 		var init = {
 			text:msg,
 			_x:screenWidth / 2,
