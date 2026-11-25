@@ -1,0 +1,124 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 619,
+    "y": 851,
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 120}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 589,
+    "y": 891,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 619,
+    "y": 217,
+    "props": {"type": "secondary", "item": "Thermal Bomb", "quantity": 4}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 649,
+    "y": 247,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 150,
+    "y": 1080,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 257,
+    "y": 621,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 307,
+    "y": 544,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 1042,
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 60}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 76,
+    "y": 300,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 170,
+    "props": {"type": "primary", "item": "Plasma", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1004,
+    "y": 76,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1524,
+    "y": 470,
+    "props": {"type": "secondary", "item": "Thermal Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1524,
+    "y": 660,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1090,
+    "y": 1050,
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1343,
+    "y": 1004,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 60,
+    "y": 770,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 30}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1300,
+    "y": 280,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1386,
+    "y": 280,
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 619,
+    "y": 1025,
+    "scale": [2.2, 1.8],
+    "props": {"type": "trigger", "item": "door2:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 619,
+    "y": 381,
+    "scale": [2.2, 1.8],
+    "props": {"type": "trigger", "item": "door3:open"}
+  }
+]

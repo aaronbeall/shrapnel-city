@@ -121,6 +121,13 @@ Each original level's stack is the same: at the bottom, shown and locked, the "c
 
 A level without `collision.json` starts in the editor as one locked pixel layer holding its map; the first shape edit writes `collision.json` and `collision-base.png`.
 
+## Level tools
+
+Each new level is built by its own tools outside the editor, then tuned in the editor. They write the files above, so the editor opens the result like any other level:
+
+- `tools/levels/04_Urban/layout.py`: 04 Urban's street grid, as one collision shape per building, barrier and crater, plus its placements, patrol loops and briefing.
+- `tools/levels/bake_collision.mjs <NN_name>`: bakes `collision.png` from `collision.json` with the editor's own shape code (in headless Chromium), for tools that write shapes.
+
 ## Levels 00 to 03
 
 These came out of the original `screen_mc` and `level assets/*` symbols unchanged. Their collision maps and backgrounds are the bitmaps the original game used (the Bridge's collision map was rendered from its vector shape exactly as the game rasterised it). The Bridge's background is baked by `tools/art/bake.py` (see Art below).
@@ -158,7 +165,7 @@ The editor recompiles levels in the browser with the same code as the build (`to
 
 ## Art
 
-A level with `art` in its `level.json` gets its `background.png` generated from its collision map by `tools/art/bake.py` (Python with numpy, scipy and Pillow: `python -m pip install numpy scipy pillow`), in two steps:
+A level with `art` in its `level.json` gets its `background.png` generated from its collision map by `tools/art/bake.py`, in the look of its kit: `"bridge"` (metal decks, levels like 03 Bridge) or `"city"` (streets and rooftops on a grey day, first used by 04 Urban: buildings get flat roofs with a parapet and facades as tall as the building, the floor is road with a pavement and kerb along every building, with centre lines and zebra crossings worked out from the street shapes, and chasms are collapsed road; `"paved": [[x0, y0, x1, y1], ...]` in `art` paves those areas all over, for squares and courtyards; `tools/art/kit_city.py`, parts made by `tools/art/gen_city.sh`). It needs Python with numpy, scipy and Pillow (`python -m pip install numpy scipy pillow`) and runs in two steps:
 
 1. **place**: lays out decor from the seed (floor paint, rails on chasm lips, greebles, vents, wall marks, lights) and writes `decor.json`, replacing what was there.
 2. **bake**: draws the floor, chasm and walls of the kit from `collision.png`, then each `decor.json` placement with its effect, and writes `background.png`.

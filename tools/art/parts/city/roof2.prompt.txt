@@ -1,0 +1,1 @@
+Create a seamless tileable texture of a flat building ROOFTOP seen straight down from above, filling the whole image edge to edge: light grey-beige rounded gravel ballast over the roof, evenly spread, with a few bare darker patches and drainage streaks. Flat even lighting, no edges, no parapet, no objects, no borders. It must tile seamlessly left-right and top-bottom.

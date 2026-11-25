@@ -1,6 +1,7 @@
 """Cut the decor sprite sheets into separate sprites.
 
-    python3 tools/art/cut_decor.py
+    python3 tools/art/cut_decor.py                 # every sheet
+    python3 tools/art/cut_decor.py city-roof city-plants   # just these sheets
 
 Reads tools/art/parts/decor/sheet_<category>.png (items on flat magenta),
 keys out the magenta, splits connected items and writes
@@ -8,7 +9,7 @@ tools/art/parts/decor/<category>/<n>.png (RGBA, trimmed) plus index.json with
 each sprite's size. Sprites from floorpaint/wallmarks keep a soft feathered edge
 so they blend into the floor or wall they're placed on.
 """
-import glob, json, os
+import glob, json, os, sys
 import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
@@ -17,8 +18,11 @@ D = os.path.join(os.path.dirname(__file__), 'parts', 'decor')
 # keep categories that aren't cut from a sheet (panels, from make_panels.py)
 ip = os.path.join(D, 'index.json')
 index = json.load(open(ip)) if os.path.exists(ip) else {}
+PAINT = ('floorpaint', 'city-roadpaint')  # painted on a patch of floor: keep only the paint
+only = set(sys.argv[1:])
 for sheet in sorted(glob.glob(os.path.join(D, 'sheet_*.png'))):
     cat = os.path.basename(sheet)[6:-4]
+    if only and cat not in only: continue
     a = np.array(Image.open(sheet).convert('RGB'), np.float32)
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
     # distance from magenta: how much green there is relative to red/blue
@@ -32,16 +36,19 @@ for sheet in sorted(glob.glob(os.path.join(D, 'sheet_*.png'))):
     # despill: pull magenta fringe back toward neutral
     spill = np.clip(np.minimum(r, b) - g, 0, None) * np.clip(key * 3, 0, 1)
     a2 = a.copy(); a2[..., 0] -= spill * 0.8; a2[..., 2] -= spill * 0.8
+    if cat.startswith('city-'):  # newer sheets: no magenta cast anywhere (dark soot over magenta keys as opaque)
+        full = np.clip(np.minimum(r, b) - g, 0, None)
+        a2[..., 0] -= full; a2[..., 2] -= full
     items = []
     for i, sl in enumerate(ndi.find_objects(lab)):
         h, w = sl[0].stop - sl[0].start, sl[1].stop - sl[1].start
         if h * w < 400 or min(h, w) < 10: continue
         m = (lab[sl] == i + 1)
         al = np.clip(alpha[sl], 0, 1) * ndi.binary_dilation(m, iterations=2)
-        if cat in ('floorpaint', 'wallmarks'):  # feather the patch edge
+        if cat in PAINT + ('wallmarks',):  # feather the patch edge
             d = ndi.distance_transform_edt(m)
             al = al * np.clip(d / 6, 0, 1)
-        if cat == 'floorpaint':  # keep only the paint, not the patch of floor it was drawn on
+        if cat in PAINT:  # keep only the paint, not the patch of floor it was drawn on
             px = a[sl]; med = np.median(px[m], axis=0)
             al = al * np.clip((np.abs(px - med).sum(-1) - 25) / 60, 0, 1)
         rgba = np.dstack([np.clip(a2[sl], 0, 255), al * 255]).astype(np.uint8)
