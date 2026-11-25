@@ -154,7 +154,12 @@ if(!pickup){
 		
 		// messages and notifications
 		if(alertNotification) notify(this, alertNotification);
+		// a weapon's intro (its definition's intro, in player.as) shows the first time the player
+		// picks one up; a pickup's own alertMessage replaces it
+		var wep = (type == "primary") ? p.wepByName(1, item) : (type == "secondary") ? p.wepByName(2, item) : null;
 		if(alertMessage) showMessage(alertMessage, alertKillTrigger||{onRollOut:this, linger:alertLinger});
+		else if(wep && wep.intro && !wep.introShown) showMessage(wep.intro, {onRollOut:this, linger:alertLinger});
+		if(wep) wep.introShown = true;
 		
 		// remove powerup if its been used
 		if(pickedup){
