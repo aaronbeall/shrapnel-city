@@ -580,15 +580,9 @@ BRIEFING = {
     ],
 }
 
+# the new weapons (their intro messages are on their definitions in as2/player.as)
 INTRO = {'Flamer': 'FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.',
          'Pepper Bombs': 'PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.'}
-
-
-def add_intros():
-    props = [o['props'] for o in pick] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
-    for pr in props:
-        if pr.get('type') in ('primary', 'secondary') and pr.get('item') in INTRO:
-            pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
 
 
 # ---------------------------------------------------------------- write
@@ -612,7 +606,6 @@ PAVED = [OPEN[k] for k in ('fish market', 'laundry yard', 'garage', 'spire plaza
 
 
 def main():
-    add_intros()
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(ROOT, 'levels', FOLDER))
     ap.add_argument('--preview')

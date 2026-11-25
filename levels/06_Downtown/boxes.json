@@ -75,16 +75,7 @@
     "x": 1080,
     "y": 944,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Pepper Bombs",
-        "quantity": 5,
-        "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Pepper Bombs", "quantity": 5}}
   },
   {"symbol": "game objects/box", "x": 1100, "y": 944},
   {"symbol": "game objects/box", "x": 1192, "y": 1206},
@@ -97,16 +88,7 @@
     "x": 1300,
     "y": 1206,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Flamer",
-        "quantity": 60,
-        "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Flamer", "quantity": 60}}
   },
   {"symbol": "game objects/box", "x": 1320, "y": 1206},
   {"symbol": "game objects/box", "x": 1290, "y": 716},
@@ -147,16 +129,7 @@
     "x": 320,
     "y": 486,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Pepper Bombs",
-        "quantity": 5,
-        "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Pepper Bombs", "quantity": 5}}
   },
   {"symbol": "game objects/box", "x": 340, "y": 486},
   {"symbol": "game objects/box", "x": 1000, "y": 486},
@@ -198,16 +171,7 @@
     "x": 944,
     "y": 270,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Flamer",
-        "quantity": 60,
-        "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Flamer", "quantity": 60}}
   },
   {"symbol": "game objects/box", "x": 944, "y": 290},
   {"symbol": "game objects/box", "x": 1260, "y": 52},
@@ -246,15 +210,6 @@
     "x": 1412,
     "y": 600,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Pepper Bombs",
-        "quantity": 8,
-        "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Pepper Bombs", "quantity": 8}}
   }
 ]

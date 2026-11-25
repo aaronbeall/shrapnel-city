@@ -3,13 +3,7 @@
     "symbol": "game objects/powerup",
     "x": 210,
     "y": 1056,
-    "props": {
-      "type": "primary",
-      "item": "Flamer",
-      "quantity": 200,
-      "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Flamer", "quantity": 200}
   },
   {
     "symbol": "game objects/powerup",
@@ -39,25 +33,13 @@
     "symbol": "game objects/powerup",
     "x": 70,
     "y": 740,
-    "props": {
-      "type": "primary",
-      "item": "Flamer",
-      "quantity": 100,
-      "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Flamer", "quantity": 100}
   },
   {
     "symbol": "game objects/powerup",
     "x": 1090,
     "y": 900,
-    "props": {
-      "type": "secondary",
-      "item": "Pepper Bombs",
-      "quantity": 15,
-      "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Pepper Bombs", "quantity": 15}
   },
   {
     "symbol": "game objects/powerup",
@@ -81,25 +63,13 @@
     "symbol": "game objects/powerup",
     "x": 1420,
     "y": 1100,
-    "props": {
-      "type": "primary",
-      "item": "Flamer",
-      "quantity": 120,
-      "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Flamer", "quantity": 120}
   },
   {
     "symbol": "game objects/powerup",
     "x": 1270,
     "y": 730,
-    "props": {
-      "type": "secondary",
-      "item": "Pepper Bombs",
-      "quantity": 10,
-      "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Pepper Bombs", "quantity": 10}
   },
   {
     "symbol": "game objects/powerup",
@@ -117,13 +87,7 @@
     "symbol": "game objects/powerup",
     "x": 182,
     "y": 360,
-    "props": {
-      "type": "secondary",
-      "item": "Pepper Bombs",
-      "quantity": 10,
-      "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Pepper Bombs", "quantity": 10}
   },
   {
     "symbol": "game objects/powerup",
@@ -141,13 +105,7 @@
     "symbol": "game objects/powerup",
     "x": 1130,
     "y": 200,
-    "props": {
-      "type": "primary",
-      "item": "Flamer",
-      "quantity": 120,
-      "alertMessage": "FLAMER UNIT: a short, wide stream of fire. Hold it down and sweep. Swarms hate this.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Flamer", "quantity": 120}
   },
   {
     "symbol": "game objects/powerup",
@@ -159,12 +117,6 @@
     "symbol": "game objects/powerup",
     "x": 1540,
     "y": 70,
-    "props": {
-      "type": "secondary",
-      "item": "Pepper Bombs",
-      "quantity": 10,
-      "alertMessage": "PEPPER BOMBS: a spray of little bomblets. Pepper a pack before it reaches you.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Pepper Bombs", "quantity": 10}
   }
 ]
