@@ -21,4 +21,5 @@ function die(){
 	_root.stats.kills++;
 	_root.enemies.remove(this);
 	gotoAndPlay(2);
+	if(objective) objectiveDestroyed(this);
 }

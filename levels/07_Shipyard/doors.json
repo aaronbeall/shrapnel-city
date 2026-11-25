@@ -1,0 +1,5 @@
+[
+  {"symbol": "game objects/door", "x": 1442, "y": 526, "scale": [1, 1.1], "props": {"id": "door1"}},
+  {"symbol": "game objects/door", "x": 1690, "y": 786, "scale": [1, 1.1], "props": {"id": "door2"}},
+  {"symbol": "game objects/door", "x": 1290, "y": 482, "scale": [1, 1.1], "props": {"id": "door3"}}
+]

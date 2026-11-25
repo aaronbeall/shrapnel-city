@@ -38,12 +38,7 @@ function hit(damage, angle){
 		
 		onDie();
 		
-		// if all required boxes are destroyed, open exit
-		var i = _root.boxes.length;
-		while(i--)
-			if(_root.boxes[i].required != false)
-				return;
-		//if(!_root.boxes.length)
-			_screen.exit_mc.open();
+		// if all required boxes are destroyed (and every objective enemy), open exit
+		checkExit();
 	}
 }

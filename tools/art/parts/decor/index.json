@@ -2212,5 +2212,304 @@
    "w": 162,
    "h": 109
   }
+ ],
+ "city-docks": [
+  {
+   "file": "city-docks/00.png",
+   "w": 351,
+   "h": 138
+  },
+  {
+   "file": "city-docks/01.png",
+   "w": 268,
+   "h": 131
+  },
+  {
+   "file": "city-docks/02.png",
+   "w": 372,
+   "h": 135
+  },
+  {
+   "file": "city-docks/03.png",
+   "w": 73,
+   "h": 34
+  },
+  {
+   "file": "city-docks/04.png",
+   "w": 20,
+   "h": 42
+  },
+  {
+   "file": "city-docks/05.png",
+   "w": 22,
+   "h": 42
+  },
+  {
+   "file": "city-docks/06.png",
+   "w": 20,
+   "h": 41
+  },
+  {
+   "file": "city-docks/07.png",
+   "w": 116,
+   "h": 122
+  },
+  {
+   "file": "city-docks/08.png",
+   "w": 92,
+   "h": 107
+  },
+  {
+   "file": "city-docks/09.png",
+   "w": 89,
+   "h": 107
+  },
+  {
+   "file": "city-docks/10.png",
+   "w": 91,
+   "h": 107
+  },
+  {
+   "file": "city-docks/11.png",
+   "w": 85,
+   "h": 107
+  },
+  {
+   "file": "city-docks/12.png",
+   "w": 123,
+   "h": 110
+  },
+  {
+   "file": "city-docks/13.png",
+   "w": 115,
+   "h": 102
+  },
+  {
+   "file": "city-docks/14.png",
+   "w": 135,
+   "h": 132
+  },
+  {
+   "file": "city-docks/15.png",
+   "w": 133,
+   "h": 136
+  },
+  {
+   "file": "city-docks/16.png",
+   "w": 148,
+   "h": 133
+  },
+  {
+   "file": "city-docks/17.png",
+   "w": 142,
+   "h": 131
+  },
+  {
+   "file": "city-docks/18.png",
+   "w": 123,
+   "h": 121
+  },
+  {
+   "file": "city-docks/19.png",
+   "w": 122,
+   "h": 123
+  },
+  {
+   "file": "city-docks/20.png",
+   "w": 32,
+   "h": 33
+  },
+  {
+   "file": "city-docks/21.png",
+   "w": 112,
+   "h": 113
+  },
+  {
+   "file": "city-docks/22.png",
+   "w": 130,
+   "h": 136
+  },
+  {
+   "file": "city-docks/23.png",
+   "w": 135,
+   "h": 126
+  },
+  {
+   "file": "city-docks/24.png",
+   "w": 141,
+   "h": 124
+  },
+  {
+   "file": "city-docks/25.png",
+   "w": 128,
+   "h": 132
+  },
+  {
+   "file": "city-docks/26.png",
+   "w": 132,
+   "h": 124
+  },
+  {
+   "file": "city-docks/27.png",
+   "w": 250,
+   "h": 31
+  },
+  {
+   "file": "city-docks/28.png",
+   "w": 254,
+   "h": 30
+  },
+  {
+   "file": "city-docks/29.png",
+   "w": 251,
+   "h": 121
+  },
+  {
+   "file": "city-docks/30.png",
+   "w": 232,
+   "h": 115
+  }
+ ],
+ "city-ships": [
+  {
+   "file": "city-ships/00.png",
+   "w": 152,
+   "h": 148
+  },
+  {
+   "file": "city-ships/01.png",
+   "w": 135,
+   "h": 149
+  },
+  {
+   "file": "city-ships/02.png",
+   "w": 135,
+   "h": 150
+  },
+  {
+   "file": "city-ships/03.png",
+   "w": 159,
+   "h": 152
+  },
+  {
+   "file": "city-ships/04.png",
+   "w": 129,
+   "h": 120
+  },
+  {
+   "file": "city-ships/05.png",
+   "w": 127,
+   "h": 117
+  },
+  {
+   "file": "city-ships/06.png",
+   "w": 96,
+   "h": 100
+  },
+  {
+   "file": "city-ships/07.png",
+   "w": 134,
+   "h": 104
+  },
+  {
+   "file": "city-ships/08.png",
+   "w": 119,
+   "h": 104
+  },
+  {
+   "file": "city-ships/09.png",
+   "w": 97,
+   "h": 101
+  },
+  {
+   "file": "city-ships/10.png",
+   "w": 258,
+   "h": 114
+  },
+  {
+   "file": "city-ships/11.png",
+   "w": 240,
+   "h": 108
+  },
+  {
+   "file": "city-ships/12.png",
+   "w": 159,
+   "h": 89
+  },
+  {
+   "file": "city-ships/13.png",
+   "w": 159,
+   "h": 89
+  },
+  {
+   "file": "city-ships/14.png",
+   "w": 152,
+   "h": 89
+  },
+  {
+   "file": "city-ships/15.png",
+   "w": 116,
+   "h": 121
+  },
+  {
+   "file": "city-ships/16.png",
+   "w": 110,
+   "h": 117
+  },
+  {
+   "file": "city-ships/17.png",
+   "w": 111,
+   "h": 118
+  },
+  {
+   "file": "city-ships/18.png",
+   "w": 149,
+   "h": 87
+  },
+  {
+   "file": "city-ships/19.png",
+   "w": 140,
+   "h": 84
+  },
+  {
+   "file": "city-ships/20.png",
+   "w": 132,
+   "h": 86
+  },
+  {
+   "file": "city-ships/21.png",
+   "w": 152,
+   "h": 149
+  },
+  {
+   "file": "city-ships/22.png",
+   "w": 145,
+   "h": 145
+  },
+  {
+   "file": "city-ships/23.png",
+   "w": 117,
+   "h": 124
+  },
+  {
+   "file": "city-ships/24.png",
+   "w": 115,
+   "h": 124
+  },
+  {
+   "file": "city-ships/25.png",
+   "w": 136,
+   "h": 67
+  },
+  {
+   "file": "city-ships/26.png",
+   "w": 135,
+   "h": 66
+  },
+  {
+   "file": "city-ships/27.png",
+   "w": 134,
+   "h": 68
+  }
  ]
 }

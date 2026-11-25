@@ -1698,6 +1698,26 @@ class Editor {
         if (hasProps) badge('rgba(110,230,255,0.95)');
       });
     }
+    // objective enemies (the exit waits for them): a red target ring and their name
+    if (this.visible.enemies) {
+      ctx.lineWidth = 2 * px;
+      ctx.font = `bold ${10 * px}px system-ui, sans-serif`;
+      ctx.textBaseline = 'top';
+      this.list('enemies').forEach((e, k) => {
+        if (!isObjective(e)) return;
+        const [x0, y0, x1, y1] = this.boundsOf('enemies', k);
+        const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, r = Math.max(x1 - x0, y1 - y0) / 2 + 4 * px;
+        ctx.strokeStyle = 'rgba(0,0,0,0.6)'; ctx.beginPath(); ctx.arc(cx, cy, r + px, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = 'rgba(255,60,90,0.95)'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+        for (let i = 0; i < 4; i++) {
+          const a = i * Math.PI / 2;
+          ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * (r - 4 * px), cy + Math.sin(a) * (r - 4 * px)); ctx.lineTo(cx + Math.cos(a) * (r + 4 * px), cy + Math.sin(a) * (r + 4 * px)); ctx.stroke();
+        }
+        const t = 'objective' + (e.props.objectiveName ? ': ' + e.props.objectiveName : '');
+        ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(cx - ctx.measureText(t).width / 2 - 2 * px, cy + r + 2 * px, ctx.measureText(t).width + 4 * px, 13 * px);
+        ctx.fillStyle = 'rgba(255,120,140,1)'; ctx.textAlign = 'center'; ctx.fillText(t, cx, cy + r + 3 * px); ctx.textAlign = 'left';
+      });
+    }
     // triggers: who sends what (labels), lines to the doors they open (green) or close (red)
     if (this.visible.triggers) {
       const doors = new Map(this.list('doors').map((d, k) => [d.props && d.props.id, [d, k]]).filter(([id]) => id));
@@ -2086,6 +2106,7 @@ class Editor {
     return [
       this.briefingPanel(),
       this.triggerPanel(),
+      this.exitPanel(),
       this.statsPanel(),
       this.sizePanel(),
       this.newLevelPanel(),
@@ -2749,6 +2770,39 @@ class Editor {
       ...rows], { open: true, badge: String(rows.length) });
   }
 
+  // ---- what opens the exit: every required box and every objective enemy (checkExit in functionsLevel.as)
+  exitPanel() {
+    const boxes = this.list('boxes'), enemies = this.list('enemies');
+    const required = boxes.filter((b) => !(b.props && b.props.required === false));
+    const objectives = enemies.map((e, k) => [e, k]).filter(([e]) => isObjective(e));
+    const pick = (layer, k) => () => { this.tool = 'select'; this.tab = 'map'; this.visible[layer] = true; if (this.locked[layer]) delete this.locked[layer]; this.sel = { layer, k }; this.refreshPanel(); };
+    const where = (e) => `(${Math.round(e.x)}, ${Math.round(e.y)})`;
+    const setAll = (req) => this.change(['boxes.json'], () => {
+      for (const b of boxes) {
+        if (req) { if (b.props) { delete b.props.required; if (!Object.keys(b.props).length) delete b.props; } }
+        else b.props = { ...(b.props || {}), required: false };
+      }
+    });
+    const sel = this.sel && this.sel.layer === 'enemies' ? enemies[this.sel.k] : null;
+    const toggle = () => this.change(['enemies.json'], () => {
+      const e = enemies[this.sel.k];
+      if (isObjective(e)) { delete e.props.objective; delete e.props.objectiveName; if (!Object.keys(e.props).length) delete e.props; }
+      else e.props = { ...(e.props || {}), objective: true };
+    });
+    return this.section('exit', 'Exit', [
+      el('div', { class: 'le-tip' }, 'The exit opens when every required box is destroyed and every objective enemy is dead. Objectives show a red target ring on the map; each kill tells the player how many are left (objectiveName names it).'),
+      el('div', { class: 'le-stats' },
+        el('div', {}, `Required boxes: ${required.length} of ${boxes.length}`),
+        el('div', { class: 'le-row' },
+          el('button', { onclick: () => setAll(false), disabled: !required.length, title: 'set required: false on every box, so only objectives hold the exit shut' }, 'None required'),
+          el('button', { onclick: () => setAll(true), disabled: required.length === boxes.length, title: 'clear required on every box (the default: all required)' }, 'All required'))),
+      el('div', {}, `Objective enemies: ${objectives.length}`),
+      ...objectives.map(([e, k]) => el('div', { class: 'le-trig', onclick: pick('enemies', k), title: 'select it' }, el('b', {}, e.props.objectiveName || 'Target'), ` ${e.symbol.split('/').pop()} ${where(e)}`)),
+      sel ? el('button', { onclick: toggle }, isObjective(sel) ? 'Selected enemy: not an objective' : 'Make the selected enemy an objective') :
+        el('div', { class: 'le-tip' }, 'Select an enemy to make it an objective (or tick objective in its settings).'),
+    ], { open: true, badge: `${objectives.length} objective${objectives.length === 1 ? '' : 's'}` });
+  }
+
   statsPanel() {
     const L = this.L;
     const ammo = {};
@@ -2774,6 +2828,8 @@ class Editor {
 Object.assign(Editor.prototype, areaMethods);
 
 function round2(v) { return Math.round(v * 100) / 100; }
+// an enemy the exit waits for (props objective = true; first used by 07 Shipyard)
+function isObjective(e) { return !!(e && e.props && e.props.objective === true); }
 function layerLabel(key) { return (VIEW_LAYERS.find((l) => l.key === key) || { label: key }).label; }
 // small line icons for the layer rows
 const svg = (d) => { const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('viewBox', '0 0 16 16'); s.innerHTML = d; return s; };
