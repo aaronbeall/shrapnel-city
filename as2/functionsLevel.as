@@ -121,7 +121,6 @@ _global.endLevel = function(){
 	_root.boxes = [];
 	_root.enemies = [];
 	_root.powerups = [];
-	_root.alertsShown = {};
 	_root.shots = [];
 	_root.zones = [];
 	_root.triggers = [];
