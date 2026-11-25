@@ -150,7 +150,7 @@
     "visionRange": {
       "group": "vision",
       "type": "number",
-      "desc": "Max distance it can see the player (px); 0 = unlimited. The default (420) keeps enemies from firing from off screen; an enemy type can set its own default in its symbol script."
+      "desc": "Max distance it can see the player (px); 0 = unlimited. Empty = while it's on screen or within 100 px of the screen's edge, so nothing fires from far off screen. An enemy type can set its own default in its symbol script."
     },
     "autoVision": {
       "group": "vision",
