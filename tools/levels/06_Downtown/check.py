@@ -77,14 +77,14 @@ def main():
     l4 = shut({'door3'})
     if l4[int(ent['y']), int(ent['x'])] != l4[int(hive[2]['y']), int(hive[2]['x'])]: problems.append('hive 3 is not reachable with the gate square shut')
     if l4[int(ent['y']), int(ent['x'])] == l4[int(ext['y']), int(ext['x'])]: problems.append('the exit is reachable with the gate square shut')
-    # a quiet spawn: within the level's sightRange, at most a couple of enemies see the entrance
-    # (line of sight through anything but black wall, as the game's wallHitTest)
-    sight = json.load(open(os.path.join(D, 'level.json'))).get('sightRange', 420)
+    # a quiet spawn: within sight range, at most a couple of enemies see the entrance (line of
+    # sight through anything but black wall, as the game's wallHitTest)
+    sight = 420  # enemyTurret.as visionRange default
     wall = c == 0
     def seen(x0, y0, x1, y1):
         n = int(math.hypot(x1 - x0, y1 - y0) / 3) + 1
         return not any(wall[int(y0 + (y1 - y0) * k / n), int(x0 + (x1 - x0) * k / n)] for k in range(n + 1))
-    watchers = [e for e in enemies if not e['symbol'].endswith('fire barrel') and math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) < sight and seen(e['x'], e['y'], ent['x'], ent['y'])]
+    watchers = [e for e in enemies if not e['symbol'].endswith('fire barrel') and math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) < (e.get('props') or {}).get('visionRange', sight) and seen(e['x'], e['y'], ent['x'], ent['y'])]
     print(f"spawn: {len(watchers)} enemies see it: " + ', '.join(f"{e['symbol'].split('/')[-1]} ({e['x']:.0f}, {e['y']:.0f})" for e in watchers))
     if len(watchers) > MAX_WATCHERS: problems.append(f'{len(watchers)} enemies see the spawn (at most {MAX_WATCHERS})')
     print('\n'.join(problems) if problems else 'no problems found')
