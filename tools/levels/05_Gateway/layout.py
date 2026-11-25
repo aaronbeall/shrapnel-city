@@ -601,18 +601,15 @@ def list_json(items):
     return '[\n' + ',\n'.join('  ' + pretty(x, '  ') for x in items) + '\n]\n'
 
 
-# this level's new weapons and keycards: an intro message on every copy (pickups and drops);
-# alertOnce shows it only for the first one the player picks up
-INTRO = {'Spreader': 'SPREADER CANNON: six shots in a fan. Queue-jumping, now with crowd control.',
-         'Stun Bomb': 'STUN BOMBS: freeze anything electric for a few seconds. Everything here is electric.',
-         KEYS['yellow']: 'KEYCARD: it opens the door marked in its colour. Drive up to the door to use it.'}
+# intro messages: the weapons' are on their definitions (as2/player.as); the keycard's is the level's own
+INTRO = {KEYS['yellow']: 'KEYCARD: it opens the door marked in its colour. Drive up to the door to use it.'}
 
 
 def add_intros():
     props = [o['props'] for o in pick] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
     for pr in props:
-        if pr.get('type') in ('primary', 'secondary', 'key') and pr.get('item') in INTRO:
-            pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
+        if pr.get('type') == 'key' and pr.get('item') in INTRO:
+            pr.update(alertMessage=INTRO[pr['item']])
 
 
 def main():
