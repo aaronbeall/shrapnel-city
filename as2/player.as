@@ -51,7 +51,7 @@ onClipEvent(load){
 		{name:"Spreader", shot:"shot_mcSpreader", ammo:0, max:150, refire:8, spread:6, fullname:"Spreader Cannon", fire:6, key:2}, 
 		{name:"Hailstorm", shot:"shot_mcStorm", ammo:0, max:150, refire:1, spread:6, fullname:"Hailstorm Cannon", burst:3, burstReload:15, fire:6, key:2}, 
 		{name:"Hydra", shot:"shot_mcHydra", ammo:0, max:250, refire:5, spread:8, fullname:"Hydra Cannon", fire:6, key:2}, 
-		{name:"Pulse", shot:"shot_mcPulse", ammo:0, max:200, refire:4, spread:8, fullname:"Pulse Cannon", fire:6, key:2}, 
+		{name:"Pulse", shot:"shot_mcPulse", ammo:0, max:200, refire:4, spread:8, fullname:"Pulse Cannon", fire:6, key:2, intro:"PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind."}, 
 		{name:"Vendetta", shot:"shot_mcVendetta", ammo:0, max:250, refire:5, spread:8, fullname:"Vendetta Cannon", fire:5, key:2}, 
 		{name:"Auto Cannon", shot:"shot_mcAuto", ammo:0, max:250, refire:3, spread:8, fullname:"Auto Cannon", fire:5, key:2}, 
 		{name:"Flak", shot:"shot_mcFlak", ammo:0, max:50, refire:10, spread:4, fullname:"Flak Cannon", fire:5, key:3}, 
@@ -89,7 +89,7 @@ onClipEvent(load){
 		{name:"Smart Missile", shot:"shot_mcSmartMissile", ammo:0, max:5, refire:15, spread:2, key:9}, 
 		{name:"Mega Missile", shot:"shot_mcMega", ammo:0, max:1, refire:70, spread:2, key:9}, 
 		{name:"Synapse Bomb", shot:"shot_mcSynapse", ammo:0, max:1, refire:60, spread:10, key:7}, 
-		{name:"Shock Bomb", shot:"shot_mcShock", ammo:0, max:1, refire:60, spread:6, key:6}, 
+		{name:"Shock Bomb", shot:"shot_mcShock", ammo:0, max:1, refire:60, spread:6, key:6, intro:"SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd."}, 
 		{name:"Laser Bomb", shot:"shot_mcLaserBomb", ammo:0, max:5, refire:30, spread:2, key:0}, 
 		{name:"Laser Anhilator", shot:"shot_mcSuperLaserBomb", ammo:0, max:1, refire:30, spread:2, key:0},
 		{name:"Bunker Buster", shot:"shot_mcBuster", ammo:0, max:4, refire:40, spread:2, key:8}

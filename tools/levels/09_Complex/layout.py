@@ -584,19 +584,10 @@ def list_json(items):
 
 # this level's new weapons: an intro message on every copy (pickups and drops); alertOnce
 # shows it only for the first one the player picks up
-INTRO = {'Pulse': 'PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.',
-         'Shock Bomb': 'SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd.'}
-
-
-def add_intros():
-    props = [o['props'] for o in pick if 'type' in o.get('props', {})] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
-    for pr in props:
-        if pr.get('type') in ('primary', 'secondary') and pr.get('item') in INTRO:
-            pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
+# the new weapons' intro messages are on their definitions in as2/player.as (shown on first pickup)
 
 
 def main():
-    add_intros()
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(ROOT, 'levels', FOLDER))
     ap.add_argument('--preview')

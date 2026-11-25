@@ -5,17 +5,7 @@
     "symbol": "game objects/box",
     "x": 510,
     "y": 1678,
-    "props": {
-      "required": false,
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Pulse",
-        "quantity": 30,
-        "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
-        "alertOnce": true
-      }
-    },
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "primary", "item": "Pulse", "quantity": 30}},
     "scale": 1.29
   },
   {"symbol": "game objects/box", "x": 530, "y": 1678, "props": {"required": false}},
@@ -65,17 +55,7 @@
     "symbol": "game objects/box",
     "x": 912,
     "y": 1290,
-    "props": {
-      "required": false,
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Pulse",
-        "quantity": 30,
-        "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
-        "alertOnce": true
-      }
-    },
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "primary", "item": "Pulse", "quantity": 30}},
     "scale": 1.29
   },
   {"symbol": "game objects/box", "x": 912, "y": 1310, "props": {"required": false}},
@@ -130,13 +110,7 @@
     "props": {
       "required": false,
       "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Shock Bomb",
-        "quantity": 1,
-        "alertMessage": "SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd.",
-        "alertOnce": true
-      }
+      "powerupDrop": {"type": "secondary", "item": "Shock Bomb", "quantity": 1}
     },
     "scale": 1.29
   },
@@ -163,17 +137,7 @@
     "symbol": "game objects/box",
     "x": 1330,
     "y": 1408,
-    "props": {
-      "required": false,
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Pulse",
-        "quantity": 30,
-        "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
-        "alertOnce": true
-      }
-    },
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "primary", "item": "Pulse", "quantity": 30}},
     "scale": 1.29
   },
   {"symbol": "game objects/box", "x": 1350, "y": 1408, "props": {"required": false}},
@@ -218,17 +182,7 @@
     "symbol": "game objects/box",
     "x": 790,
     "y": 1010,
-    "props": {
-      "required": false,
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Pulse",
-        "quantity": 30,
-        "alertMessage": "PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind.",
-        "alertOnce": true
-      }
-    },
+    "props": {"required": false, "health": 25, "powerupDrop": {"type": "primary", "item": "Pulse", "quantity": 30}},
     "scale": 1.29
   },
   {"symbol": "game objects/box", "x": 270, "y": 400, "props": {"required": false}},
@@ -254,13 +208,7 @@
     "props": {
       "required": false,
       "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Shock Bomb",
-        "quantity": 1,
-        "alertMessage": "SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd.",
-        "alertOnce": true
-      }
+      "powerupDrop": {"type": "secondary", "item": "Shock Bomb", "quantity": 1}
     },
     "scale": 1.29
   },
