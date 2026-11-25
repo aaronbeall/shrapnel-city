@@ -9,7 +9,7 @@ Reads the level files (so it checks hand edits too) and reports:
 - anything the player can't reach from the entrance (with the checkpoint gate open), and
   whether the exit is shut off while the gate is closed
 - density per 100k px of open floor, to compare with the earlier levels
-- how many enemies can see the spawn (within level.json sightRange, line of sight over
+- how many enemies can see the spawn (within the turrets' default visionRange, line of sight over
   chasms): a couple is a hot start, more is a crowd
 """
 import json
@@ -80,7 +80,7 @@ def main():
     lab2, _ = ndi.label(w2)
     if lab2[int(ent['y']), int(ent['x'])] == lab2[int(ext['y']), int(ext['x'])]: problems.append('the exit is reachable with the gate shut')
     # the spawn: a couple of enemies in sight is a hot start, more is a crowd
-    rng_ = json.load(open(os.path.join(D, 'level.json'))).get('sightRange', 420)
+    rng_ = 420   # enemyTurret.as's default visionRange
     wall = c <= 0x10   # chasm doesn't block sight
 
     def sees(x, y):

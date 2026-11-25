@@ -555,7 +555,7 @@ def main():
         'boxes.json': list_json(boxes),
         'powerups.json': list_json(pick),
         'doors.json': list_json(doors),
-        # no vision zones: enemies see by level.json sightRange and line of sight
+        # no vision zones: enemies see by their visionRange (default 420) and line of sight
         'vision.json': '[]\n',
     }
     for name, text in files.items():
@@ -563,7 +563,7 @@ def main():
     lj = os.path.join(a.out, 'level.json')
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
-    settings.setdefault('sightRange', 420)          # how far enemies outside any vision zone can see
+    settings.pop('sightRange', None)                # sight range is an enemy setting (visionRange) now
     # the city art kit; paved = areas with paving all over instead of road (plaza, courtyards, exit square)
     settings.setdefault('art', {'kit': 'city', 'seed': 404})
     settings['art'].setdefault('paved', [[num(v) for v in r] for r in PAVED])
