@@ -16,10 +16,17 @@ switch(type){
 		icons_mc.gotoAndStop(_player.wepByName(2, item).id + 1);
 		break;
 	case "trigger":
+	case "lock":
 		gotoAndStop(1);
 		break;
 	default:
 		gotoAndStop(item || 1);
+}
+
+// keycard names as the HUD inventory shows them
+function keyLabel(name){
+	var c = name.split("Key").join("");
+	return c.charAt(0).toUpperCase() + c.substr(1) + " Keycard";
 }
 
 // pickup the powerup
@@ -102,6 +109,35 @@ if(!pickup){
 				trigger(item);
 				break;
 			
+			// keycard: goes into the HUD inventory (item is its inventory name, e.g. "redKey")
+			case "key":
+				_inventory.addItem(item, keyLabel(item), this);
+				notify(this, keyLabel(item));
+				break;
+			
+			// keycard lock: an invisible pad by a door. With the keycard in the inventory the
+			// card flies to the pad and is used up, then the pad sends its unlock trigger
+			// (e.g. "door1:open"); without it, a notification says which card is needed
+			case "lock":
+				pickedup = false;
+				if(unlocking)
+					break;
+				if(_inventory.hasItem(item)){
+					unlocking = true;
+					registerTrigger(this, "use:" + item);
+					onTrigger = function(trig){
+						if(trig == "use:" + item && unlocking){
+							unlocking = false;
+							trigger(unlock);
+							_root.powerups.remove(this);
+							this.kill();
+						}
+					}
+					_inventory.useItem(item, this);
+				}else if(!isOver)
+					notify(this, keyLabel(item) + " required");
+				break;
+			
 			/*// changing zones
 			case "zoneWarp":
 				changeZone(item);
@@ -118,7 +154,12 @@ if(!pickup){
 		
 		// messages and notifications
 		if(alertNotification) notify(this, alertNotification);
+		// a weapon's intro (its definition's intro, in player.as) shows the first time the player
+		// picks one up; a pickup's own alertMessage replaces it
+		var wep = (type == "primary") ? p.wepByName(1, item) : (type == "secondary") ? p.wepByName(2, item) : null;
 		if(alertMessage) showMessage(alertMessage, alertKillTrigger||{onRollOut:this, linger:alertLinger});
+		else if(wep && wep.intro && !wep.introShown) showMessage(wep.intro, {onRollOut:this, linger:alertLinger});
+		if(wep) wep.introShown = true;
 		
 		// remove powerup if its been used
 		if(pickedup){

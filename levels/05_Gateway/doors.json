@@ -1,0 +1,26 @@
+[
+  {
+    "symbol": "game objects/door",
+    "x": 720,
+    "y": 1140,
+    "matrix": [0, 1, -1, 0],
+    "color": {"multiply": [0.55, 0.55, 0.55, 1], "add": [114, 94, 18, 0]},
+    "props": {"id": "door1"}
+  },
+  {
+    "symbol": "game objects/door",
+    "x": 1250,
+    "y": 700,
+    "matrix": [0, 1, -1, 0],
+    "color": {"multiply": [0.55, 0.55, 0.55, 1], "add": [18, 63, 114, 0]},
+    "props": {"id": "door2"}
+  },
+  {
+    "symbol": "game objects/door",
+    "x": 172,
+    "y": 320,
+    "matrix": [0, 1, -1, 0],
+    "color": {"multiply": [0.55, 0.55, 0.55, 1], "add": [108, 18, 18, 0]},
+    "props": {"id": "door3"}
+  }
+]

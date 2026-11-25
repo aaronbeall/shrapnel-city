@@ -8,6 +8,7 @@ import { LevelApplier, restartLevel, showBriefing } from './apply.js';
 import { CollisionMap, COLOURS } from './collision.js';
 import { ShapeStack, isPixels, MODES, gameClass, greyOf } from './shapes.js';
 import { renderPreview } from './preview.js';
+import { areaMethods } from './areas.js';
 import { parsePath, pathString, fromPoints, isPolygon, clone, curveCount, segEnds, nearestSeg, insertNode, removeNodes, nodeHandles, isSmooth, toggleSmooth, oppositeHandle, moveNodes } from './path.js';
 import { DEPTH, LAYERS, isRef, isTrigger, triggerNames, zonePath, zoneColour, briefingJSON } from '../../tools/levels/compile.mjs';
 import { pretty } from '../../tools/flash-source/format.mjs';
@@ -35,7 +36,12 @@ const VIEW_LAYERS = [
 const TRIGGER_EVENTS = { powerups: ['onPickup', 'when picked up'], boxes: ['onDie', 'when destroyed'], enemies: ['onDie', 'when killed'] };
 // ready-made placements offered in the palette beside the symbols
 const PRESETS = {
-  powerups: [{ label: 'trigger pad', symbol: 'game objects/powerup', props: { type: 'trigger', item: '' } }],
+  powerups: [
+    { label: 'trigger pad', symbol: 'game objects/powerup', props: { type: 'trigger', item: '' } },
+    // keycards: a key goes into the inventory; its lock pad (by a door) uses it up and sends unlock
+    { label: 'keycard', symbol: 'game objects/powerup', props: { type: 'key', item: 'yellowKey' } },
+    { label: 'keycard lock pad', symbol: 'game objects/powerup', props: { type: 'lock', item: 'yellowKey', unlock: 'door1:open' } },
+  ],
 };
 const AUTO_VISION_ANGLES = 90, LOS_SAMPLE_SIZE = 15; // as2/enemyTurret.as
 const NODE_LOS_SAMPLE = 10; // as2/pathNode.as
@@ -475,6 +481,7 @@ class Editor {
     if (mod && k === 'y') { e.preventDefault(); this.undo(true); return; }
     if (mod && k === 's') { e.preventDefault(); this.save(); return; }
     if (mod && k === 'd') { e.preventDefault(); this.duplicate(); return; }
+    if (mod && k === 'g') { e.preventDefault(); if (e.shiftKey) this.ungroupShapes(); else this.groupShapes(); return; }
     if (mod && (e.code === 'BracketRight' || e.code === 'BracketLeft')) { // collision shapes up / down the stack
       e.preventDefault();
       const up = e.code === 'BracketRight';
@@ -483,6 +490,7 @@ class Editor {
     }
     if (mod) return;
     if (e.key === 'Shift') this.shiftDown = true;
+    if (this.areaKey(e)) { e.preventDefault(); return; }
     const arrow = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
     if (arrow && this.selPoints().length) { e.preventDefault(); this.nudgePoints(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
     if (arrow) { e.preventDefault(); if (this.sel) this.nudge(arrow[0] * (e.shiftKey ? 10 : 1), arrow[1] * (e.shiftKey ? 10 : 1)); return; }
@@ -563,6 +571,7 @@ class Editor {
       this.drag = { kind: 'pan', sx, sy, ox: this.view.ox, oy: this.view.oy };
       return;
     }
+    if (this.areaMouseDown(e, x, y)) return; // a kit area list picked in the Art tab takes the map
     const t = this.tool;
     if (t !== 'select' && !this.toolReady()) return;
     if (t === 'select') {
@@ -642,6 +651,7 @@ class Editor {
     const d = this.drag;
     if (!d) return;
     if (d.kind === 'pan') { this.view.ox = d.ox + sx - d.sx; this.view.oy = d.oy + sy - d.sy; }
+    else if (this.areaMouseMove(e, x, y)) return;
     else if (d.kind === 'move') {
       const p0 = d.starts[d.starts.length - 1]; // the primary (the one clicked)
       let nx = p0.x + x - d.x, ny = p0.y + y - d.y;
@@ -688,6 +698,7 @@ class Editor {
     const d = this.drag;
     this.drag = null;
     if (!d) return;
+    if (this.areaMouseUp(d)) return;
     if ((d.kind === 'points' || d.kind === 'handle') && d.moved) {
       this.pushUndo({ type: 'data', level: this.index, before: d.before, after: this.snapshot(), files: [d.file] });
       this.markDirty(d.file);
@@ -1153,14 +1164,106 @@ class Editor {
       if (dir > 0) for (let i = idx.length - 1; i >= 0; i--) { if (order[i].on) step(i); }
       else for (let i = 0; i < idx.length; i++) { if (order[i].on) step(i); }
     }
+    this.applyShapeOrder(order);
+  }
+
+  // put the stack in a new order (entries {e: shape, k: its old index}), running fn in the same
+  // undo step, and keep the same shapes selected
+  applyShapeOrder(order, fn) {
+    const list = this.list('collision');
     const primary = this.sel;
-    this.change(['collision.json'], () => { list.splice(0, list.length, ...order.map((x) => x.e)); }, { reload: false });
     const at = new Map(order.map((x, i) => [x.k, i]));
+    this.change(['collision.json'], () => { list.splice(0, list.length, ...order.map((x) => x.e)); if (fn) fn(); }, { reload: false });
     this.selection = this.selection.map((s) => (s.layer === 'collision' ? { layer: 'collision', k: at.get(s.k) } : s));
     if (primary && primary.layer === 'collision') { // keep the primary last
       const p = this.selection.findIndex((s) => s.layer === 'collision' && s.k === at.get(primary.k));
       if (p >= 0) this.selection.push(...this.selection.splice(p, 1));
     }
+    this.refreshPanel();
+  }
+
+  // ------------------------------------------------------------------ shape groups
+  // A group is a name on its shapes ("group"); the stack folds each run of consecutive shapes
+  // with the same name into one row. Grouping, joining and leaving move shapes so each group
+  // stays one run: they gather just above the topmost picked shape (above the rest of its own
+  // group, if it's in one), so the paint order changes no more than that.
+  pickedShapes() { return [...new Set(this.selItems().filter((s) => s.layer === 'collision').map((s) => s.k))].sort((a, b) => a - b); }
+  shapeGroups() { return [...new Set(this.list('collision').map((s) => s.group).filter(Boolean))]; }
+  // the indices of the run of same-group shapes that k is in, bottom first
+  groupRun(k) {
+    const list = this.list('collision'), g = list[k] && list[k].group;
+    if (!g) return [k];
+    let a = k, b = k;
+    while (a > 0 && list[a - 1].group === g) a--;
+    while (b < list.length - 1 && list[b + 1].group === g) b++;
+    return Array.from({ length: b - a + 1 }, (_, i) => a + i);
+  }
+  newGroupName() {
+    const used = new Set(this.shapeGroups());
+    let n = 1;
+    while (used.has(`group ${n}`)) n++;
+    return `group ${n}`;
+  }
+
+  // move the shapes ks to just above index top (and above the rest of top's group), then name
+  // their group g (or none)
+  gatherShapes(ks, top, g) {
+    const list = this.list('collision'), on = new Set(ks);
+    const run = this.groupRun(top);
+    const end = Math.max(top, ...run.filter((j) => !on.has(j)));
+    const entries = list.map((e, k) => ({ e, k }));
+    const order = [...entries.filter((x) => x.k <= end && !on.has(x.k)), ...entries.filter((x) => on.has(x.k)), ...entries.filter((x) => x.k > end && !on.has(x.k))];
+    const moved = ks.map((k) => list[k]);
+    this.applyShapeOrder(order, () => { for (const s of moved) { if (g) s.group = g; else delete s.group; } });
+  }
+
+  // Ctrl+G: the selected shapes become a new group
+  groupShapes() {
+    const ks = this.pickedShapes();
+    if (!ks.length) { this.status('Select the shapes to group first.', true); return; }
+    const g = this.newGroupName();
+    this.gatherShapes(ks, ks[ks.length - 1], g);
+    this.renamingGroup = g; // its row opens for a name
+    this.refreshPanel();
+    this.status(`Grouped ${ks.length} shape${ks.length === 1 ? '' : 's'} as "${g}".`);
+  }
+
+  // Ctrl+Shift+G: the selected shapes leave their groups; any that leave part of a group behind
+  // move just above it, so what's left stays together
+  ungroupShapes() {
+    const list = this.list('collision'), on = new Set(this.pickedShapes().filter((k) => list[k].group));
+    if (!on.size) { this.status('None of the selected shapes are in a group.', true); return; }
+    const order = [];
+    for (let k = 0; k < list.length;) {
+      const run = this.groupRun(k);
+      order.push(...run.filter((j) => !on.has(j)), ...run.filter((j) => on.has(j)));
+      k = run[run.length - 1] + 1;
+    }
+    const left = [...on].map((k) => list[k]);
+    this.applyShapeOrder(order.map((k) => ({ e: list[k], k })), () => { for (const s of left) delete s.group; });
+    this.status(`Took ${on.size} shape${on.size === 1 ? '' : 's'} out of ${on.size === 1 ? 'its group' : 'their groups'}.`);
+  }
+
+  // put shape k in group g ('' for none): it joins the topmost run of that name
+  setShapeGroup(k, g) {
+    const list = this.list('collision');
+    g = (g || '').trim();
+    if ((list[k].group || '') === g) return;
+    if (!g) { this.selection = [{ layer: 'collision', k }]; this.ungroupShapes(); return; }
+    let top = -1;
+    for (let j = list.length - 1; j >= 0; j--) if (j !== k && list[j].group === g) { top = j; break; }
+    if (top < 0) this.change(['collision.json'], () => { list[k].group = g; }, { reload: false });
+    else this.gatherShapes([k], top, g);
+  }
+
+  // rename the run ks
+  renameGroup(ks, name) {
+    const list = this.list('collision'), old = list[ks[0]].group;
+    name = (name || '').trim();
+    this.renamingGroup = null;
+    if (!name || name === old) { this.refreshPanel(); return; }
+    this.change(['collision.json'], () => { for (const k of ks) list[k].group = name; }, { reload: false });
+    if (this.openShapeGroups.has(old)) this.openShapeGroups.add(name);
     this.refreshPanel();
   }
 
@@ -1196,6 +1299,7 @@ class Editor {
       el('button', { class: 'le-icon' + (s.locked ? ' on' : ''), title: s.locked ? 'unlock' : 'lock: can\'t be selected on the map or edited', onclick: () => this.setShapeFlag([k], 'locked', !s.locked) }, s.locked ? ICON.lock : ICON.unlock),
       swatch(s), el('span', { class: 'le-name', onclick: (e) => pick([k], e) }, s.name || `shape ${k + 1}`));
     // top first
+    let renaming = 0;
     for (let k = list.length - 1; k >= 0;) {
       const g = list[k].group;
       if (!g) { rows.append(row(list[k], k, false)); k--; continue; }
@@ -1205,10 +1309,16 @@ class Editor {
       rows.append(el('div', { class: 'le-shape group' + (ks.every((j) => selected.has(j)) ? ' on' : '') },
         el('button', { class: 'le-icon' + (shown ? ' on' : ''), title: shown ? 'hide them all' : 'show them all', onclick: () => this.setShapeFlag(ks, 'hidden', !!shown) }, shown ? ICON.eye : ICON.eyeOff),
         el('button', { class: 'le-icon', title: open ? 'fold' : 'unfold', onclick: () => { this.openShapeGroups[open ? 'delete' : 'add'](g); this.refreshPanel(); } }, open ? '▾' : '▸'),
-        el('span', { class: 'le-name', title: 'click to select them all', onclick: (e) => pick(ks, e) }, `${g} `, el('small', {}, `${shown}/${ks.length} shown`))));
+        this.renamingGroup === g && !renaming++
+          ? el('input', { class: 'le-name le-rename', value: g, title: 'Enter renames the group, Esc keeps its name',
+            onkeydown: (ev) => { if (ev.key === 'Enter') ev.target.blur(); if (ev.key === 'Escape') { ev.target.value = g; ev.target.blur(); } },
+            onblur: (ev) => { if (this.renamingGroup === g) this.renameGroup(ks, ev.target.value); } })
+          : el('span', { class: 'le-name', title: 'click to select them all, double-click to rename', onclick: (e) => pick(ks, e), ondblclick: () => { this.renamingGroup = g; this.refreshPanel(); } }, `${g} `, el('small', {}, `${shown}/${ks.length} shown`))));
       if (open) for (const j of ks) rows.append(row(list[j], j, true));
     }
-    const any = selected.size > 0;
+    const field = rows.querySelector('input.le-rename');
+    if (field) setTimeout(() => { if (field.isConnected) { field.focus(); field.select(); } });
+    const any = selected.size > 0, grouped = [...selected].some((k) => list[k] && list[k].group);
     box.append(rows,
       el('div', { class: 'le-row' },
         el('button', { disabled: !any, title: 'to the top (Ctrl+Shift+])', onclick: () => this.reorderShapes(Infinity) }, '⤒'),
@@ -1218,6 +1328,10 @@ class Editor {
         el('button', { disabled: !any, title: 'delete the selected shapes', onclick: () => this.deleteSel() }, '✕'),
         el('span', { class: 'le-grow' }),
         el('button', { title: 'a new empty pixel layer on top for Pencil, Eraser and Fill', onclick: () => { this.sel = null; this.pixelTarget(); } }, '+ Pixels')),
+      el('div', { class: 'le-row' },
+        el('button', { disabled: !any, title: 'make the selected shapes a new group, gathered at the topmost one (Ctrl+G)', onclick: () => this.groupShapes() }, 'Group'),
+        el('button', { disabled: !grouped, title: 'take the selected shapes out of their groups (Ctrl+Shift+G)', onclick: () => this.ungroupShapes() }, 'Ungroup'),
+        el('span', { class: 'le-tip' }, 'double-click a group to rename it')),
       el('div', { class: 'le-row' },
         el('label', { title: 'bake the shapes into collision.png as you edit them; off, the map only changes when you press Bake collision' },
           el('input', { type: 'checkbox', checked: this.autoBake, onchange: (ev) => { this.autoBake = ev.target.checked; if (this.autoBake && this.shapesAhead) this.bakeCollision(); else this.refreshPanel(); } }), ' Bake as I edit'),
@@ -1241,7 +1355,11 @@ class Editor {
       el('div', { class: 'le-row' },
         el('label', {}, el('input', { type: 'checkbox', checked: !s.hidden, onchange: (ev) => this.setShapeFlag([k], 'hidden', !ev.target.checked) }), ' baked'),
         el('label', {}, el('input', { type: 'checkbox', checked: !!s.locked, onchange: (ev) => this.setShapeFlag([k], 'locked', ev.target.checked) }), ' locked'),
-        s.group ? el('small', {}, ` in "${s.group}"`) : ''),
+        ''),
+      el('label', { class: 'le-set', title: 'pick or type a group to move it into (it joins the top of that group), or clear it to take it out' }, el('span', { class: 'le-set-name' }, 'group'),
+        el('input', { value: s.group || '', list: 'le-shape-groups', placeholder: 'none', onchange: (ev) => this.setShapeGroup(k, ev.target.value), onkeydown: (ev) => { if (ev.key === 'Enter') ev.target.blur(); } }),
+        el('datalist', { id: 'le-shape-groups' }, ...this.shapeGroups().map((g) => el('option', { value: g }))),
+        s.group ? el('button', { title: 'take it out of the group', onclick: () => this.setShapeGroup(k, '') }, '✕') : ''),
       isPixels(s) || s.locked ? '' : this.zonePointsPanel(s));
   }
 
@@ -1790,6 +1908,7 @@ class Editor {
       }
     }
     this.drawZonePoints(ctx, px);
+    this.drawAreas(ctx, px);
     // tool previews
     const m = this.mouse;
     const fillCol = (c, a) => `rgba(${COLOURS[c].join(',')},${a})`;
@@ -2174,6 +2293,7 @@ class Editor {
         num('rotation', t.rot, (v) => setTransform(e, v, t.sx, t.sy))),
       el('label', { class: 'le-set' }, el('span', { class: 'le-set-name' }, 'name'), el('input', { value: e.name || '', placeholder: 'none', onchange: (ev) => this.change([file], () => { if (ev.target.value) e.name = ev.target.value; else delete e.name; }) })));
     if (layer === 'pathNodes') box.append(this.nodeRows(k));
+    else box.append(this.tintRow(e, file));
     box.append(...this.triggerRows(layer, e));
     {
       const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
@@ -2260,11 +2380,31 @@ class Editor {
     }
     const only = this.placeOnly ||= new Set(DECOR_TYPES);
     const all = only.size === DECOR_TYPES.length;
+    // the kits, their grades and their area lists (tools/art/kits.json)
+    const kits = this.kitSchema() || { [art.kit]: {} }, kit = kits[art.kit] || {};
+    const grades = Object.entries(kit.grades || {}), areas = Object.entries(kit.areas || {});
     box.append(
-      el('div', { class: 'le-row' }, 'Kit ', el('select', { title: 'the tile set: floor, wall and chasm textures and the decor sheets (tools/art/parts)', onchange: (ev) => setArt({ kit: ev.target.value }) },
-        ...['bridge', 'city'].map((kit) => el('option', { value: kit, selected: art.kit === kit }, kit))),
+      el('div', { class: 'le-row' }, 'Kit ', el('select', { title: 'the tile set: floor, wall and chasm textures and the decor sheets (tools/art/parts, kits listed in tools/art/kits.json)', onchange: (ev) => { this.setAreaEdit(null); setArt({ kit: ev.target.value }); } },
+        ...Object.entries(kits).map(([key, k]) => el('option', { value: key, selected: art.kit === key, title: k.tip || '' }, k.label || key))),
         ' Seed ', el('input', { type: 'number', step: 1, value: art.seed, style: 'width: 6em', title: 'picks the decor layout and the floor grain', onchange: (ev) => { const v = Math.round(+ev.target.value); if (isFinite(v)) setArt({ seed: v }); } }),
         el('button', { title: 'a new random seed (then Re-place decor to use it)', onclick: () => setArt({ seed: 1 + Math.floor(Math.random() * 9999) }) }, '🎲')),
+      grades.length ? el('div', { class: 'le-row' }, 'Grade ', el('select', { title: 'the colour grade over the finished art (level.json art.grade); takes effect on the next Bake art', onchange: (ev) => setArt({ grade: ev.target.value || undefined }) },
+        el('option', { value: '', selected: !art.grade }, `default (${kit.defaultGrade})`),
+        ...grades.map(([g, o]) => el('option', { value: g, selected: art.grade === g, title: o.tip || '' }, g)),
+        ...(art.grade && !(kit.grades || {})[art.grade] ? [el('option', { value: art.grade, selected: true }, art.grade + ' (unknown)')] : [])),
+        art.grade && (kit.grades || {})[art.grade] && kit.grades[art.grade].tip ? el('small', {}, ' ' + kit.grades[art.grade].tip) : '') : '',
+      ...areas.map(([key, a]) => {
+        const n = Array.isArray(art[key]) ? art[key].length : 0, on = this.areaEdit === key;
+        return el('div', { class: 'le-row', title: (a.tip || '') + ` (level.json art.${key}, ${a.shape === 'polygon' ? 'polygons' : 'rectangles'}; the bake reads them)` },
+          el('label', {}, el('input', { type: 'checkbox', checked: on, onchange: (ev) => this.setAreaEdit(ev.target.checked ? key : null) }), ` ${a.label || key} `),
+          el('span', { style: `display:inline-block;width:.8em;height:.8em;background:${a.colour || '#e0b040'};margin-right:.4em` }),
+          el('small', {}, `${n} ${a.shape === 'polygon' ? (n === 1 ? 'polygon' : 'polygons') : n === 1 ? 'box' : 'boxes'}`),
+          on && this.areaSel != null && art[key] && art[key][this.areaSel] ? el('button', { onclick: () => { this.writeAreas(key, art[key].filter((_, i) => i !== this.areaSel)); this.areaSel = null; this.refreshPanel(); } }, 'Delete') : '');
+      }),
+      this.areaEdit && areas.some(([k]) => k === this.areaEdit) ? el('div', { class: 'le-tip' }, (kit.areas[this.areaEdit].shape === 'polygon'
+        ? 'On the map: click corners on empty floor to draw one (click the first corner or Enter to close), drag one to move it, drag a corner to move it, Alt+click a corner to remove it.'
+        : 'On the map: drag on empty floor to draw one, drag one to move it, drag a corner to resize it.') + ' Delete removes the selected one, Esc stops editing, Shift snaps. Takes effect on the next Bake art.') : '',
+      this.areaRows(el, art),
       el('div', { class: 'le-row' },
         btn('Bake art', 'bake', 'Save, then redraw background.png from collision.png and decor.json as they are (collision shapes aren\'t re-baked)'),
         this.shapesAhead ? el('button', { disabled: off, class: 'le-hot', title: 'the collision shapes changed since collision.png was baked: bake them into it first, then the art', onclick: () => { if (this.bakeCollision()) this.runArt('bake'); } }, 'Bake collision + art') : ''),
@@ -2496,6 +2636,26 @@ class Editor {
     return (this.L[key] || []).length;
   }
 
+  // the instance's colour tint (its Flash colour transform: multiply by 1 - amount, add colour × amount),
+  // e.g. 05 Gateway's keycard doors in their key's colour
+  tintRow(e, file) {
+    const c = e.color, m = c && c.multiply, a = c && c.add;
+    const plain = !c || (m && m.slice(0, 3).every((v) => v === m[0]) && m[3] === 1 && (!a || a[3] === 0));
+    const amt = c && plain ? round2(1 - (m ? m[0] : 1)) : 0;
+    const rgb = c && plain && a && amt > 0 ? a.slice(0, 3).map((v) => Math.max(0, Math.min(255, Math.round(v / amt)))) : [255, 255, 255];
+    const hex = '#' + rgb.map((v) => v.toString(16).padStart(2, '0')).join('');
+    const set = (h, t) => this.change([file], () => {
+      if (!(t > 0)) { delete e.color; return; }
+      const col = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+      e.color = { multiply: [round2(1 - t), round2(1 - t), round2(1 - t), 1], add: col.map((v) => Math.round(v * t)).concat(0) };
+    });
+    if (c && !plain) return el('div', { class: 'le-row', title: 'a colour transform the tint row can\'t show; edit it in the level\'s JSON' }, 'Tint: custom colour transform ', el('button', { onclick: () => set(hex, 0) }, 'Clear'));
+    return el('div', { class: 'le-row', title: 'tints it toward a colour (its colour transform); amount 0 is none' }, 'Tint ',
+      el('input', { type: 'color', value: hex, onchange: (ev) => set(ev.target.value, amt || 0.45) }),
+      ' amount ', el('input', { type: 'number', min: 0, max: 1, step: 0.05, value: amt, style: 'width: 5em', onchange: (ev) => { const t = +ev.target.value; if (isFinite(t)) set(hex, Math.max(0, Math.min(1, t))); } }),
+      c ? el('button', { onclick: () => set(hex, 0) }, 'Clear') : '');
+  }
+
   nodeRows(k) {
     const e = this.list('pathNodes')[k];
     const pinned = e.props && e.props.connections !== undefined;
@@ -2719,6 +2879,8 @@ class Editor {
 }
 
 // ---------------------------------------------------------------------------- helpers
+Object.assign(Editor.prototype, areaMethods);
+
 function round2(v) { return Math.round(v * 100) / 100; }
 function layerLabel(key) { return (VIEW_LAYERS.find((l) => l.key === key) || { label: key }).label; }
 // small line icons for the layer rows
@@ -2998,6 +3160,7 @@ const CSS = `
 #level-editor .le-shape.on { background: rgba(46,230,255,0.18); }
 #level-editor .le-shape.hidden .le-name { opacity: 0.5; }
 #level-editor .le-shape.group .le-name { font-style: italic; }
+#level-editor .le-shape input.le-rename { min-width: 0; font: inherit; font-style: italic; padding: 0 2px; }
 #level-editor .le-shape .le-name { flex: 1; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #level-editor .le-mode { width: 14px; text-align: center; color: var(--c, #9ab); text-shadow: 0 0 1px #8aa; }
 #level-editor .le-hot { border-color: #fc6 !important; color: #fc6; }

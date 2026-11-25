@@ -1101,5 +1101,6 @@
   "player assets/player ship/shape 4": 1100,
   "player assets/player ship": 1101,
   "player assets/player ship firing": 1102,
-  "enemy assets/enemy scout": 1103
+  "enemy assets/enemy scout": 1103,
+  "enemy assets/enemy warden": 1500
 }

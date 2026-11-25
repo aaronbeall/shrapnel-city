@@ -1,0 +1,159 @@
+[
+  {
+    "symbol": "game objects/powerup",
+    "x": 130,
+    "y": 1529,
+    "props": {
+      "type": "primary",
+      "item": "Spreader",
+      "quantity": 60
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 150,
+    "y": 1608,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1380,
+    "y": 1575,
+    "props": {
+      "type": "primary",
+      "item": "Spreader",
+      "quantity": 40
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1370,
+    "y": 1400,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 520,
+    "y": 1260,
+    "props": {"type": "primary", "item": "Bolter", "quantity": 40}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 900,
+    "y": 1570,
+    "props": {"type": "secondary", "item": "Carbon Bomb", "quantity": 2}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 90,
+    "y": 760,
+    "props": {"type": "key", "item": "blueKey", "quantity": 1}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 60,
+    "y": 1070,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1200,
+    "y": 1020,
+    "props": {
+      "type": "secondary",
+      "item": "Stun Bomb",
+      "quantity": 4
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1240,
+    "y": 1020,
+    "props": {"type": "health", "item": "health", "quantity": 25}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 720,
+    "y": 960,
+    "props": {
+      "type": "primary",
+      "item": "Spreader",
+      "quantity": 40
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 860,
+    "y": 1070,
+    "props": {"type": "primary", "item": "Plasma", "quantity": 15}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 60,
+    "y": 610,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1380,
+    "y": 360,
+    "props": {
+      "type": "secondary",
+      "item": "Stun Bomb",
+      "quantity": 3
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 800,
+    "y": 556,
+    "props": {
+      "type": "primary",
+      "item": "Spreader",
+      "quantity": 40
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 220,
+    "y": 60,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1060,
+    "y": 120,
+    "props": {
+      "type": "primary",
+      "item": "Spreader",
+      "quantity": 50
+    }
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1060,
+    "y": 210,
+    "props": {"type": "health", "item": "health", "quantity": 50}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 720,
+    "y": 1198,
+    "scale": [5.2, 3.2],
+    "props": {"type": "lock", "item": "yellowKey", "unlock": "door1:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 1250,
+    "y": 738,
+    "scale": [5.2, 3.2],
+    "props": {"type": "lock", "item": "blueKey", "unlock": "door2:open"}
+  },
+  {
+    "symbol": "game objects/powerup",
+    "x": 172,
+    "y": 358,
+    "scale": [5.2, 3.2],
+    "props": {"type": "lock", "item": "redKey", "unlock": "door3:open"}
+  }
+]

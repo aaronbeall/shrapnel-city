@@ -1,0 +1,4 @@
+[
+  {"symbol": "game objects/entrance_mc", "x": 64, "y": 1608, "name": "entrance_mc"},
+  {"symbol": "game objects/exit_mc", "x": 1240, "y": 92, "name": "exit_mc"}
+]
