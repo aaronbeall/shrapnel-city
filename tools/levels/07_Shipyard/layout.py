@@ -444,7 +444,7 @@ for x, y in ((180, 1250), (1400, 1300), (1590, 120)):
 # the dock control terminal: opens both dry dock gantries. Not required: the exit only wants the targets
 boxes.append(P('game objects/box computer', 1350, 560, props={'required': False, 'onDie': {'$trigger': ['door1:open', 'door2:open']}}))
 
-# no vision zones: enemies see by sight range and line of sight (level.json "sightRange", PR #37).
+# no vision zones: enemies see by their visionRange (420 by default, PR #37) and line of sight.
 # Zones let you shoot in from outside them, and water hides nothing anyway
 vision = []
 
@@ -529,7 +529,7 @@ def main():
     lj = os.path.join(a.out, 'level.json')
     settings = json.load(open(lj)) if os.path.exists(lj) else {}
     settings['size'] = {'w': W, 'h': H}
-    settings['sightRange'] = 420
+    settings.pop('sightRange', None)
     settings.setdefault('art', {'kit': 'city', 'seed': 707})
     settings['art'].setdefault('paved', [[num(v) for v in r] for r in PAVED])
     # what kind of water, floor and wall each place is, for the city kit's docks (tools/art/docks.py)
