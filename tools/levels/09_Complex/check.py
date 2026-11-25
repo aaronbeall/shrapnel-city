@@ -112,13 +112,21 @@ def main():
             ns = groups.get(col.get(pid), [])
             if not any(los((e['x'], e['y']), (x, y)) for x, y, _ in ns): problems.append(f"{e['symbol'].split('/')[-1]} at ({e['x']}, {e['y']}) sees no node of its path colour")
 
-    # a quiet spawn: only a couple of enemies (a hot start) in sight of the entrance within the
-    # enemies' default visionRange (closed doors block the view, so only the dig site counts)
-    sight = 420
-    seen = [e for e in enemies if 'barrel' not in e['symbol'] and e['y'] > 1440 and math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) <= sight
-            and los((e['x'], e['y']), (ent['x'], ent['y']))]
-    if len(seen) > 3: problems.append(f'{len(seen)} enemies can see the spawn (a couple at most)')
+    # a quiet spawn: only a couple of enemies (a hot start) can see the entrance. An enemy with
+    # no visionRange sees while it's on screen or within SIGHT_MARGIN of the screen's edge
+    # (as2/enemyTurret.as): the 800x600 view centred on the spawn, clamped to the level, grown
+    # by 100 px. Closed doors block the view, so only the dig site counts.
+    vx0 = min(max(ent['x'] - 400, 0), c.shape[1] - 800) - 100
+    vy0 = min(max(ent['y'] - 300, 0), c.shape[0] - 600) - 100
+
+    def sees_spawn(e):
+        vr = e.get('props', {}).get('visionRange')
+        near = math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) <= vr if vr else (vx0 <= e['x'] <= vx0 + 1000 and vy0 <= e['y'] <= vy0 + 800)
+        return near and los((e['x'], e['y']), (ent['x'], ent['y']))
+    seen = [e for e in enemies if 'barrel' not in e['symbol'] and e['y'] > 1440 and sees_spawn(e)]
+    if len(seen) > 3: problems.append(f'{len(seen)} enemies can see the spawn (a couple at most): ' + ', '.join(f"{e['symbol'].split('/')[-1]} ({e['x']}, {e['y']})" for e in seen))
     print(f'{len(seen)} enemies in sight of the spawn')
+
     # doors: each opened by something
     sent = set()
     for o in boxes + pick + enemies:

@@ -306,7 +306,7 @@ def hunter(x, y, path, rot=0, **props):
 
 
 # --- dig site: a gentle start, guns in the rock pockets
-E(STINGER, 372, 1540)
+E(STINGER, 320, 1560)
 E(STINGER, 1250, 1604)
 E(WOLFGUN, 1010, 1550)
 tri(520, 1600)
