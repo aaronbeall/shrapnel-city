@@ -113,8 +113,8 @@ def main():
             if not any(los((e['x'], e['y']), (x, y)) for x, y, _ in ns): problems.append(f"{e['symbol'].split('/')[-1]} at ({e['x']}, {e['y']}) sees no node of its path colour")
 
     # a quiet spawn: only a couple of enemies (a hot start) in sight of the entrance within the
-    # level's sightRange (closed doors block the view, so only the dig site counts)
-    sight = json.load(open(os.path.join(D, 'level.json'))).get('sightRange', 420)
+    # enemies' default visionRange (closed doors block the view, so only the dig site counts)
+    sight = 420
     seen = [e for e in enemies if 'barrel' not in e['symbol'] and e['y'] > 1440 and math.hypot(e['x'] - ent['x'], e['y'] - ent['y']) <= sight
             and los((e['x'], e['y']), (ent['x'], ent['y']))]
     if len(seen) > 3: problems.append(f'{len(seen)} enemies can see the spawn (a couple at most)')
