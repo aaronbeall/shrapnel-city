@@ -1115,5 +1115,9 @@
   "enemy assets/enemy bunker mortar": 1810,
   "weapon assets/shot MC enemy mortar/shape 1": 1811,
   "weapon assets/shot MC enemy mortar": 1812,
+  "enemy assets/enemy lab hunter": 1900,
+  "enemy assets/enemy repair drone body/shape 1": 1901,
+  "enemy assets/enemy repair drone body": 1902,
+  "enemy assets/enemy repair drone": 1903,
   "enemy assets/enemy warden": 1500
 }

@@ -54,6 +54,7 @@ function update(time){
 		}else if(_player.core_mc.hitTest(_x + _screen._x, _y + _screen._y, true)) {
 			// player collision
 			_player.hitPlayer(getDamage(damage), _rotation);
+			if(stun) _player.stun(stun);
 			hitFunc(); 
 			makePlayerBlastmark(this, blastMark);
 			break;

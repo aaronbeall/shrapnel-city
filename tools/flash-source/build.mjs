@@ -55,6 +55,14 @@ for (const [name, { file, ext }] of lib) {
     if (fs.existsSync(f)) text += fs.readFileSync(f, 'utf8');
   }
   const classes = new Set([...text.matchAll(/#include \\?"as\/(?:object|level)\/(\w+)\.as/g)].map((m) => m[1]));
+  // and the class files those include (a subclass such as enemyRepair -> enemyVehicle)
+  for (const c of [...classes]) {
+    const f = path.join(ROOT, 'as2', c + '.as');
+    if (!fs.existsSync(f)) continue;
+    for (const m of fs.readFileSync(f, 'utf8').matchAll(/#include\s+"(?:as\/(?:object|level)\/)?(\w+)\.as"/g)) {
+      if (!classes.has(m[1])) { classes.add(m[1]); const g = path.join(ROOT, 'as2', m[1] + '.as'); if (fs.existsSync(g)) for (const n of fs.readFileSync(g, 'utf8').matchAll(/#include\s+"(?:as\/(?:object|level)\/)?(\w+)\.as"/g)) classes.add(n[1]); }
+    }
+  }
   for (const [layer, cls] of Object.entries(PLACE_CLASSES)) if (cls.some((c) => classes.has(c))) palette[layer].push(name);
 }
 for (const l of Object.values(palette)) l.sort();

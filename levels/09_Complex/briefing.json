@@ -1,0 +1,54 @@
+{
+  "title": "COMPLEX",
+  "body": "You made it underground. Now climb out. The robots\nbuilt a research complex into the rock: specimen labs,\na robotics workshop, a server vault and a drone bay,\nstacked floor on floor up to the surface lift. Mind\nthe lab staff; they have been optimized. Lab Hunters\nroam every wing and come together when one finds you.\nTwo bulkheads stand in the way. Their terminals don't.",
+  "captions": [
+    {
+      "style": "name",
+      "text": "Lab Hunter",
+      "x": 636.45,
+      "y": 209.89
+    },
+    {
+      "style": "note",
+      "text": "Stun shots. Travels in packs.",
+      "x": 636.45,
+      "y": 316.6
+    },
+    {
+      "style": "name",
+      "text": "Repair Drone",
+      "x": 636.48,
+      "y": 359.89
+    },
+    {
+      "style": "note",
+      "text": "Fixes robots. Shoot it first.",
+      "x": 636.45,
+      "y": 426.6
+    }
+  ],
+  "graphics": [
+    {
+      "symbol": "enemy assets/designs/hauler",
+      "x": 636.5,
+      "y": 272,
+      "matrix": [
+        -1.6,
+        0,
+        0,
+        -1.6
+      ]
+    },
+    {
+      "symbol": "enemy assets/enemy repair drone body",
+      "x": 636.5,
+      "y": 396,
+      "scale": 1.3
+    },
+    {
+      "symbol": "screen_mc/shape 3",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}

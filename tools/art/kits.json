@@ -19,6 +19,12 @@
         "shape": "rect",
         "colour": "#e0b040",
         "tip": "open floor inside these boxes is paved all over (plazas, courtyards, yards) instead of road with pavement round it"
+      },
+      "metal": {
+        "label": "Metal rooms",
+        "shape": "rect",
+        "colour": "#a0c8d8",
+        "tip": "inside these boxes the floor, walls and chasms are the metal (bridge) kit, with a metal lining into the walls round them: lab rooms dug into the level (09 Complex)"
       }
     }
   },
@@ -42,6 +48,12 @@
         "shape": "rect",
         "colour": "#e07040",
         "tip": "walls inside these boxes out in the badlands are drawn as concrete (pillboxes, huts) instead of rock"
+      },
+      "metal": {
+        "label": "Metal rooms",
+        "shape": "rect",
+        "colour": "#a0c8d8",
+        "tip": "inside these boxes the floor, walls and chasms are the metal (bridge) kit, with a metal lining into the walls round them: lab rooms dug into the level (09 Complex)"
       }
     }
   }

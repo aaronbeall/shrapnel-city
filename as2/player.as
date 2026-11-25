@@ -43,15 +43,15 @@ onClipEvent(load){
 	weapons1 = [
 		{name:"Energizer", shot:"shot_mcEnergizer", ammo:Infinity, max:Infinity, refire:4, spread:12, fullname:"Energizer Gun", fire:1, key:1}, 
 		{name:"Bolter", shot:"shot_mc", ammo:200, max:999, refire:2, spread:8, fullname:"Bolter Cannon", fire:1, key:1}, 
-		{name:"Plasma", shot:"shot_mcPlasma", ammo:0, max:200, refire:10, spread:6, fullname:"Plasma Cannon", fire:2, key:2}, 
-		{name:"Vertigo", shot:"shot_mcBurstPlasma", ammo:0, max:300, refire:2, spread:7, fullname:"Vertigo Cannon", burst:3, burstReload:6, fire:2, key:2}, 
+		{name:"Plasma", shot:"shot_mcPlasma", ammo:0, max:200, refire:10, spread:6, fullname:"Plasma Cannon", fire:2, key:2, intro:"PLASMA CANNON: slow, heavy plasma bolts that hit hard."}, 
+		{name:"Vertigo", shot:"shot_mcBurstPlasma", ammo:0, max:300, refire:2, spread:7, fullname:"Vertigo Cannon", burst:3, burstReload:6, fire:2, key:2, intro:"VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick."}, 
 		{name:"Phoenix", shot:"shot_mcPhoenix", ammo:0, max:200, refire:4, spread:7, fullname:"Phoenix Cannon", fire:4, key:2}, 
 		{name:"Gatling", shot:"shot_mcEnergizer", ammo:0, max:Infinity, refire:1, spread:16, fullname:"Gatling Gun", fire:1, key:1}, 
-		{name:"Banshee", shot:"shot_mcBanshee", ammo:0, max:600, refire:1, spread:24, fullname:"Banshee Cannon", fire:1, key:1}, 
+		{name:"Banshee", shot:"shot_mcBanshee", ammo:0, max:600, refire:1, spread:24, fullname:"Banshee Cannon", fire:1, key:1, intro:"BANSHEE CANNON: a screaming hail of rapid fire with a wide spread. Hold the trigger and sweep."}, 
 		{name:"Spreader", shot:"shot_mcSpreader", ammo:0, max:150, refire:8, spread:6, fullname:"Spreader Cannon", fire:6, key:2}, 
 		{name:"Hailstorm", shot:"shot_mcStorm", ammo:0, max:150, refire:1, spread:6, fullname:"Hailstorm Cannon", burst:3, burstReload:15, fire:6, key:2}, 
 		{name:"Hydra", shot:"shot_mcHydra", ammo:0, max:250, refire:5, spread:8, fullname:"Hydra Cannon", fire:6, key:2}, 
-		{name:"Pulse", shot:"shot_mcPulse", ammo:0, max:200, refire:4, spread:8, fullname:"Pulse Cannon", fire:6, key:2}, 
+		{name:"Pulse", shot:"shot_mcPulse", ammo:0, max:200, refire:4, spread:8, fullname:"Pulse Cannon", fire:6, key:2, intro:"PULSE CANNON: energy pulses that ricochet off walls. The lab corridors were not designed with this in mind."}, 
 		{name:"Vendetta", shot:"shot_mcVendetta", ammo:0, max:250, refire:5, spread:8, fullname:"Vendetta Cannon", fire:5, key:2}, 
 		{name:"Auto Cannon", shot:"shot_mcAuto", ammo:0, max:250, refire:3, spread:8, fullname:"Auto Cannon", fire:5, key:2}, 
 		{name:"Flak", shot:"shot_mcFlak", ammo:0, max:50, refire:10, spread:4, fullname:"Flak Cannon", fire:5, key:3}, 
@@ -68,11 +68,11 @@ onClipEvent(load){
 	for(var i in weapons1) weapons1[i].id = int(i);
 	weapons2 = [
 		{name:"Carbon Bomb", shot:"shot_mcBomb", ammo:2, max:20, refire:15, spread:4, key:6}, 
-		{name:"Thermal Bomb", shot:"shot_mcGrenade", ammo:0, max:10, refire:25, spread:4, key:6}, 
-		{name:"Impact Mortar", shot:"shot_mcMort", ammo:0, max:5, refire:15, spread:4, key:7}, 
+		{name:"Thermal Bomb", shot:"shot_mcGrenade", ammo:0, max:10, refire:25, spread:4, key:6, intro:"THERMAL BOMBS: lob one over a barrier and let it cook."}, 
+		{name:"Impact Mortar", shot:"shot_mcMort", ammo:0, max:5, refire:15, spread:4, key:7, intro:"IMPACT MORTAR: a slow rocket that speeds up and blows on impact. Big blast, so keep your distance."}, 
 		{name:"Stun Bomb", shot:"shot_mcStun", ammo:0, max:12, refire:15, spread:4, key:6}, 
-		{name:"Shrapnel Bomb", shot:"shot_mcFrag", ammo:0, max:5, refire:35, spread:0, key:8}, 
-		{name:"Splinter Bomb", shot:"shot_mcSplinter", ammo:0, max:5, refire:10, spread:4, key:8}, 
+		{name:"Shrapnel Bomb", shot:"shot_mcFrag", ammo:0, max:5, refire:35, spread:0, key:8, intro:"SHRAPNEL BOMB: it bursts into a ring of shrapnel. Drop it in the middle of a crowd."}, 
+		{name:"Splinter Bomb", shot:"shot_mcSplinter", ammo:0, max:5, refire:10, spread:4, key:8, intro:"SPLINTER BOMB: explodes and sprays splinters of Banshee fire in every direction."}, 
 		{name:"Plasma Bomb", shot:"shot_mcPlasmaBomb", ammo:0, max:5, refire:25, spread:4, key:8}, 
 		{name:"Pulse Bomb", shot:"shot_mcPulseBomb", ammo:0, max:5, refire:25, spread:4, key:8}, 
 		{name:"Spikey Bomb", shot:"shot_mcSpikey", ammo:0, max:5, refire:25, spread:4, key:8}, 
@@ -89,7 +89,7 @@ onClipEvent(load){
 		{name:"Smart Missile", shot:"shot_mcSmartMissile", ammo:0, max:5, refire:15, spread:2, key:9}, 
 		{name:"Mega Missile", shot:"shot_mcMega", ammo:0, max:1, refire:70, spread:2, key:9}, 
 		{name:"Synapse Bomb", shot:"shot_mcSynapse", ammo:0, max:1, refire:60, spread:10, key:7}, 
-		{name:"Shock Bomb", shot:"shot_mcShock", ammo:0, max:1, refire:60, spread:6, key:6}, 
+		{name:"Shock Bomb", shot:"shot_mcShock", ammo:0, max:1, refire:60, spread:6, key:6, intro:"SHOCK BOMB: one electric blast stuns every robot in sight for twenty seconds. You carry one. Save it for a crowd."}, 
 		{name:"Laser Bomb", shot:"shot_mcLaserBomb", ammo:0, max:5, refire:30, spread:2, key:0}, 
 		{name:"Laser Anhilator", shot:"shot_mcSuperLaserBomb", ammo:0, max:1, refire:30, spread:2, key:0},
 		{name:"Bunker Buster", shot:"shot_mcBuster", ammo:0, max:4, refire:40, spread:2, key:8}
@@ -110,6 +110,10 @@ onClipEvent(load){
 	speed = 0;
 	dead = dying = false;
 	deathTime = 0;
+	stunned = 0;     // frames left of a stun (enemy stun shots): no thrust, no firing
+	stunImmune = 0;  // frames after a stun in which the player can't be stunned again
+	stunBudget = 0;  // what's left of one stun's 40 frame cap
+	movable = true;  // so stun zaps follow the ship
 	refire1 = 0;
 	refire2 = 0;
 	firing1 = false;
@@ -165,6 +169,24 @@ onClipEvent(load){
 			damage_mc.play();
 		}
 		updateDisplay("health");
+	}
+	
+	// stunned by an enemy stun shot: engines and guns cut out for a moment. Capped, and followed
+	// by a short immunity, so a pack of stunners can't hold the player down for good
+	function stun(frames){
+		if(dying || dead || stunImmune > 0)
+			return;
+		if(!(stunned > 0)){
+			stunned = 0;
+			stunBudget = 40;
+			notify(this, "STUNNED", 20);
+		}
+		frames = Math.min(frames, stunBudget);
+		if(frames <= 0)
+			return;
+		stunBudget -= frames;
+		stunned += frames;
+		makeZaps(this, stunned);
 	}
 	
 	// show indicator graphics
@@ -261,6 +283,7 @@ onClipEvent(load){
 	// activate player
 	function spawn(){
 		dead = dying = false;
+		stunned = stunImmune = 0;
 		_visible = _screen.shadow_mc._visible = true;
 		_player.blasts_mc._alpha = 100;
 	}
@@ -286,8 +309,20 @@ onClipEvent(load){
 		xSpeed *= decel;
 		ySpeed *= decel;
 		
+		// stun countdown
+		if(stunned > 0){
+			stunned -= time;
+			if(stunned <= 0){
+				stunned = 0;
+				stunImmune = 30;
+			}
+			if(randomPerSecond(10))
+				makeSparks(this, .6);
+		}else if(stunImmune > 0)
+			stunImmune -= time;
+		
 		// thrust input
-		if(!dying){
+		if(!dying && !(stunned > 0)){
 			if(Key.isDown(Key.UP)){
 				/*if(speed < speedMax)*/ thrust(accel, _rotation);
 				exhaust_mc._visible = true;
@@ -399,7 +434,7 @@ onClipEvent(load){
 			// SHOOTING
 			// primary weapon
 			if(refire1 < weapon1.refire) refire1 += time;
-			if(Key.isDown(Key.SPACE)) firing1 = true;
+			if(Key.isDown(Key.SPACE) && !(stunned > 0)) firing1 = true;
 			else if(!weapon1.burst || shotCount1 == 0) firing1 = false;
 			if(firing1 && refire1 >= weapon1.refire && weapon1.ammo > 0){
 				_root.stats.shots++;
@@ -450,7 +485,7 @@ onClipEvent(load){
 			
 			// secondary weapon
 			if(refire2 < weapon2.refire) refire2 += time;
-			if(Key.isDown(Key.CONTROL) && refire2 >= weapon2.refire && weapon2.ammo > 0){
+			if(Key.isDown(Key.CONTROL) && !(stunned > 0) && refire2 >= weapon2.refire && weapon2.ammo > 0){
 				_root.stats.bombs++;
 				refire2 = 0;
 				var d = shotID();

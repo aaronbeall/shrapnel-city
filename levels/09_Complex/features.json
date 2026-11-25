@@ -1,0 +1,4 @@
+[
+  {"symbol": "game objects/entrance_mc", "x": 800, "y": 1700, "name": "entrance_mc"},
+  {"symbol": "game objects/exit_mc", "x": 800, "y": 125, "name": "exit_mc", "props": {"lock": "exit:open"}}
+]
