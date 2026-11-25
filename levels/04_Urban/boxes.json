@@ -32,16 +32,7 @@
     "x": 531.5,
     "y": 998,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Thermal Bomb",
-        "quantity": 1,
-        "alertMessage": "THERMAL BOMBS: lob one over a barrier and let it cook.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Thermal Bomb", "quantity": 1}}
   },
   {"symbol": "game objects/box", "x": 551.5, "y": 998},
   {"symbol": "game objects/box", "x": 1206, "y": 830},
@@ -55,16 +46,7 @@
     "x": 1480,
     "y": 954,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Vertigo",
-        "quantity": 30,
-        "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Vertigo", "quantity": 30}}
   },
   {"symbol": "game objects/box", "x": 1480, "y": 974},
   {"symbol": "game objects/box", "x": 394, "y": 228},
@@ -99,16 +81,7 @@
     "x": 619,
     "y": 120,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Vertigo",
-        "quantity": 30,
-        "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Vertigo", "quantity": 30}}
   },
   {"symbol": "game objects/box", "x": 639, "y": 120},
   {"symbol": "game objects/box", "x": 659, "y": 120},
@@ -118,16 +91,7 @@
     "x": 482,
     "y": 237,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Thermal Bomb",
-        "quantity": 1,
-        "alertMessage": "THERMAL BOMBS: lob one over a barrier and let it cook.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Thermal Bomb", "quantity": 1}}
   },
   {"symbol": "game objects/box", "x": 482, "y": 257},
   {"symbol": "game objects/box", "x": 901, "y": 120},
@@ -152,16 +116,7 @@
     "x": 549,
     "y": 442,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Vertigo",
-        "quantity": 30,
-        "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Vertigo", "quantity": 30}}
   },
   {"symbol": "game objects/box", "x": 569, "y": 442},
   {"symbol": "game objects/box", "x": 589, "y": 442},

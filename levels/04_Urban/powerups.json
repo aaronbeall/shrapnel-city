@@ -3,13 +3,7 @@
     "symbol": "game objects/powerup",
     "x": 619,
     "y": 851,
-    "props": {
-      "type": "primary",
-      "item": "Vertigo",
-      "quantity": 120,
-      "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 120}
   },
   {
     "symbol": "game objects/powerup",
@@ -21,13 +15,7 @@
     "symbol": "game objects/powerup",
     "x": 619,
     "y": 217,
-    "props": {
-      "type": "secondary",
-      "item": "Thermal Bomb",
-      "quantity": 4,
-      "alertMessage": "THERMAL BOMBS: lob one over a barrier and let it cook.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Thermal Bomb", "quantity": 4}
   },
   {
     "symbol": "game objects/powerup",
@@ -57,13 +45,7 @@
     "symbol": "game objects/powerup",
     "x": 800,
     "y": 1042,
-    "props": {
-      "type": "primary",
-      "item": "Vertigo",
-      "quantity": 60,
-      "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 60}
   },
   {
     "symbol": "game objects/powerup",
@@ -87,13 +69,7 @@
     "symbol": "game objects/powerup",
     "x": 1524,
     "y": 470,
-    "props": {
-      "type": "secondary",
-      "item": "Thermal Bomb",
-      "quantity": 2,
-      "alertMessage": "THERMAL BOMBS: lob one over a barrier and let it cook.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Thermal Bomb", "quantity": 2}
   },
   {
     "symbol": "game objects/powerup",
@@ -105,13 +81,7 @@
     "symbol": "game objects/powerup",
     "x": 1090,
     "y": 1050,
-    "props": {
-      "type": "primary",
-      "item": "Vertigo",
-      "quantity": 40,
-      "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 40}
   },
   {
     "symbol": "game objects/powerup",
@@ -135,13 +105,7 @@
     "symbol": "game objects/powerup",
     "x": 1386,
     "y": 280,
-    "props": {
-      "type": "primary",
-      "item": "Vertigo",
-      "quantity": 40,
-      "alertMessage": "VERTIGO CANNON: three-round plasma bursts. Tanks hate this one simple trick.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Vertigo", "quantity": 40}
   },
   {
     "symbol": "game objects/powerup",
