@@ -63,7 +63,8 @@ onClipEvent(load){
 		{name:"Reaper", shot:"shot_mcReaper", ammo:0, max:200, refire:6, spread:8, fullname:"Reaper Cannon", fire:7, key:4}, 
 		{name:"Laser", shot:"shot_mcLaser", ammo:0, max:100, refire:11, spread:0, fullname:"Laser", fire:3, key:5}, 
 		{name:"Super Laser", shot:"shot_mcSuperLaser", ammo:0, max:500, refire:1, spread:0, fullname:"Super Laser", fire:3, key:5}, 
-		{name:"Heat Ray", shot:"shot_mcUltraLaser", ammo:0, max:300, refire:1, spread:0, fullname:"Death Ray", burst:5, burstReload:20, fire:3, key:5}
+		{name:"Heat Ray", shot:"shot_mcUltraLaser", ammo:0, max:300, refire:1, spread:0, fullname:"Death Ray", burst:5, burstReload:20, fire:3, key:5}, 
+		{name:"Arc Caster", shot:"shot_mcArc", ammo:0, max:150, refire:6, spread:0, fullname:"Arc Caster", fire:3, key:2, intro:"ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor."}
 	]
 	for(var i in weapons1) weapons1[i].id = int(i);
 	weapons2 = [
@@ -74,7 +75,7 @@ onClipEvent(load){
 		{name:"Shrapnel Bomb", shot:"shot_mcFrag", ammo:0, max:5, refire:35, spread:0, key:8, intro:"SHRAPNEL BOMB: it bursts into a ring of shrapnel. Drop it in the middle of a crowd."}, 
 		{name:"Splinter Bomb", shot:"shot_mcSplinter", ammo:0, max:5, refire:10, spread:4, key:8, intro:"SPLINTER BOMB: explodes and sprays splinters of Banshee fire in every direction."}, 
 		{name:"Plasma Bomb", shot:"shot_mcPlasmaBomb", ammo:0, max:5, refire:25, spread:4, key:8}, 
-		{name:"Pulse Bomb", shot:"shot_mcPulseBomb", ammo:0, max:5, refire:25, spread:4, key:8}, 
+		{name:"Pulse Bomb", shot:"shot_mcPulseBomb", ammo:0, max:5, refire:25, spread:4, key:8, intro:"PULSE BOMBS: a bouncing charge that bursts into a ring of pulse shots. Roll one round a corner."}, 
 		{name:"Spikey Bomb", shot:"shot_mcSpikey", ammo:0, max:5, refire:25, spread:4, key:8}, 
 		{name:"Cluster Bomb", shot:"shot_mcCluster", ammo:0, max:5, refire:35, spread:6, key:8}, 
 		{name:"Spitfire Bomb", shot:"shot_mcSpitfire", ammo:0, max:3, refire:35, spread:6, key:8}, 

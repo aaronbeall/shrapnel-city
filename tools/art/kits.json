@@ -2,7 +2,11 @@
   "bridge": {
     "label": "bridge",
     "tip": "metal decks, cables and lights over the chasm (levels 00-03)",
-    "grades": {},
+    "grades": {
+      "none": { "tip": "no grade: the kit's own colours (00-03 Bridge)" },
+      "red alert": { "sat": 0.55, "mul": [1.0, 0.8, 0.78], "gamma": 1.18, "lift": [0.03, 0.0, 0.0], "tip": "10 Interface: emergency lighting, colours drained, a hard red cast and a red haze in the dark" }
+    },
+    "defaultGrade": "none",
     "areas": {}
   },
   "city": {

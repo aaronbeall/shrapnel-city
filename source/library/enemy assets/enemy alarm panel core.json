@@ -1,0 +1,32 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {
+          "place": "enemy assets/enemy alarm panel core/shape 1",
+          "depth": 1,
+          "x": 0,
+          "y": 0,
+          "filters": [
+            {
+              "type": "dropShadow",
+              "color": "#00000066",
+              "blurX": 4,
+              "blurY": 4,
+              "angle": 0.785398,
+              "distance": 4,
+              "strength": 1,
+              "inner": false,
+              "knockout": false,
+              "passes": 2
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

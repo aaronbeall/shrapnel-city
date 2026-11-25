@@ -10,6 +10,8 @@
     "pickup": "Pickup",
     "message": "Message",
     "door": "Door",
+    "trap": "Floor trap",
+    "alarm": "Alarm",
     "other": "Other"
   },
   "settings": {
@@ -344,6 +346,100 @@
     },
     "labelTxt": {
       "ignore": true
+    },
+    "onTime": {
+      "group": "trap",
+      "type": "number",
+      "min": 0,
+      "step": 0.1,
+      "desc": "Seconds the grid stays live each cycle."
+    },
+    "offTime": {
+      "group": "trap",
+      "type": "number",
+      "min": 0,
+      "step": 0.1,
+      "desc": "Seconds the grid is dead between live spells. 0 keeps it live the whole time it is on."
+    },
+    "warnTime": {
+      "group": "trap",
+      "type": "number",
+      "min": 0,
+      "step": 0.1,
+      "desc": "Seconds of amber flicker at the end of the dead spell, before it goes live."
+    },
+    "phase": {
+      "group": "trap",
+      "type": "number",
+      "step": 0.1,
+      "desc": "Seconds into the cycle it starts; stagger tiles in a strip to make a wave."
+    },
+    "shockDamage": {
+      "group": "trap",
+      "type": "number",
+      "min": 0,
+      "desc": "Damage per hit to a ship over the live grid (once per frame however many tiles it straddles)."
+    },
+    "hitRate": {
+      "group": "trap",
+      "type": "number",
+      "min": 1,
+      "desc": "Frames between hits while the ship stays on a live grid."
+    },
+    "dormant": {
+      "group": "trap",
+      "desc": "Does nothing until its group's alarm (<group>:alarm) wakes it."
+    },
+    "alarmTime": {
+      "group": "trap",
+      "type": "number",
+      "min": 0,
+      "desc": "Seconds a <group>:alarm keeps the grid running before it goes dormant again."
+    },
+    "group": {
+      "group": "trap",
+      "type": "string",
+      "desc": "Trigger group: listens for <group>:alarm (live for alarmTime), <group>:on and <group>:off (shut down for good, e.g. a breaker box's onDie)."
+    },
+    "alarm": {
+      "group": "alarm",
+      "type": "trigger",
+      "desc": "Triggers sent when it spots the player, e.g. \"hall:alarm\" or [\"hall:alarm\", \"door3:close\"]. Every hunter is also sent after the player."
+    },
+    "alarmClear": {
+      "group": "alarm",
+      "type": "trigger",
+      "desc": "Triggers sent when the alarm stands down (alarmCooldown seconds after it lost the player, or when it dies with the alarm up), e.g. \"door2:open\" to end a lockdown."
+    },
+    "alarmRange": {
+      "group": "alarm",
+      "type": "number",
+      "min": 0,
+      "desc": "How far it sees, in px (line of sight; walls block it, chasms don't)."
+    },
+    "alarmCone": {
+      "group": "alarm",
+      "type": "number",
+      "min": 0,
+      "desc": "Degrees either side of where it faces that it sees; 180 sees all round. Sneak up from behind."
+    },
+    "alarmCooldown": {
+      "group": "alarm",
+      "type": "number",
+      "min": 0,
+      "desc": "Seconds without seeing the player before it can sound the alarm again."
+    },
+    "alarmRepeat": {
+      "group": "alarm",
+      "type": "number",
+      "min": 0,
+      "step": 0.5,
+      "desc": "While it still sees the player, re-sends the hunters every this many seconds."
+    },
+    "alarmNotice": {
+      "group": "alarm",
+      "type": "string",
+      "desc": "Text flashed over it when it sounds the alarm (empty for none)."
     }
   }
 }

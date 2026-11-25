@@ -1,7 +1,7 @@
 {
   "kind": "sprite",
   "symbol": {"type": "movie clip"},
-  "frames": 23,
+  "frames": 24,
   "timeline": [
     {
       "frame": 1,
@@ -28,6 +28,7 @@
     {"frame": 20, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 18", "depth": 1}]},
     {"frame": 21, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 19", "depth": 1}]},
     {"frame": 22, "changes": [{"replace": "weapon assets/wep icons primary - guns/shape 20", "depth": 1}]},
-    {"frame": 23, "changes": [{"remove": 1}]}
+    {"frame": 23, "changes": [{"remove": 1}]},
+    {"frame": 24, "changes": [{"place": "weapon assets/wep icons arc caster", "depth": 20, "x": 0, "y": 0, "scale": 1.1}]}
   ]
 }

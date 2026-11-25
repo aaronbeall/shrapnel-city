@@ -1,0 +1,250 @@
+[
+  {"name": "collision map", "pixels": "collision-base.png", "locked": true},
+  {"name": "bedrock", "mode": "wall", "d": "M 0 0 L 1680 0 L 1680 1200 L 0 1200 Z"},
+  {
+    "name": "intake",
+    "mode": "open",
+    "d": "M 76 900 L 364 900 L 380 916 L 380 1124 L 364 1140 L 76 1140 L 60 1124 L 60 916 Z",
+    "group": "intake"
+  },
+  {
+    "name": "intake corridor",
+    "mode": "open",
+    "d": "M 280 800 L 360 800 L 360 920 L 280 920 Z",
+    "group": "intake"
+  },
+  {
+    "name": "server hall",
+    "mode": "open",
+    "d": "M 76 280 L 604 280 L 620 296 L 620 804 L 604 820 L 76 820 L 60 804 L 60 296 Z",
+    "group": "server hall"
+  },
+  {
+    "name": "hunter dock",
+    "mode": "open",
+    "d": "M 430 170 L 610 170 L 620 180 L 620 280 L 610 290 L 430 290 L 420 280 L 420 180 Z",
+    "group": "server hall"
+  },
+  {
+    "name": "hall to bus",
+    "mode": "open",
+    "d": "M 100 120 L 180 120 L 180 300 L 100 300 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "data bus",
+    "mode": "open",
+    "d": "M 70 60 L 1170 60 L 1180 70 L 1180 130 L 1170 140 L 70 140 L 60 130 L 60 70 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "bus alcove 1",
+    "mode": "open",
+    "d": "M 246 134 L 294 134 L 300 140 L 300 178 L 294 184 L 246 184 L 240 178 L 240 140 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "bus alcove 2",
+    "mode": "open",
+    "d": "M 476 26 L 524 26 L 530 32 L 530 60 L 524 66 L 476 66 L 470 60 L 470 32 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "bus alcove 3",
+    "mode": "open",
+    "d": "M 876 26 L 924 26 L 930 32 L 930 60 L 924 66 L 876 66 L 870 60 L 870 32 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "bus alcove 4",
+    "mode": "open",
+    "d": "M 1016 26 L 1064 26 L 1070 32 L 1070 60 L 1064 66 L 1016 66 L 1010 60 L 1010 32 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "cooling trench",
+    "mode": "open",
+    "d": "M 692 140 L 1108 140 L 1120 152 L 1120 1128 L 1108 1140 L 692 1140 L 680 1128 L 680 152 Z",
+    "group": "cooling trench"
+  },
+  {
+    "name": "trench to yard",
+    "mode": "open",
+    "d": "M 1110 1020 L 1170 1020 L 1170 1100 L 1110 1100 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "switching yard",
+    "mode": "open",
+    "d": "M 1172 620 L 1628 620 L 1640 632 L 1640 1088 L 1628 1100 L 1172 1100 L 1160 1088 L 1160 632 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "core corridor",
+    "mode": "open",
+    "d": "M 1320 520 L 1400 520 L 1400 640 L 1320 640 Z",
+    "group": "core"
+  },
+  {
+    "name": "core",
+    "mode": "open",
+    "d": "M 1260 60 L 1600 60 L 1640 100 L 1640 500 L 1600 540 L 1260 540 L 1220 500 L 1220 100 Z",
+    "group": "core"
+  },
+  {
+    "name": "rack 1",
+    "mode": "wall",
+    "d": "M 145 380 L 175 380 L 180 385 L 180 715 L 175 720 L 145 720 L 140 715 L 140 385 Z",
+    "group": "server racks"
+  },
+  {
+    "name": "rack 2",
+    "mode": "wall",
+    "d": "M 265 380 L 295 380 L 300 385 L 300 525 L 295 530 L 265 530 L 260 525 L 260 385 Z",
+    "group": "server racks"
+  },
+  {
+    "name": "rack 3",
+    "mode": "wall",
+    "d": "M 265 590 L 295 590 L 300 595 L 300 715 L 295 720 L 265 720 L 260 715 L 260 595 Z",
+    "group": "server racks"
+  },
+  {
+    "name": "rack 4",
+    "mode": "wall",
+    "d": "M 385 380 L 415 380 L 420 385 L 420 525 L 415 530 L 385 530 L 380 525 L 380 385 Z",
+    "group": "server racks"
+  },
+  {
+    "name": "rack 5",
+    "mode": "wall",
+    "d": "M 385 590 L 415 590 L 420 595 L 420 715 L 415 720 L 385 720 L 380 715 L 380 595 Z",
+    "group": "server racks"
+  },
+  {
+    "name": "rack 6",
+    "mode": "wall",
+    "d": "M 505 380 L 535 380 L 540 385 L 540 715 L 535 720 L 505 720 L 500 715 L 500 385 Z",
+    "group": "server racks"
+  },
+  {
+    "name": "cooling channel",
+    "mode": "chasm",
+    "d": "M 770 220 L 1030 220 L 1040 230 L 1040 1090 L 1030 1100 L 770 1100 L 760 1090 L 760 230 Z",
+    "group": "cooling trench"
+  },
+  {
+    "name": "west bank end",
+    "mode": "wall",
+    "d": "M 680 920 L 760 920 L 760 1140 L 680 1140 Z",
+    "group": "cooling trench"
+  },
+  {
+    "name": "east bank end",
+    "mode": "wall",
+    "d": "M 1040 140 L 1120 140 L 1120 470 L 1040 470 Z",
+    "group": "cooling trench"
+  },
+  {
+    "name": "catwalk north",
+    "mode": "open",
+    "d": "M 760 480 L 1040 480 L 1040 544 L 760 544 Z",
+    "group": "cooling trench"
+  },
+  {
+    "name": "catwalk south",
+    "mode": "open",
+    "d": "M 760 840 L 1040 840 L 1040 904 L 760 904 Z",
+    "group": "cooling trench"
+  },
+  {
+    "name": "pillar",
+    "mode": "open",
+    "d": "M 882.3 662 L 917.7 662 L 930 674.3 L 930 709.7 L 917.7 722 L 882.3 722 L 870 709.7 L 870 674.3 Z",
+    "group": "cooling trench"
+  },
+  {
+    "name": "cabinet 1",
+    "mode": "wall",
+    "d": "M 1246 700 L 1314 700 L 1320 706 L 1320 814 L 1314 820 L 1246 820 L 1240 814 L 1240 706 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "cabinet 2",
+    "mode": "wall",
+    "d": "M 1246 900 L 1314 900 L 1320 906 L 1320 1014 L 1314 1020 L 1246 1020 L 1240 1014 L 1240 906 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "cabinet 3",
+    "mode": "wall",
+    "d": "M 1406 700 L 1474 700 L 1480 706 L 1480 814 L 1474 820 L 1406 820 L 1400 814 L 1400 706 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "cabinet 4",
+    "mode": "wall",
+    "d": "M 1406 900 L 1474 900 L 1480 906 L 1480 1014 L 1474 1020 L 1406 1020 L 1400 1014 L 1400 906 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "cabinet 5",
+    "mode": "wall",
+    "d": "M 1566 700 L 1634 700 L 1640 706 L 1640 814 L 1634 820 L 1566 820 L 1560 814 L 1560 706 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "cabinet 6",
+    "mode": "wall",
+    "d": "M 1566 900 L 1634 900 L 1640 906 L 1640 1014 L 1634 1020 L 1566 1020 L 1560 1014 L 1560 906 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "core door jamb west",
+    "mode": "wall",
+    "d": "M 1320 572 L 1332 572 L 1332 592 L 1320 592 Z",
+    "group": "core"
+  },
+  {
+    "name": "core door jamb east",
+    "mode": "wall",
+    "d": "M 1388 572 L 1400 572 L 1400 592 L 1388 592 Z",
+    "group": "core"
+  },
+  {
+    "name": "hall lockdown jamb west",
+    "mode": "wall",
+    "d": "M 100 200 L 112 200 L 112 220 L 100 220 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "hall lockdown jamb east",
+    "mode": "wall",
+    "d": "M 168 200 L 180 200 L 180 220 L 168 220 Z",
+    "group": "data bus"
+  },
+  {
+    "name": "yard lockdown jamb north",
+    "mode": "wall",
+    "d": "M 1130 1020 L 1150 1020 L 1150 1032 L 1130 1032 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "yard lockdown jamb south",
+    "mode": "wall",
+    "d": "M 1130 1088 L 1150 1088 L 1150 1100 L 1130 1100 Z",
+    "group": "switching yard"
+  },
+  {
+    "name": "core moat",
+    "mode": "chasm",
+    "d": "M 1373.36 204 L 1486.64 204 L 1526 243.36 L 1526 356.64 L 1486.64 396 L 1373.36 396 L 1334 356.64 L 1334 243.36 Z",
+    "group": "core"
+  },
+  {
+    "name": "the interface",
+    "mode": "wall",
+    "d": "M 1400.5 250 L 1459.5 250 L 1480 270.5 L 1480 329.5 L 1459.5 350 L 1400.5 350 L 1380 329.5 L 1380 270.5 Z",
+    "group": "core"
+  }
+]

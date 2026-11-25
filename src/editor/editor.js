@@ -46,6 +46,8 @@ const PRESETS = {
 const AUTO_VISION_ANGLES = 90, LOS_SAMPLE_SIZE = 15; // as2/enemyTurret.as
 const NODE_LOS_SAMPLE = 10; // as2/pathNode.as
 const NODE = 'game objects/node';
+// a trap tile's group listens for <group>:alarm, <group>:on and <group>:off (as2/trapTile.as)
+const TRAP_EVENTS = ['alarm', 'on', 'off'];
 // decor (decor.json) is baked into the background by tools/art/bake.py; sprites live here
 const DECOR_DIR = 'tools/art/parts/decor/';
 // how each decor category is drawn by the bake when placed by hand
@@ -1571,11 +1573,36 @@ class Editor {
   knownTriggers() {
     const out = new Set();
     for (const d of this.list('doors')) if (d.props && d.props.id) { out.add(d.props.id + ':open'); out.add(d.props.id + ':close'); }
+    for (const g of this.trapGroups().keys()) for (const v of TRAP_EVENTS) out.add(g + ':' + v);
     for (const l of PLACE_LAYERS) for (const e of this.list(l)) {
       for (const n of sentTriggers(e)) out.add(n);
       for (const m of [].concat(e.script || []).join('\n').matchAll(/registerTrigger\(\s*this\s*,\s*["']([^"']+)["']/g)) out.add(m[1]);
     }
     return [...out].sort();
+  }
+
+  // the classes a placed symbol is built from (assets/props.json), e.g. trapTile or enemyAlarm
+  classesOf(e) {
+    const s = this.propsSpec && this.propsSpec.symbols[e.symbol];
+    return (s && s.classes) || [];
+  }
+  isTrap(e) { return this.classesOf(e).includes('trapTile'); }
+  isAlarm(e) { return this.classesOf(e).includes('enemyAlarm'); }
+  // trap tiles by group: group -> [[tile, k], ...] (tiles without a group only run on their timers)
+  trapGroups() {
+    const m = new Map();
+    this.list('doors').forEach((d, k) => {
+      const g = d.props && d.props.group;
+      if (!g || !this.isTrap(d)) return;
+      if (!m.has(g)) m.set(g, []);
+      m.get(g).push([d, k]);
+    });
+    return m;
+  }
+  // an alarm unit's settings as the game reads them (its props over the symbol's defaults)
+  alarmSettings(e) {
+    const spec = this.propsSpec && this.propsSpec.symbols[e.symbol];
+    return spec ? effectiveSettings(spec.settings, e.props || {}) : {};
   }
 
   // ------------------------------------------------------------------ save
@@ -1812,6 +1839,22 @@ class Editor {
       const labels = [];
       ctx.lineWidth = 1.5 * px;
       for (const [id, [d]] of doors) labels.push([d.x, d.y, id, '#9cf']);
+      // trap groups: their tiles outlined (amber timed, blue dormant), one label in the middle of each group
+      const traps = new Map();
+      ctx.lineWidth = 1 * px;
+      for (const [g, tiles] of this.trapGroups()) {
+        let sx = 0, sy = 0;
+        for (const [d, k] of tiles) {
+          const [x0, y0, x1, y1] = this.boundsOf('doors', k);
+          ctx.strokeStyle = d.props.dormant ? 'rgba(150,200,255,0.8)' : 'rgba(255,190,90,0.8)';
+          ctx.strokeRect(x0, y0, x1 - x0, y1 - y0);
+          sx += d.x; sy += d.y;
+        }
+        const c = [sx / tiles.length, sy / tiles.length];
+        traps.set(g, c);
+        labels.push([c[0], c[1], `${g} grid${tiles.every(([d]) => d.props.dormant) ? ' (dormant)' : ''}`, '#9cf']);
+      }
+      ctx.lineWidth = 1.5 * px;
       // independent of the layers: every trigger in the level shows while this is on
       for (const l of ['powerups', 'boxes', 'enemies']) {
         this.list(l).forEach((e) => {
@@ -1819,6 +1862,14 @@ class Editor {
           if (!sent.length) return;
           ctx.setLineDash([6 * px, 4 * px]);
           for (const n of sent) {
+            const t = /^(.+):(alarm|on|off)$/.exec(n);
+            if (t && traps.has(t[1])) {
+              // waking or powering a trap group is a danger (amber, red); shutting it down is green
+              const [cx, cy] = traps.get(t[1]);
+              ctx.strokeStyle = t[2] === 'off' ? 'rgba(120,255,140,0.9)' : t[2] === 'on' ? 'rgba(255,120,120,0.9)' : 'rgba(255,190,90,0.9)';
+              ctx.beginPath(); ctx.moveTo(e.x, e.y); ctx.lineTo(cx, cy); ctx.stroke();
+              continue;
+            }
             const m = /^(.+):(open|close)$/.exec(n);
             const d = m && doors.get(m[1]);
             if (!d) continue;
@@ -1859,6 +1910,22 @@ class Editor {
         ctx.beginPath(); ctx.arc(e.x, e.y, 5 * px, 0, Math.PI * 2); ctx.fill();
         if (this.linkFrom === k) { ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.arc(e.x, e.y, 9 * px, 0, Math.PI * 2); ctx.stroke(); }
       });
+    }
+    // a selected alarm unit's sight: alarmRange around it, inside alarmCone either side of where it
+    // faces (rotation 0 faces up, as the game's getAngle). Walls still block it in the game.
+    for (const it of this.selItems()) {
+      if (it.layer !== 'enemies') continue;
+      const e = this.list('enemies')[it.k];
+      if (!e || !this.isAlarm(e)) continue;
+      const s = this.alarmSettings(e);
+      const range = +s.alarmRange || 0, cone = Math.min(180, +s.alarmCone || 0);
+      if (!range) continue;
+      const face = (transformOf(e).rot - 90) * Math.PI / 180, half = cone * Math.PI / 180;
+      ctx.beginPath();
+      if (cone >= 180) ctx.arc(e.x, e.y, range, 0, Math.PI * 2);
+      else { ctx.moveTo(e.x, e.y); ctx.arc(e.x, e.y, range, face - half, face + half); ctx.closePath(); }
+      ctx.fillStyle = 'rgba(255,60,60,0.12)'; ctx.fill();
+      ctx.strokeStyle = 'rgba(255,90,90,0.85)'; ctx.lineWidth = 1.5 * px; ctx.setLineDash([6 * px, 4 * px]); ctx.stroke(); ctx.setLineDash([]);
     }
     // selection: solid cyan with a dark edge, a tint and corner handles (the primary's are white),
     // so it stands out from the thin dashed outlines of everything else
@@ -2699,6 +2766,23 @@ class Editor {
       const from = PLACE_LAYERS.flatMap((l) => this.list(l)).filter((o) => sentTriggers(o).some((n) => n === id + ':open' || n === id + ':close')).length;
       rows.push(el('div', { class: 'le-tip' }, `Opens on "${id}:open" and closes on "${id}:close"; ${from || 'nothing'} in this level sends ${from === 1 ? 'one' : 'them'}. Set a pickup, trigger pad, box or enemy to send one.`));
     }
+    if (layer === 'doors' && this.isTrap(e)) {
+      const g = e.props && e.props.group;
+      if (g) {
+        const ns = TRAP_EVENTS.map((v) => g + ':' + v);
+        const from = PLACE_LAYERS.flatMap((l) => this.list(l)).filter((o) => sentTriggers(o).some((n) => ns.includes(n))).length;
+        const tiles = this.trapGroups().get(g).length;
+        rows.push(el('div', { class: 'le-tip' }, `Group "${g}" (${tiles} tile${tiles === 1 ? '' : 's'}): goes live for alarmTime on "${g}:alarm", for good on "${g}:on", and shuts down for good on "${g}:off"; ${from || 'nothing'} in this level sends ${from === 1 ? 'one' : 'them'}.${e.props.dormant ? ' Dormant: it does nothing until the alarm.' : ''}`));
+      } else rows.push(el('div', { class: 'le-tip' }, 'No group: it only runs on its timer (onTime, offTime, phase). Give it a group under Floor trap to wake or shut it with triggers.'));
+    }
+    if (layer === 'enemies' && this.isAlarm(e)) {
+      const row = (key, label, title) => rows.push(el('div', { class: 'le-row' }, label, input(alarmTriggers(e, key).join(', '), (n) => {
+        if (n.length) { e.props ||= {}; e.props[key] = n.length === 1 ? n[0] : n; } else if (e.props) { delete e.props[key]; if (!Object.keys(e.props).length) delete e.props; }
+      }, title)));
+      row('alarm', 'When it spots the player, send ', 'trigger names, separated by commas, e.g. "hall:alarm" to wake a trap group or "door2:close" for a lockdown; every hunter is sent after the player as well');
+      row('alarmClear', 'When the alarm stands down, send ', 'trigger names, separated by commas, e.g. "door2:open" to end a lockdown; sent alarmCooldown seconds after it lost the player, or when it dies with the alarm up');
+      rows.push(el('div', { class: 'le-tip' }, 'It never shoots. Seeing the player (its sight is drawn while it is selected) sends every hunter after them, plus these triggers.'));
+    }
     if (layer === 'powerups' && e.props && e.props.type === 'trigger') {
       rows.push(el('div', { class: 'le-row' }, 'Trigger pad sends ', input(e.props.item || '', (n) => { e.props.item = n[0] || ''; }, 'sent when the player walks over it')));
     }
@@ -2844,11 +2928,20 @@ class Editor {
       if (!d.props || !d.props.id) return;
       rows.push(el('div', { class: 'le-trig', onclick: pick('doors', k), title: 'select this door' }, el('b', {}, d.props.id), ` ${d.symbol.split('/').pop()} ${where(d)} listens for ${d.props.id}:open / :close`));
     });
+    for (const [g, tiles] of this.trapGroups()) {
+      const dormant = tiles.filter(([d]) => d.props.dormant).length;
+      rows.push(el('div', { class: 'le-trig', onclick: pick('doors', tiles[0][1]), title: 'select its first tile' }, el('b', {}, g), ` trap grid, ${tiles.length} tile${tiles.length === 1 ? '' : 's'}${dormant ? (dormant === tiles.length ? ', dormant' : `, ${dormant} dormant`) : ''}, listens for ${g}:alarm / :on / :off`));
+    }
     const names = { powerups: 'pickup', boxes: 'box', enemies: 'enemy' };
     for (const l of ['powerups', 'boxes', 'enemies']) this.list(l).forEach((e, k) => {
-      const sent = sentTriggers(e);
-      if (!sent.length) return;
+      const alarm = alarmTriggers(e), clear = alarmTriggers(e, 'alarmClear');
+      const sent = sentTriggers(e).filter((n) => !alarm.includes(n) && !clear.includes(n));
       const kind = e.props && e.props.type === 'trigger' ? 'trigger pad' : names[l] + ' ' + e.symbol.split('/').pop();
+      if (l === 'enemies' && this.isAlarm(e)) {
+        rows.push(el('div', { class: 'le-trig', onclick: pick(l, k), title: 'select it' }, `${kind} ${where(e)}, spots the player: `, el('b', {}, ['hunters', ...alarm].join(', '))));
+        if (clear.length) rows.push(el('div', { class: 'le-trig', onclick: pick(l, k), title: 'select it' }, `${kind} ${where(e)}, alarm stands down: `, el('b', {}, clear.join(', '))));
+      }
+      if (!sent.length) return;
       const how = e.props && e.props.type === 'trigger' ? 'walked over' : TRIGGER_EVENTS[l][1].replace('when ', '');
       rows.push(el('div', { class: 'le-trig', onclick: pick(l, k), title: 'select it' + (e.script !== undefined ? ' (set by its script)' : '') }, `${kind} ${where(e)}, ${how}: `, el('b', {}, sent.join(', '))));
     });
@@ -2961,9 +3054,17 @@ function sentTriggers(e) {
   if (e.props) {
     if (e.props.type === 'trigger' && e.props.item) out.push(e.props.item);
     for (const v of Object.values(e.props)) if (isTrigger(v)) { try { out.push(...triggerNames(v)); } catch { /* bad */ } }
+    out.push(...alarmTriggers(e), ...alarmTriggers(e, 'alarmClear'));
   }
   for (const m of [].concat(e.script || []).join('\n').matchAll(/[^.\w]trigger\(\s*["']([^"']+)["']/g)) out.push(m[1]);
   return out;
+}
+
+// what an alarm unit (as2/enemyAlarm.as) sends when it spots the player (its `alarm` setting) or
+// when the alarm stands down (`alarmClear`): one trigger name or a list of them
+function alarmTriggers(e, key = 'alarm') {
+  const a = e.props && e.props[key];
+  return [].concat(a || []).filter((n) => typeof n === 'string' && n);
 }
 
 function hiddenLabel(e, layer) {

@@ -1,0 +1,22 @@
+{
+  "kind": "sprite",
+  "symbol": {"type": "movie clip"},
+  "frames": 1,
+  "timeline": [
+    {
+      "frame": 1,
+      "changes": [
+        {"place": "enemy assets/enemy alarm sentinel beacon/shape 1", "depth": 1, "x": 0, "y": 0, "blend": "add"},
+        {
+          "place": "_glow",
+          "depth": 2,
+          "x": 0,
+          "y": 0,
+          "scale": 0.55,
+          "color": {"multiply": [0, 0, 0, 0.8], "add": [255, 40, 20, 0]},
+          "blend": "add"
+        }
+      ]
+    }
+  ]
+}

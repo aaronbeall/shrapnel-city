@@ -1,0 +1,59 @@
+{
+  "title": "INTERFACE",
+  "body": "Alarms sound if you are detected. They also sound if\nyou are not. It's a feature. This is the robots'\nnetwork interface hub: tight corridors, electrified\nfloors and a building full of snitches. Alarm panels\nand sentinels call in the hunters and power up the\nfloor grids, so shoot the watchers first. Take out the\nuplink terminal to open the core, then leave.",
+  "captions": [
+    {
+      "style": "name",
+      "text": "Alarm Sentinel",
+      "x": 636.45,
+      "y": 209.89
+    },
+    {
+      "style": "note",
+      "text": "Unarmed. Tells on you.",
+      "x": 636.45,
+      "y": 316.6
+    },
+    {
+      "style": "name",
+      "text": "Laser Turret",
+      "x": 636.48,
+      "y": 359.89
+    },
+    {
+      "style": "note",
+      "text": "Slow to turn. Not to fire.",
+      "x": 636.45,
+      "y": 426.6
+    }
+  ],
+  "graphics": [
+    {
+      "symbol": "enemy assets/enemy alarm sentinel legs",
+      "x": 636.5,
+      "y": 268,
+      "scale": 1.6
+    },
+    {
+      "symbol": "enemy assets/enemy alarm sentinel core",
+      "x": 636.5,
+      "y": 268,
+      "scale": 1.6
+    },
+    {
+      "symbol": "enemy assets/enemy laser turret core",
+      "x": 636.5,
+      "y": 400
+    },
+    {
+      "symbol": "enemy assets/enemy laser turret turret body",
+      "x": 636.5,
+      "y": 400
+    },
+    {
+      "symbol": "screen_mc/shape 3",
+      "x": 0,
+      "y": 0
+    }
+  ]
+}

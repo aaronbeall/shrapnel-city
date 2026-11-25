@@ -464,9 +464,26 @@ def bake(g, decor, seed, opts, kit='bridge', art=None):
     img += np.stack([blur(bloom[..., c], 4) for c in range(3)], -1) * lo['bloom']
     img *= (1 - 0.12 * (((g.xx / W - 0.5) * 2) ** 4 + ((g.yy / H - 0.5) * 2) ** 4))[..., None]
     if kit == 'city': img = kit_city.grade(img, (art or {}).get('grade'))
+    elif (art or {}).get('grade'): img = grade_metal(img, art['grade'])
     sh = opts['edges']['sharpen']
     if sh > 0: img = img + sh * (img - np.stack([blur(img[..., c], 1.0) for c in range(3)], -1))
     return (np.clip(img, 0, 1) * 255 + 0.5).astype(np.uint8)
+
+
+# colour grades for the metal kit, picked by level.json art.grade (none: the Bridge's own look)
+# the bridge (metal) kit's colour grades, from tools/art/kits.json (which the editor reads too):
+# saturation, a gamma, a colour multiply and a lift in the shadows; "none" leaves the art alone
+METAL_GRADES = json.load(open(os.path.join(os.path.dirname(__file__), 'kits.json')))['bridge']['grades']
+
+
+def grade_metal(img, name):
+    if name not in METAL_GRADES: sys.exit(f'unknown art grade {name!r} for the bridge kit; known: {", ".join(METAL_GRADES)}')
+    g = METAL_GRADES[name]
+    if 'sat' not in g: return img
+    lum = img.mean(-1, keepdims=True)
+    img = lum + (img - lum) * g['sat']
+    img = np.clip(img, 0, None) ** g['gamma']
+    return img * np.array(g['mul'], np.float32) + np.array(g['lift'], np.float32) * (1 - np.clip(lum * 3, 0, 1))
 
 
 def write_decor(path, decor):

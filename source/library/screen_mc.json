@@ -847,6 +847,24 @@
           "name": "shot_mcECannon",
           "clipEvents": [1],
           "script": "#include \"as/shots/shot_mcECannon.as\""
+        },
+        {
+          "place": "weapon assets/shot MC arc",
+          "depth": 3240,
+          "x": -150,
+          "y": 640,
+          "name": "shot_mcArc",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcArc.as\""
+        },
+        {
+          "place": "weapon assets/shot MC enemy laser",
+          "depth": 3243,
+          "x": -180,
+          "y": 640,
+          "name": "shot_mcELaser",
+          "clipEvents": [1],
+          "script": "#include \"as/shots/shot_mcELaser.as\""
         }
       ]
     }

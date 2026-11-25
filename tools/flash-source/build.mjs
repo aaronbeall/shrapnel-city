@@ -44,7 +44,7 @@ for (const f of files) {
 // includes) includes that layer's class file: an enemy class makes it an enemy, and so on.
 const PLACE_CLASSES = {
   enemies: ['enemyTurret', 'enemyVehicle', 'enemyObject'], boxes: ['box', 'boxReactor'], powerups: ['powerup'],
-  doors: ['door', 'gate'], features: ['entrance', 'exit'], pathNodes: ['pathNode'],
+  doors: ['door', 'gate', 'trapTile'], features: ['entrance', 'exit'], pathNodes: ['pathNode'],
 };
 const palette = Object.fromEntries(Object.keys(PLACE_CLASSES).map((l) => [l, []]));
 for (const [name, { file, ext }] of lib) {
