@@ -449,9 +449,6 @@ boxes.append(P('game objects/box computer', 1350, 560, props={'required': False,
 vision = []
 
 
-INTRO = {'Auto Cannon': 'AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.',
-         'Rocket Pod': 'ROCKET POD: dumb-fire rockets that fly straight over water. Ships are big. Aim anyway.'}
-
 BRIEFING = {
     'title': 'SHIPYARD',
     'body': ("The navy was automated for efficiency. It is now very\n"
@@ -498,17 +495,7 @@ def list_json(items):
     return '[\n' + ',\n'.join('  ' + pretty(x, '  ') for x in items) + '\n]\n'
 
 
-def add_intros():
-    """This level's new weapons: the intro message on every copy (pickups and drops); alertOnce
-    shows it only for the first one picked up."""
-    props = [o['props'] for o in pick] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
-    for pr in props:
-        if pr.get('type') in ('primary', 'secondary') and pr.get('item') in INTRO:
-            pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
-
-
 def main():
-    add_intros()
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(ROOT, 'levels', FOLDER))
     ap.add_argument('--preview')
@@ -592,7 +579,7 @@ def preview(path):
             d.ellipse([p['x'] - 9, p['y'] - 9, p['x'] + 9, p['y'] + 9], outline=(0, 200, 255), width=3)
             continue
         col = (0, 120, 255) if pr['type'] != 'health' else (0, 170, 0)
-        if pr.get('item') in INTRO: col = (255, 0, 255)
+        if pr.get('item') in ('Auto Cannon', 'Rocket Pod'): col = (255, 0, 255)
         d.rectangle([p['x'] - 8, p['y'] - 8, p['x'] + 8, p['y'] + 8], outline=col, width=3)
     for f in features:
         d.ellipse([f['x'] - 24, f['y'] - 24, f['x'] + 24, f['y'] + 24], outline=(0, 160, 0), width=5)

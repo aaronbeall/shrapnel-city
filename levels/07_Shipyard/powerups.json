@@ -3,13 +3,7 @@
     "symbol": "game objects/powerup",
     "x": 120,
     "y": 1230,
-    "props": {
-      "type": "primary",
-      "item": "Auto Cannon",
-      "quantity": 120,
-      "alertMessage": "AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Auto Cannon", "quantity": 120}
   },
   {
     "symbol": "game objects/powerup",
@@ -21,13 +15,7 @@
     "symbol": "game objects/powerup",
     "x": 575,
     "y": 440,
-    "props": {
-      "type": "secondary",
-      "item": "Rocket Pod",
-      "quantity": 6,
-      "alertMessage": "ROCKET POD: dumb-fire rockets that fly straight over water. Ships are big. Aim anyway.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Rocket Pod", "quantity": 6}
   },
   {
     "symbol": "game objects/powerup",
@@ -39,25 +27,13 @@
     "symbol": "game objects/powerup",
     "x": 360,
     "y": 400,
-    "props": {
-      "type": "primary",
-      "item": "Auto Cannon",
-      "quantity": 60,
-      "alertMessage": "AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Auto Cannon", "quantity": 60}
   },
   {
     "symbol": "game objects/powerup",
     "x": 560,
     "y": 112,
-    "props": {
-      "type": "secondary",
-      "item": "Rocket Pod",
-      "quantity": 4,
-      "alertMessage": "ROCKET POD: dumb-fire rockets that fly straight over water. Ships are big. Aim anyway.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Rocket Pod", "quantity": 4}
   },
   {
     "symbol": "game objects/powerup",
@@ -93,25 +69,13 @@
     "symbol": "game objects/powerup",
     "x": 1330,
     "y": 980,
-    "props": {
-      "type": "secondary",
-      "item": "Rocket Pod",
-      "quantity": 4,
-      "alertMessage": "ROCKET POD: dumb-fire rockets that fly straight over water. Ships are big. Aim anyway.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Rocket Pod", "quantity": 4}
   },
   {
     "symbol": "game objects/powerup",
     "x": 1540,
     "y": 500,
-    "props": {
-      "type": "primary",
-      "item": "Auto Cannon",
-      "quantity": 60,
-      "alertMessage": "AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Auto Cannon", "quantity": 60}
   },
   {
     "symbol": "game objects/powerup",
@@ -135,13 +99,7 @@
     "symbol": "game objects/powerup",
     "x": 1740,
     "y": 120,
-    "props": {
-      "type": "primary",
-      "item": "Auto Cannon",
-      "quantity": 40,
-      "alertMessage": "AUTO CANNON: a heavy belt-fed gun. Hold fire and walk it onto the target.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Auto Cannon", "quantity": 40}
   },
   {
     "symbol": "game objects/message beacon",
