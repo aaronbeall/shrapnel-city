@@ -48,13 +48,7 @@
     "symbol": "game objects/powerup",
     "x": 600,
     "y": 804,
-    "props": {
-      "type": "primary",
-      "item": "Arc Caster",
-      "quantity": 80,
-      "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Arc Caster", "quantity": 80}
   },
   {
     "symbol": "game objects/powerup",
@@ -66,13 +60,7 @@
     "symbol": "game objects/powerup",
     "x": 1550,
     "y": 1040,
-    "props": {
-      "type": "secondary",
-      "item": "Pulse Bomb",
-      "quantity": 3,
-      "alertMessage": "PULSE BOMBS: a bouncing charge that bursts into a ring of pulse shots. Roll one round a corner.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Pulse Bomb", "quantity": 3}
   },
   {
     "symbol": "game objects/powerup",
@@ -108,13 +96,7 @@
     "symbol": "game objects/powerup",
     "x": 500,
     "y": 104,
-    "props": {
-      "type": "primary",
-      "item": "Arc Caster",
-      "quantity": 40,
-      "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Arc Caster", "quantity": 40}
   },
   {
     "symbol": "game objects/powerup",
@@ -138,13 +120,7 @@
     "symbol": "game objects/powerup",
     "x": 1080,
     "y": 1100,
-    "props": {
-      "type": "primary",
-      "item": "Arc Caster",
-      "quantity": 40,
-      "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Arc Caster", "quantity": 40}
   },
   {
     "symbol": "game objects/powerup",
@@ -156,13 +132,7 @@
     "symbol": "game objects/powerup",
     "x": 1200,
     "y": 1000,
-    "props": {
-      "type": "secondary",
-      "item": "Pulse Bomb",
-      "quantity": 2,
-      "alertMessage": "PULSE BOMBS: a bouncing charge that bursts into a ring of pulse shots. Roll one round a corner.",
-      "alertOnce": true
-    }
+    "props": {"type": "secondary", "item": "Pulse Bomb", "quantity": 2}
   },
   {
     "symbol": "game objects/powerup",
@@ -174,12 +144,6 @@
     "symbol": "game objects/powerup",
     "x": 1590,
     "y": 320,
-    "props": {
-      "type": "primary",
-      "item": "Arc Caster",
-      "quantity": 40,
-      "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
-      "alertOnce": true
-    }
+    "props": {"type": "primary", "item": "Arc Caster", "quantity": 40}
   }
 ]

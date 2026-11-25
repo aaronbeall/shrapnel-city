@@ -23,16 +23,7 @@
     "x": 80,
     "y": 380,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Arc Caster",
-        "quantity": 25,
-        "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Arc Caster", "quantity": 25}}
   },
   {"symbol": "game objects/box", "x": 80, "y": 400},
   {"symbol": "game objects/box", "x": 80, "y": 660},
@@ -65,16 +56,7 @@
     "x": 460,
     "y": 300,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Arc Caster",
-        "quantity": 25,
-        "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Arc Caster", "quantity": 25}}
   },
   {"symbol": "game objects/box", "x": 430, "y": 186},
   {
@@ -130,16 +112,7 @@
     "x": 1196,
     "y": 632,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "primary",
-        "item": "Arc Caster",
-        "quantity": 25,
-        "alertMessage": "ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "primary", "item": "Arc Caster", "quantity": 25}}
   },
   {"symbol": "game objects/box", "x": 1216, "y": 632},
   {"symbol": "game objects/box", "x": 1336, "y": 632},
@@ -184,16 +157,7 @@
     "x": 1250,
     "y": 130,
     "scale": 1.29,
-    "props": {
-      "health": 25,
-      "powerupDrop": {
-        "type": "secondary",
-        "item": "Pulse Bomb",
-        "quantity": 1,
-        "alertMessage": "PULSE BOMBS: a bouncing charge that bursts into a ring of pulse shots. Roll one round a corner.",
-        "alertOnce": true
-      }
-    }
+    "props": {"health": 25, "powerupDrop": {"type": "secondary", "item": "Pulse Bomb", "quantity": 1}}
   },
   {"symbol": "game objects/box", "x": 1250, "y": 150},
   {"symbol": "game objects/box", "x": 1610, "y": 380},

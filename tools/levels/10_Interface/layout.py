@@ -512,10 +512,6 @@ BRIEFING = {
     ],
 }
 
-INTRO = {'Arc Caster': 'ARC CASTER: chain lightning. It jumps from robot to robot, and robots hate being a conductor.',
-         'Pulse Bomb': 'PULSE BOMBS: a bouncing charge that bursts into a ring of pulse shots. Roll one round a corner.'}
-
-
 # ---------------------------------------------------------------- green links by walkable line of sight
 def link_green(grid_):
     walk = ndi.distance_transform_edt(grid_ == 2) >= 15
@@ -548,19 +544,11 @@ def list_json(items):
     return '[\n' + ',\n'.join('  ' + pretty(x, '  ') for x in items) + '\n]\n' if items else '[]\n'
 
 
-def add_intros():
-    props = [o['props'] for o in pick] + [o['props']['powerupDrop'] for o in boxes + enemies if 'powerupDrop' in o.get('props', {})]
-    for pr in props:
-        if pr.get('type') in ('primary', 'secondary') and pr.get('item') in INTRO:
-            pr.update(alertMessage=INTRO[pr['item']], alertOnce=True)
-
-
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--out', default=os.path.join(ROOT, 'levels', FOLDER))
     ap.add_argument('--preview')
     a = ap.parse_args()
-    add_intros()
     grid_ = raster()
     link_green(grid_)
     for n in nodes: n.pop('_group', None)
